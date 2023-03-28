@@ -47,7 +47,10 @@ export default function SearchLesson() {
             </div>
           </div>
         </div>
-        <div id="scroll" className="grid grid-cols-3 gap-4 mt-10  h-[425px] overflow-y-scroll ">
+        <div
+          id="scroll"
+          className="grid grid-cols-3 gap-4 mt-10  h-[425px] overflow-y-scroll pr-3"
+        >
           {lessons.map(item => (
             <LessonCard
               title={item.title}

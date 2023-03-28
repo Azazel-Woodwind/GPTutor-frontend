@@ -21,6 +21,7 @@ import TeacherDashboard from "./pages/TeacherDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Unauthorised from "./pages/Unauthorised";
 import SearchLesson from "./pages/SearchLesson";
+import Welcome from "./pages/Welcome";
 
 const STUDENT_ACCESS_LEVEL = 1;
 const TEACHER_ACCESS_LEVEL = 2;
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
           {
             path: "/searchLesson",
             element: <SearchLesson />,
+          },
+          {
+            path: "/welcome",
+            element: <Welcome />,
           },
         ],
       },
