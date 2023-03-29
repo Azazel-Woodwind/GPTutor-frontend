@@ -3,12 +3,16 @@ import Navbar from "../components/Navbar";
 import { BiMicrophone } from "react-icons/bi";
 import { IoMdClose, IoMdSend } from "react-icons/io";
 import { BsChevronUp } from "react-icons/bs";
+import Avatar from "../components/Avatar";
 
 export default function Welcome() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className=" px-20">
-        <Navbar />
+        <Navbar showHeader={true} />
+      </div>
+      <div className="mx-auto mt-20">
+        <Avatar isAnimate={true} style="w-[280px] h-[280px] " />
       </div>
 
       <div className="mt-auto">
@@ -20,7 +24,12 @@ export default function Welcome() {
           className="relative max-w-[1100px] border  rounded-t-[30px] border-slate-500 border-b-0  p-8 pt-10 mx-auto flex items-center space-x-2.5"
         >
           <div className="flex items-center justify-center top-2 left-[49%] absolute">
-            <BsChevronUp style={{  strokeWidth: "1"}} color="#898C97" cursor="pointer" size={20} />
+            <BsChevronUp
+              style={{ strokeWidth: "1" }}
+              color="#898C97"
+              cursor="pointer"
+              size={20}
+            />
           </div>
           <div className="flex items-center space-x-4 border border-cyan-400 p-1  rounded-[16px] flex-1 mr-3">
             <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">

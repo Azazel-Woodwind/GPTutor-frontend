@@ -24,7 +24,7 @@ export default function SearchLesson() {
   ];
   return (
     <div className="h-screen px-12 overflow-hidden">
-      <Navbar />
+      <Navbar showHeader={true}/>
       <div className="max-w-[1000px] mx-auto py-10">
         <div className="flex items-center w-full space-x-10">
           <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-2.5 flex-1">

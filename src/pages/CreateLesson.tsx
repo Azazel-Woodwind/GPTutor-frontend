@@ -1,16 +1,29 @@
 import React, { useState } from "react";
 import Logo from "../assets/Logo";
 import CustomInput from "../components/CustomInput";
+import DropDownList from "../components/DropDownList";
 import Header from "../components/Header/header";
 import ImageTextArea from "../components/ImageTextArea";
+import {
+  subjects,
+  topics,
+  eduLevel,
+  booleanOptions,
+  quizTypes,
+} from "../Data";
 
 export default function CreateLesson() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [topic, setTopic] = useState("");
+  const [education, setEducation] = useState("");
+  const [subject, setSubject] = useState("");
+  const [quizType, setQuizType] = useState("");
+  const [publish, setPublish] = useState("");
 
   return (
-    <div className="min-h-[100vh] text-white font-abel ">
-      <div className="px-20 mt-10">
+    <div className="min-h-[100vh] text-white font-abel overflow-y-scroll pb-4">
+      <div className="px-20 ">
         <Header />
       </div>
 
@@ -27,7 +40,32 @@ export default function CreateLesson() {
               className="border-[#50576E] border rounded-lg bg-transparent px-3 py-2 text-[16px] outline-none"
             />
           </div>
-
+          <div className="flex mb-4 space-x-2">
+            <div className="flex flex-1 flex-col ">
+              <label className="text-[16px] mb-[2px]">Education Level</label>
+              <DropDownList
+                value={education}
+                setValue={setEducation}
+                options={eduLevel}
+              />
+            </div>
+            <div className="flex flex-col flex-1">
+              <label className="text-[16px] mb-[2px]">Subject</label>
+              <DropDownList
+                value={subject}
+                setValue={setSubject}
+                options={subjects}
+              />
+            </div>
+            <div className="flex flex-1 flex-col ">
+              <label className="text-[16px] mb-[2px]">Topic</label>
+              <DropDownList
+                value={topic}
+                setValue={setTopic}
+                options={topics}
+              />
+            </div>
+          </div>
           <CustomInput
             title="L01"
             value={title}
@@ -46,6 +84,26 @@ export default function CreateLesson() {
             setValue={setTitle}
             lines={2}
           />
+          <div className="flex mb-4 space-x-2">
+            <div className="flex flex-1 flex-col ">
+              <label className="text-[16px] mb-[2px]">
+                End of Lesson quiz type
+              </label>
+              <DropDownList
+                value={quizType}
+                setValue={setQuizType}
+                options={quizTypes}
+              />
+            </div>
+            <div className="flex flex-col flex-1">
+              <label className="text-[16px] mb-[2px]">Publish Lesson?</label>
+              <DropDownList
+                value={publish}
+                setValue={setPublish}
+                options={booleanOptions}
+              />
+            </div>
+          </div>
           <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-full text-[#040A1E] text-[20px] rounded-lg py-2 text-center">
             Generate Lesson
           </button>
@@ -55,7 +113,7 @@ export default function CreateLesson() {
             value={description}
             setValue={setDescription}
             title="Lesson Description/Guide (Please give precise instructions and refer to LOs)"
-            lines={6}
+            lines={4}
           />
           <ImageTextArea
             value={description}

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
+import Avatar from "../components/Avatar";
+import DropDownList from "../components/DropDownList";
+import MultiSelect from "../components/MultiSelect";
+import { eduLevel, subjects } from "../Data";
 
 function WaitingList() {
+  const [education, setEducation] = useState("");
+  const [subject, setSubject] = useState([]);
   return (
     <div className="max-w-[1100px] mx-auto h-screen text-white px-6 py-28">
       <div className="flex items-center justify-between space-x-20  ">
-        <div className=" mx-auto text-center flex-1">
+        <div className=" mx-auto text-center flex-1 relative">
+          <div className="absolute -top-10">
+            <Avatar isAnimate={true} style="w-[300px] h-[300px]"/>
+          </div>
           <h1 className="font-lora font-[500]  text-[120px] text-white ">
             xtutor
           </h1>
@@ -31,16 +40,18 @@ function WaitingList() {
           <div className="flex space-x-3 items-center mb-3">
             <div className="flex w-full flex-col space-y-1">
               <label className="text-[20px]">Ed-level</label>
-              <input
-                type="text"
-                className="bg-transparent outline-none border border-white rounded-lg px-2 py-1"
+              <DropDownList
+                value={education}
+                setValue={setEducation}
+                options={eduLevel}
               />
             </div>
             <div className="flex w-full flex-col space-y-1">
               <label className="text-[20px]">Subject/s</label>
-              <input
-                type="email"
-                className="bg-transparent outline-none border border-white rounded-lg px-2 py-1"
+              <MultiSelect
+                value={subject}
+                setValue={setSubject}
+                options={subjects}
               />
             </div>
           </div>
