@@ -68,18 +68,18 @@ export default function Register() {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="flex flex-col text-white min-h-[100vh] pb-4 px-12 ">
+    <div className="flex flex-col text-white min-h-[100vh] pb-4 md:px-12 px-4 ">
       <Header />
-      <div className="flex justify-between flex-1 items-center">
+      <div className="flex  md:justify-between justify-center flex-1 items-center">
         <div>
-          <Avatar isAnimate={true} style="w-[300px] h-[300px] ml-32" />
+          <Avatar  isAnimate={true} style="w-[300px] h-[300px] ml-32 hidden md:block" />
         </div>
-        <div className="ml-auto max-w-[475px] mr-12  flex-1  flex flex-col justify-center">
+        <div className="ml-auto max-w-[475px]  md:mr-12  flex-1  flex flex-col justify-center">
           <p className="text-[34px] font-light font-abel leading-none ">
             Welcome Back !
           </p>
           <p className="text-[34px] font-light font-abel mb-3">Login Now</p>
-          <div className="flex flex-col space-y-1 mb-3">
+          <div className="flex flex-col space-y-1 mb-3 ">
             <label className="text-[20px]">Email</label>
             <input
               value={email}

@@ -51,14 +51,14 @@ export default function DropDownList({ value, setValue, options }: Iprops) {
         <BiChevronDown size={20} />
       </div>
       <div
-        className={`transition-all duration-300 ease-in-out bg-[#040A1E] rounded-lg border left-0 right-0 mt-2 absolute inse ${
+        className={`transition-all duration-300 ease-in-out bg-[#040A1E] rounded-lg border left-0 right-0 mt-2 absolute z-20 ${
           !isOpen && "hidden"
         }`}
       >
         {options.map(opt => (
           <div
             onClick={() => setValue(opt)}
-            className="border-b px-2 py-1.5 hover:bg-white/20 cursor-pointer"
+            className="border-b last:border-0 px-2 py-1.5 hover:bg-white/20 cursor-pointer "
           >
             {opt}
           </div>

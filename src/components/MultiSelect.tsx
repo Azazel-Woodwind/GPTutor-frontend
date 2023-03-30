@@ -43,24 +43,28 @@ type Iprops = {
 
 export default function MultiSelect({ value, setValue, options }: Iprops) {
   const [isOpen, setIsOpen] = useState(false);
-  const onDelete = (item: string) => {
-    const filterValues = value.filter(opt => opt !== item);
-    setValue(filterValues);
+ 
+
+  const onOptionClick = (opt: string) => {
+    if (findItem(opt)) {
+      const filteredValues = value.filter(item => item !== opt);
+      setValue(filteredValues);
+      return;
+    }
+    setValue([...value, opt]);
   };
+
+  const findItem = (item: string) => {
+    if (value.includes(item)) {
+      return true;
+    }
+    return false;
+  };
+
   return (
     <div onClick={() => setIsOpen(!isOpen)} className="relative w-full  ">
       <div className="flex items-center   justify-between border border-white  rounded-[7px] h-[42px] px-2 overflow-scroll">
-        <div className="flex  flex-1 overflow-scroll max-w-[180px] items-center space-x-3 ">
-          {value.map(item => (
-            <div
-              onClick={() => onDelete(item)}
-              className="bg-white/10 flex space-x-3 px-2 py-[2px] rounded-md items-center"
-            >
-              <p>{item}</p>
-              <button>x</button>
-            </div>
-          ))}
-        </div>
+        <p>{value.length} selected</p>
         <BiChevronDown size={20} />
       </div>
       <div
@@ -70,8 +74,10 @@ export default function MultiSelect({ value, setValue, options }: Iprops) {
       >
         {options.map(opt => (
           <div
-            onClick={() => setValue([opt, ...value])}
-            className="border-b px-2 py-1.5 hover:bg-white/20 cursor-pointer "
+            onClick={() => onOptionClick(opt)}
+            className={`border-b last:border-b-0 px-2 py-1.5 hover:bg-white/10 cursor-pointer ${
+              findItem(opt) && "bg-white/40"
+            }`}
           >
             {opt}
           </div>

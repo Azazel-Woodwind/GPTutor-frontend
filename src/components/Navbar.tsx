@@ -26,7 +26,7 @@ export default function Navbar({
       <div
         className={`${
           !showHeader && "hidden"
-        } absolute py-3 rounded-b-lg top-0 left-[calc(50%-100px)]  w-[250px] flex items-center justify-around border border-t-0 border-[#50576E]`}
+        } absolute py-3 rounded-b-lg top-0 left-[calc(50%-100px)] hidden  w-[250px] md:flex items-center justify-around border border-t-0 border-[#50576E]`}
       >
         <button onClick={() => setActive("home")}>
           <BiHomeSmile

@@ -23,18 +23,18 @@ export default function SearchLesson() {
     { title: "Algebra 9", info: "Substitution", color: "#fff" },
   ];
   return (
-    <div className="h-screen px-12 overflow-hidden">
+    <div className="h-screen md:px-12 p-4 overflow-hidden">
       <Navbar showHeader={true}/>
       <div className="max-w-[1000px] mx-auto py-10">
-        <div className="flex items-center w-full space-x-10">
-          <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-2.5 flex-1">
+        <div className="flex md:flex-row flex-col items-center w-full space-y-6 md:space-x-10">
+          <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-2.5 w-full flex-1">
             <FiSearch color="#fff" size={22} />
             <input
               type="text"
               className="border-none outline-none bg-transparent ml-2.5 font-abel text-white font-[20px]"
             />
           </div>
-          <div className="flex-1 flex items-center space-x-6">
+          <div className="flex-1 w-full flex items-center space-x-6">
             <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-full rounded-lg py-2.5 text-center">
               h
             </button>
@@ -49,7 +49,7 @@ export default function SearchLesson() {
         </div>
         <div
           id="scroll"
-          className="grid grid-cols-3 gap-4 mt-10  h-[425px] overflow-y-scroll pr-3"
+          className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-10  h-[420px] overflow-y-scroll pr-3"
         >
           {lessons.map(item => (
             <LessonCard

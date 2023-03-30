@@ -7,5 +7,7 @@ export const topics = [
   "Molecules",
 ];
 
+export const occupations = ["Student", "Teacher"];
+
 export const booleanOptions = ["yes", "No"];
 export const quizTypes = ["Mcqs", "Blanks", "True/False"];

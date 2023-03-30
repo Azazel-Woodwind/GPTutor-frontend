@@ -8,6 +8,9 @@ module.exports = {
         abel: ["Abel", "sans-serif"],
       },
     },
+    animationDuration: {
+      "2s": "4s",
+    },
   },
   plugins: [],
 };

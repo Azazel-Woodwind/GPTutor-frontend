@@ -8,7 +8,7 @@ type MessageProps = {
 export default function Messages({ type, message }: MessageProps) {
   return (
     <div
-      className={`flex  space-x-3 p-3 rounded-[7px]  ${
+      className={`flex  space-x-3 p-3  rounded-[7px]  ${
         type === "sophia" && "bg-white/10"
       } `}
     >
@@ -21,7 +21,9 @@ export default function Messages({ type, message }: MessageProps) {
       >
         {type === "sophia" ? `X` : `J`}
       </button>
-      <p className="text-[16px] text-white font-abel pt-1.5 flex-1">{message}</p>
+      <p className="text-[16px] text-white font-abel md:pt-1.5 flex-1">
+        {message}
+      </p>
     </div>
   );
 }

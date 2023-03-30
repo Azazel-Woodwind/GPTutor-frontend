@@ -14,21 +14,21 @@ export default function Register() {
   const [subject, setSubject] = useState([]);
 
   return (
-    <div className="flex flex-col text-white min-h-[100vh] pb-4 px-12 ">
+    <div className="flex flex-col text-white min-h-[100vh] pb-4 md:px-12 px-4 ">
       <Header />
 
-      <div className="flex items-center justify-between flex-1">
+      <div className="flex md:flex-row flex-col items-center md:justify-between justify-center flex-1">
         <div>
-          <Avatar style="w-[320px] h-[320px] ml-32" />
+          <Avatar style="w-[320px] h-[320px] ml-32 hidden md:block" />
         </div>
-        <div className=" w-[420px] mr-12">
+        <div className=" md:max-w-[420px] w-full md:mr-12">
           <p className="text-[42px] text-center font-light font-abel mb-1  leading-none">
             Create Account.
           </p>
           <p className="bg-gradient-to-r mb-4 leading-none text-center from-white/20 to-white/90  text-transparent bg-clip-text">
             {`>>>>>>>>>>>>>>`}
           </p>
-          <div className="flex flex-col space-y-1 mb-3">
+          <div className="flex flex-col space-y-1 mb-3 ">
             <label className="text-[20px]">Name</label>
             <input
               value={name}

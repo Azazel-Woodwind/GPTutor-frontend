@@ -8,20 +8,20 @@ import Avatar from "../components/Avatar";
 export default function Welcome() {
   return (
     <div className="min-h-screen flex flex-col">
-      <div className=" px-20">
+      <div className="md:px-20 px-4">
         <Navbar showHeader={true} />
       </div>
-      <div className="mx-auto mt-20">
+      <div className="mx-auto mt-20 md:block hidden">
         <Avatar isAnimate={true} style="w-[280px] h-[280px] " />
       </div>
 
       <div className="mt-auto">
-        <h3 className="text-white font-abel text-[52px] text-center mb-10">
+        <h3 className="text-white font-abel md:text-[52px] text-[36px] text-center mb-10">
           Welcome Back, Sophia!
         </h3>
         <div
           style={{ background: "rgba(255, 255, 255, 0.06) " }}
-          className="relative max-w-[1100px] border  rounded-t-[30px] border-slate-500 border-b-0  p-8 pt-10 mx-auto flex items-center space-x-2.5"
+          className="relative max-w-[1100px] border  rounded-t-[30px] border-slate-500 border-b-0  md:p-8 p-2 pt-10 mx-auto flex items-center space-x-2.5"
         >
           <div className="flex items-center justify-center top-2 left-[49%] absolute">
             <BsChevronUp
@@ -31,7 +31,7 @@ export default function Welcome() {
               size={20}
             />
           </div>
-          <div className="flex items-center space-x-4 border border-cyan-400 p-1  rounded-[16px] flex-1 mr-3">
+          <div className="flex items-center space-x-4 border border-cyan-400 p-1  rounded-[16px] flex-1 md:mr-3 ">
             <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">
               <BiMicrophone color="#fff" size={24} />
             </button>
