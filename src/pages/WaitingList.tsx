@@ -8,16 +8,16 @@ function WaitingList() {
   const [education, setEducation] = useState("");
   const [subject, setSubject] = useState([]);
   return (
-    <div className="max-w-[1100px] mx-auto h-screen text-white px-6 py-28">
+    <div className="max-w-[1100px] mx-auto flex flex-col  h-screen text-white px-6 pt-28 pb-4">
       <div className="flex items-center justify-between space-x-20  ">
         <div className=" mx-auto text-center flex-1 relative">
-          <div className="absolute -top-10">
-            <Avatar isAnimate={true} style="w-[300px] h-[300px]"/>
+          <div className="absolute -top-12">
+            <Avatar isAnimate={true} style="w-[300px] h-[300px]" />
           </div>
-          <h1 className="font-lora font-[500]  text-[120px] text-white ">
+          <h3 className="font-lora font-[500]  text-[120px] text-white leading-none mt-6">
             xtutor
-          </h1>
-          <h6 className="text-[42px] font-normal mb-2 font-abel">
+          </h3>
+          <h6 className="text-[42px] font-normal mb-2 font-abel leading-none">
             Hello Sophia.
           </h6>
         </div>
@@ -58,12 +58,11 @@ function WaitingList() {
           <button className="bg-gradient-to-r from-[#58fec4] to-blue-500 rounded-lg py-2 mt-2 text-black">{`>>>>>`}</button>
         </div>
       </div>
-      <div className="flex  ">
-        <p className="font-abel text-[26px] font-normal flex-1 text-center ">
-          Support the xtutor Vision,{" "}
-          <span className="underline">Read more</span>
+      <div className="mt-auto  ">
+        <p className="font-abel text-[50px] font-normal flex-1 text-center mb-10">
+          REVOLUTIONIZING EDUCATION.
         </p>
-        <div className="flex-1" />
+        <p className="text-white font-abel text-center text-[24px] mx-auto">©️ xtutor.ai, 2023</p>
       </div>
     </div>
   );

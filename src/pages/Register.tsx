@@ -21,13 +21,12 @@ export default function Register() {
         <div>
           <Avatar style="w-[320px] h-[320px] ml-32" />
         </div>
-        <div className=" w-[450px] mr-12">
-          <p className="text-[34px] font-light font-abel leading-none">
-            Welcome to{" "}
-            <span className="text-[42px] font-lora font-medium">xtutor</span>
-          </p>
-          <p className="text-[34px] font-light font-abel mb-3">
+        <div className=" w-[420px] mr-12">
+          <p className="text-[42px] text-center font-light font-abel mb-1  leading-none">
             Create Account.
+          </p>
+          <p className="bg-gradient-to-r mb-4 leading-none text-center from-white/20 to-white/90  text-transparent bg-clip-text">
+            {`>>>>>>>>>>>>>>`}
           </p>
           <div className="flex flex-col space-y-1 mb-3">
             <label className="text-[20px]">Name</label>
@@ -35,15 +34,6 @@ export default function Register() {
               value={name}
               onChange={e => setName(e.target.value)}
               type="text"
-              className="bg-transparent outline-none border border-white rounded-lg px-2 py-2"
-            />
-          </div>
-          <div className="flex flex-col space-y-1 mb-3">
-            <label className="text-[20px]">Password</label>
-            <input
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              type="password"
               className="bg-transparent outline-none border border-white rounded-lg px-2 py-2"
             />
           </div>
@@ -57,11 +47,11 @@ export default function Register() {
             />
           </div>
           <div className="flex flex-col space-y-1 mb-3">
-            <label className="text-[20px]">Phone Number</label>
+            <label className="text-[20px]">Password</label>
             <input
-              value={phoneNumber}
-              onChange={e => setPhoneNumber(e.target.value)}
-              type="text"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              type="password"
               className="bg-transparent outline-none border border-white rounded-lg px-2 py-2"
             />
           </div>
@@ -81,10 +71,6 @@ export default function Register() {
                 setValue={setSubject}
                 options={subjects}
               />
-              {/* <input
-              type="email"
-              className="bg-transparent outline-none border border-white rounded-lg px-2 py-2"
-            /> */}
             </div>
           </div>
           <button className="bg-gradient-to-r from-[#58fec4] w-full to-blue-500 rounded-lg py-2.5 mt-3 text-black">

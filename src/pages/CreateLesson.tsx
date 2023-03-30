@@ -4,13 +4,7 @@ import CustomInput from "../components/CustomInput";
 import DropDownList from "../components/DropDownList";
 import Header from "../components/Header/header";
 import ImageTextArea from "../components/ImageTextArea";
-import {
-  subjects,
-  topics,
-  eduLevel,
-  booleanOptions,
-  quizTypes,
-} from "../Data";
+import { subjects, topics, eduLevel, booleanOptions, quizTypes } from "../Data";
 
 export default function CreateLesson() {
   const [title, setTitle] = useState("");
@@ -23,14 +17,14 @@ export default function CreateLesson() {
 
   return (
     <div className="min-h-[100vh] text-white font-abel overflow-y-scroll pb-4">
-      <div className="px-20 ">
+      <div className="md:px-20 px-4 ">
         <Header />
       </div>
 
-      <h1 className=" text-[50px] max-w-[1100px] mx-auto font-abel my-2">
+      <h1 className=" md:text-[50px] text-[32px] max-w-[1100px] mx-auto font-abel my-2 px-4">
         Create Lesson
       </h1>
-      <div className="flex max-w-[1100px] mx-auto space-x-16">
+      <div className="flex flex-col md:flex-row max-w-[1100px] mx-auto md:space-x-16 px-4">
         <div className="flex-1">
           <div className="flex flex-col mb-4">
             <label className="text-[16px] mb-[2px]">Title</label>
@@ -104,9 +98,6 @@ export default function CreateLesson() {
               />
             </div>
           </div>
-          <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-full text-[#040A1E] text-[20px] rounded-lg py-2 text-center">
-            Generate Lesson
-          </button>
         </div>
         <div className="flex-1">
           <CustomInput
@@ -134,6 +125,12 @@ export default function CreateLesson() {
             lines={2}
           />
         </div>
+      </div>
+      <div className="flex max-w-[1100px] mx-auto md:space-x-16 px-4">
+        <button className="flex-1 bg-gradient-to-r from-cyan-300 to-blue-600 w-full text-[#040A1E] text-[20px] rounded-lg py-2 text-center">
+          Generate Lesson
+        </button>
+        <div className="flex-1 hidden md:block" />
       </div>
     </div>
   );

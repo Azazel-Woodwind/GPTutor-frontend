@@ -70,7 +70,7 @@ export default function MultiSelect({ value, setValue, options }: Iprops) {
       >
         {options.map(opt => (
           <div
-            onClick={() => setValue([...value, opt])}
+            onClick={() => setValue([opt, ...value])}
             className="border-b px-2 py-1.5 hover:bg-white/20 cursor-pointer "
           >
             {opt}

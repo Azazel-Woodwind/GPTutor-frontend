@@ -25,5 +25,5 @@
 import React from "react";
 
 export default function header() {
-  return <div className="font-lora font-medium text-[60px]">xtutor</div>;
+  return <div className="font-lora font-medium md:text-[60px] text-[40px]">xtutor</div>;
 }
