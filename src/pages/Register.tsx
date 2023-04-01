@@ -4,6 +4,7 @@ import DropDownList from "../components/DropDownList";
 import { eduLevel, subjects } from "../Data";
 import MultiSelect from "../components/MultiSelect";
 import Avatar from "../components/Avatar";
+import Footer from "../components/Footer";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -14,22 +15,20 @@ export default function Register() {
   const [subject, setSubject] = useState([]);
 
   return (
-    <div className="flex flex-col text-white min-h-[100vh] pb-4 md:px-12 px-4 ">
-      <Header />
-
+    <div className="flex flex-col text-white min-h-[calc(100vh-100px)] pb-4 md:px-12 px-4 ">
       <div className="flex md:flex-row flex-col items-center md:justify-between justify-center flex-1">
-        <div>
-          <Avatar style="w-[320px] h-[320px] ml-32 hidden md:block" />
+        <div className="">
+          <Avatar style="w-[375px] h-[375px] ml-32 hidden md:block" />
         </div>
-        <div className=" md:max-w-[420px] w-full md:mr-12">
+        <div className="font-abel  md:max-w-[420px] w-full md:mr-[100px]">
           <p className="text-[42px] text-center font-light font-abel mb-1  leading-none">
-            Create Account.
+            Create Account
           </p>
           <p className="bg-gradient-to-r mb-4 leading-none text-center from-white/20 to-white/90  text-transparent bg-clip-text">
             {`>>>>>>>>>>>>>>`}
           </p>
-          <div className="flex flex-col space-y-1 mb-3 ">
-            <label className="text-[20px]">Name</label>
+          <div className="flex  flex-col space-y-1 mb-3 ">
+            <label className="text-[20px] ">Name</label>
             <input
               value={name}
               onChange={e => setName(e.target.value)}
@@ -73,7 +72,7 @@ export default function Register() {
               />
             </div>
           </div>
-          <button className="bg-gradient-to-r from-[#58fec4] w-full to-blue-500 rounded-lg py-2.5 mt-3 text-black">
+          <button className="bg-gradient-to-r font-abel  w-full from-[#58E3FE] to-[#227CFF] rounded-lg py-2.5 mt-3 text-black">
             Sign Up
           </button>
           <p className="text-sm text-gray-400 font-abel text-center mt-6">
@@ -82,6 +81,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

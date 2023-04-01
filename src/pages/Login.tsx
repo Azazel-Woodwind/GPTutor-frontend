@@ -61,6 +61,7 @@
 
 import React, { useState } from "react";
 import Avatar from "../components/Avatar";
+import Footer from "../components/Footer";
 import Header from "../components/Header/header";
 
 export default function Register() {
@@ -68,17 +69,16 @@ export default function Register() {
   const [email, setEmail] = useState("");
 
   return (
-    <div className="flex flex-col text-white min-h-[100vh] pb-4 md:px-12 px-4 ">
-      <Header />
+    <div className="flex flex-col text-white min-h-[calc(100vh-100px)] pb-4 md:px-12 px-4 ">
       <div className="flex  md:justify-between justify-center flex-1 items-center">
         <div>
-          <Avatar  isAnimate={true} style="w-[300px] h-[300px] ml-32 hidden md:block" />
+          <Avatar
+            isAnimate={true}
+            style="w-[375px] h-[375px] ml-32 hidden md:block"
+          />
         </div>
         <div className="ml-auto max-w-[475px]  md:mr-12  flex-1  flex flex-col justify-center">
-          <p className="text-[34px] font-light font-abel leading-none ">
-            Welcome Back !
-          </p>
-          <p className="text-[34px] font-light font-abel mb-3">Login Now</p>
+          <p className="text-[38px] font-light font-abel mb-3">Login</p>
           <div className="flex flex-col space-y-1 mb-3 ">
             <label className="text-[20px]">Email</label>
             <input
@@ -102,7 +102,7 @@ export default function Register() {
             Forgot your Password?
           </p>
 
-          <button className="bg-gradient-to-r from-[#58fec4] w-full to-blue-500 rounded-lg py-2.5 mt-8 text-black">
+          <button className="bg-gradient-to-r from-[#58E3FE] to-[#227CFF] rounded-lg py-2.5 mt-8 text-black">
             Login
           </button>
           <p className="text-sm text-gray-400 font-abel text-center mt-6">
@@ -111,6 +111,7 @@ export default function Register() {
           </p>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

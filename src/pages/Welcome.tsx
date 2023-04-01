@@ -7,12 +7,9 @@ import Avatar from "../components/Avatar";
 
 export default function Welcome() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="md:px-20 px-4">
-        <Navbar showHeader={true} />
-      </div>
-      <div className="mx-auto mt-20 md:block hidden">
-        <Avatar isAnimate={true} style="w-[280px] h-[280px] " />
+    <div className="min-h-[calc(100vh-100px)] flex flex-col">
+      <div className="mx-auto mt-8 md:block hidden">
+        <Avatar isAnimate={true} style="w-[375px] h-[375px] " />
       </div>
 
       <div className="mt-auto">
@@ -32,7 +29,7 @@ export default function Welcome() {
             />
           </div>
           <div className="flex items-center space-x-4 border border-cyan-400 p-1  rounded-[16px] flex-1 md:mr-3 ">
-            <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">
+            <button className="bg-gradient-to-r from-[#58E3FE] to-[#227CFF] w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">
               <BiMicrophone color="#fff" size={24} />
             </button>
             <input
@@ -40,10 +37,10 @@ export default function Welcome() {
               className="flex-1 border-none outline-none h-full bg-transparent font-abel text-white text-lg"
             />
           </div>
-          <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">
+          <button className="bg-gradient-to-r from-[#58E3FE] to-[#227CFF] w-[42px] h-[42px] rounded-[12px] flex items-center justify-center">
             <IoMdSend color="#fff" size={24} />
           </button>
-          <p className="bg-gradient-to-r from-cyan-300 to-blue-600 inline-block text-transparent bg-clip-text border-[2px] border-cyan-500 h-[42px] w-[42px] text-center pt-[2px] text-xl rounded-[12px] cursor-pointer">
+          <p className="bg-gradient-to-r from-[#58E3FE] to-[#227CFF] inline-block text-transparent bg-clip-text border-[2px] border-cyan-500 h-[42px] w-[42px] text-center pt-[2px] text-xl rounded-[12px] cursor-pointer">
             x
           </p>
         </div>

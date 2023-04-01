@@ -8,6 +8,31 @@
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
+.check1 {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 69.27%
+  );
+}
+.check2 {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+.check3 {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 95.83%
+  );
+}
+.check4 {
+  background-color: red;
+}
+
 @keyframes pulse {
   0% {
     transform: scale(0.5);
@@ -20,4 +45,51 @@
   100% {
     transform: scale(0.5);
   }
+}
+
+.radio-label {
+  color: #303030;
+  font-size: 14px;
+  font-weight: 400;
+  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.radio-input {
+  margin: 0;
+  visibility: hidden;
+}
+
+.radio-input:checked + span {
+  border: 2px solid #fff;
+}
+
+.radio-input:checked + span:after {
+  opacity: 1;
+}
+
+.custom-radio {
+  cursor: pointer;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+/* for inner filled circle */
+.custom-radio::after {
+  content: "";
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.2s;
 }

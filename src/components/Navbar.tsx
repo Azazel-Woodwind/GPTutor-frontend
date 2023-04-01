@@ -8,22 +8,44 @@ import Header from "./Header/header";
 
 export default function Navbar({
   showHeader = false,
+  userType = null,
 }: {
   showHeader?: boolean;
+  userType?: string | null;
 }) {
   const [active, setActive] = useState("home");
+
   return (
-    <div className="flex  items-center justify-between text-white relative">
-      <Header />
-      <div className="flex items-center space-x-8">
-        <Link className="text-white font-abel text-lg" to="">
-          Home
-        </Link>
-        <Link className="text-white font-abel text-lg" to="">
-          Settings
-        </Link>
-      </div>
-      <div
+    <div className="flex h-[100px]  items-center justify-between text-white relative md:px-4 md:pr-14 px-4 ">
+      {userType !== null && <Header />}
+      {userType === null && (
+        <div className="flex items-center space-x-8 py-5 ml-auto">
+          <Link className="text-white font-abel text-lg" to="/login">
+            Login
+          </Link>
+          <Link className="text-white font-abel text-lg" to="/register">
+            Register
+          </Link>
+        </div>
+      )}
+      {userType === "student" && (
+        <div className="flex items-center space-x-8">
+          <Link className="text-white font-abel text-lg" to="/searchLesson">
+            Lesson
+          </Link>
+        </div>
+      )}
+      {(userType === "teacher" || userType === "admin") && (
+        <button className="bg-gradient-to-r from-[#58E3FE] to-[#227CFF] px-4 py-1.5 rounded-md ">
+          <Link
+            className="text-white font-abel text-lg font-bold"
+            to="/create-lesson"
+          >
+            Create Lesson
+          </Link>
+        </button>
+      )}
+      {/* <div
         className={`${
           !showHeader && "hidden"
         } absolute py-3 rounded-b-lg top-0 left-[calc(50%-100px)] hidden  w-[250px] md:flex items-center justify-around border border-t-0 border-[#50576E]`}
@@ -46,7 +68,7 @@ export default function Navbar({
             color={`${active === "setting" ? "#24AAFF" : "#fff"}`}
           />
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

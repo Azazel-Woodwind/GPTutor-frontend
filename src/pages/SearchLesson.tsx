@@ -23,22 +23,21 @@ export default function SearchLesson() {
     { title: "Algebra 9", info: "Substitution", color: "#fff" },
   ];
   return (
-    <div className="h-screen md:px-12 p-4 overflow-hidden">
-      <Navbar showHeader={true}/>
+    <div className="h-[calc(100vh-100px)] md:px-12 p-4 overflow-hidden">
       <div className="max-w-[1000px] mx-auto py-10">
-        <div className="flex md:flex-row flex-col items-center w-full space-y-6 md:space-x-10">
-          <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-2.5 w-full flex-1">
+        <div className="flex md:flex-row flex-col items-center w-full md:space-y-0 space-y-6 md:space-x-10">
+          <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-3.5 w-full flex-1">
             <FiSearch color="#fff" size={22} />
             <input
               type="text"
               className="border-none outline-none bg-transparent ml-2.5 font-abel text-white font-[20px]"
             />
           </div>
-          <div className="flex-1 w-full flex items-center space-x-6">
-            <button className="bg-gradient-to-r from-cyan-300 to-blue-600 w-full rounded-lg py-2.5 text-center">
+          <div className="flex-1 w-full flex items-center space-x-6 ">
+            <button className="bg-gradient-to-r from-[#58E3FE] h-[50px] to-[#227CFF] w-full rounded-lg py-2.5 text-center">
               h
             </button>
-            <div className="bg-gradient-to-r from-cyan-300 to-blue-600 w-full rounded-lg  text-center p-[2.5px] overflow-hidden ">
+            <div className="bg-gradient-to-r from-cyan-300 h-[50px] to-blue-600 w-full rounded-lg  text-center p-[2.5px] overflow-hidden ">
               <button className="bg-[#040A1E] w-full h-full rounded-md py-2">
                 <p className="bg-gradient-to-r from-cyan-300 to-blue-600 inline-block text-transparent bg-clip-text">
                   Tutorial

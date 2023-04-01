@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Logo from "../assets/Logo";
 import CustomInput from "../components/CustomInput";
 import DropDownList from "../components/DropDownList";
+import Footer from "../components/Footer";
 import Header from "../components/Header/header";
 import ImageTextArea from "../components/ImageTextArea";
 import { subjects, topics, eduLevel, booleanOptions, quizTypes } from "../Data";
@@ -16,11 +17,7 @@ export default function CreateLesson() {
   const [publish, setPublish] = useState("");
 
   return (
-    <div className="min-h-[100vh] text-white font-abel overflow-y-scroll pb-4">
-      <div className="md:px-20 px-4 ">
-        <Header />
-      </div>
-
+    <div className="min-h-[calc(100vh-100px)] text-white font-abel overflow-y-scroll pb-4">
       <h1 className=" md:text-[50px] text-[32px] max-w-[1100px] mx-auto font-abel my-2 px-4">
         Create Lesson
       </h1>
@@ -132,6 +129,7 @@ export default function CreateLesson() {
         </button>
         <div className="flex-1 hidden md:block" />
       </div>
+      <Footer />
     </div>
   );
 }

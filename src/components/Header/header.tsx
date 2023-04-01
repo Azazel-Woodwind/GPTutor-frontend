@@ -23,7 +23,8 @@
 // export default Header;
 
 import React from "react";
+import Logo from "../../assets/Logo";
 
 export default function header() {
-  return <div className="font-lora font-medium md:text-[60px] text-[40px]">xtutor</div>;
+  return <Logo />;
 }

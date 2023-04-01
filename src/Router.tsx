@@ -22,6 +22,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Unauthorised from "./pages/Unauthorised";
 import SearchLesson from "./pages/SearchLesson";
 import Welcome from "./pages/Welcome";
+import Navbar from "./components/Navbar";
 
 const STUDENT_ACCESS_LEVEL = 1;
 const TEACHER_ACCESS_LEVEL = 2;
@@ -31,7 +32,7 @@ const SUPER_ADMIN_ACCESS_LEVEL = 4;
 function ApplicationWrapper() {
   return (
     <>
-      {/* <Header /> */}
+      <Navbar userType="student"/>
       <Outlet />
     </>
   );
@@ -62,7 +63,11 @@ function RouteProtector({ accessLevel }: RouteProtectorProps) {
     }
     return <Navigate to={"/login"} state={{ from: location }} replace />;
   }
-  return <Outlet />;
+  return (
+    <>
+      <Outlet />
+    </>
+  );
 }
 
 function PublicWrapper() {

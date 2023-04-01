@@ -12,5 +12,7 @@ module.exports = {
       "2s": "4s",
     },
   },
-  plugins: [],
+  plugins: [
+    // ...
+  ],
 };

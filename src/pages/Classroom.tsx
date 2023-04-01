@@ -4,6 +4,12 @@ import RoundedLine from "../assets/RoundedLine";
 import Navbar from "../components/Navbar";
 import nurons from "../assets/neurons.png";
 import neucleus from "../assets/nucleus.jpg";
+import image1 from "../assets/image1.png";
+import image2 from "../assets/image2.png";
+import image3 from "../assets/image3.png";
+import image4 from "../assets/image4.png";
+import image5 from "../assets/image5.png";
+import image6 from "../assets/image6.png";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import Messages from "../components/Messages";
@@ -13,10 +19,19 @@ import "./searchLeson.css";
 import Avatar from "../components/Avatar";
 import { Resizable } from "re-resizable";
 
+
 export default function Classroom() {
   const [isCollapse, setIsCollapse] = useState(false);
   const [imageCount, setImageCount] = useState(0);
-  const images = [nurons, neucleus];
+  const images = [
+    { img: nurons, desc: "Cellular Biology - The Nerve Cell" },
+    { img: image1, desc: "Forces & Motion" },
+    { img: image2, desc: "Astrophysics - Planet Earth" },
+    { img: image3, desc: "Cellular Biology - Eukaryotic Cells" },
+    { img: image4, desc: "DNA" },
+    { img: image5, desc: "Cellular Biology - Eukaryotic Cells" },
+    { img: image6, desc: "The Human Immune System" },
+  ];
   const [heightScreen, setHeightScreen] = useState(0);
 
   useEffect(() => {
@@ -37,13 +52,9 @@ export default function Classroom() {
   console.log("Image count", imageCount);
 
   return (
-    <div className="min-h-screen overflow-hidden  flex flex-col relative">
-      <div className="md:px-20 px-4">
-        <Navbar />
-      </div>
-
+    <div className="min-h-[calc(100vh-100px)] overflow-hidden  flex flex-col relative">
       <div
-        className={`max-w-[1100px] md:w-[1100px] flex flex-col   mx-auto  relative h-full md:mt-auto mt-14 flex-1 `}
+        className={`max-w-[1100px] md:w-[1100px] flex flex-col   mx-auto  relative h-full md:mt-6 mt-14 flex-1 `}
       >
         <div
           className={`flex  md:space-x-3 md:h-[420px] h-[375px]  ${
@@ -51,7 +62,7 @@ export default function Classroom() {
           }`}
         >
           <div className="flex-1 md:block hidden ">
-            <Avatar style="w-[250px] h-[250px] ml-10 mt-14" />
+            <Avatar style="w-[370px] h-[370px] ml-4 " />
           </div>
           <div className="md:w-[595px] w-[370px] relative mx-auto">
             <div className="relative md:w-full w-[276px] mx-auto">
@@ -59,7 +70,7 @@ export default function Classroom() {
                 style={{ position: "absolute", height: "44px", width: "100%" }}
               />
               <p className="font-abel md:text-[16px] text-[12px] text-white absolute text-center left-0 right-0 md:top-[10px] top-[14px] ">
-                GCSE | Cellular Biology - The Nerve Cell
+                {images[imageCount].desc}
               </p>
             </div>
             <div className="relative ">
@@ -67,7 +78,7 @@ export default function Classroom() {
               <div className="absolute">
                 <div className="md:p-6 p-3.5 relative md:pt-16 pt-14">
                   <img
-                    src={images[imageCount]}
+                    src={images[imageCount].img}
                     className="w-full h-full rounded-xl "
                   />
                   <button
@@ -100,7 +111,7 @@ export default function Classroom() {
             top: true,
           }}
           style={{
-            background: "#040A1E ",
+            backgroundColor: "#040A1E ",
             position: "absolute",
           }}
           className={`transition-all bottom-2 top-0   mt-auto ease-in-out  md:max-w-[1100px] max-w-[400px] border  rounded-t-[30px] border-slate-500 border-b-0  md:px-8 px-2 pt-10 pb-20 ${
@@ -108,9 +119,9 @@ export default function Classroom() {
           }  overflow-hidden`}
           defaultSize={{
             width: "100%",
-            height: 300,
+            height: 250,
           }}
-          maxHeight={heightScreen - 85}
+          maxHeight={heightScreen - 110}
         >
           <button className="absolute top-2 left-[49%]">
             {isCollapse ? (
