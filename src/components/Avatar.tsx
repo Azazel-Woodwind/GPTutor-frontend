@@ -12,21 +12,21 @@ export default function Avatar({
     <div className={`${style} rounded-full relative opacity-50 `}>
       <div
         id={isAnimate ? "animation-ping" : ""}
-        className={`rounded-full  border inset-[0px] duration-300 check1 absolute border-b-0 `}
+        className={`rounded-full  border border-[#fff]/10 inset-[0px] duration-300 check1 absolute border-b-0 `}
       />
       <div
         id={isAnimate ? "animation-ping" : ""}
-        className={`rounded-full  border inset-[45px] duration-300 check2 absolute border-b-0 check2`}
+        className={`rounded-full  border border-[#fff]/10 inset-[45px] duration-300 check2 absolute border-b-0 check2`}
       />
       <div
         id={isAnimate ? "animation-ping" : ""}
-        className={`rounded-full border inset-[90px] duration-300 check3 absolute border-b-0 check3`}
+        className={`rounded-full border border-[#fff]/10 inset-[90px] duration-300 check3 absolute border-b-0 check3`}
       />
       <div
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.05)",
         }}
-        className={` rounded-full  border border-b-0 inset-[135px] ${
+        className={` rounded-full  border border-[#fff]/10 border-b-0 inset-[135px] ${
           isAnimate && "animate-pulse"
         }  absolute`}
       />
