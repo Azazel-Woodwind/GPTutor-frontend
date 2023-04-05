@@ -43,7 +43,7 @@ function useX(config: Config) {
     const audioQueue = useRef<string[]>([]);
     // console.log(audioQueue.current.length)
 
-    const sendMessage = (message: string) => {
+    const sendMessage = (message: string, context: object | undefined) => {
         if (message === "" || streaming || loading) return;
         if (!audio.current!.paused) {
             audioQueue.current = [];
@@ -52,8 +52,7 @@ function useX(config: Config) {
         }
         setHistory(prev => [...prev, { role: "user", content: message }]);
         onMessage({ role: "user", content: message });
-        console.log("SENDING MESSAGE TO X: ", message);
-        Socket.emit(`${channel}_message_x`, message);
+        Socket.emit(`${channel}_message_x`, { message, context } );
         setLoading(true);
     };
 

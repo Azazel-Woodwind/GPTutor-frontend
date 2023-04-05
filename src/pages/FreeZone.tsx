@@ -8,34 +8,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import SettingsIcon from "@mui/icons-material/Settings";
 import DesktopMacIcon from "@mui/icons-material/DesktopMac";
 import { redirect } from "react-router-dom";
+import { useAuth } from "../context/SessionContext";
 
 const FreeZone = () => {
-    const logout = () => {
-        localStorage.clear();
-        redirect("/login");
-    };
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            redirect("/login");
-        }
-    }, []);
+    const { session } = useAuth();
+    console.log(session);
+
     return (
         <>
             <div className="backGround-image">
-                <div>
-                    <div className="flex justify-between items-center w-100 pt-5">
-                        <div className="flex items-center text-white mr-5">
-                            <div className="menu-item">Home</div>
-                            <div className="menu-item">Setting</div>
-                            <div
-                                className="menu-item cursor-pointer"
-                                onClick={logout}>
-                                Logout
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div>
                     <div id="outerContainer">
                         <div id="container">
@@ -56,7 +37,9 @@ const FreeZone = () => {
                     </div>
                 </div>
                 <div className="text-center text-white home-text">
-                    <h1>Welcome Back, Sophia!</h1>
+                    <h1>
+                        Welcome Back, {session!.user.user_metadata.first_name}!
+                    </h1>
                 </div>
                 <div className="mt-5">
                     <div className="flex w-100 justify-center items-center">

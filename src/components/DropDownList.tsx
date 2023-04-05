@@ -36,34 +36,35 @@ import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
 type Iprops = {
-  value: string;
-  setValue: any;
-  options: string[];
+    value: string | undefined;
+    setValue: any;
+    options: string[];
 };
 
 export default function DropDownList({ value, setValue, options }: Iprops) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelect] = useState("");
-  return (
-    <div onClick={() => setIsOpen(!isOpen)} className="relative w-full flex-1">
-      <div className="flex items-center justify-between border border-white w-full rounded-[7px] h-[42px] px-2">
-        <p>{value}</p>
-        <BiChevronDown size={20} />
-      </div>
-      <div
-        className={`transition-all duration-300 ease-in-out bg-[#040A1E] rounded-lg border left-0 right-0 mt-2 absolute z-20 ${
-          !isOpen && "hidden"
-        }`}
-      >
-        {options.map(opt => (
-          <div
-            onClick={() => setValue(opt)}
-            className="border-b last:border-0 px-2 py-1.5 hover:bg-white/20 cursor-pointer "
-          >
-            {opt}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelect] = useState("");
+    return (
+        <div
+            onClick={() => setIsOpen(!isOpen)}
+            className="relative w-full flex-1">
+            <div className="flex items-center justify-between border border-[#50576E] w-full rounded-[7px] h-[42px] px-2">
+                <p>{value}</p>
+                <BiChevronDown size={20} />
+            </div>
+            <div
+                className={`transition-all duration-300 ease-in-out bg-[#040A1E] rounded-lg border left-0 right-0 mt-2 absolute z-20 ${
+                    !isOpen && "hidden"
+                }`}>
+                {options.map((opt, i) => (
+                    <div
+                        key={i}
+                        onClick={() => setValue(opt)}
+                        className="border-b last:border-0 px-2 py-1.5 hover:bg-white/20 cursor-pointer ">
+                        {opt}
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
 }

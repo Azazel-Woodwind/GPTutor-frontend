@@ -1,102 +1,75 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
-type Image = {
-    link: string;
-    description: string;
-};
+import { FiSearch } from "react-icons/fi";
+import { useLoaderData } from "react-router-dom";
+import LessonAPI from "../api/LessonAPI";
+import LessonRound from "../components/Header/LessonRound";
+import LessonCard from "../components/LessonCard";
+import Navbar from "../components/Navbar";
+import { useAuth } from "../context/SessionContext";
+import Loading from "./Loading";
+import "./searchLesson.css";
 
-type LearningObjective = {
-    title: string;
-    images: Image[];
-};
+export default function Lessons() {
+    const [displayedLessons, setDisplayedLessons] = React.useState<Lesson[]>(
+        []
+    );
 
-type Lesson = {
-    id: string;
-    title: string;
-    subject: string;
-    educationLevel: string;
-    description: string;
-    learningObjectives: LearningObjective[];
-};
+    // const fetchLessons = async () => {
+    //     try {
+    //         const lessons = await LessonAPI.getPublicLessons();
+    //         console.log("ALL LESSONS:", lessons);
 
-function main() {
-    const [lessons, setLessons] = React.useState<Lesson[]>([]);
-    const [loading, setLoading] = React.useState(true);
+    //         setLessons(lessons);
+    //     } catch (error) {
+    //         console.log(error);
+    //         return [];
+    //     }
+    // };
 
-    const fetchLessons = async () => {
-        try {
-            const res = await fetch("http://localhost:3001/api/lessons");
-            const data = await res.json();
-            console.log(data);
-            // const lessons = JSON.parse(data);
-            const currentLessons = [];
-            for (const lessonID in data) {
-                console.log(lessonID);
-                currentLessons.push(data[lessonID]);
-            }
-            console.log(currentLessons);
-            setLessons(currentLessons);
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
-    };
-
-    const deleteLesson = async (lessonID: string) => {
-        await fetch(`http://localhost:3001/api/lessons/${lessonID}`, {
-            method: "DELETE",
-        });
-        setLessons(lessons.filter(lesson => lesson.id !== lessonID));
-    };
+    const lessons = useLoaderData() as Lesson[];
 
     useEffect(() => {
-        fetchLessons();
+        setDisplayedLessons(lessons);
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    // console.log(loading);
 
     return (
-        <div>
-            <h1>Lessons</h1>
-            {lessons.length === 0 ? (
-                <h2>No lessons found</h2>
-            ) : (
-                <div>
-                    {lessons.map((lesson: any, i) => {
-                        return (
-                            <div
-                                style={{
-                                    border: "2px solid black",
-                                    padding: "5px",
-                                    paddingBottom: "10px",
-                                    margin: "10px 0px",
-                                }}
-                                key={i}>
-                                <h2>{lesson.title}</h2>
-                                <h3>Subject: {lesson.subject}</h3>
-                                <h3>
-                                    Education level: {lesson.educationLevel}
-                                </h3>
-                                <p>Description: {lesson.description}</p>
-                                <p>Lesson ID: {lesson.id}</p>
-                                <Link to={`/lessons/${lesson.id}`}>
-                                    <button>Start lesson</button>
-                                </Link>
-                                <button onClick={() => deleteLesson(lesson.id)}>
-                                    Delete lesson
-                                </button>
-                            </div>
-                        );
-                    })}
+        <div className="h-[calc(100vh-100px)] md:px-12 p-4 overflow-hidden">
+            <div className="max-w-[1000px] mx-auto py-10">
+                <div className="flex md:flex-row flex-col items-center w-full md:space-y-0 space-y-6 md:space-x-10">
+                    <div className="flex items-center border border-[#50576E] rounded-xl px-3 py-3.5 w-full flex-1">
+                        <FiSearch color="#fff" size={22} />
+                        <input
+                            type="text"
+                            className="border-none outline-none bg-transparent ml-2.5 font-abel text-white font-[20px]"
+                        />
+                    </div>
+                    <div className="flex-1 w-full flex items-center space-x-6 ">
+                        <button className="bg-gradient-to-r from-[#58E3FE] h-[50px] to-[#227CFF] w-full rounded-lg py-2.5 text-center">
+                            h
+                        </button>
+                        <div className="bg-gradient-to-r from-cyan-300 h-[50px] to-blue-600 w-full rounded-lg  text-center p-[2.5px] overflow-hidden ">
+                            <button className="bg-[#040A1E] w-full h-full rounded-md py-2">
+                                <p className="bg-gradient-to-r from-cyan-300 to-blue-600 inline-block text-transparent bg-clip-text">
+                                    Tutorial
+                                </p>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            )}
-            <Link to="/create-lesson">
-                <button>Create lesson</button>
-            </Link>
+                <div
+                    id="scroll"
+                    className="grid md:grid-cols-3 grid-cols-1 gap-4 mt-10  h-[420px] overflow-y-scroll pr-3">
+                    {displayedLessons.map(lesson => (
+                        <LessonCard
+                            title={lesson.title}
+                            subject={lesson.subject}
+                            color={"white"}
+                        />
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
-
-export default main;

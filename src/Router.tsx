@@ -1,173 +1,228 @@
 import {
-  createBrowserRouter,
-  Outlet,
-  RouterProvider,
-  Navigate,
-  useLocation,
+    createBrowserRouter,
+    Outlet,
+    RouterProvider,
+    Navigate,
+    useLocation,
 } from "react-router-dom";
 import FreeZone from "./pages/FreeZone";
-import Lessons from "./pages/Lessons";
-import Login from "./pages/Login";
+import MyLessons from "./pages/MyLessons";
 import CreateLesson from "./pages/CreateLesson";
 import Classroom from "./pages/Classroom";
 import Register from "./pages/Register";
-import Header from "./components/Header/header";
 import { SocketContextProvider } from "./context/SocketContext";
-import { UserContext } from "./context/UserContext";
-import { useContext } from "react";
-import { redirect } from "react-router-dom";
-import WaitingList from "./pages/WaitingList";
+import { useAuth } from "./context/SessionContext";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Unauthorised from "./pages/Unauthorised";
-import SearchLesson from "./pages/SearchLesson";
+import Lessons from "./pages/Lessons";
 import Welcome from "./pages/Welcome";
-import Navbar from "./components/Navbar";
+import XFooter from "./components/XFooter";
+import LessonAPI from "./api/LessonAPI";
+import { apiClient } from "./api/configs/axiosConfig";
+import DemoForm from "./pages/DemoForm";
+import Test1 from "./pages/Test1";
+import Test2 from "./pages/Test2";
+import styled from "styled-components";
 
+import WaitingList from "./pages/WaitingList";
+import Login from "./pages/Login";
+import Hub from "./pages/Hub";
+import Header from "./components/Header/header";
+import Chat from "./components/Chat";
 const STUDENT_ACCESS_LEVEL = 1;
 const TEACHER_ACCESS_LEVEL = 2;
 const ADMIN_ACCESS_LEVEL = 3;
 const SUPER_ADMIN_ACCESS_LEVEL = 4;
 
+const ApplicationContainer = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+const ApplicationWrapperStyle = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const ApplicationInternalStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
 function ApplicationWrapper() {
-  return (
-    <>
-      <Navbar userType="student"/>
-      <Outlet />
-    </>
-  );
+    return (
+        <ApplicationWrapperStyle>
+            <ApplicationInternalStyle>
+                <Header />
+                <Outlet />
+            </ApplicationInternalStyle>
+            {/* <Chat /> */}
+        </ApplicationWrapperStyle>
+    );
 }
 
 const AuthWrapper = () => {
-  const { user } = useContext(UserContext);
+    const { session } = useAuth();
 
-  if (!user) return <Navigate to={"/login"} replace />;
+    if (!session) return <Navigate to={"/login"} replace />;
 
-  return (
-    <SocketContextProvider>
-      <Outlet />
-    </SocketContextProvider>
-  );
+    return (
+        <SocketContextProvider>
+            <Outlet />
+            <XFooter />
+        </SocketContextProvider>
+    );
 };
 
 type RouteProtectorProps = {
-  accessLevel: number;
+    accessLevel: number;
+    children: any;
 };
 
-function RouteProtector({ accessLevel }: RouteProtectorProps) {
-  const { user } = useContext(UserContext);
-  const location = useLocation();
-  if (user?.accessLevel < accessLevel) {
-    if (user) {
-      return <Navigate to={"/free-zone"} state={{ from: location }} replace />;
+function RouteProtector({ accessLevel, children }: RouteProtectorProps) {
+    const { session } = useAuth();
+
+    const location = useLocation();
+    if (session!.user.accessLevel < accessLevel) {
+        return <Navigate to={"/hub"} state={{ from: location }} replace />;
     }
-    return <Navigate to={"/login"} state={{ from: location }} replace />;
-  }
-  return (
-    <>
-      <Outlet />
-    </>
-  );
+    return children ? children : <Outlet />;
 }
 
 function PublicWrapper() {
-  const { user } = useContext(UserContext);
-  console.log(user);
+    const { session } = useAuth();
 
-  if (user) return <Navigate to={"/free-zone"} replace />;
-
-  return <Outlet />;
+    return session ? <Navigate to={"/hub"} replace /> : <Outlet />;
 }
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <ApplicationWrapper />,
-    children: [
-      {
+    {
         path: "/",
-        element: <PublicWrapper />,
-        children: [
-          {
-            path: "/",
-            element: <WaitingList />,
-          },
-          {
-            path: "/login",
-            element: <Login />,
-          },
-          {
-            path: "/register",
-            element: <Register />,
-          },
-          {
-            path: "/searchLesson",
-            element: <SearchLesson />,
-          },
-          {
-            path: "/welcome",
-            element: <Welcome />,
-          },
-        ],
-      },
-      {
+        element: <WaitingList />,
+    },
+    {
+        path: "/login",
+        element: <Login />,
+    },
+    {
+        path: "/register",
+        element: <Register />,
+    },
+    {
         path: "/",
-        // element: <AuthWrapper />,
+        element: <ApplicationWrapper />,
         children: [
-          {
-            path: "/free-zone",
-            element: <FreeZone />,
-          },
-          {
-            path: "/lessons",
-            element: <Lessons />,
-          },
-          {
-            path: "/lesson/:lessonName", // search query includes ?id=lessonId to identify lesson
-            element: <Classroom />,
-          },
-          {
-            path: "/teacher",
-            element: <RouteProtector accessLevel={TEACHER_ACCESS_LEVEL} />,
-            children: [
-              {
-                path: "/teacher/dashboard",
-                element: <TeacherDashboard />,
-              },
-            ],
-          },
-          {
-            path: "create-lesson",
-            element: <RouteProtector accessLevel={TEACHER_ACCESS_LEVEL} />,
-            children: [
-              {
-                path: "/create-lesson",
-                element: <CreateLesson />,
-              },
-            ],
-          },
-          {
-            path: "/admin",
-            element: <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL} />,
-            children: [
-              {
-                path: "/admin/dashboard",
-                element: <AdminDashboard />,
-              },
-            ],
-          },
-          {
-            path: "/unauthorised",
-            element: <Unauthorised />,
-          },
+            {
+                path: "/hub",
+                element: <Hub />,
+            },
+            {
+                path: "/",
+                element: <PublicWrapper />,
+                children: [
+                    {
+                        path: "/login",
+                        element: <Login />,
+                    },
+                    {
+                        path: "/register",
+                        element: <Register />,
+                    },
+                    {
+                        path: "/welcome",
+                        element: <Welcome />,
+                    },
+                ],
+            },
+            {
+                element: <AuthWrapper />,
+                children: [
+                    {
+                        path: "/hub",
+                        element: <FreeZone />,
+                    },
+                    {
+                        path: "/my-lessons",
+                        element: <MyLessons />,
+                        loader: async (): Promise<Lesson[]> => {
+                            try {
+                                const lessons = await LessonAPI.getMyLessons();
+                                console.log("ALL LESSONS:", lessons);
+
+                                return lessons;
+                            } catch (error) {
+                                console.log(error);
+                                return [];
+                            }
+                        },
+                    },
+                    {
+                        path: "/lessons",
+                        element: <Lessons />,
+                        loader: async (): Promise<Lesson[]> => {
+                            try {
+                                const lessons =
+                                    await LessonAPI.getPublicLessons();
+                                console.log("ALL LESSONS:", lessons);
+
+                                return lessons;
+                            } catch (error) {
+                                console.log(error);
+                                return [];
+                            }
+                        },
+                    },
+                    {
+                        path: "/lesson/:lessonName", // search query includes ?id=lessonId to identify lesson
+                        element: <Classroom />,
+                    },
+                    {
+                        path: "/teacher/dashboard",
+                        element: (
+                            <RouteProtector accessLevel={TEACHER_ACCESS_LEVEL}>
+                                <TeacherDashboard />
+                            </RouteProtector>
+                        ),
+                    },
+                    {
+                        path: "create-lesson",
+                        element: (
+                            <RouteProtector accessLevel={STUDENT_ACCESS_LEVEL}>
+                                <CreateLesson />
+                            </RouteProtector>
+                        ),
+                    },
+                    {
+                        path: "/admin/dashboard",
+                        element: (
+                            <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
+                                <AdminDashboard />
+                            </RouteProtector>
+                        ),
+                        loader: async (): Promise<Lesson[]> => {
+                            try {
+                                const lessons = await LessonAPI.getAll();
+                                console.log("ALL LESSONS:", lessons);
+
+                                return lessons;
+                            } catch (error) {
+                                console.log(error);
+                                return [];
+                            }
+                        },
+                    },
+                    {
+                        path: "/unauthorised",
+                        element: <Unauthorised />,
+                    },
+                ],
+            },
         ],
-      },
-    ],
-  },
+    },
 ]);
 
 function Router() {
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
 }
 
 export default Router;

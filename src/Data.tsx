@@ -1,13 +1,10 @@
-export const eduLevel = ["Matric", "F.sc", "Bachedlors", "PHD"];
-export const subjects = ["Biology", "Science", "Maths", "Algebra"];
-export const topics = [
-  "Cellular Biology",
-  "Mechanics",
-  "Trignometery",
-  "Molecules",
-];
-
-export const occupations = ["Student", "Teacher"];
+export const educationLevels = ["KS3", "GCSE", "A-level"];
+export const subjects = ["Mathematics", "Physics", "Chemistry", "Biology"];
 
 export const booleanOptions = ["yes", "No"];
 export const quizTypes = ["Mcqs", "Blanks", "True/False"];
+
+export const MAX_LEARNING_OBJECTIVES = 5;
+export const MAX_IMAGES = 3;
+export const MIN_LEARNING_OBJECTIVES = 3;
+export const MIN_IMAGES = 1;
