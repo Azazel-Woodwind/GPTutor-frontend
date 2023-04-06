@@ -1,13 +1,15 @@
 import React from "react";
 import styled from "styled-components";
+import CenteredRow from "../styles/containers/CenteredRow";
+import FillParent from "../styles/containers/FillParent";
 
 const Avatar = ({ size, hasLogo }) => {
     return (
         <AvatarWrapper size={size}>
             <Ring />
-            <Ring delay={"2000"} />
-            <Ring delay={"4000"} />
-            <Ring delay={"6000"} />
+            <Ring delay={"2000"} size={size} />
+            <Ring delay={"4000"} size={size} />
+            <Ring delay={"6000"} size={size} />
             <X size={size}>
                 {hasLogo && (
                     <>
@@ -77,12 +79,11 @@ const Avatar = ({ size, hasLogo }) => {
 const X = styled.span`
     position: relative;
     border-radius: 50%;
-    background-color: #344161;
+    background-color: #34416150;
     width: ${props => props.size * 0.8}px;
     height: ${props => props.size * 0.8}px;
     z-index: 1;
     border: 1px solid rgb(255, 255, 255, 0.05);
-
     div {
         position: absolute;
         width: 20rem;
@@ -100,19 +101,19 @@ const X = styled.span`
     }
 `;
 
-const Ring = styled.span`
+const Ring = styled(FillParent)`
     position: absolute;
     border-radius: 50%;
+    width: ${props => props.size}px;
+    height: ${props => props.size}px;
     top: 0;
     left: 0;
-    ${props => props.theme.utils.fillParent}
     z-index: 1;
     animation: pulse 8s ease-out infinite;
     animation-delay: ${props => props.delay}ms;
 `;
 
-const AvatarWrapper = styled.div`
-    ${props => props.theme.utils.centeredRow}
+const AvatarWrapper = styled(CenteredRow)`
     position: relative;
 
     width: ${props => props.size}px;

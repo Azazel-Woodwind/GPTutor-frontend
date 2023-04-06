@@ -11,15 +11,14 @@ const BlurredEllipse = styled.div`
 
 export const Ellipse1 = styled(BlurredEllipse)`
     background-color: ${props => props.theme.colours.highlight1};
-    top: -20%;
-    left: 35%;
+    top: -30%;
+    left: 10%;
     z-index: 0;
 `;
 
 export const Ellipse2 = styled(BlurredEllipse)`
-    background-color: ${props => props.theme.colours.highlight2};
-    top: 35%;
-    left: 20%;
+    background-color: ${props => props.theme.colours.highlight1};
+    bottom: -20%;
+    right: 30%;
     z-index: 0;
 `;
-

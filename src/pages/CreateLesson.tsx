@@ -8,11 +8,9 @@ import ImageTextArea from "../components/ImageTextArea";
 import {
     subjects,
     educationLevels,
-    booleanOptions,
-    quizTypes,
     MAX_LEARNING_OBJECTIVES,
     MIN_LEARNING_OBJECTIVES,
-} from "../Data";
+} from "../lib/FormData";
 import { useForm } from "react-hook-form";
 import useDynamicFields from "../hooks/useDynamicFields";
 import LearningObjective from "../components/CreateLesson/LearningObjective";

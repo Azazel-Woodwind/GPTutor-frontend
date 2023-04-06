@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-
-function Loading() {
+import Avatar from "../components/Avatar";
+function Loading({ message }) {
     return (
         <Wrapper>
-            <div className="flex justify-center items-center h-screen relative">
-                <div className="bg-[#3750C0] hidden md:block absolute bottom-[0px] left-0 blur-[382px] w-[600px] h-[300px]" />
-                <div className="bg-[#3750C0] hidden md:block absolute bottom-[0px] left-0 blur-[382px] w-[600px] h-[300px]" />
-                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white-900"></div>
-            </div>
+            <Avatar size={200} />
+            <h1>
+                Amet tempor sit irure est laboris Lorem proident id elit eu
+                consequat eu veniam.
+            </h1>
         </Wrapper>
     );
 }
@@ -19,7 +19,15 @@ const Wrapper = styled.div`
     width: 100vw;
     height: 100vh;
     z-index: 10000000;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
     background-color: #040a1e;
     position: absolute;
+    h1 {
+        font-weight: 200;
+        font-size: 20px;
+    }
 `;
 export default Loading;

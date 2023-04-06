@@ -15,7 +15,6 @@ import { useAuth } from "./context/SessionContext";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Unauthorised from "./pages/Unauthorised";
-import Lessons from "./pages/Lessons";
 import Welcome from "./pages/Welcome";
 import XFooter from "./components/XFooter";
 import LessonAPI from "./api/LessonAPI";
@@ -26,10 +25,15 @@ import Test2 from "./pages/Test2";
 import styled from "styled-components";
 
 import WaitingList from "./pages/WaitingList";
+import Lessons from "./pages/Lessons";
+
 import Login from "./pages/Login";
 import Hub from "./pages/Hub";
 import Header from "./components/Header/header";
 import Chat from "./components/Chat";
+import Loading from "./pages/Loading";
+import { ChatContextProvider } from "./context/ChatContext";
+
 const STUDENT_ACCESS_LEVEL = 1;
 const TEACHER_ACCESS_LEVEL = 2;
 const ADMIN_ACCESS_LEVEL = 3;
@@ -43,20 +47,25 @@ const ApplicationContainer = styled.div`
 const ApplicationWrapperStyle = styled.div`
     display: flex;
     flex-direction: row;
+    height: 100%;
 `;
 
 const ApplicationInternalStyle = styled.div`
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
 `;
+
 function ApplicationWrapper() {
     return (
         <ApplicationWrapperStyle>
-            <ApplicationInternalStyle>
-                <Header />
-                <Outlet />
-            </ApplicationInternalStyle>
-            {/* <Chat /> */}
+            <ChatContextProvider>
+                <ApplicationInternalStyle>
+                    <Header />
+                    <Outlet />
+                </ApplicationInternalStyle>
+                <Chat />
+            </ChatContextProvider>
         </ApplicationWrapperStyle>
     );
 }
@@ -101,12 +110,26 @@ const router = createBrowserRouter([
         element: <WaitingList />,
     },
     {
-        path: "/login",
-        element: <Login />,
+        path: "/loading",
+        element: <Loading />,
     },
     {
-        path: "/register",
-        element: <Register />,
+        path: "/test",
+        element: <Test1 />,
+    },
+    {
+        path: "/",
+        element: <PublicWrapper />,
+        children: [
+            {
+                path: "/login",
+                element: <Login />,
+            },
+            {
+                path: "/register",
+                element: <Register />,
+            },
+        ],
     },
     {
         path: "/",
@@ -117,22 +140,8 @@ const router = createBrowserRouter([
                 element: <Hub />,
             },
             {
-                path: "/",
-                element: <PublicWrapper />,
-                children: [
-                    {
-                        path: "/login",
-                        element: <Login />,
-                    },
-                    {
-                        path: "/register",
-                        element: <Register />,
-                    },
-                    {
-                        path: "/welcome",
-                        element: <Welcome />,
-                    },
-                ],
+                path: "/lessons",
+                element: <Lessons />,
             },
             {
                 element: <AuthWrapper />,

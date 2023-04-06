@@ -1,5 +1,9 @@
 import { FaPlus } from "react-icons/fa";
-import { MAX_IMAGES, MIN_IMAGES, MIN_LEARNING_OBJECTIVES } from "../../Data";
+import {
+    MAX_IMAGES,
+    MIN_IMAGES,
+    MIN_LEARNING_OBJECTIVES,
+} from "../../lib/FormData";
 import useDynamicFields from "../../hooks/useDynamicFields";
 import LearningObjectiveImage from "./LearningObjectiveImage";
 

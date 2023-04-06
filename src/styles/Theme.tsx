@@ -1,7 +1,7 @@
-const gradientColour1 = "#58c1fe";
-const gradientColour2 = "rgba(36, 170, 255, 1)";
-const gradientColour3 = "rgba(1, 99, 255, 1)";
-const gradientAngle = 149;
+export const gradientColour1 = "#58c1fe";
+export const gradientColour2 = "rgba(36, 170, 255, 1)";
+export const gradientColour3 = "rgba(1, 99, 255, 1)";
+export const gradientAngle = 149;
 
 const Theme = {
     colours: {
@@ -12,12 +12,13 @@ const Theme = {
         tertiary: "#040a1e",
         highlight1: "#3750c0",
         highlight2: "#217db0",
+        glow: "#3523a9",
     },
     utils: {
         centeredRow: `
                     display: flex;
                     flex-direction: row;
-                    justify-content: center;
+                    justify-content: center;/
                     align-items: center;
                 `,
         centeredColumn: `
@@ -42,14 +43,7 @@ const Theme = {
                     `,
     },
     gradient: ({ animationLength }: { length: number }) => `
-    @keyframes gradient {
-        0% {
-            background-position: 0 0;
-        }
-        100% {
-            background-position: 100% 0;
-        }
-    }
+    
 
     background: ${gradientColour1};
     background: -moz-linear-gradient(
@@ -59,6 +53,7 @@ const Theme = {
         ${gradientColour3} 75%,
         ${gradientColour1} 100%
     );
+    
     background: -webkit-linear-gradient(
         ${gradientAngle}deg,
         ${gradientColour1}  0%,
@@ -66,15 +61,26 @@ const Theme = {
         ${gradientColour3}  75%,
         ${gradientColour1}  100%
     );
-    background: linear-gradient(
-        ${gradientAngle}deg,
+    background: rgba(0, 0, 0, 0), linear-gradient(
+        ${gradientAngle}  deg,
         ${gradientColour1}  0%,
         ${gradientColour2}  25%,
         ${gradientColour3}  75%,
         ${gradientColour1}  100%
     );
+    background-clip: padding-box, border-box;
+    background-size: 800% auto;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="${gradientColour1}",endColorstr="${gradientColour1}",GradientType=1);
     animation: gradient ${animationLength}s linear infinite;
+    `,
+    linearGradient: `
+    linear-gradient(
+        149deg,
+        #58c1fe  0%,
+        rgba(36, 170, 255, 1)  25%,
+        rgba(1, 99, 255, 1)  75%,
+        #58c1fe  100%
+    )
     `,
 };
 

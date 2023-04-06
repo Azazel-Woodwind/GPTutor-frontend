@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Theme from "../styles/Theme";
+import CenteredRow from "../styles/containers/CenteredRow";
+import IconButton from "./IconButton";
 
 const DefaultInputStyling = `
     padding: 0.7em 0.7em 1.1em 0.7em;
-    margin: 1em 0;
     position: relative;
     border-radius: 8px;
     box-sizing: content-box;
@@ -21,8 +22,8 @@ const DefaultInputStyling = `
 export const BaseInputStyle = styled.input`
     color: ${props => (props.color ? props.color : "white")};
     font-size: 16px;
-    z-index: 2;
-    min-width: 100%;
+    z-index: 1;
+    width: 100%;
     background: rgba(0, 0, 0, 0);
     outline: none;
     border: none;
@@ -34,17 +35,19 @@ export const BaseInputStyle = styled.input`
     :-internal-autofill-previewed,
     :-internal-autofill-selected {
         -webkit-transition: background-color 5000s ease-in-out 0s;
-        -webkit-text-fill-color: inherit !important;
+        -webkit-text-fill-color: ${props =>
+            props.theme.colours.primary} !important;
     }
     ${props => props.invalid && "border: 1px solid red !important;"};
     ${props => props.width && `width: ${props.width}`};
     ${props =>
         props.adornmentWidth &&
-        `padding-right: calc(${props.adornmentWidth}px + 1em);`};
+        `padding-right: calc(${props.adornmentWidth}px);`};
 `;
 
 export const CustomFieldset = styled.fieldset`
     ${DefaultInputStyling}
+    flex-grow: 1;
 `;
 
 export const CustomLegend = styled.legend`
@@ -78,38 +81,64 @@ const InputLabel = styled.label`
 
 const EndAdornmentWrapper = styled.div`
     position: absolute;
-    top: 0px;
+    top: -5%;
     right: 0px;
-    width: 100%;
-    z-index: -4;
     height: 100%;
     display: flex;
     align-items: center;
     flex-direction: row-reverse;
-    padding-right: 1em;
     box-sizing: border-box;
-    span {
-        z-index: 10;
-    }
 `;
 
-export const BaseInput = ({ inputRef, ...props }) => {
+export const BaseInput = ({ inputRef, type, ...props }) => {
     const [wrapper, setRef] = React.useState(undefined);
+    const [visible, setVisible] = React.useState(false);
 
     return (
-        <div>
+        <>
             <BaseInputStyle
                 {...props}
+                type={visible ? "text" : type}
                 ref={inputRef}
                 adornmentWidth={wrapper?.getBoundingClientRect().width}
             />
 
-            {props.endAdornment && (
+            {type === "password" ? (
                 <EndAdornmentWrapper>
-                    <span ref={ref => setRef(ref)}>{props.endAdornment}</span>
+                    <span ref={ref => setRef(ref)}>
+                        <IconButton
+                            as={motion.div}
+                            whileTap={{ scale: 0.95 }}
+                            whileHover={{
+                                scale: 1.1,
+                                transition: { duration: 0.3 },
+                            }}
+                            onClick={() => setVisible(!visible)}>
+                            {visible ? (
+                                <FaEye
+                                    // style={{
+                                    //     backgroundColor: "blue",
+                                    //     borderRadius: "50%",
+
+                                    // }}
+                                    size="1.4em"
+                                />
+                            ) : (
+                                <FaEyeSlash size="1.5em" />
+                            )}
+                        </IconButton>
+                    </span>
                 </EndAdornmentWrapper>
+            ) : (
+                props.endAdornment && (
+                    <EndAdornmentWrapper>
+                        <span ref={ref => setRef(ref)}>
+                            {props.endAdornment}
+                        </span>
+                    </EndAdornmentWrapper>
+                )
             )}
-        </div>
+        </>
     );
 };
 
@@ -120,11 +149,11 @@ export const Textfield = ({
     onBlur,
     required,
     color,
-    endAdornment,
     ...props
 }: any) => {
     const [focused, setFocused] = React.useState(false);
     const [input, setInput] = React.useState("");
+    const [mouseEntered, setMouseEntered] = React.useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
     const LabelVariants = {
@@ -142,9 +171,13 @@ export const Textfield = ({
     return (
         <CustomFieldset
             onClick={() => {
+                console.log("mouse down");
+
                 inputRef.current?.focus();
                 setFocused(true);
             }}
+            onMouseEnter={() => setMouseEntered(true)}
+            onMouseLeave={() => setMouseEntered(false)}
             {...props}>
             <CustomLegend visible={focused || input.length}>
                 {label}
@@ -170,8 +203,10 @@ export const Textfield = ({
                     onClick && onClick(e);
                 }}
                 onBlur={e => {
-                    setFocused(false);
-                    onBlur && onBlur(e);
+                    if (!mouseEntered) {
+                        setFocused(false);
+                        onBlur && onBlur(e);
+                    }
                 }}
             />
         </CustomFieldset>

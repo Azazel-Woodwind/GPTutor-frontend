@@ -2,7 +2,6 @@ import React from "react";
 import useX from "../hooks/useX/useX";
 import { SocketContext } from "../context/SocketContext";
 import styled from "styled-components";
-import Messages from "./Messages";
 import { Resizable } from "re-resizable";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { BiMicrophone } from "react-icons/bi";

@@ -1,5 +1,5 @@
 import { FaImage } from "react-icons/fa";
-import { MIN_IMAGES } from "../../Data";
+import { MIN_IMAGES } from "../../lib/FormData";
 
 export default function LearningObjectiveImage({
     imageIndex,

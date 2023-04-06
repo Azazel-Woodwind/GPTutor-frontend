@@ -5,7 +5,7 @@ import MultiSelect from "../components/MultiSelect";
 import RadioButton from "../components/RadioButton";
 import ErrorMessage from "../components/WaitingList/ErrorMessage";
 import SuccessMessage from "../components/WaitingList/SuccessMessage";
-import PageWrapper from "../styles/PageWrapper";
+import PageWrapper from "../styles/Ellipses";
 import styled from "styled-components";
 import { Textfield } from "../components/Textfield";
 import CustomSelect from "../components/CustomSelect";
