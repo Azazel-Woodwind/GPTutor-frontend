@@ -2,26 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import Avatar from "./Avatar";
 import { motion } from "framer-motion";
+import {
+    capitaliseFirstLetter,
+    formatEducationLevel,
+} from "../lib/stringUtils";
 
 type PropsTypes = {
-    title: string;
-    subject: string;
-    color: string;
+    lesson: Lesson;
 };
 
-function LessonCard({ title, subject, color }: PropsTypes) {
+function LessonCard({ lesson }: PropsTypes) {
     return (
         <Container
             as={motion.div}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}>
-            <Title> Algebra Fundamentals</Title>
-            <Subject> Mathematics</Subject>
-            <Description>
-                Sint esse cupidatat magna nostrud pariatur ut qui elit id ipsum
-                labore eu qui.
-            </Description>
-            <Level> GCSE </Level>
+            <Title>{capitaliseFirstLetter(lesson.title)}</Title>
+            <Subject>{capitaliseFirstLetter(lesson.subject)}</Subject>
+            <Description>{lesson.caption}</Description>
+            <Level>{formatEducationLevel(lesson.education_level)}</Level>
         </Container>
     );
 }
@@ -61,7 +60,7 @@ const Container = styled.div`
     position: relative;
     padding: 2em 1em;
     width: 15em;
-    height: 22em;
+    height: 18em;
     z-index: 10;
     border-radius: 5px;
     box-sizing: border-box;

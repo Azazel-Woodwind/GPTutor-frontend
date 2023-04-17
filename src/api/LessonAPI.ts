@@ -3,7 +3,11 @@ import supabase from "./configs/supabase";
 
 const LessonAPI = {
     getPublicLessons: async function (): Promise<Lesson[]> {
-        const { data, error } = await supabase.from("lessons").select("*");
+        const { data, error } = await supabase
+            .from("lessons")
+            .select("*")
+            .eq("is_published", true)
+            .eq("is_verified", true);
 
         if (error) {
             throw error;
@@ -13,32 +17,46 @@ const LessonAPI = {
     },
 
     getMyLessons: async function (): Promise<Lesson[]> {
-        const {
-            data: { session },
-            error,
-        } = await supabase.auth.getSession();
+        // const {
+        //     data: { session },
+        //     error,
+        // } = await supabase.auth.getSession();
+
+        // if (error) {
+        //     throw error;
+        // }
+
+        // if (!session) {
+        //     throw "Must be logged in to get your lessons";
+        // }
+
+        const { data, error } = await supabase.from("lessons").select("*");
 
         if (error) {
             throw error;
         }
 
-        if (!session) {
-            throw "Must be logged in to get your lessons";
-        }
-
-        const { data, error: error2 } = await supabase
-            .from("lessons")
-            .select("*")
-            .eq("author_id", session.user.id);
-
-        if (error2) {
-            throw error2;
-        }
-
         return data as Lesson[];
     },
 
+    getMyLessonById: async function (lesson_id: string): Promise<Lesson> {
+        const { data, error } = await supabase
+            .from("lessons")
+            .select("*, learning_objectives (*, images (*))")
+            .eq("id", lesson_id);
+
+        if (error) {
+            console.log(error);
+
+            throw error;
+        }
+
+        return data[0] as Lesson;
+    },
+
     create: async function (newLesson: Omit<Lesson, "id">) {
+        console.log(newLesson);
+
         const { data, error } = await supabase.rpc("create_lesson", newLesson);
 
         if (error) {

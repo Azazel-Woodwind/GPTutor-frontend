@@ -12,7 +12,9 @@ const ChildContainer = styled.div`
     border: solid transparent;
 `;
 
-const GradientOutline = ({ children }) => {
+const GradientOutline = ({ children, hidden }) => {
+    if (hidden) return <> {children} </>;
+
     return (
         <GradientBorder>
             <ChildContainer> {children} </ChildContainer>

@@ -1,17 +1,20 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
+    :root {
+        --toastify-toast-width: 350px;
+    }
     body, html {
-        z-index: -1;
+        position: relative;
+        z-index: -3;
         margin: 0;
         padding: 0;
         height: 100vh;
         width: 100vw;
-        
-        color: ${props => props.theme.colours.primary};;
+        color: ${props => props.theme.colours.primary};
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         overflow-x: clip;
-        background-color: #121a3f;
+        background-color: ${props => props.theme.colours.background};
         overflow-y: clip;
         ${props => props.theme.utils.fullScreen};
     }
@@ -23,21 +26,25 @@ const GlobalStyles = createGlobalStyle`
     * {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        box-sizing: border-box; //DICKhead caught in 4k
+        box-sizing: border-box; 
     }
-*::-webkit-scrollbar {
-  width: 0.3em;
-}
- 
-*::-webkit-scrollbar-track {
-  background-color: ${props => props.theme.colours.tertiary};
-}
- 
-*::-webkit-scrollbar-thumb {
-  ${props => props.theme.gradient({ animationLength: 5 })}
-  border-radius: 10px;
-}
 
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 10px;
+        cursor: pointer;
+    }
+    
+    *::-webkit-scrollbar-track {
+        background-color: ${props => props.theme.colours.tertiary};
+        cursor: pointer;
+    }
+    
+    *::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.colours.contrast};
+        border-radius: 10px;
+        cursor: pointer;
+    }
 
     @keyframes pulse {
         0% {

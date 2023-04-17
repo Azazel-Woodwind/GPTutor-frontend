@@ -1,21 +1,22 @@
 import React from "react";
 import styled from "styled-components";
+import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
 import FillParent from "../styles/containers/FillParent";
 
 const Avatar = ({ size, hasLogo }) => {
     return (
         <AvatarWrapper size={size}>
-            <Ring />
+            <Ring size={size} />
             <Ring delay={"2000"} size={size} />
             <Ring delay={"4000"} size={size} />
             <Ring delay={"6000"} size={size} />
             <X size={size}>
                 {hasLogo && (
-                    <>
+                    <LogoWrapper>
                         <svg
                             width={1.7 * size}
-                            height="100"
+                            // height="100"
                             viewBox="0 0 476 114"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -33,9 +34,9 @@ const Avatar = ({ size, hasLogo }) => {
                                     width="475.465"
                                     height="113.477"
                                     filterUnits="userSpaceOnUse"
-                                    color-interpolation-filters="sRGB">
+                                    colorInterpolationFilters="sRGB">
                                     <feFlood
-                                        flood-opacity="0"
+                                        floodOpacity="0"
                                         result="BackgroundImageFix"
                                     />
                                     <feColorMatrix
@@ -68,15 +69,36 @@ const Avatar = ({ size, hasLogo }) => {
                                 </filter>
                             </defs>
                         </svg>
-                        <div> Tutor Liberation Front </div>
-                    </>
+                        <Slogan size={size}> Tutor Liberation Front </Slogan>
+                    </LogoWrapper>
                 )}
             </X>
         </AvatarWrapper>
     );
 };
 
-const X = styled.span`
+const Slogan = styled.div`
+    position: relative;
+    padding: 0;
+    text-align: center;
+    font-size: ${props => (props.size * 1.5) / 190}em;
+
+    top: -2%;
+`;
+
+const LogoWrapper = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    right: -87%;
+    top: 6%;
+    svg {
+        position: relative;
+    }
+`;
+
+const X = styled(CenteredColumn)`
     position: relative;
     border-radius: 50%;
     background-color: #34416150;
@@ -84,21 +106,6 @@ const X = styled.span`
     height: ${props => props.size * 0.8}px;
     z-index: 1;
     border: 1px solid rgb(255, 255, 255, 0.05);
-    div {
-        position: absolute;
-        width: 20rem;
-        text-align: center;
-        font-size: 1.5em;
-        top: 74%;
-        left: 25%;
-    }
-    svg {
-        /* border: 5px solid red; */
-        position: absolute;
-        left: 29%;
-        top: 13%;
-        width: auto;
-    }
 `;
 
 const Ring = styled(FillParent)`
@@ -106,8 +113,6 @@ const Ring = styled(FillParent)`
     border-radius: 50%;
     width: ${props => props.size}px;
     height: ${props => props.size}px;
-    top: 0;
-    left: 0;
     z-index: 1;
     animation: pulse 8s ease-out infinite;
     animation-delay: ${props => props.delay}ms;
@@ -116,8 +121,8 @@ const Ring = styled(FillParent)`
 const AvatarWrapper = styled(CenteredRow)`
     position: relative;
 
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
+    min-width: ${props => props.size * 3}px;
+    min-height: ${props => props.size * 3}px;
     /* border: 5px solid blue; */
 `;
 

@@ -31,7 +31,7 @@ function useX(config: Config) {
     const { Socket } = useContext(SocketContext);
 
     const [history, setHistory] = useState<Message[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [streaming, setStreaming] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [speaking, setSpeaking] = useState(false);
@@ -41,7 +41,11 @@ function useX(config: Config) {
         typeof window === "undefined" ? null : new Audio()
     );
     const audioQueue = useRef<string[]>([]);
-    // console.log(audioQueue.current.length)
+
+    const sendSystemMessage = message => {
+        console.log("Received system message request: ", message);
+        setHistory(prev => [...prev, { role: "system", content: message }]);
+    };
 
     const sendMessage = (message: string, context: object | undefined) => {
         if (message === "" || streaming || loading) return;
@@ -50,13 +54,24 @@ function useX(config: Config) {
             audio.current!.src = "";
             audio.current!.load();
         }
+
         setHistory(prev => [...prev, { role: "user", content: message }]);
         onMessage({ role: "user", content: message });
-        Socket.emit(`${channel}_message_x`, { message, context } );
+        Socket.emit(`${channel}_message_x`, { message, context });
         setLoading(true);
     };
 
+    const toggleMute = () => {
+        audio.current!.muted = !audio.current!.muted;
+    };
+
+    const setSpeed = (speed: number) => {
+        audio.current!.playbackRate = speed;
+    };
+
     useEffect(() => {
+        if (!Socket) return;
+
         audio.current!.autoplay = true;
 
         // audio.current!.muted = true;
@@ -93,6 +108,11 @@ function useX(config: Config) {
             }
         });
 
+        Socket.on(`${channel}_error`, err => {
+            sendSystemMessage(err);
+            setLoading(false);
+        });
+
         Socket.on(`audio_data`, data => {
             // console.log("received audio_data")
             if (audio.current!.paused) {
@@ -109,7 +129,7 @@ function useX(config: Config) {
         });
 
         Socket.on(`${channel}_response_data`, data => {
-            // console.log("response_data")
+            console.log("response_data:", data);
 
             setHistory(prev => [
                 ...prev,
@@ -125,7 +145,7 @@ function useX(config: Config) {
             onFinished(message);
             setLoading(false);
         });
-    }, []);
+    }, [Socket]);
 
     return {
         sendMessage,
@@ -135,8 +155,11 @@ function useX(config: Config) {
         setLoading,
         currentMessage,
         setCurrentMessage,
+        sendSystemMessage,
         streaming,
         speaking,
+        toggleMute,
+        setSpeed,
     };
 }
 

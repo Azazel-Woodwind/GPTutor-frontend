@@ -5,23 +5,15 @@ import {
     Navigate,
     useLocation,
 } from "react-router-dom";
-import FreeZone from "./pages/FreeZone";
-import MyLessons from "./pages/MyLessons";
 import CreateLesson from "./pages/CreateLesson";
 import Classroom from "./pages/Classroom";
 import Register from "./pages/Register";
 import { SocketContextProvider } from "./context/SocketContext";
 import { useAuth } from "./context/SessionContext";
 import TeacherDashboard from "./pages/TeacherDashboard";
-import AdminDashboard from "./pages/AdminDashboard";
 import Unauthorised from "./pages/Unauthorised";
-import Welcome from "./pages/Welcome";
-import XFooter from "./components/XFooter";
 import LessonAPI from "./api/LessonAPI";
-import { apiClient } from "./api/configs/axiosConfig";
-import DemoForm from "./pages/DemoForm";
 import Test1 from "./pages/Test1";
-import Test2 from "./pages/Test2";
 import styled from "styled-components";
 
 import WaitingList from "./pages/WaitingList";
@@ -32,56 +24,70 @@ import Hub from "./pages/Hub";
 import Header from "./components/Header/header";
 import Chat from "./components/Chat";
 import Loading from "./pages/Loading";
+import Settings from "./pages/SettingsMenu";
+
+import Notification from "./pages/Notification";
 import { ChatContextProvider } from "./context/ChatContext";
+import PublicFooter from "./components/PublicFooter";
+import CenteredColumn from "./styles/containers/CenteredColumn";
+import SubjectsAPI from "./api/SubjectAPI";
+import { capitaliseFirstLetter, formatEducationLevel } from "./lib/stringUtils";
+import CenteredRow from "./styles/containers/CenteredRow";
 
-const STUDENT_ACCESS_LEVEL = 1;
-const TEACHER_ACCESS_LEVEL = 2;
-const ADMIN_ACCESS_LEVEL = 3;
-const SUPER_ADMIN_ACCESS_LEVEL = 4;
+import Profile from "./pages/settings/Profile";
+import Account from "./pages/settings/Account";
+import Apperance from "./pages/settings/Appearance";
+import Plans from "./pages/settings/Plans";
+import Notifications from "./pages/settings/Notifications";
+import General from "./pages/settings/General";
 
-const ApplicationContainer = styled.div`
-    width: 100%;
-    height: 100%;
-`;
+import Dashboard from "./pages/DashboardMenu";
+import Users from "./pages/dashboard/Users";
+import DLessons from "./pages/dashboard/Lessons";
+
+import PageWrapper from "./styles/containers/PageWrapper";
+import Scroller from "./components/Scroller";
+import MyLessons from "./pages/dashboard/MyLessons";
+import { ADMIN_ACCESS_LEVEL } from "./lib/accessLevels";
+import EducationLevelsAPI from "./api/EducationLevelAPI";
+import UserAPI from "./api/UserAPI";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
-    flex-direction: row;
+    justify-content: center;
     height: 100%;
 `;
 
 const ApplicationInternalStyle = styled.div`
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+
+    flex: 1 1 auto;
 `;
 
 function ApplicationWrapper() {
-    return (
-        <ApplicationWrapperStyle>
-            <ChatContextProvider>
-                <ApplicationInternalStyle>
-                    <Header />
-                    <Outlet />
-                </ApplicationInternalStyle>
-                <Chat />
-            </ChatContextProvider>
-        </ApplicationWrapperStyle>
-    );
-}
-
-const AuthWrapper = () => {
     const { session } = useAuth();
 
     if (!session) return <Navigate to={"/login"} replace />;
 
     return (
         <SocketContextProvider>
-            <Outlet />
-            <XFooter />
+            <ApplicationWrapperStyle fillparent>
+                <ChatContextProvider>
+                    <ApplicationInternalStyle>
+                        <Header />
+                        <Outlet />
+                    </ApplicationInternalStyle>
+                    <Chat />
+                </ChatContextProvider>
+            </ApplicationWrapperStyle>
         </SocketContextProvider>
     );
-};
+}
 
 type RouteProtectorProps = {
     accessLevel: number;
@@ -101,14 +107,17 @@ function RouteProtector({ accessLevel, children }: RouteProtectorProps) {
 function PublicWrapper() {
     const { session } = useAuth();
 
-    return session ? <Navigate to={"/hub"} replace /> : <Outlet />;
+    if (session) return <Navigate to={"/hub"} replace />;
+
+    return (
+        <Scroller>
+            <Outlet />
+            <PublicFooter />
+        </Scroller>
+    );
 }
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <WaitingList />,
-    },
     {
         path: "/loading",
         element: <Loading />,
@@ -126,8 +135,78 @@ const router = createBrowserRouter([
                 element: <Login />,
             },
             {
+                path: "/notification",
+                element: <Notification />,
+            },
+            {
                 path: "/register",
                 element: <Register />,
+                loader: async (): Promise<{
+                    subjectOptions: Subject[];
+                    educationLevels: EducationLevel[];
+                }> => {
+                    try {
+                        const subjects = await SubjectsAPI.getAll();
+                        const educationLevels =
+                            await EducationLevelsAPI.getAll();
+                        console.log("ALL SUBJECTS:", subjects);
+                        console.log("ALL EDUCATION LEVELS:", educationLevels);
+
+                        return {
+                            subjectOptions: subjects.map(subject =>
+                                capitaliseFirstLetter(
+                                    subject.subject
+                                        .replaceAll("_", " ")
+                                        .replaceAll("ict", "ICT")
+                                )
+                            ) as Subject[],
+                            educationLevels: educationLevels.map(
+                                educationLevel =>
+                                    formatEducationLevel(
+                                        educationLevel.education_level
+                                    )
+                            ) as EducationLevel[],
+                        };
+                    } catch (error) {
+                        console.log(error);
+                        return { subjectOptions: [], educationLevels: [] };
+                    }
+                },
+            },
+            {
+                path: "/",
+                element: <WaitingList />,
+                loader: async (): Promise<{
+                    subjectOptions: Subject[];
+                    educationLevels: EducationLevel[];
+                }> => {
+                    try {
+                        const subjects = await SubjectsAPI.getAll();
+                        const educationLevels =
+                            await EducationLevelsAPI.getAll();
+                        console.log("ALL SUBJECTS:", subjects);
+                        console.log("ALL EDUCATION LEVELS:", educationLevels);
+
+                        return {
+                            subjectOptions: subjects.map(subject =>
+                                capitaliseFirstLetter(
+                                    subject.subject
+                                        .replaceAll("_", " ")
+                                        .replaceAll("ict", "ICT")
+                                )
+                            ) as Subject[],
+                            educationLevels: educationLevels.map(
+                                educationLevel =>
+                                    formatEducationLevel(
+                                        educationLevel.education_level
+                                    )
+                            ) as EducationLevel[],
+                        };
+                    } catch (error) {
+                        console.log(error);
+                        return { subjectOptions: [], educationLevels: [] };
+                    }
+                },
             },
         ],
     },
@@ -140,24 +219,120 @@ const router = createBrowserRouter([
                 element: <Hub />,
             },
             {
-                path: "/lessons",
-                element: <Lessons />,
+                path: "/classroom",
+                element: <Classroom />,
             },
             {
-                element: <AuthWrapper />,
+                path: "/create-lesson",
+                element: <CreateLesson action="create" />,
+                loader: async (): Promise<{
+                    subjectOptions: Subject[];
+                    educationLevels: EducationLevel[];
+                }> => {
+                    try {
+                        const subjects = await SubjectsAPI.getAll();
+                        const educationLevels =
+                            await EducationLevelsAPI.getAll();
+                        console.log("ALL SUBJECTS:", subjects);
+                        console.log("ALL EDUCATION LEVELS:", educationLevels);
+
+                        return {
+                            subjectOptions: subjects.map(subject =>
+                                capitaliseFirstLetter(
+                                    subject.subject
+                                        .replaceAll("_", " ")
+                                        .replaceAll("ict", "ICT")
+                                )
+                            ) as Subject[],
+                            educationLevels: educationLevels.map(
+                                educationLevel =>
+                                    formatEducationLevel(
+                                        educationLevel.education_level
+                                    )
+                            ) as EducationLevel[],
+                        };
+                    } catch (error) {
+                        console.log(error);
+                        return { subjectOptions: [], educationLevels: [] };
+                    }
+                },
+            },
+            {
+                path: "/edit-lesson",
+                element: <CreateLesson action="edit" />,
+                loader: async (): Promise<{
+                    subjectOptions: Subject[];
+                    educationLevels: EducationLevel[];
+                }> => {
+                    try {
+                        const subjects = await SubjectsAPI.getAll();
+                        const educationLevels =
+                            await EducationLevelsAPI.getAll();
+                        console.log("ALL SUBJECTS:", subjects);
+                        console.log("ALL EDUCATION LEVELS:", educationLevels);
+
+                        return {
+                            subjectOptions: subjects.map(subject =>
+                                capitaliseFirstLetter(
+                                    subject.subject
+                                        .replaceAll("_", " ")
+                                        .replaceAll("ict", "ICT")
+                                )
+                            ) as Subject[],
+                            educationLevels: educationLevels.map(
+                                educationLevel =>
+                                    formatEducationLevel(
+                                        educationLevel.education_level
+                                    )
+                            ) as EducationLevel[],
+                        };
+                    } catch (error) {
+                        console.log(error);
+                        return { subjectOptions: [], educationLevels: [] };
+                    }
+                },
+            },
+            {
+                path: "/settings",
+                element: <Settings />,
                 children: [
                     {
-                        path: "/hub",
-                        element: <FreeZone />,
+                        path: "/settings/general",
+                        element: <General />,
                     },
                     {
-                        path: "/my-lessons",
+                        path: "/settings/profile",
+                        element: <Profile />,
+                    },
+                    {
+                        path: "/settings/account",
+                        element: <Account />,
+                    },
+                    {
+                        path: "/settings/appearance",
+                        element: <Apperance />,
+                    },
+                    {
+                        path: "/settings/notifications",
+                        element: <Notifications />,
+                    },
+                    {
+                        path: "/settings/plans",
+                        element: <Plans />,
+                    },
+                ],
+            },
+            {
+                path: "/dashboard",
+                element: <Dashboard />,
+                children: [
+                    {
+                        path: "/dashboard/my-lessons",
                         element: <MyLessons />,
                         loader: async (): Promise<Lesson[]> => {
                             try {
                                 const lessons = await LessonAPI.getMyLessons();
                                 console.log("ALL LESSONS:", lessons);
-
                                 return lessons;
                             } catch (error) {
                                 console.log(error);
@@ -165,54 +340,36 @@ const router = createBrowserRouter([
                             }
                         },
                     },
-                    {
-                        path: "/lessons",
-                        element: <Lessons />,
-                        loader: async (): Promise<Lesson[]> => {
-                            try {
-                                const lessons =
-                                    await LessonAPI.getPublicLessons();
-                                console.log("ALL LESSONS:", lessons);
 
-                                return lessons;
-                            } catch (error) {
-                                console.log(error);
-                                return [];
-                            }
-                        },
-                    },
                     {
-                        path: "/lesson/:lessonName", // search query includes ?id=lessonId to identify lesson
-                        element: <Classroom />,
-                    },
-                    {
-                        path: "/teacher/dashboard",
-                        element: (
-                            <RouteProtector accessLevel={TEACHER_ACCESS_LEVEL}>
-                                <TeacherDashboard />
-                            </RouteProtector>
-                        ),
-                    },
-                    {
-                        path: "create-lesson",
-                        element: (
-                            <RouteProtector accessLevel={STUDENT_ACCESS_LEVEL}>
-                                <CreateLesson />
-                            </RouteProtector>
-                        ),
-                    },
-                    {
-                        path: "/admin/dashboard",
+                        path: "/dashboard/users",
                         element: (
                             <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-                                <AdminDashboard />
+                                <Users />
+                            </RouteProtector>
+                        ),
+                        loader: async (): Promise<User[]> => {
+                            try {
+                                const users = await UserAPI.getAll();
+                                console.log("ALL USERS:", users);
+                                return users;
+                            } catch (error) {
+                                console.log(error);
+                                return [];
+                            }
+                        },
+                    },
+                    {
+                        path: "/dashboard/lessons",
+                        element: (
+                            <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
+                                <DLessons />
                             </RouteProtector>
                         ),
                         loader: async (): Promise<Lesson[]> => {
                             try {
                                 const lessons = await LessonAPI.getAll();
                                 console.log("ALL LESSONS:", lessons);
-
                                 return lessons;
                             } catch (error) {
                                 console.log(error);
@@ -220,13 +377,41 @@ const router = createBrowserRouter([
                             }
                         },
                     },
-                    {
-                        path: "/unauthorised",
-                        element: <Unauthorised />,
-                    },
                 ],
             },
+            {
+                path: "/lessons",
+                element: <Lessons />,
+                loader: async (): Promise<Lesson[]> => {
+                    try {
+                        const lessons = await LessonAPI.getPublicLessons();
+                        console.log("ALL LESSONS:", lessons);
+                        return lessons;
+                    } catch (error) {
+                        console.log(error);
+                        return [];
+                    }
+                },
+            },
+            {
+                path: "/learningpathways",
+                element: <Lessons />,
+                loader: async (): Promise<Lesson[]> => {
+                    try {
+                        const lessons = await LessonAPI.getPublicLessons();
+                        console.log("ALL LESSONS:", lessons);
+                        return lessons;
+                    } catch (error) {
+                        console.log(error);
+                        return [];
+                    }
+                },
+            },
         ],
+    },
+    {
+        path: "/unauthorised",
+        element: <Unauthorised />,
     },
 ]);
 

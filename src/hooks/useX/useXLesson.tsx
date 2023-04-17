@@ -23,7 +23,7 @@ function useXLesson(props: any) {
     const [images, setImages] = React.useState<any[]>([]);
     const [currentImageLink, setCurrentImageLink] = React.useState("");
 
-    const { Socket, authenticated } = React.useContext(SocketContext);
+    const { Socket } = React.useContext(SocketContext);
 
     const X = useX({
         channel: "lesson",
@@ -46,7 +46,7 @@ function useXLesson(props: any) {
         if (!lesson) return;
         setStarted(true);
         setCurrentLearningObjective(
-            lesson.learningObjectives[learningObjectiveNumber - 1]
+            lesson.learning_objectives[learningObjectiveNumber - 1]
         );
         if (learningObjectiveNumber === -1) {
             setCurrentImageLink("");
@@ -66,31 +66,31 @@ function useXLesson(props: any) {
 
         setImages(prev => [
             ...prev,
-            ...lesson.learningObjectives[
+            ...lesson.learning_objectives[
                 learningObjectiveNumber - 1
             ].images.map((image: any) => image.link),
         ]);
         currentLearningObjectiveIndex = images.length;
         setCurrentImageLink(
-            lesson.learningObjectives[learningObjectiveNumber - 1].images[0]
+            lesson.learning_objectives[learningObjectiveNumber - 1].images[0]
                 .link
         );
     }, [learningObjectiveNumber]);
 
     useEffect(() => {
         // Socket.emit("authenticate", true);
-        if (authenticated) {
-            console.log("starting lesson");
+        console.log("starting lesson");
 
-            Socket.emit("start_lesson", { lessonID: props.lessonID });
-            Socket.on("lesson_finished", () => setFinished(true));
-            Socket.on("lesson_response_data", data => {
-                const { learningObjectiveNumber } = data;
-                setLearningObjectiveNumber(learningObjectiveNumber);
-            });
-            Socket.on("lesson_info", data => setLesson(data));
-        }
-    }, [authenticated]);
+        Socket.emit("start_lesson", { lessonID: props.lessonID });
+        Socket.on("lesson_finished", () => setFinished(true));
+        Socket.on("lesson_response_data", data => {
+            const { learningObjectiveNumber } = data;
+            setLearningObjectiveNumber(learningObjectiveNumber);
+        });
+
+        //I think grabbing the lesson info makes more sense from the db here?
+        Socket.on("lesson_info", data => setLesson(data));
+    }, []);
 
     return {
         ...X,

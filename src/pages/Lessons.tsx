@@ -3,9 +3,18 @@ import LessonCard from "../components/LessonCard";
 import styled from "styled-components";
 import { Textfield } from "../components/Textfield";
 import { FaEye } from "react-icons/fa";
-import Button from "../components/Button.tsx";
+import Button from "../components/Button";
+import useConversationDisplay from "../hooks/useConversationDisplay";
+import { useLoaderData } from "react-router-dom";
+import { ChatContext } from "../context/ChatContext";
 
 function Lessons() {
+    const lessons = useLoaderData();
+
+    useConversationDisplay(0.3);
+    const { width } = React.useContext(ChatContext);
+    // console.log(width.get());
+
     return (
         <Container>
             <Controls>
@@ -13,23 +22,15 @@ function Lessons() {
                     <Textfield label="Advanced Search" type="text" required />
                 </SearchBar>
                 <span>
-                    {" "}
                     Example: Search for "GCSE algebra linear equations"{" "}
                 </span>
             </Controls>
             <LessonContainer>
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
-                <LessonCard />
+                {lessons.length ? (
+                    lessons.map(lesson => <LessonCard lesson={lesson} />)
+                ) : (
+                    <h1>No lessons found :(</h1>
+                )}
             </LessonContainer>
         </Container>
     );
@@ -54,8 +55,9 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    //background-color: #121a3f;
     z-index: 5;
+    overflow-x: clip;
+    padding-top: 6em;
 `;
 const LessonContainer = styled.div`
     margin-left: 4em;
@@ -63,9 +65,9 @@ const LessonContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
-    width: 70em;
+    width: 70%;
     height: 70vh;
     margin-bottom: 2em;
-    overflow-y: scroll;
+    overflow-y: auto;
 `;
 export default Lessons;

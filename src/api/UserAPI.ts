@@ -2,18 +2,26 @@ import { apiClient } from "./configs/axiosConfig";
 import supabase from "./configs/supabase";
 
 const UserAPI = {
-    signUp: async function (newUser: Omit<User, "id" | "access_level">) {
+    signUp: async function ({
+        email,
+        password,
+        first_name,
+        last_name,
+        education_level,
+        subjects,
+    }: Omit<User, "id" | "access_level">) {
         const {
             data: { user },
             error,
         } = await supabase.auth.signUp({
-            email: newUser.email,
-            password: newUser.password,
+            email,
+            password,
             options: {
                 data: {
-                    first_name: newUser.first_name,
-                    education_level: newUser.education_level,
-                    subjects: newUser.subjects,
+                    first_name,
+                    last_name,
+                    education_level,
+                    subjects,
                 },
             },
         });

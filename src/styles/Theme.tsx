@@ -1,24 +1,33 @@
 export const gradientColour1 = "#58c1fe";
-export const gradientColour2 = "rgba(36, 170, 255, 1)";
-export const gradientColour3 = "rgba(1, 99, 255, 1)";
+export const gradientColour2 = "#24aaff";
+export const gradientColour3 = "#0163ff";
 export const gradientAngle = 149;
 
 const Theme = {
     colours: {
-        primary: "#fff",
+        background: "#0C1437",
+        primary: "#ffffff",
         primaryFaded: "rgba(255, 255, 255, 0.5)",
         primaryStrong: "rgb(255, 255, 255, 0.9)",
         secondary: gradientColour3,
         tertiary: "#040a1e",
-        highlight1: "#3750c0",
-        highlight2: "#217db0",
+        contrast: "#E323F0",
+        highlight1: "#1D1054",
+        highlight2: "#2B91FF",
         glow: "#3523a9",
+        error: "#ff5252",
+    },
+    font: {
+        small: "12px",
+        medium: "16px",
+        large: "20px",
+        xlarge: "24px",
     },
     utils: {
         centeredRow: `
                     display: flex;
                     flex-direction: row;
-                    justify-content: center;/
+                    justify-content: center;
                     align-items: center;
                 `,
         centeredColumn: `
@@ -42,7 +51,7 @@ const Theme = {
                     width: 100vw;
                     `,
     },
-    gradient: ({ animationLength }: { length: number }) => `
+    gradient: ({ animationLength }: { animationLength: number }) => `
     
 
     background: ${gradientColour1};
@@ -61,27 +70,61 @@ const Theme = {
         ${gradientColour3}  75%,
         ${gradientColour1}  100%
     );
-    background: rgba(0, 0, 0, 0), linear-gradient(
+    background: linear-gradient(
         ${gradientAngle}  deg,
         ${gradientColour1}  0%,
         ${gradientColour2}  25%,
         ${gradientColour3}  75%,
         ${gradientColour1}  100%
     );
-    background-clip: padding-box, border-box;
     background-size: 800% auto;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="${gradientColour1}",endColorstr="${gradientColour1}",GradientType=1);
     animation: gradient ${animationLength}s linear infinite;
     `,
-    linearGradient: `
-    linear-gradient(
-        149deg,
-        #58c1fe  0%,
-        rgba(36, 170, 255, 1)  25%,
-        rgba(1, 99, 255, 1)  75%,
-        #58c1fe  100%
-    )
+    gradientFaded: ({ animationLength }: { length: number }) => `
+    
+
+    background: ${gradientColour1};
+    background: -moz-linear-gradient(
+        ${gradientAngle}deg,
+        ${gradientColour1}90 0%,
+        ${gradientColour2}90 25%,
+        ${gradientColour3}90 75%,
+        ${gradientColour1}90 100%
+    );
+    
+    background: -webkit-linear-gradient(
+        ${gradientAngle}deg,
+        ${gradientColour1}90  0%,
+        ${gradientColour2}90  25%,
+        ${gradientColour3}90  75%,
+        ${gradientColour1}90  100%
+    );
+    background: linear-gradient(
+        ${gradientAngle}  deg,
+        ${gradientColour1}90  0%,
+        ${gradientColour2}90  25%,
+        ${gradientColour3}90  75%,
+        ${gradientColour1}70  100%
+    );
+    background-size: 800% auto;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="${gradientColour1}",endColorstr="${gradientColour1}",GradientType=1);
+    animation: gradient ${animationLength}s linear infinite;
+    `,
+    linearGradient: `linear-gradient(
+        ${gradientAngle}  deg,
+        ${gradientColour1}  0%,
+        ${gradientColour2}  25%,
+        ${gradientColour3}  75%,
+        ${gradientColour1}  100%
+    );
     `,
 };
+
+Theme.utils["gradientText"] = `
+    ${Theme.gradient({ animationLength: 5 })}
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+`;
 
 export default Theme;

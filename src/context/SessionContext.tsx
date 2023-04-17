@@ -33,7 +33,6 @@ export function SessionContextProvider({ children }: any) {
 
         if (userError || !data) {
             if (userError) console.log(userError);
-            console.log(userError);
             return;
         }
 
@@ -59,8 +58,6 @@ export function SessionContextProvider({ children }: any) {
     React.useEffect(() => {
         initialiseSession();
     }, []);
-
-    console.log(loading);
 
     return (
         <SessionContext.Provider

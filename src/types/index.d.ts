@@ -16,6 +16,7 @@ type User = {
     email: string;
     password: string;
     first_name: string;
+    last_name: string;
     education_level: EducationLevel;
     subjects: Subject[];
     access_level: number;
@@ -23,6 +24,7 @@ type User = {
 
 type WaitingListMember = {
     first_name: string;
+    last_name: string;
     email: string;
     education_level: EducationLevel;
     is_student: boolean;
@@ -45,7 +47,10 @@ type Lesson = {
     subject: Subject;
     education_level: EducationLevel;
     description: string;
+    caption: string;
     learning_objectives: LearningObjective[];
+    is_published: boolean;
+    created_at?: string;
 };
 
 type ChatEntry = {

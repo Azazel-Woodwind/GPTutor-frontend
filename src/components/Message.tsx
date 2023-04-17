@@ -1,15 +1,19 @@
 import React from "react";
 import styled from "styled-components";
+import { useAuth } from "../context/SessionContext";
+import GradientOutline from "../styles/GradientOutline";
 
 const AvatarStyle = styled.div`
     width: 1ch;
     height: 1ch;
     padding: 1ch;
-    background-color: rgb(0, 0, 0, 0.2);
-    background-color: rgb(255, 255, 255, 0.1);
-    ${props => {
-        console.log(props);
-    }}
+    background-color: ${props => props.theme.colours.secondary};
+    ${props =>
+        props.type == "system" && props.theme.gradient({ animationLength: 5 })}
+    ${props =>
+        !props.highlighted &&
+        `background-color: rgb(0, 0, 0, 0.7); color: unset;`};
+
     margin-right: 1em;
     display: flex;
     align-items: center;
@@ -20,31 +24,42 @@ const AvatarStyle = styled.div`
     font-style: italic;
 `;
 
-const Avatar = ({ type }) => {
+const Avatar = ({ type, highlighted }) => {
     var symbol;
+    const { session } = useAuth();
 
     switch (type) {
-        case "X":
+        case "assistant":
             symbol = "X";
             break;
-        case "USER":
-            symbol = "U";
+        case "user":
+            symbol = session.user.user_metadata.first_name
+                .charAt(0)
+                .toUpperCase();
             break;
-        case "SYSTEM":
+        case "system":
             symbol = "S";
             break;
     }
 
-    return <AvatarStyle> X </AvatarStyle>;
+    return (
+        <AvatarStyle highlighted={highlighted} type={type}>
+            {" "}
+            {symbol}{" "}
+        </AvatarStyle>
+    );
 };
 const Message = ({ type, message }) => {
-    const highlighted = type == "X" || type == "SYSTEM";
-    console.log(highlighted);
+    const highlighted = type == "assistant" || type == "system";
+
+    console.log(type);
     return (
-        <Container highlighted={highlighted}>
-            <Avatar highlighted={highlighted} type={type} />
-            <span> {message} </span>
-        </Container>
+        <GradientOutline hidden={type !== "system"}>
+            <Container highlighted={highlighted}>
+                <Avatar highlighted={highlighted} type={type} />
+                <span> {message} </span>
+            </Container>
+        </GradientOutline>
     );
 };
 
@@ -59,6 +74,7 @@ const Container = styled.div`
             : props.theme.colours.primaryStrong};
     padding-right: 1em;
     span {
+        white-space: pre-line;
         flex-grow: 1;
     }
     ${props =>

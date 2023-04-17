@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { nanoid } from "nanoid";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 
@@ -119,26 +120,20 @@ function CustomSelect(props) {
         };
     }, []);
 
+    const ids = React.useMemo(() => props.options.map(() => nanoid()), []);
+
     return (
         <Container>
-            {props.options.map(option => (
-                <Option {...props} mouseDown={mouseDown} option={option} />
+            {props.options.map((option, i) => (
+                <Option
+                    key={ids[i]}
+                    {...props}
+                    mouseDown={mouseDown}
+                    option={option}
+                />
             ))}
         </Container>
     );
-}
-
-function useCustomSelect({ ...props }) {
-    const [selected, setSelected] = React.useState([]);
-
-    return [
-        selected,
-        <CustomSelect
-            {...props}
-            selected={selected}
-            setSelected={setSelected}
-        />,
-    ];
 }
 
 export default CustomSelect;

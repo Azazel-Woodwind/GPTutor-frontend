@@ -1,28 +1,79 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
+import { useMemo, useState } from "react";
+import { nanoid } from "nanoid";
+import SvgLinearGradient from "./SvgLinearGradient";
 
-const CustomButtonStyle = styled.button`
-    cursor: pointer;
+export const fontSizeOptions = ["sm", "md", "lg", "xl"];
+
+export const getFontSize = (size: string) => {
+    switch (size) {
+        case "sm":
+            return "12px";
+        case "md":
+            return "16px";
+        case "lg":
+            return "20px";
+        case "xl":
+            return "24px";
+        default:
+            return "16px";
+    }
+};
+
+const BaseButtonStyles = css`
+    font-size: ${props => getFontSize(props.size)};
+    padding: 0.8em 2em;
+`;
+
+const OutlinedButtonStyle = styled(motion.button)`
+    ${BaseButtonStyles}
+    position: relative;
+    background-color: transparent;
+    border: none;
+    ${props => !props.disabled && "cursor: pointer;"}
+    overflow: hidden;
+    outline: none;
+`;
+
+const ButtonText = styled.span`
+    position: relative;
+    z-index: 1;
+    color: ${props => (props.disabled ? "gray" : "transparent")};
+    ${props => props.theme.gradient({ animationLength: 5 })}
+    -webkit-background-clip: text;
+    pointer-events: none;
+`;
+
+const SvgBorder = styled.svg`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+`;
+
+const FilledButtonStyle = styled(motion.button)`
+    ${BaseButtonStyles}
+
     display: block;
 
     border: unset;
     outline: unset;
 
-    padding: 1em;
-    padding-right: 2em;
-    padding-left: 2em;
-    /* border: 10px solid rgb(255, 255, 255, 1); */
-
-    /* min-width: ${props => (props.width ? props.width : "10em")}; */
     color: white;
     z-index: 10;
-    font-size: 16px;
+
     border-radius: 10px;
     ${props =>
-        props.theme.gradient({
-            animationLength: 5,
-        })}
-    background-size: 800% auto;
+        props.disabled
+            ? "background-color: rgb(0, 0, 0, 0.1); color: gray;"
+            : `${props.theme.gradient({
+                  animationLength: 5,
+              })}; cursor: pointer;`}
+
+    transition: all 0.2s;
     /* background: rgba(255, 255, 255, 0); */
     // how do i get this to work?
     /* background: ${props => props.theme.linearGradient}; */
@@ -73,18 +124,97 @@ HAHHA shieeet */
     // i can tellays
     // calm down bro
     // desolé
-`; //dickhead?
+`;
+
+const IconSvg = styled.svg`
+    height: 70%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* transform: translateY(-50%); */
+`;
+
+function OutlinedButton(props) {
+    const [buttonRef, setRef] = useState<HTMLButtonElement>();
+
+    const borderGradientID = useMemo(nanoid, []);
+    const iconGradientID = useMemo(nanoid, []);
+
+    const dimensions = useMemo(() => {
+        if (buttonRef) {
+            const { width, height } = buttonRef.getBoundingClientRect();
+            // console.log(width, height);
+
+            return { width, height };
+        }
+    }, [buttonRef]);
+
+    const borderWidth = props.borderWidth || 2;
+
+    return (
+        <OutlinedButtonStyle ref={ref => setRef(ref)} {...props}>
+            <SvgBorder
+                viewBox={`0 0 ${dimensions?.width + 2 * borderWidth || 0} ${
+                    dimensions?.height + 2 * borderWidth || 0
+                }`}>
+                <defs>
+                    <SvgLinearGradient gradientID={borderGradientID} />
+                </defs>
+                <rect
+                    x={borderWidth}
+                    y={borderWidth}
+                    width={dimensions?.width || 0}
+                    height={dimensions?.height || 0}
+                    rx="10"
+                    fill={props.disabled ? "rgb(0, 0, 0, 0.1)" : "none"}
+                    stroke={
+                        props.disabled ? "gray" : `url(#${borderGradientID})`
+                    }
+                    strokeWidth={borderWidth}
+                />
+            </SvgBorder>
+            {props.viewboxWidth && props.viewboxHeight && props.paths ? (
+                <IconSvg
+                    viewBox={`0 0 ${props.viewboxWidth} ${props.viewboxHeight}`}
+                    focusable="false"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <SvgLinearGradient gradientID={iconGradientID} />
+                    </defs>
+                    {props.paths.map((path, i) => (
+                        <path
+                            key={i}
+                            fill={`url(#${iconGradientID})`}
+                            d={path}></path>
+                    ))}
+                </IconSvg>
+            ) : (
+                <ButtonText disabled={props.disabled}>
+                    {props.children}
+                </ButtonText>
+            )}
+        </OutlinedButtonStyle>
+    );
+}
+
+function FilledButton(props) {
+    return <FilledButtonStyle {...props}>{props.children}</FilledButtonStyle>;
+}
 
 const CustomButton = props => {
-    return (
-        <CustomButtonStyle
-            as={motion.button}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.95 }}
-            {...props}>
-            {props.children}
-        </CustomButtonStyle>
-    );
+    if (!props.disabled) {
+        props = {
+            ...props,
+            whileHover: { scale: 1.03 },
+            whileTap: { scale: 0.95 },
+        };
+    }
+
+    if (props.outline) {
+        return <OutlinedButton {...props} />;
+    }
+    return <FilledButton {...props} />;
 };
 
 export default CustomButton;

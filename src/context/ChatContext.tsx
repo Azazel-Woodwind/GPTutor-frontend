@@ -1,15 +1,20 @@
 import * as React from "react";
+import { useMotionValue } from "framer-motion";
+
+const defaultWidth = 600;
 
 export const ChatContext = React.createContext({
-    width: 200,
-    setWidth: () => {},
+    max: true,
+    setMax: () => {},
+    width: defaultWidth,
 });
 
 export function ChatContextProvider({ children }: any) {
-    const [width, setWidth] = React.useState(false);
+    const width = useMotionValue(defaultWidth);
+    const [max, setMax] = React.useState(defaultWidth);
 
     return (
-        <ChatContext.Provider value={[width, setWidth]}>
+        <ChatContext.Provider value={{ width, max, setMax }}>
             {children}
         </ChatContext.Provider>
     );

@@ -6,14 +6,9 @@ import supabase from "../api/configs/supabase";
 import { useAuth } from "./SessionContext";
 export const SocketContext = React.createContext({
     Socket: null,
-    authenticated: false,
-    setAuthenticated: (authenticated: boolean) => {},
 });
-
+// dhaval level code ????
 export function SocketContextProvider({ children }: any) {
-    const [authenticated, setAuthenticated] = React.useState(
-        !localStorage.getItem("token") === null
-    );
     const navigate = useNavigate();
     const [Socket, setSocket] = React.useState<any>(null);
 
@@ -27,14 +22,17 @@ export function SocketContextProvider({ children }: any) {
                     token: session?.access_token,
                 },
             });
-
             console.log("Connecting to socket");
+            socket.on("connect_error", err => {
+                console.log("error:", err.message);
+                // either no token, token is invalid or database error
+            });
 
             socket.on("authenticated", bool => {
-                setAuthenticated(bool);
                 if (!bool) return;
                 setSocket(socket);
                 setLoading(false);
+                console.log(socket);
                 console.log("Authenticated ", bool);
             });
 
@@ -45,10 +43,10 @@ export function SocketContextProvider({ children }: any) {
         }
     }, []);
 
+    //console.log("Socket: ", Socket); // acc FUCKING retarded                                                                                                                                                                                                                                                                            dickhead btw
     if (!Socket) return null;
     return (
-        <SocketContext.Provider
-            value={{ Socket, authenticated, setAuthenticated }}>
+        <SocketContext.Provider value={{ Socket }}>
             {children}
         </SocketContext.Provider>
     );

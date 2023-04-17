@@ -1,536 +1,397 @@
 import React, { useState } from "react";
-import Logo from "../assets/Logo";
-import CustomInput from "../components/CustomInput";
-import DropDownList from "../components/DropDownList";
-import Footer from "../components/Footer";
-import Header from "../components/Header/header";
-import ImageTextArea from "../components/ImageTextArea";
 import {
-    subjects,
-    educationLevels,
     MAX_LEARNING_OBJECTIVES,
     MIN_LEARNING_OBJECTIVES,
 } from "../lib/FormData";
-import { useForm } from "react-hook-form";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import useDynamicFields from "../hooks/useDynamicFields";
 import LearningObjective from "../components/CreateLesson/LearningObjective";
-import { FaPlus } from "react-icons/fa";
 import LessonAPI from "../api/LessonAPI";
+import CenteredColumn from "../styles/containers/CenteredColumn";
+import styled from "styled-components";
+import useDropdownList from "../hooks/useDropdownList";
+import CenteredRow from "../styles/containers/CenteredRow";
+import Textfield from "../components/Textfield";
+import useConversationDisplay from "../hooks/useConversationDisplay";
+import useRadioButtons from "../hooks/useRadioButtons";
+import RadioButtonsContainer from "../styles/containers/HorizontalRadioButtonContainer";
+import { TextWrapper } from "../styles/TextWrappers";
+import CustomButton from "../components/Button";
+import Checkbox from "../components/Checkbox";
+import { toast } from "react-toastify";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import { formatEducationLevel, formatSubject } from "../lib/stringUtils";
+import RadioButton from "../components/RadioButton";
+import DropdownList from "../components/DropdownList";
 
-export default function CreateLesson() {
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [educationLevel, setEducationLevel] = useState("");
-    const [subject, setSubject] = useState("");
-    const [publish, setPublish] = useState(false);
+const CreateLessonForm = styled.form`
+    margin: 0 auto;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+    gap: 1em;
+    padding: 0 1em;
+`;
 
-    const form = useForm();
+const Container = styled.div`
+    overflow-y: auto;
+    margin-top: 8em;
+    margin-left: 2em;
+    margin-right: 2em;
 
-    const imageUnwrappers = React.useRef<Function[]>([]);
-    const learningObjectives = useDynamicFields({
-        formElements: [
-            <textarea
-                name="title"
-                rows={1}
-                style={{ resize: "none" }}
-                className="w-full border-[#50576E] border rounded-lg bg-transparent px-3 py-1.5 text-[16px] outline-none"
-            />,
-        ],
-        max: MAX_LEARNING_OBJECTIVES,
-        min: MIN_LEARNING_OBJECTIVES,
-        form,
+    padding-bottom: 2em;
+    /* width: 100%; */
+    height: 100%;
+    overflow: auto;
+`;
+
+function CreateLesson({ action }) {
+    const { subjectOptions, educationLevels } = useLoaderData();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [lesson, setLesson] = useState(null);
+    useConversationDisplay(0.3);
+
+    const form = useForm({
+        defaultValues: {
+            title: "",
+            description: "",
+            education_level: null,
+            subject: "",
+            caption: "",
+            learning_objectives: Array(3).fill({
+                title: "",
+                images: [
+                    {
+                        link: "",
+                        description: "",
+                    },
+                ],
+            }),
+            is_published: false,
+        },
     });
+
+    const learningObjectivesFields = useFieldArray({
+        control: form.control,
+        name: "learning_objectives",
+    });
+
+    const navigate = useNavigate();
+
+    const resetForm = () => {
+        form.reset();
+    };
+
+    const setDefaultValues = lessonArg => {
+        const currentLesson = lessonArg || lesson;
+        if (!currentLesson) return;
+
+        form.reset({
+            title: currentLesson.title,
+            description: currentLesson.description,
+            education_level: currentLesson.education_level,
+            subject: formatSubject(currentLesson.subject),
+            caption: currentLesson.caption,
+            learning_objectives: currentLesson.learning_objectives.map(
+                objective => ({
+                    title: objective.title,
+                    images: objective.images.map(image => ({
+                        link: image.link,
+                        description: image.description,
+                    })),
+                })
+            ),
+            is_published: currentLesson.is_published,
+        });
+    };
+
+    React.useEffect(() => {
+        resetForm();
+        if (action === "edit") {
+            const lessonID = searchParams.get("id");
+            if (!lessonID) {
+                toast.error("No Lesson ID Provided", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+                return navigate("/create-lesson");
+            }
+            LessonAPI.getMyLessonById(lessonID)
+                .then(lesson => {
+                    console.log(lesson);
+                    if (!lesson) {
+                        toast.error("Lesson not found", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                        });
+                        return navigate("/create-lesson");
+                    }
+
+                    setLesson(lesson);
+                    setDefaultValues(lesson);
+                })
+                .catch(err => {
+                    toast.error("Lesson not found", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                    return navigate("/create-lesson");
+                });
+        }
+    }, []);
 
     const onSubmit = async (data: any) => {
         console.log("FORM SUBMITTED");
+        console.log(data);
 
-        const parsedImages = imageUnwrappers.current.map(unwrap =>
-            unwrap(data)
-        );
-
-        const unwrappedLearningObjectives = learningObjectives.unwrap(data);
-
-        const parsedObjectives = unwrappedLearningObjectives.map(
-            (objective, index) => ({
-                ...unwrappedLearningObjectives[index],
-                images: parsedImages[index],
-            })
-        );
-
-        // console.log("Lesson title:", title);
-        // console.log("Education Level:", educationLevel);
-        // console.log("Subject:", subject);
-        // console.log("Description:", description);
-        // console.log("Publishing:", publish);
-
-        // parsedObjectives.forEach((objective, index) => {
-        //     console.log(
-        //         `Learning Objective ${index + 1}: ${JSON.stringify(objective)}`
-        //     );
-        // });
         try {
-            const lesson = await LessonAPI.create({
-                title,
-                subject: subject.toLowerCase() as Subject,
-                description,
-                education_level: educationLevel.toLowerCase() as EducationLevel,
-                learning_objectives: parsedObjectives,
-            });
-            console.log(lesson);
+            console.log(JSON.stringify(data, null, 2));
+            let newLesson;
+            if (action === "edit") {
+                newLesson = await LessonAPI.updateOwnedByid(lesson.id, {
+                    title: data.title,
+                    subject: data.subject.toLowerCase() as Subject,
+                    description: data.description,
+                    caption: data.caption,
+                    education_level:
+                        data.education_level.toLowerCase() as EducationLevel,
+                    learning_objectives: data.learning_objectives,
+                    is_published: data.is_published,
+                });
+                toast.success("Lesson successfully updated!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            } else {
+                newLesson = await LessonAPI.create({
+                    title: data.title,
+                    subject: data.subject.toLowerCase() as Subject,
+                    description: data.description,
+                    caption: data.caption,
+                    education_level:
+                        data.education_level.toLowerCase() as EducationLevel,
+                    learning_objectives: data.learning_objectives,
+                    is_published: data.is_published,
+                });
+                toast.success("Lesson successfully created!", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            }
 
-            // if (publish) {
-            //     await LessonAPI.publishById(lesson.id);
-            // }
+            console.log(newLesson);
+
+            resetForm();
         } catch (error) {
-            console.log(error);
+            console.log(JSON.stringify(error));
         }
     };
 
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="min-h-[calc(100vh-100px)] text-white font-abel pb-4 ">
-                <h1 className=" md:text-[50px] text-[32px] max-w-[1100px] mx-auto font-abel my-2 px-4">
-                    Create Lesson
-                </h1>
-                <div className="flex md:flex-col max-w-[1100px] mx-auto md:space-x-16 px-4">
-                    <div className="flex-1">
-                        <div className="flex flex-row gap-5 p-5">
-                            <div className="flex-1">
-                                <div className="flex flex-col mb-4">
-                                    <label className="text-[16px] mb-[2px]">
-                                        Title
-                                    </label>
-                                    <input
-                                        value={title}
-                                        onChange={e => setTitle(e.target.value)}
-                                        className="border-[#50576E] border rounded-lg bg-transparent px-3 py-2 text-[16px] outline-none"
-                                    />
-                                </div>
-                                <div className="flex mb-4 space-x-2 gap-20">
-                                    <div className="flex flex-1 flex-col ">
-                                        <label className="text-[16px] mb-[2px]">
-                                            Education Level
-                                        </label>
-                                        <DropDownList
-                                            value={educationLevel}
-                                            setValue={setEducationLevel}
-                                            options={educationLevels}
-                                        />
-                                    </div>
-                                    <div className="flex flex-1 flex-col">
-                                        <label className="text-[16px] mb-[2px]">
-                                            Subject
-                                        </label>
-                                        <DropDownList
-                                            value={subject}
-                                            setValue={setSubject}
-                                            options={subjects}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex-1">
-                                <CustomInput
-                                    value={description}
-                                    setValue={setDescription}
-                                    title="Lesson Description/Guide (Please give precise instructions and refer to LOs)"
-                                    lines={4}
-                                />
-                            </div>
-                        </div>
-                        <div className="ml-5">
-                            <h1>Learning objectives</h1>
-                        </div>
+        <Container>
+            <CreateLessonForm onSubmit={form.handleSubmit(onSubmit)}>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: "1em",
+                    }}>
+                    <h1 style={{ margin: 0 }}> Create Lesson </h1>
+                    <CustomButton
+                        onClick={e => {
+                            e.preventDefault();
+                            if (action === "edit") {
+                                setDefaultValues();
+                            } else {
+                                resetForm();
+                            }
+                        }}
+                        outline>
+                        {action === "edit" ? "Reset defaults" : "Clear"}
+                    </CustomButton>
+                </div>
 
-                        <div>
-                            {learningObjectives.elements.map(
-                                (elements, index) => (
-                                    <LearningObjective
-                                        key={index}
-                                        index={index}
-                                        imageUnwrappers={imageUnwrappers}
-                                        elements={elements}
-                                        learningObjectives={learningObjectives}
-                                        form={form}
-                                    />
-                                )
-                            )}
-                        </div>
-                        <div className="flex justify-center mt-5">
-                            <button
-                                disabled={
-                                    learningObjectives.elements.length >=
-                                    MAX_LEARNING_OBJECTIVES
-                                }
-                                onClick={e => {
-                                    e.preventDefault();
-                                    learningObjectives.addField();
-                                }}>
-                                <FaPlus
-                                    color={
-                                        learningObjectives.elements.length >=
-                                        MAX_LEARNING_OBJECTIVES
-                                            ? "dimgray"
-                                            : "#4e57d5"
-                                    }
-                                    size={24}
+                <div style={{ display: "flex", gap: "1em" }}>
+                    <CenteredColumn gap="1em">
+                        <Controller
+                            name="title"
+                            control={form.control}
+                            render={({ field }) => (
+                                <Textfield
+                                    fullwidth
+                                    label="Title"
+                                    type="text"
+                                    required
+                                    {...field}
                                 />
-                            </button>
-                        </div>
-                        <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
-                            <input
-                                className="relative float-left mt-[0.15rem] mr-[6px] -ml-[1.5rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary"
-                                type="checkbox"
-                                id="checkboxChecked"
-                                checked={publish}
-                                onChange={e => setPublish(e.target.checked)}
+                            )}
+                        />
+
+                        <CenteredRow gap="1em">
+                            <Controller
+                                control={form.control}
+                                name={"education_level"}
+                                render={({ field }) => (
+                                    <RadioButtonsContainer gap="1.5em">
+                                        {educationLevels.map(level => (
+                                            <RadioButton
+                                                key={level}
+                                                label={level}
+                                                checked={
+                                                    field.value ===
+                                                    level.toLowerCase()
+                                                }
+                                                onChange={e =>
+                                                    field.onChange(
+                                                        level.toLowerCase()
+                                                    )
+                                                }
+                                            />
+                                        ))}
+                                    </RadioButtonsContainer>
+                                )}
                             />
-                            <label
-                                className="inline-block pl-[0.15rem] hover:cursor-pointer"
-                                htmlFor="checkboxChecked">
-                                Publish this lesson
-                            </label>
-                        </div>
+                            <Controller
+                                control={form.control}
+                                name={"subject"}
+                                render={({ field }) => (
+                                    <DropdownList
+                                        label="Subject"
+                                        options={subjectOptions}
+                                        selected={field.value}
+                                        setSelected={field.onChange}
+                                        required
+                                    />
+                                )}
+                            />
+                        </CenteredRow>
+                    </CenteredColumn>
+                    <Controller
+                        name="description"
+                        control={form.control}
+                        render={({ field }) => (
+                            <Textfield
+                                label="Lesson Description"
+                                width="430px"
+                                multiline
+                                // rows={5}
+                                {...field}
+                            />
+                        )}
+                    />
+                </div>
+                <Controller
+                    name="caption"
+                    control={form.control}
+                    render={({ field }) => (
+                        <Textfield
+                            label="Caption"
+                            type="text"
+                            fullwidth
+                            required
+                            // rows={5}
+                            {...field}
+                        />
+                    )}
+                />
+                <div
+                    style={{
+                        paddingTop: "1em",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2em",
+                    }}>
+                    {learningObjectivesFields.fields.map((objective, index) => (
+                        <LearningObjective
+                            form={form}
+                            key={objective.id}
+                            index={index}
+                            learningObjectivesFields={learningObjectivesFields}
+                        />
+                    ))}
+                </div>
+                <div
+                    style={{
+                        width: "100%",
+                        textAlign: "center",
+                        marginBottom: "1em",
+                    }}>
+                    <CustomButton
+                        disabled={
+                            learningObjectivesFields.fields.length >=
+                            MAX_LEARNING_OBJECTIVES
+                        }
+                        onClick={e => {
+                            e.preventDefault();
+                            learningObjectivesFields.append({
+                                title: "",
+                                images: [
+                                    {
+                                        link: "",
+                                        description: "",
+                                    },
+                                ],
+                            });
+                        }}
+                        outline>
+                        Add Learning Objective
+                    </CustomButton>
+                </div>
+
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "1em",
+                    }}>
+                    <div style={{ marginTop: "8px" }}>
+                        <Checkbox
+                            checkboxSize={31}
+                            borderWidth={2}
+                            fontSize="1.1em"
+                            label="Publish this lesson"
+                            {...form.register("is_published")}
+                        />
                     </div>
+
+                    <CustomButton style={{ marginTop: "0.6em", width: "100%" }}>
+                        {action === "edit" ? "Save changes" : "Create Lesson"}
+                    </CustomButton>
                 </div>
-                <div className="flex max-w-[1100px] mx-auto md:space-x-16 px-4 my-6 justify-center">
-                    <button className="flex-1 mx-10 bg-gradient-to-r from-cyan-300 to-blue-600 w-full text-[#040A1E] text-[20px] rounded-lg py-2 text-center">
-                        Generate Lesson
-                    </button>
-                </div>
-                <Footer />
-            </div>
-        </form>
+            </CreateLessonForm>
+        </Container>
     );
 }
 
-// import { Box } from "@mui/material";
-// import "bootstrap/dist/css/bootstrap.min.css";
-
-// import React, { useState } from "react";
-
-// import img from "../assets/WhiteLogo.png";
-// import { Toaster } from "react-hot-toast";
-// import AutorenewIcon from "@mui/icons-material/Autorenew";
-// import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
-// import { Link } from "react-router-dom";
-
-// const CreateLesson = () => {
-//     const handleChange = () => {};
-//     const [loading, setLoading] = useState(false);
-//     const newData = {};
-
-//     return (
-//         <>
-//             <Toaster position="top-right" reverseOrder={false} />
-//             <div className="backGround-image">
-//                 <Link to="/" className="login-logo flex justify-center">
-//                     <img
-//                         src={img}
-//                         width={150}
-//                         height={150}
-//                         className="object-cover ms-5 pt-5"
-//                     />
-//                 </Link>
-//                 <div className="row mt-4 m-0">
-//                     <div className="col-md-2"></div>
-//                     <div className="col-md-4 text-white text-7xl">
-//                         Create Lesson
-//                     </div>
-//                 </div>
-//                 <div className="row w-100 mt-2">
-//                     <div className="col-md-2"></div>
-//                     <div className="col-md-4">
-//                         <div className="row text-white mt-4">
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <label className="form-label">Title</label>
-//                                 <input
-//                                     type="text"
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="title"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-4 form-group mt-3">
-//                                 <label className="form-label">
-//                                     Educational level
-//                                 </label>
-//                                 <input
-//                                     type="text"
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="educational_level"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-4 form-group mt-3">
-//                                 <label className="form-label">Subject</label>
-//                                 <input
-//                                     type="text"
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="subject"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-4 form-group mt-3">
-//                                 <label className="form-label">Topic</label>
-//                                 <input
-//                                     type="text"
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="topic"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <label className="form-label">LO1</label>
-//                                 <textarea
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     minLength={2}
-//                                     name="lo1"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <label className="form-label">LO2</label>
-//                                 <textarea
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     minLength={2}
-//                                     name="lo2"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <label className="form-label">LO3</label>
-//                                 <textarea
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     minLength={2}
-//                                     name="lo3"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-6 form-group mt-3">
-//                                 <label className="form-label">
-//                                     End of Lesson quiz type
-//                                 </label>
-//                                 <input
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="quiz_type"
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-6 form-group mt-3">
-//                                 <label className="form-label">
-//                                     Publish Lesson?
-//                                 </label>
-//                                 {/* <input
-//                   placeholder=""
-//                   id="email1"
-//                   className="form-control bg-transparent rounded-3 py-2"
-//                   style={{ outline: 'none' }}
-//                   required
-//                   name="publish"
-//                   value={newData?.publish}
-//                   onChange={(e) => {
-//                     handleChange(e)
-//                   }}
-//                   autoComplete="off"
-//                 /> */}
-//                                 <select
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     name="publish">
-//                                     <option className="text-black" value="true">
-//                                         True
-//                                     </option>
-//                                     <option
-//                                         className="text-black"
-//                                         value="false">
-//                                         False
-//                                     </option>
-//                                 </select>
-//                             </div>
-//                             <div className="col-md-12 mt-5">
-//                                 {!loading ? (
-//                                     <button className=" py-2 rounded-3 btn-grad text-capitalize w-100">
-//                                         Generate Lesson
-//                                     </button>
-//                                 ) : (
-//                                     <button
-//                                         className="py-2 rounded-3 btn-grad text-capitalize w-100"
-//                                         // onClick={handleSubmit}
-//                                     >
-//                                         <AutorenewIcon className="icon-spin" />
-//                                     </button>
-//                                 )}
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="col-md-4">
-//                         <div className="row text-white mt-4">
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <label className="form-label">
-//                                     Lesson Description/Guide (Please give
-//                                     precise instructions and refer to LOs)
-//                                 </label>
-//                                 <textarea
-//                                     placeholder=""
-//                                     id="email1"
-//                                     className="form-control bg-transparent rounded-3 py-2"
-//                                     style={{ outline: "none" }}
-//                                     required
-//                                     name="description"
-//                                     rows={5}
-//                                     autoComplete="off"
-//                                 />
-//                             </div>
-//                             <div className="col-md-12 form-group mt-2">
-//                                 <div className="relative">
-//                                     <label className="form-label">
-//                                         L01 Media + Description
-//                                     </label>
-//                                     <textarea
-//                                         placeholder=""
-//                                         id="email1"
-//                                         className="form-control bg-transparent rounded-3 py-2 "
-//                                         style={{
-//                                             outline: "none",
-//                                             paddingLeft: "65px",
-//                                         }}
-//                                         required
-//                                         name="lo1_description"
-//                                         rows={2}
-//                                         autoComplete="off"
-//                                     />
-//                                     <label
-//                                         htmlFor="fileUpload1"
-//                                         className="absolute top-[41px] left-[10px]">
-//                                         <div>
-//                                             <AddPhotoAlternateOutlinedIcon
-//                                                 style={{ fontSize: "45px" }}
-//                                             />
-//                                         </div>
-//                                     </label>
-//                                     <input
-//                                         hidden
-//                                         id="fileUpload1"
-//                                         type="file"
-//                                     />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <div className="relative">
-//                                     <label className="form-label">
-//                                         L02 Media + Description
-//                                     </label>
-//                                     <textarea
-//                                         placeholder=""
-//                                         id="email1"
-//                                         className="form-control bg-transparent rounded-3 py-2 "
-//                                         style={{
-//                                             outline: "none",
-//                                             paddingLeft: "65px",
-//                                         }}
-//                                         required
-//                                         name="lo2_description"
-//                                         rows={2}
-//                                         autoComplete="off"
-//                                     />
-//                                     <label
-//                                         htmlFor="fileUpload2"
-//                                         className="absolute top-[41px] left-[10px]">
-//                                         <div>
-//                                             <AddPhotoAlternateOutlinedIcon
-//                                                 style={{ fontSize: "45px" }}
-//                                             />
-//                                         </div>
-//                                     </label>
-//                                     <input
-//                                         hidden
-//                                         id="fileUpload2"
-//                                         type="file"
-//                                     />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-12 form-group mt-3">
-//                                 <div className="relative">
-//                                     <label className="form-label">
-//                                         L03 Media + Description
-//                                     </label>
-//                                     <textarea
-//                                         placeholder=""
-//                                         id="email1"
-//                                         className="form-control bg-transparent rounded-3 py-2 "
-//                                         style={{
-//                                             outline: "none",
-//                                             paddingLeft: "65px",
-//                                         }}
-//                                         required
-//                                         name="lo3_description"
-//                                         rows={2}
-//                                         autoComplete="off"
-//                                     />
-//                                     <label
-//                                         htmlFor="fileUpload3"
-//                                         className="absolute top-[41px] left-[10px]">
-//                                         <div>
-//                                             <AddPhotoAlternateOutlinedIcon
-//                                                 style={{ fontSize: "45px" }}
-//                                             />
-//                                         </div>
-//                                     </label>
-//                                     <input
-//                                         hidden
-//                                         id="fileUpload3"
-//                                         type="file"
-//                                     />
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     </div>
-//                     <div className="col-md-2"></div>
-//                 </div>
-//             </div>
-//         </>
-//     );
-// };
-
-// const Content3 = () => {
-//     return (
-//         <Box sx={{ height: "100vh", width: "100%" }}>
-//             <CreateLesson />
-//         </Box>
-//     );
-// };
-
-// export default Content3;
+export default CreateLesson;

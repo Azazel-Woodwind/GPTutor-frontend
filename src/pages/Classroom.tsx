@@ -1,100 +1,148 @@
-import React, { useState, useRef, useEffect } from "react";
-import Rectangle from "../assets/Rectangle";
-import RoundedLine from "../assets/RoundedLine";
-import Navbar from "../components/Navbar";
-import nurons from "../assets/neurons.png";
-import neucleus from "../assets/nucleus.jpg";
-import image1 from "../assets/image1.png";
-import image2 from "../assets/image2.png";
-import image3 from "../assets/image3.png";
-import image4 from "../assets/image4.png";
-import image5 from "../assets/image5.png";
-import image6 from "../assets/image6.png";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import "./searchLesson.css";
-import Avatar from "../components/Avatar";
+import { ChatContext } from "../context/ChatContext";
+import React from "react";
+import styled from "styled-components";
+import Chat from "../components/Chat";
+import useConversationDisplay from "../hooks/useConversationDisplay";
+import Button from "../components/Button";
+import useChat from "../hooks/useChat";
+import { useNavigate } from "react-router-dom";
+import useLesson from "../hooks/useX/useXLesson";
+import { Textfield } from "../components/Textfield";
+import { MdArrowRightAlt, MdArrowLeft } from "react-icons/md";
 
-export default function Classroom() {
-    const [isCollapse, setIsCollapse] = useState(false);
-    const [imageCount, setImageCount] = useState(0);
-    const images = [
-        { img: nurons, desc: "Cellular Biology - The Nerve Cell" },
-        { img: image1, desc: "Forces & Motion" },
-        { img: image2, desc: "Astrophysics - Planet Earth" },
-        { img: image3, desc: "Cellular Biology - Eukaryotic Cells" },
-        { img: image4, desc: "DNA" },
-        { img: image5, desc: "Cellular Biology - Eukaryotic Cells" },
-        { img: image6, desc: "The Human Immune System" },
-    ];
-    const [heightScreen, setHeightScreen] = useState(0);
-
-    useEffect(() => {
-        const { innerWidth: width, innerHeight: height } = window;
-        setHeightScreen(height);
-    }, []);
-
-    const onImageChange = (num: number) => {
-        if (imageCount === images.length - 1 && num === 1) {
-            setImageCount(0);
-        } else if (imageCount === 0 && num === -1) {
-            setImageCount(images.length - 1);
-        } else {
-            setImageCount(prev => num + prev);
-        }
-    };
-
-    console.log("Image count", imageCount);
-
+const Image = styled.img`
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+`;
+const ImageCarousel = ({ learningObjective }) => {
+    if (!learningObjective?.images) return null;
+    const images = learningObjective.images;
     return (
-        <div className="min-h-[calc(100vh-100px)] overflow-hidden  flex flex-col relative">
-            <div
-                className={`max-w-[1100px] md:w-[1100px] flex flex-col   mx-auto  relative h-full md:mt-6 mt-14 flex-1 `}>
-                <div
-                    className={`flex  md:space-x-3 md:h-[420px] h-[375px]  ${
-                        isCollapse && "hidden"
-                    }`}>
-                    <div className="flex-1 md:block hidden ">
-                        <Avatar style="w-[370px] h-[370px] ml-4 " />
-                    </div>
-                    <div className="md:w-[595px] w-[370px] relative mx-auto">
-                        <div className="relative md:w-full w-[276px] mx-auto">
-                            <Rectangle
-                                style={{
-                                    position: "absolute",
-                                    height: "44px",
-                                    width: "100%",
-                                }}
-                            />
-                            <p className="font-abel md:text-[16px] text-[12px] text-white absolute text-center left-0 right-0 md:top-[10px] top-[14px] ">
-                                {images[imageCount].desc}
-                            </p>
-                        </div>
-                        <div className="relative ">
-                            <RoundedLine
-                                style={{ position: "absolute", top: "22px" }}
-                            />
-                            <div className="absolute">
-                                <div className="md:p-6 p-3.5 relative md:pt-16 pt-14">
-                                    <img
-                                        src={images[imageCount].img}
-                                        className="w-full h-full rounded-xl "
-                                    />
-                                    <button
-                                        onClick={() => onImageChange(-1)}
-                                        className="absolute md:text-[20px] text-[16px] -left-5 top-[49%] md:w-[65px] md:h-[65px] w-[50px] h-[50px] bg-[#131E2F]/90 rounded-full flex items-center justify-center">
-                                        <FaChevronLeft color="white " />
-                                    </button>
-                                    <button
-                                        onClick={() => onImageChange(1)}
-                                        className="absolute md:text-[20px] text-[16px] -right-5 top-[49%] md:w-[65px] md:h-[65px] w-[50px] h-[50px] bg-[#131E2F]/90 rounded-full flex items-center justify-center">
-                                        <FaChevronRight color="white " />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ImageContainer>
+            <ArrowLeft>
+                <MdArrowLeft />
+            </ArrowLeft>
+
+            <ArrowRight>
+                <MdArrowRightAlt />
+            </ArrowRight>
+            {learningObjective.title}
+            {images.map(image => {
+                return <Image src={image.link} />;
+            })}
+        </ImageContainer>
+    );
+};
+
+const ArrowLeft = styled.div`
+    position: absolute;
+    top: 45%;
+    left: -1em;
+    width: 2em;
+    height: 2em;
+    z-index: 10;
+`;
+
+const ArrowRight = styled(ArrowLeft)`
+    right: -1em;
+`;
+const ImageContainer = styled.div`
+    position: relative;
+    width: 60vw;
+    max-width: 920px;
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    text-align: center;
+`;
+
+function Classroom() {
+    useConversationDisplay(false);
+    const navigate = useNavigate();
+    const hook = useLesson({
+        lessonID: `28a739ac-9e3b-489d-a8be-5f0caa020daf`,
+    });
+
+    const { Controls, ChatHistory, X } = useChat({
+        prompts: ["Ut nostrud pariatur in ipsum."],
+        hook: hook,
+    });
+
+    const {
+        lesson,
+        finished,
+        started,
+        learningObjectiveNumber,
+        currentLearningObjective,
+        nextImage,
+        previousImage,
+        currentImageLink,
+        images,
+    } = hook;
+
+    const [currentImage, setCurrentImage] = React.useState(0);
+    return (
+        <Container>
+            <DualDisplay>
+                <X size={175} />
+                {currentLearningObjective && (
+                    <ImageCarousel
+                        learningObjective={currentLearningObjective}
+                    />
+                )}
+            </DualDisplay>
+            <ChatHistoryWrapper>
+                <ChatHistory
+                    height="15em"
+                    prompt={"This is the classroom environment."}
+                />
+            </ChatHistoryWrapper>
+            <ControlSection>
+                <LessonOptions>
+                    <Button outline onClick={e => navigate("/hub")}>
+                        Exit Lesson
+                    </Button>
+                </LessonOptions>
+                <Controls />
+            </ControlSection>
+        </Container>
     );
 }
+
+const ChatHistoryWrapper = styled.div`
+    width: 100%;
+    //background-color: rgb(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+const LessonOptions = styled.div`
+    position: absolute;
+    left: 1em;
+`;
+
+const DualDisplay = styled.div`
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    gap: 18em;
+    flex-grow: 1;
+`;
+const ControlSection = styled.div`
+    background-color: rgb(0, 0, 0, 0.1);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+const Container = styled.div`
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+export default Classroom;

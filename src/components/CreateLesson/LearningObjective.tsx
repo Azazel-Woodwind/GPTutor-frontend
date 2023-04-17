@@ -1,4 +1,3 @@
-import { FaPlus } from "react-icons/fa";
 import {
     MAX_IMAGES,
     MIN_IMAGES,
@@ -6,109 +5,127 @@ import {
 } from "../../lib/FormData";
 import useDynamicFields from "../../hooks/useDynamicFields";
 import LearningObjectiveImage from "./LearningObjectiveImage";
+import Textfield from "../Textfield";
+import CenteredColumn from "../../styles/containers/CenteredColumn";
+import { TextWrapper } from "../../styles/TextWrappers";
+import CustomButton from "../Button";
+import { Cross } from "@styled-icons/entypo/Cross";
+import styled from "styled-components";
+import IconButton from "../IconButton";
+import SvgLinearGradient from "../SvgLinearGradient";
+import { nanoid } from "nanoid";
+import { useEffect, useMemo } from "react";
+import { motion } from "framer-motion";
+import { Controller, useFieldArray } from "react-hook-form";
+import { ImageFill } from "styled-icons/bootstrap";
 
 export default function LearningObjective({
     index,
-    learningObjectives,
-    elements,
-    imageUnwrappers,
+    learningObjectivesFields,
     form,
 }) {
-    const [Title] = elements;
+    const gradientID = useMemo(nanoid, []);
 
-    const learningObjectiveImages = useDynamicFields({
-        formElements: [
-            <textarea
-                name="link"
-                rows={1}
-                style={{ resize: "none" }}
-                className="w-full border-[#50576E] border rounded-lg bg-transparent px-3 py-1.5 text-[16px] outline-none"
-            />,
-            <textarea
-                name="description"
-                rows={1}
-                style={{ resize: "none" }}
-                className="w-full border-[#50576E] border rounded-lg bg-transparent px-3 py-1.5 text-[16px] outline-none"
-            />,
-        ],
-        max: MAX_IMAGES,
-        min: MIN_IMAGES,
-        form,
+    const imagesFields = useFieldArray({
+        control: form.control,
+        name: `learning_objectives.${index}.images`,
     });
-    imageUnwrappers.current[index] = learningObjectiveImages.unwrap;
-
-    const deleteLearningObjective = () => {
-        if (learningObjectives.elements.length <= MIN_LEARNING_OBJECTIVES)
-            return;
-
-        learningObjectives.deleteField(index);
-    };
 
     return (
-        <div className="relative border border-[#818aa8] my-2 p-5">
-            <div className="">
-                <span
-                    onClick={deleteLearningObjective}
-                    className={`absolute top-2 bottom-0 right-2 cursor-${
-                        learningObjectives.elements.length <=
-                        MIN_LEARNING_OBJECTIVES
-                            ? "auto"
-                            : "pointer"
-                    }`}>
-                    <svg
-                        className={`fill-current h-8 w-8 text-${
-                            learningObjectives.elements.length <=
-                            MIN_LEARNING_OBJECTIVES
-                                ? "gray"
-                                : "red"
-                        }-600`}
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20">
-                        <title>Close</title>
-                        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-                    </svg>
-                </span>
-                <h5>Learning objective #{index + 1}</h5>
-                <div className="my-3">{Title}</div>
-                <h5>Images</h5>
-                <div className="my-3">
-                    {learningObjectiveImages.elements.map(
-                        (imageElements, index) => (
-                            <LearningObjectiveImage
-                                key={index}
-                                deleteImage={
-                                    learningObjectiveImages.deleteField
-                                }
-                                imageElements={imageElements}
-                                imageIndex={index}
-                                learningObjectiveImages={
-                                    learningObjectiveImages
-                                }
-                            />
-                        )
-                    )}
-                </div>
-            </div>
-            <div className="flex justify-center mt-5">
-                <button
+        <Container>
+            <CloseIconContainer>
+                <IconButton
+                    onClick={() => learningObjectivesFields.remove(index)}
                     disabled={
-                        learningObjectiveImages.elements.length >= MAX_IMAGES
-                    }
-                    onClick={e => {
-                        e.preventDefault();
-                        learningObjectiveImages.addField();
-                    }}>
-                    <FaPlus
-                        color={
-                            learningObjectiveImages.elements.length >=
-                            MAX_IMAGES
-                                ? "dimgray"
-                                : "#4e57d5"
-                        }
-                        size={24}
+                        learningObjectivesFields.fields.length <=
+                        MIN_LEARNING_OBJECTIVES
+                    }>
+                    <CloseIcon
+                        viewBox="0 0 20 20"
+                        focusable="false"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <SvgLinearGradient gradientID={gradientID} />
+                        </defs>
+
+                        <path
+                            fill={
+                                !(
+                                    learningObjectivesFields.fields.length <=
+                                    MIN_LEARNING_OBJECTIVES
+                                )
+                                    ? `url(#${gradientID})`
+                                    : "gray"
+                            }
+                            d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"></path>
+                    </CloseIcon>
+                </IconButton>
+            </CloseIconContainer>
+            <ObjectiveTitle size="xl">
+                Learning Objective #{index + 1}
+            </ObjectiveTitle>
+            <Controller
+                name={`learning_objectives.${index}.title`}
+                control={form.control}
+                render={({ field }) => <Textfield label="Title" {...field} />}
+            />
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1em",
+                }}>
+                {imagesFields.fields.map((image, imageIndex) => (
+                    <LearningObjectiveImage
+                        form={form}
+                        key={image.id}
+                        imageIndex={imageIndex}
+                        imagesFields={imagesFields}
+                        learningObjectiveIndex={index}
                     />
-                </button>
+                ))}
             </div>
-        </div>
+            <CustomButton
+                disabled={imagesFields.fields.length >= MAX_IMAGES}
+                onClick={e => {
+                    //This is very good code! Well played! Truly exemplary** Just like I expected from you ;)
+                    //Keep up the good work
+                    e.preventDefault();
+                    imagesFields.append({
+                        link: "",
+                        description: "",
+                    });
+                }}
+                outline
+                style={{ width: "fit-content" }}>
+                Add Image
+            </CustomButton>
+        </Container>
     );
 }
+
+export const CloseIcon = styled.svg`
+    width: 1.9em;
+    height: 1.9em;
+`;
+
+export const CloseIconContainer = styled.div`
+    position: absolute;
+    top: 0;
+    right: 0;
+`;
+
+const ObjectiveTitle = styled(TextWrapper)`
+    text-align: left;
+    width: 100%;
+    font-weight: 600;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 1em;
+    padding: 1em 0;
+`;
