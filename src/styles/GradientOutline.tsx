@@ -9,11 +9,10 @@ const GradientBorder = styled.div`
 const ChildContainer = styled.div`
     background-clip: padding-box;
     background: ${props => props.theme.colours.tertiary};
-    border: solid transparent;
 `;
 
 const GradientOutline = ({ children, hidden }) => {
-    if (hidden) return <> {children} </>;
+    if (hidden) return <div style={{ padding: "1px" }}> {children} </div>;
 
     return (
         <GradientBorder>

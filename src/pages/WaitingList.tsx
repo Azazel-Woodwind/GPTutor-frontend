@@ -40,7 +40,7 @@ function WaitingList() {
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
 
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState(true);
 
     useEffect(() => {
         if (firstName.length === 0) {
@@ -105,7 +105,8 @@ function WaitingList() {
             !isValidFirstName ||
             !isValidLastName ||
             !EducationRadioButtons.selected ||
-            selectedSubjects.length === 0
+            selectedSubjects.length === 0 ||
+            !OccupationRadioButtons.selected
         );
     };
 
@@ -176,9 +177,10 @@ function WaitingList() {
             ) : (
                 <XForm
                     onSubmit={addToWaitingList}
-                    submitButtonText={
-                        "WARNING: Do NOT let your wife CATCH you using THIS application"
-                    }
+                    // submitButtonText={
+                    //     "WARNING: Do NOT let your wife CATCH you using THIS application"
+                    // }
+                    submitButtonText={"Join the XTutor Waiting List!"}
                     title="Join the Waiting List!"
                     buttonProps={{
                         disabled: formIsInvalid(),

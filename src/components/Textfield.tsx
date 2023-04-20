@@ -6,32 +6,15 @@ import Theme from "../styles/Theme";
 import CenteredRow from "../styles/containers/CenteredRow";
 import IconButton from "./IconButton";
 
-const EndAdornmentWrapper = styled.div`
-    /* border: 1px solid red; */
-    position: absolute;
-    top: 5px;
-    bottom: 0;
-    right: 0;
-    /* height: 100%; */
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    box-sizing: border-box;
-    cursor: text;
-    /* z-index: 5; */
-`;
-
 export const BaseInput = forwardRef(({ type, multiline, ...props }, ref) => {
     const [wrapper, setRef] = React.useState(undefined);
     const [visible, setVisible] = React.useState(false);
     const [endAdornmentWidth, setEndAdornmentWidth] = React.useState(0);
 
     React.useEffect(() => {
-        // console.log(wrapper?.getBoundingClientRect().width);
         setEndAdornmentWidth(wrapper?.getBoundingClientRect().width);
     });
 
-    // console.log(wrapper?.getBoundingClientRect().width);
     return (
         <>
             <BaseInputStyle
@@ -43,6 +26,7 @@ export const BaseInput = forwardRef(({ type, multiline, ...props }, ref) => {
                     as: "textarea",
                     ...(props.rows && { rows: props.rows }),
                 })}
+                // style={{ marginTop: "5px" }}
             />
 
             {type === "password" ? (
@@ -81,6 +65,21 @@ export const BaseInput = forwardRef(({ type, multiline, ...props }, ref) => {
         </>
     );
 });
+
+const EndAdornmentWrapper = styled.div`
+    /* border: 1px solid red; */
+    position: absolute;
+    top: 5px;
+    bottom: 0;
+    right: 0;
+    /* height: 100%; */
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    box-sizing: border-box;
+    cursor: text;
+    /* z-index: 5; */
+`;
 
 const ErrorText = styled.div`
     color: ${props => props.theme.colours.error};
@@ -156,7 +155,7 @@ export const BaseInputStyle = styled.input`
     padding: 0 0.7em;
     /* padding-bottom: 0.4em; */
     ${props =>
-        props.as === "textarea" && `margin-top: 1.4em; margin-bottom: 0.7em;`};
+        props.as === "textarea" && `margin-top: 21px; margin-bottom: 0.7em;`};
     /* border: 2px solid black; */
     position: relative;
     color: ${props => (props.color ? props.color : "white")};
@@ -277,7 +276,11 @@ export const Textfield = forwardRef(
                         {...props}>
                         <CustomLegend
                             visible={
-                                !!(focused || (props.value && props.value.length) || (ref && ref.current?.value?.length > 0))
+                                !!(
+                                    focused ||
+                                    (props.value && props.value.length) ||
+                                    (ref && ref.current?.value?.length > 0)
+                                )
                             }>
                             {required ? `${label} *` : label}
                         </CustomLegend>
@@ -286,8 +289,13 @@ export const Textfield = forwardRef(
                         initial={false}
                         variants={LabelVariants}
                         animate={
-                            !!(focused || (props.value && props.value.length) || (ref && ref.current?.value?.length > 0)) &&
-                            "focused"
+                            !!(
+                                focused ||
+                                (props.value && props.value.length) ||
+                                (ref && ref.current?.value?.length > 0)
+                            )
+                                ? "focused"
+                                : undefined
                         }>
                         {required ? `${label} *` : label}
                     </InputLabel>

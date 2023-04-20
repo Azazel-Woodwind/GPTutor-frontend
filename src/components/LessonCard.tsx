@@ -6,17 +6,27 @@ import {
     capitaliseFirstLetter,
     formatEducationLevel,
 } from "../lib/stringUtils";
+import { useNavigate } from "react-router-dom";
 
 type PropsTypes = {
     lesson: Lesson;
 };
 
 function LessonCard({ lesson }: PropsTypes) {
+    const navigate = useNavigate();
+
     return (
         <Container
             as={motion.div}
             whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.9 }}>
+            whileTap={{ scale: 0.9 }}
+            onClick={() =>
+                navigate(
+                    `/lessons/${lesson.title.replaceAll(" ", "-")}?id=${
+                        lesson.id
+                    }`
+                )
+            }>
             <Title>{capitaliseFirstLetter(lesson.title)}</Title>
             <Subject>{capitaliseFirstLetter(lesson.subject)}</Subject>
             <Description>{lesson.caption}</Description>

@@ -28,8 +28,8 @@ const defaultConfig: UseWhisperConfig = {
     nonStop: false,
     removeSilence: false,
     stopTimeout: defaultStopTimeout,
-    streaming: false,
-    timeSlice: 1_000,
+    streaming: true,
+    timeSlice: 1_500,
     onDataAvailable: undefined,
     onTranscribe: undefined,
     Socket: undefined,
@@ -45,7 +45,7 @@ const defaultTimeout: UseWhisperTimeout = {
 /**
  * React Hook for OpenAI Whisper
  */
-export const useWhisper: UseWhisperHook = (config) => {
+export const useWhisper: UseWhisperHook = config => {
     const {
         autoStart,
         autoTranscribe,
@@ -64,8 +64,8 @@ export const useWhisper: UseWhisperHook = (config) => {
         ...config,
     };
 
-    Socket!.on("transcribed_audio", (message) => {
-        console.log("onInterim", { message });
+    Socket!.on("transcribed_audio", message => {
+        // console.log("onInterim", { message });
         if (message) {
             setTranscript(message);
         }
@@ -107,7 +107,7 @@ export const useWhisper: UseWhisperHook = (config) => {
                 listener.current.off("stopped_speaking", onStopSpeaking);
             }
             if (stream.current) {
-                stream.current.getTracks().forEach((track) => track.stop());
+                stream.current.getTracks().forEach(track => track.stop());
                 stream.current = undefined;
             }
         };
@@ -201,7 +201,7 @@ export const useWhisper: UseWhisperHook = (config) => {
     const onStartStreaming = async () => {
         try {
             if (stream.current) {
-                stream.current.getTracks().forEach((track) => track.stop());
+                stream.current.getTracks().forEach(track => track.stop());
             }
             stream.current = await navigator.mediaDevices.getUserMedia({
                 audio: true,
@@ -293,6 +293,8 @@ export const useWhisper: UseWhisperHook = (config) => {
                 onStopStreaming();
                 onStopTimeout("stop");
                 setRecording(false);
+                console.log("HERE HERE HERE");
+
                 if (autoTranscribe) {
                     await onTranscribing();
                 } else {
@@ -323,7 +325,7 @@ export const useWhisper: UseWhisperHook = (config) => {
             listener.current = undefined;
         }
         if (stream.current) {
-            stream.current.getTracks().forEach((track) => track.stop());
+            stream.current.getTracks().forEach(track => track.stop());
             stream.current = undefined;
         }
     };
@@ -352,7 +354,7 @@ export const useWhisper: UseWhisperHook = (config) => {
      */
 
     const onTranscribing = async () => {
-        console.log("transcribing speech");
+        // console.log("transcribing speech");
         try {
             if (recorder.current) {
                 const recordState = await recorder.current.getState();
@@ -435,14 +437,14 @@ export const useWhisper: UseWhisperHook = (config) => {
      * - set transcript text with interim result
      */
     const onDataAvailable = async (data: Blob) => {
-        console.log("onDataAvailable", data);
+        // console.log("onDataAvailable", data);
         try {
             if (streaming && recorder.current) {
                 onDataAvailableCallback?.(data);
                 chunks.current.push(data);
                 const recorderState = await recorder.current.getState();
                 console.log(speaking);
-                
+
                 if (recorderState === "recording") {
                     const blob = new Blob(chunks.current, {
                         type: "audio/webm;codecs=opus",
@@ -450,6 +452,7 @@ export const useWhisper: UseWhisperHook = (config) => {
                     const file = new File([blob], "speech.webm", {
                         type: "audio/webm;codecs=opus",
                     });
+
                     // const body = new FormData();
                     // const base64 = await new Promise<string | ArrayBuffer | null>(
                     //   (resolve) => {
@@ -458,8 +461,9 @@ export const useWhisper: UseWhisperHook = (config) => {
                     //     reader.readAsDataURL(blob)
                     //   }
                     // )
+
                     console.log("sending audio to server");
-                    
+
                     Socket!.emit("transcribe_audio", { file });
                 }
             }
@@ -481,7 +485,7 @@ export const useWhisper: UseWhisperHook = (config) => {
         body.append("file", file);
         Socket!.emit("lesson_transcribe_audio", { body });
 
-        const response: any = await new Promise((resolve) =>
+        const response: any = await new Promise(resolve =>
             Socket!.on("transcribed_audio", resolve)
         );
         return response.data.text;

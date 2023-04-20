@@ -1,19 +1,37 @@
-import { redirect, Link } from "react-router-dom";
+import { redirect, Link, useNavigate, useLocation } from "react-router-dom";
 import React from "react";
 import supabase from "../../api/configs/supabase";
 import Logo from "../../assets/Logo";
 import { useAuth } from "../../context/SessionContext";
 import styled from "styled-components";
 import { ChatContext } from "../../context/ChatContext";
+import CustomButton from "../Button";
+
+const LogoSvg = styled.svg`
+    cursor: pointer;
+    width: 150px;
+    height: 100px;
+`;
+
+const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
 
 export default function header() {
     const { session, setLoading } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    console.log(
+        "IN CLASSROOM?",
+        inClassroomRegex.test(location.pathname + location.search)
+    );
+
     return (
         <>
             <Container>
-                <svg
-                    width={150}
-                    height="100"
+                <LogoSvg
+                    onClick={() => {
+                        navigate("/hub");
+                    }}
                     viewBox="0 0 476 114"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -62,11 +80,25 @@ export default function header() {
                             />
                         </filter>
                     </defs>
-                </svg>
+                </LogoSvg>
             </Container>
+            {inClassroomRegex.test(location.pathname + location.search) && (
+                <ExitLessonButtonContainer>
+                    <CustomButton outline onClick={() => navigate("/lessons")}>
+                        Exit Lesson
+                    </CustomButton>
+                </ExitLessonButtonContainer>
+            )}
         </>
     );
 }
+
+const ExitLessonButtonContainer = styled.div`
+    position: absolute;
+    top: 1.5em;
+    right: 1em;
+    z-index: 100;
+`;
 
 const Container = styled.div`
     top: 0px;
@@ -74,8 +106,7 @@ const Container = styled.div`
     min-height: 2em;
     height: 100px;
     color: white;
-    z-index: 100;
-    padding-bottom: 5em;
+    z-index: 10000000;
     position: absolute;
 
     svg {
@@ -83,5 +114,4 @@ const Container = styled.div`
         left: 2em;
         top: 0px;
     }
-    //background-color: rgb(255, 255, 255, 0.01);
 `;

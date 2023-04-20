@@ -66,8 +66,8 @@ const LessonContainer = styled.div`
     flex-wrap: wrap;
     gap: 1em;
     width: 70%;
-    height: 70vh;
+    height: fit-content;
     margin-bottom: 2em;
-    overflow-y: auto;
 `;
+
 export default Lessons;

@@ -39,7 +39,7 @@ const LessonAPI = {
         return data as Lesson[];
     },
 
-    getMyLessonById: async function (lesson_id: string): Promise<Lesson> {
+    getLessonById: async function (lesson_id: string): Promise<Lesson> {
         const { data, error } = await supabase
             .from("lessons")
             .select("*, learning_objectives (*, images (*))")

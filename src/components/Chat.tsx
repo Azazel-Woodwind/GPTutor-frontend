@@ -1,22 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import Avatar from "../components/Avatar";
 import Message from "./Message";
 import GradientOutline from "../styles/GradientOutline";
-import { MdBackspace, MdSend, MdKeyboardVoice } from "react-icons/md";
-import { BaseInputStyle } from "./Textfield";
-import { motion } from "framer-motion";
-import IconWrapperStyle from "../styles/IconWrapper";
-import { ChatContext } from "../context/ChatContext"; //retard?
-import { useNavigate } from "react-router-dom";
+import { ChatContext } from "../context/ChatContext";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "./Navigation";
 import useChat from "../hooks/useChat";
 import useXConversation from "../hooks/useX/useXConversation";
-import useResizable from "../hooks/useResizable";
 import CenteredRow from "../styles/containers/CenteredRow";
+import CenteredColumn from "../styles/containers/CenteredColumn";
+import useAvatar from "../hooks/useAvatar";
+import Resizable from "./Resizable";
 
 const prompts = [
-    "Hi X. Can you show me lessons?",
+    "Hi X. Can you show me the available lessons?",
     "Help me get started with GCSE math?",
     "How does this page work?",
     "What subjects can you teach?",
@@ -24,59 +21,42 @@ const prompts = [
 ];
 
 const Chat = props => {
-    const { width, max } = React.useContext(ChatContext);
-
-    // console.log(width.get(), window.innerWidth);
-
-    const { Resizable, isCollapsed } = useResizable({
-        number: width,
-        max,
-        min: 320,
-        draggable: width !== window.innerWidth,
-    });
+    const { width } = React.useContext(ChatContext);
+    const location = useLocation();
     const hook = useXConversation();
-    const { Controls, ChatHistory, X } = useChat({ prompts: prompts, hook });
+    const chat = useChat({ hook });
 
     return (
-        <Resizable>
+        <Resizable number={width} min={400}>
             <Window>
-                {!isCollapsed && (
-                    <>
-                        <Navigation />
-                        <AvatarContainer>
-                            <X />
-                        </AvatarContainer>
-                        <BottomSection>
-                            <ChatHistory
-                                height="24em"
-                                prompt={
-                                    "This is X, your personal AI tutor. You can have him navigate the application for you, or for example answer any questions related to the application or your subjects"
-                                }
-                            />
-                            <Controls />
-                        </BottomSection>
-                    </>
-                )}
+                <ChatSection {...chat} />
             </Window>
         </Resizable>
     );
 };
 
-const Container = styled.div``;
-
-const AvatarContainer = styled.div`
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
-
-const BottomSection = styled.div`
+const ChatSection = ({ Avatar, AvatarProps, ChatHistory, Controls }) => {
+    return (
+        <>
+            <Navigation />
+            <Avatar size={120} {...AvatarProps} />
+            <BottomSection>
+                <ChatHistory
+                    height="20em"
+                    prompt={
+                        "This is X, your personal AI tutor. You can have him navigate the application for you, or for example answer any questions related to the application or your subjects"
+                    }
+                />
+                <Controls prompts={prompts} />
+            </BottomSection>
+        </>
+    );
+};
+const BottomSection = styled(CenteredColumn)`
+    max-width: 1200px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-grow: 1;
+    margin-top: 2em;
 `;
 
 const Window = styled.div`

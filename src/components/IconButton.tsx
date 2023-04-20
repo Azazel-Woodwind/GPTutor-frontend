@@ -71,7 +71,7 @@ const IconSvg = styled.svg`
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -52%);
+    transform: translate(-50%, -50%);
     /* border: 2px solid black; */
 `;
 
@@ -96,6 +96,7 @@ function OutlinedIconButton({
     viewboxWidth,
     viewboxHeight,
     paths,
+    scale,
     ...props
 }) {
     const [hovering, setHovering] = React.useState(false);
@@ -103,10 +104,11 @@ function OutlinedIconButton({
     const gradientID1 = React.useMemo(nanoid, []);
     const gradientID2 = React.useMemo(nanoid, []);
 
-    width = width || 35;
-    height = height || 35;
-    borderWidth = borderWidth || 2;
-    iconSize = iconSize || 20;
+    scale = scale || 1;
+    width = scale * (width || 35);
+    height = scale * (height || 35);
+    borderWidth = scale * (borderWidth || 2);
+    iconSize = scale * (iconSize || 20);
 
     return (
         <Container
@@ -121,10 +123,10 @@ function OutlinedIconButton({
                     <SvgLinearGradient gradientID={gradientID1} />
                 </defs>
                 <rect
-                    x={borderWidth}
-                    y={borderWidth}
-                    width={width - borderWidth * 2}
-                    height={height - borderWidth * 2}
+                    x={borderWidth / 2}
+                    y={borderWidth / 2}
+                    width={width - borderWidth}
+                    height={height - borderWidth}
                     rx="7"
                     fill={hovering ? "rgb(39, 46, 95)" : "none"}
                     stroke={`url(#${gradientID1})`}

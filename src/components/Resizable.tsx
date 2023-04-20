@@ -8,9 +8,10 @@ import {
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import useScreensize from "./useScreensize";
+import useScreensize from "../hooks/useScreensize";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { ChatContext } from "../context/ChatContext";
 
 const options = {
     duration: 0.5,
@@ -20,7 +21,7 @@ const threshold = 0.8;
 
 let resizableProportion: number;
 
-const useResizable = ({ number, min, max, draggable }) => {
+const Resizable = ({ number, children, min }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [fullscreen, setFullscreen] = useState(false);
@@ -28,6 +29,9 @@ const useResizable = ({ number, min, max, draggable }) => {
     const { width } = useScreensize(
         (oldWidth, oldHeight, newWidth, newHeight) => {}
     );
+
+    const { draggable } = React.useContext(ChatContext);
+    // console.log(draggable);
 
     const onChange = React.useCallback(
         latest => {
@@ -89,49 +93,44 @@ const useResizable = ({ number, min, max, draggable }) => {
                 collapse();
             }
         },
-        [navigateThreshold, location]
+        [navigateThreshold, location, draggable]
     );
 
-    return {
-        Resizable: ({ children }) => (
-            <Container width={number}>
-                <motion.div
-                    style={{
-                        width: number,
-                        cursor: isDragging ? "row-resize" : "",
-                    }}>
-                    {!location.pathname.includes("hub") && (
-                        <Handle
-                            as={motion.div}
-                            drag="x"
-                            onDoubleClick={() => {
-                                if (isCollapsed) uncollapse();
-                                else collapse();
-                            }}
-                            dragConstraints={{
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                bottom: 0,
-                            }}
-                            dragElastic={0}
-                            dragMomentum={false}
-                            onDrag={handleDrag}
-                            onDragEnd={() => {
-                                setIsDragging(false);
-                            }}
-                            onDragStart={() => {
-                                setIsDragging(true);
-                            }}
-                        />
-                    )}
-                    {children}
-                </motion.div>
-            </Container>
-        ),
-        isDragging,
-        isCollapsed,
-    };
+    return (
+        <Container width={number}>
+            <motion.div
+                style={{
+                    width: number,
+                }}>
+                {!location.pathname.includes("hub") && draggable && (
+                    <Handle
+                        as={motion.div}
+                        drag="x"
+                        onDoubleClick={() => {
+                            if (isCollapsed) uncollapse();
+                            else collapse();
+                        }}
+                        dragConstraints={{
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                        }}
+                        dragElastic={0}
+                        dragMomentum={false}
+                        onDrag={handleDrag}
+                        onDragEnd={() => {
+                            setIsDragging(false);
+                        }}
+                        onDragStart={() => {
+                            setIsDragging(true);
+                        }}
+                    />
+                )}
+                {children}
+            </motion.div>
+        </Container>
+    );
 };
 
 const Handle = styled.div`
@@ -144,6 +143,7 @@ const Handle = styled.div`
     top: calc(50% - 50px);
     left: -20px;
     z-index: 100;
+    cursor: e-resize;
 `;
 
 const Container = styled.div`
@@ -159,4 +159,4 @@ const Container = styled.div`
     flex: 0 1 auto;
 `;
 
-export default useResizable;
+export default Resizable;

@@ -25,7 +25,7 @@ export function SocketContextProvider({ children }: any) {
             console.log("Connecting to socket");
             socket.on("connect_error", err => {
                 console.log("error:", err.message);
-                // either no token, token is invalid or database error
+                // either no token, token is invalid, database error or timeout
             });
 
             socket.on("authenticated", bool => {

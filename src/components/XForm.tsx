@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import Avatar from "../components/Avatar";
 import SubmitButton from "../components/Button";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
+import Avatar from "./Avatar";
 
 // Embrace the shadows ; find the truth
 
@@ -34,8 +34,8 @@ function XForm({
 }) {
     return (
         <>
-            <CenteredRow gap="10em" wrap fillparent>
-                <Avatar size={190} hasLogo />
+            <CenteredRow gap="8em" wrap fillparent>
+                <Avatar size={200} hasLogo />
                 <CenteredColumn gap="0.2em">
                     <Title>{title}</Title>
                     <FormContainer onSubmit={onSubmit}>

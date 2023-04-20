@@ -35,11 +35,15 @@ function useX(config: Config) {
     const [streaming, setStreaming] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [speaking, setSpeaking] = useState(false);
+    const [multiplier, setMultiplier] = useState(1);
 
     const currentSentence = useRef<string>("");
-    const audio = useRef<HTMLMediaElement>(
-        typeof window === "undefined" ? null : new Audio()
-    );
+    const audio = useRef<HTMLMediaElement>(new Audio());
+    const audioContext = useRef<AudioContext | null>(new AudioContext());
+    const analyserNode = useRef<AnalyserNode | null>(null);
+    const dataArray = useRef<Uint8Array | null>(null);
+    const animationId = useRef<number | null>(null);
+    const audioSource = useRef<MediaElementAudioSourceNode | null>(null);
     const audioQueue = useRef<string[]>([]);
 
     const sendSystemMessage = message => {
@@ -69,6 +73,20 @@ function useX(config: Config) {
         audio.current!.playbackRate = speed;
     };
 
+    const updateMultiplier = () => {
+        analyserNode.current!.getByteFrequencyData(dataArray.current!);
+
+        const averageFrequency =
+            dataArray.current!.reduce((acc, val) => acc + val) /
+            dataArray.current!.length;
+        const frequencyRatio = averageFrequency / 255;
+        const multiplier = 1 + frequencyRatio * 1.4;
+
+        setMultiplier(multiplier);
+        // console.log(pulseSpeed);
+        animationId.current = requestAnimationFrame(updateMultiplier);
+    };
+
     useEffect(() => {
         if (!Socket) return;
 
@@ -77,8 +95,24 @@ function useX(config: Config) {
         // audio.current!.muted = true;
 
         audio.current!.onplay = () => {
-            // audio.current!.playbackRate = 2
-            console.log(audioQueue.current.length);
+            console.log("track playing");
+            setSpeaking(true);
+
+            audioContext.current = new AudioContext();
+            if (!audioSource.current) {
+                analyserNode.current = audioContext.current.createAnalyser();
+                audioSource.current =
+                    audioContext.current.createMediaElementSource(
+                        audio.current
+                    );
+                audioSource.current.connect(analyserNode.current);
+                analyserNode.current.connect(audioContext.current.destination);
+            }
+
+            const bufferLength = analyserNode.current!.frequencyBinCount;
+            dataArray.current = new Uint8Array(bufferLength);
+
+            animationId.current = requestAnimationFrame(updateMultiplier);
         };
 
         audio.current!.onended = () => {
@@ -90,6 +124,8 @@ function useX(config: Config) {
                 audio.current!.play();
             } else {
                 setSpeaking(false);
+                cancelAnimationFrame(animationId.current!);
+                setMultiplier(1);
             }
         };
 
@@ -121,7 +157,6 @@ function useX(config: Config) {
                         ? `data:audio/x-wav;base64,${data}`
                         : `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
                 audio.current!.play();
-                setSpeaking(true);
             } else {
                 // console.log("queueing audio_data");
                 audioQueue.current.push(data);
@@ -147,19 +182,20 @@ function useX(config: Config) {
         });
     }, [Socket]);
 
+    // console.log("MULTIPLIER", multiplier);
+
     return {
         sendMessage,
         history,
         setHistory,
         loading,
-        setLoading,
         currentMessage,
-        setCurrentMessage,
         sendSystemMessage,
         streaming,
         speaking,
         toggleMute,
         setSpeed,
+        multiplier,
     };
 }
 

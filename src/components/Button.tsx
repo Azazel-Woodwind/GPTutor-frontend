@@ -206,8 +206,11 @@ const CustomButton = props => {
     if (!props.disabled) {
         props = {
             ...props,
-            whileHover: { scale: 1.03 },
-            whileTap: { scale: 0.95 },
+            whileHover: {
+                scale: props.whileHoverScale || 1.03,
+                transition: { duration: 0.2 },
+            },
+            whileTap: { scale: props.whileTapScale || 0.95 },
         };
     }
 

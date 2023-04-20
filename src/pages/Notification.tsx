@@ -24,7 +24,6 @@ const NotificationWrapper = styled(CenteredColumn)`
 const Wrapper = styled(CenteredColumn)`
     display: flex;
 
-    margin-bottom: 3em;
     b {
         color: ${props => props.theme.colours.secondary};
     }

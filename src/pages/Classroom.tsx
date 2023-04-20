@@ -1,15 +1,15 @@
 import { ChatContext } from "../context/ChatContext";
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import Chat from "../components/Chat";
 import useConversationDisplay from "../hooks/useConversationDisplay";
 import Button from "../components/Button";
-import useChat from "../hooks/useChat";
-import { useNavigate } from "react-router-dom";
+import Chatbox from "../hooks/useChat";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import useLesson from "../hooks/useX/useXLesson";
 import { Textfield } from "../components/Textfield";
 import { MdArrowRightAlt, MdArrowLeft } from "react-icons/md";
-
+import useAvatar from "../hooks/useAvatar";
+import useChat from "../hooks/useChat";
 const Image = styled.img`
     width: 100%;
     height: auto;
@@ -59,13 +59,17 @@ const ImageContainer = styled.div`
 
 function Classroom() {
     useConversationDisplay(false);
+    const [currentImage, setCurrentImage] = React.useState(0);
+
     const navigate = useNavigate();
+
+    const currentLesson = useLoaderData();
+
     const hook = useLesson({
-        lessonID: `28a739ac-9e3b-489d-a8be-5f0caa020daf`,
+        lessonID: currentLesson.id,
     });
 
-    const { Controls, ChatHistory, X } = useChat({
-        prompts: ["Ut nostrud pariatur in ipsum."],
+    const { Controls, ChatHistory, Avatar } = useChat({
         hook: hook,
     });
 
@@ -81,31 +85,31 @@ function Classroom() {
         images,
     } = hook;
 
-    const [currentImage, setCurrentImage] = React.useState(0);
     return (
         <Container>
             <DualDisplay>
-                <X size={175} />
+                <Avatar size={150} />
                 {currentLearningObjective && (
                     <ImageCarousel
                         learningObjective={currentLearningObjective}
                     />
                 )}
             </DualDisplay>
-            <ChatHistoryWrapper>
-                <ChatHistory
-                    height="15em"
-                    prompt={"This is the classroom environment."}
-                />
-            </ChatHistoryWrapper>
-            <ControlSection>
-                <LessonOptions>
-                    <Button outline onClick={e => navigate("/hub")}>
-                        Exit Lesson
-                    </Button>
-                </LessonOptions>
-                <Controls />
-            </ControlSection>
+            <>
+                <ChatHistoryWrapper>
+                    <ChatHistory
+                        height="15em"
+                        prompt={"This is the classroom environment."}
+                    />
+                </ChatHistoryWrapper>
+                <ControlSection>
+                    <Controls
+                        height="15em"
+                        prompts={["Ut nostrud pariatur in ipsum."]}
+                        hook={hook}
+                    />
+                </ControlSection>
+            </>
         </Container>
     );
 }
@@ -116,6 +120,7 @@ const ChatHistoryWrapper = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    max-width: 1200px;
 `;
 const LessonOptions = styled.div`
     position: absolute;
@@ -136,6 +141,7 @@ const ControlSection = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    max-width: 1200px;
 `;
 const Container = styled.div`
     width: 100vw;
@@ -143,6 +149,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 5em;
 `;
 
 export default Classroom;

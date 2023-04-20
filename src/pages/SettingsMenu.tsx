@@ -21,7 +21,7 @@ const Notifications = Icon(NotificationsCircle);
 const UserProfile = Icon(Profile);
 
 const Account = () => {
-    useConversationDisplay(0.35);
+    useConversationDisplay(0.3);
 
     return (
         <Container>

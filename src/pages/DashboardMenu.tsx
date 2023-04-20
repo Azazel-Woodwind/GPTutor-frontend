@@ -12,7 +12,7 @@ import { UserBadge } from "@styled-icons/boxicons-solid/UserBadge";
 const Users = Icon(UserBadge);
 
 const Dashboard = () => {
-    useConversationDisplay(0.3);
+    useConversationDisplay(0.25);
     const { session } = useAuth();
 
     return (

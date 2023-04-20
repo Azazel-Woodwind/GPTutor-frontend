@@ -60,12 +60,12 @@ const ApplicationWrapperStyle = styled.div`
 
 const ApplicationInternalStyle = styled.div`
     height: 100%;
+    position: relative;
     width: 100%;
     overflow-y: auto;
 
     display: flex;
     flex-direction: column;
-
     flex: 1 1 auto;
 `;
 
@@ -213,14 +213,11 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <ApplicationWrapper />,
+        // errorElement: <Error />, need to implement this
         children: [
             {
                 path: "/hub",
                 element: <Hub />,
-            },
-            {
-                path: "/classroom",
-                element: <Classroom />,
             },
             {
                 path: "/create-lesson",
@@ -329,6 +326,28 @@ const router = createBrowserRouter([
                     {
                         path: "/dashboard/my-lessons",
                         element: <MyLessons />,
+                        action: async ({ request }) => {
+                            if (request.method !== "DELETE") {
+                                throw new Response("Incorrect request method", {
+                                    status: 400,
+                                    statusText: "Bad Request",
+                                });
+                            }
+
+                            const data = await request.formData();
+                            const lessonID = data.get("id");
+
+                            if (!lessonID) {
+                                throw new Response("Missing lesson ID", {
+                                    status: 400,
+                                    statusText: "Bad Request",
+                                });
+                            }
+
+                            await LessonAPI.deleteOwnedByid(lessonID as string);
+
+                            return null;
+                        },
                         loader: async (): Promise<Lesson[]> => {
                             try {
                                 const lessons = await LessonAPI.getMyLessons();
@@ -349,14 +368,9 @@ const router = createBrowserRouter([
                             </RouteProtector>
                         ),
                         loader: async (): Promise<User[]> => {
-                            try {
-                                const users = await UserAPI.getAll();
-                                console.log("ALL USERS:", users);
-                                return users;
-                            } catch (error) {
-                                console.log(error);
-                                return [];
-                            }
+                            const users = await UserAPI.getAll();
+                            console.log("ALL USERS:", users);
+                            return users;
                         },
                     },
                     {
@@ -382,7 +396,7 @@ const router = createBrowserRouter([
             {
                 path: "/lessons",
                 element: <Lessons />,
-                loader: async (): Promise<Lesson[]> => {
+                loader: async ({ request }): Promise<Lesson[]> => {
                     try {
                         const lessons = await LessonAPI.getPublicLessons();
                         console.log("ALL LESSONS:", lessons);
@@ -391,6 +405,40 @@ const router = createBrowserRouter([
                         console.log(error);
                         return [];
                     }
+                },
+            },
+            {
+                path: "/lessons/:lessonName", // ?id="yer28736427384yb23c78e"
+                element: <Classroom />,
+                loader: async ({ request }): Promise<Lesson> => {
+                    const url = new URL(request.url);
+                    const id = url.searchParams.get("id");
+
+                    if (!id) {
+                        throw new Response("No lesson ID provided", {
+                            status: 400,
+                            statusText: "Bad Request",
+                        });
+                    }
+                    let lesson;
+                    try {
+                        lesson = await LessonAPI.getLessonById(id);
+                    } catch (error: any) {
+                        if (
+                            error.message ===
+                            "JSON object requested, multiple (or no) rows returned"
+                        ) {
+                            throw new Response("Lesson not found", {
+                                status: 404,
+                                statusText: "Not Found",
+                            });
+                        } else {
+                            throw error;
+                        }
+                    }
+
+                    console.log("LESSON:", lesson);
+                    return lesson;
                 },
             },
             {

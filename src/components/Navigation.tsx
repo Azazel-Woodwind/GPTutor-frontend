@@ -61,6 +61,8 @@ const Navigation = styled.div`
 `;
 
 export default () => {
+    // console.log("rendering navigation");
+
     return (
         <Navigation>
             <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} />

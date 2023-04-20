@@ -29,21 +29,19 @@ const CreateLessonForm = styled.form`
     width: fit-content;
     display: flex;
     flex-direction: column;
-    /* height: 100%; */
     gap: 1em;
     padding: 0 1em;
+    padding-bottom: 2em;
 `;
 
 const Container = styled.div`
-    overflow-y: auto;
     margin-top: 8em;
     margin-left: 2em;
     margin-right: 2em;
 
-    padding-bottom: 2em;
+    /* padding-bottom: 2em; */
     /* width: 100%; */
     height: 100%;
-    overflow: auto;
 `;
 
 function CreateLesson({ action }) {
@@ -123,7 +121,7 @@ function CreateLesson({ action }) {
                 });
                 return navigate("/create-lesson");
             }
-            LessonAPI.getMyLessonById(lessonID)
+            LessonAPI.getLessonById(lessonID)
                 .then(lesson => {
                     console.log(lesson);
                     if (!lesson) {

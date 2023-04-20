@@ -13,15 +13,10 @@ const useConversationDisplay = value => {
     const screen = useScreensize();
 
     let setWidth = screen.width * value;
-    const { width, setMax } = React.useContext(ChatContext);
+    const { width, setDraggable } = React.useContext(ChatContext);
 
     React.useEffect(() => {
-        setMax(value);
-
-        // if (!value) {
-        //     animate(width, 0, options);
-        //     return;
-        // }
+        setDraggable(!!value);
 
         if (value === true) {
             console.log("FULLSCREEN");

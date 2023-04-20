@@ -30,7 +30,7 @@ const GlobalStyles = createGlobalStyle`
     }
 
     *::-webkit-scrollbar {
-        width: 6px;
+        width: 8px;
         height: 10px;
         cursor: pointer;
     }
@@ -41,7 +41,8 @@ const GlobalStyles = createGlobalStyle`
     }
     
     *::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.colours.contrast};
+        /* background-color: ${props => props.theme.colours.contrast}; */
+        ${props => props.theme.gradient({ animationLength: 4 })}
         border-radius: 10px;
         cursor: pointer;
     }
