@@ -8,7 +8,6 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageWrapper from "./styles/containers/PageWrapper";
-// import {} from "styled-components/cssprop";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={Theme}>
