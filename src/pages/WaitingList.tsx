@@ -40,7 +40,7 @@ function WaitingList() {
     const [isValidEmail, setIsValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
 
-    const [success, setSuccess] = useState(true);
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         if (firstName.length === 0) {
