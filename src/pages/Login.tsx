@@ -20,7 +20,7 @@ function WaitingList() {
         e.preventDefault();
 
         if (!emailInput?.current?.value || !passwordInput?.current?.value) {
-            toast.error("Fill in all the FUCKING fields.", {
+            toast.error("deez FUCKING nuts", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

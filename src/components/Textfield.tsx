@@ -1,87 +1,24 @@
 import React, { forwardRef } from "react";
-import styled, { css } from "styled-components";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { motion } from "framer-motion";
+import styled, { css, useTheme } from "styled-components";
+import { AnimatePresence, motion } from "framer-motion";
 import Theme from "../styles/Theme";
 import CenteredRow from "../styles/containers/CenteredRow";
-import IconButton from "./IconButton";
-
-export const BaseInput = forwardRef(({ type, multiline, ...props }, ref) => {
-    const [wrapper, setRef] = React.useState(undefined);
-    const [visible, setVisible] = React.useState(false);
-    const [endAdornmentWidth, setEndAdornmentWidth] = React.useState(0);
-
-    React.useEffect(() => {
-        setEndAdornmentWidth(wrapper?.getBoundingClientRect().width);
-    });
-
-    return (
-        <>
-            <BaseInputStyle
-                {...props}
-                type={visible ? "text" : type}
-                ref={ref}
-                adornmentWidth={endAdornmentWidth}
-                {...(multiline && {
-                    as: "textarea",
-                    ...(props.rows && { rows: props.rows }),
-                })}
-                // style={{ marginTop: "5px" }}
-            />
-
-            {type === "password" ? (
-                <EndAdornmentWrapper>
-                    <span
-                        style={{ paddingRight: "0.7em" }}
-                        ref={ref => setRef(ref)}>
-                        <IconButton
-                            onMouseDown={e => e.preventDefault()}
-                            onMouseOver={e => e.currentTarget.blur()}
-                            onKeyUp={e => {
-                                if (e.key === "Enter") {
-                                    setVisible(!visible);
-                                }
-                            }}
-                            onClick={e => {
-                                setVisible(!visible);
-                            }}>
-                            {visible ? (
-                                <FaEye size="1.4em" />
-                            ) : (
-                                <FaEyeSlash size="1.5em" />
-                            )}
-                        </IconButton>
-                    </span>
-                </EndAdornmentWrapper>
-            ) : (
-                props.endAdornment && (
-                    <EndAdornmentWrapper>
-                        <span ref={ref => setRef(ref)}>
-                            {props.endAdornment}
-                        </span>
-                    </EndAdornmentWrapper>
-                )
-            )}
-        </>
-    );
-});
-
-const EndAdornmentWrapper = styled.div`
-    /* border: 1px solid red; */
-    position: absolute;
-    top: 5px;
-    bottom: 0;
-    right: 0;
-    /* height: 100%; */
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    box-sizing: border-box;
-    cursor: text;
-    /* z-index: 5; */
-`;
+import { CheckSvgData, CrossSvgData } from "../lib/svgIconData";
+import SvgIcon from "./SvgIcon";
+import { TextWrapper } from "../styles/TextWrappers";
+import {
+    CONTAINS_LOWERCASE_REGEX,
+    CONTAINS_NUMBER_REGEX,
+    CONTAINS_SPECIAL_CHARACTER_REGEX,
+    CONTAINS_UPPERCASE_REGEX,
+    PASSWORD_LENGTH_REGEX,
+} from "../lib/regexes";
+import { BaseInput } from "./BaseInput";
+import Collapse from "./Collapse";
 
 const ErrorText = styled.div`
+    padding: 0;
+    margin: 0;
     color: ${props => props.theme.colours.error};
     font-size: 0.95em;
     font-weight: 620;
@@ -95,12 +32,15 @@ export const CustomFieldset = styled.fieldset.withConfig({
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
     position: absolute;
-    /* z-index: 1; */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     margin: 0;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
 
     box-sizing: border-box;
     border-radius: 8px;
@@ -127,12 +67,9 @@ export const CustomLegend = styled.legend.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
-    /* padding-bottom: 0.5em; */
     padding: 0 7px;
-    /* padding: 0; */
     margin: 0;
     visibility: hidden;
-    bottom: 0.5em;
     max-width: 100%;
     ${props =>
         !props.visible &&
@@ -149,51 +86,12 @@ export const CustomLegend = styled.legend.withConfig({
     white-space: nowrap;
 `;
 
-export const BaseInputStyle = styled.input`
-    margin: 0;
-    margin-top: 5px;
-    padding: 0 0.7em;
-    /* padding-bottom: 0.4em; */
-    ${props =>
-        props.as === "textarea" && `margin-top: 21px; margin-bottom: 0.7em;`};
-    /* border: 2px solid black; */
-    position: relative;
-    color: ${props => (props.color ? props.color : "white")};
-    font-size: 16px;
-    /* flex: 1; */
-    /* z-index: 5; */
-    background: rgba(0, 0, 0, 0);
-    outline: none;
-    border: none;
-    /* height: 100%; */
-    width: 100%;
-
-    /* border: none; */
-    box-sizing: border-box;
-    :-webkit-autofill,
-    :-webkit-autofill:hover,
-    :-webkit-autofill:focus,
-    :-internal-autofill-previewed {
-        -webkit-transition: background-color 5000s ease-in-out 0s;
-        -webkit-text-fill-color: ${props =>
-            props.theme.colours.primary} !important;
-    }
-    cursor: auto; // causes default cursor when hovering over scrollbar
-    ${props =>
-        props.adornmentWidth &&
-        `width: calc(100% - ${props.adornmentWidth}px);`};
-
-    ${props => props.as === "textarea" && `resize: none;`}
-`;
-
 const InputLabel = styled(motion.div)`
-    padding: 0;
-    margin: 0;
     position: absolute;
     transform-origin: left;
     color: gray;
     left: 12px;
-    top: 21px;
+    top: 22px;
     font-size: 16px;
     /* ${props =>
         props.focused && `top: -5px; left: 20px; font-size: 14.4px;`}; */
@@ -210,15 +108,16 @@ const TextfieldWrapper = styled.div.withConfig({
     /* z-index: 50; */
     height: 100%;
     width: 100%;
-    /* border: 1px solid red; */
     ${props => !props.multiline && `min-height: ${props.height || "64px"};`};
 `;
 
-const Container = styled.label.withConfig({
+const Label = styled.label.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
     /* border: 1px solid green; */
+    position: relative;
+    display: inline-block;
     ${props => props.width && `width: ${props.width};`};
     ${props => props.fullwidth && `width: 100%;`};
     ${props => props.height && `height: ${props.height};`};
@@ -227,15 +126,22 @@ const Container = styled.label.withConfig({
 
 export const Textfield = forwardRef(
     (
-        { label, onChange, onClick, onBlur, required, color, ...props }: any,
+        {
+            label,
+            onChange,
+            onClick,
+            onFocus,
+            onBlur,
+            required,
+            color,
+            ...props
+        }: any,
         ref
     ) => {
         const [focused, setFocused] = React.useState(false);
         const [mouseEntered, setMouseEntered] = React.useState(false);
 
-        // React.useEffect(() => {
-        //     console.log(ref.current);
-        // }, []);
+        const inputRef = React.useRef(null);
 
         const LabelVariants = {
             focused: {
@@ -254,11 +160,8 @@ export const Textfield = forwardRef(
         };
 
         return (
-            <Container {...props}>
+            <Label {...props}>
                 <TextfieldWrapper
-                    // onMouseDown={e => {
-                    //     setFocused(true);
-                    // }}
                     {...props}
                     onMouseOver={e => {
                         // console.log("mouse over");
@@ -279,7 +182,9 @@ export const Textfield = forwardRef(
                                 !!(
                                     focused ||
                                     (props.value && props.value.length) ||
-                                    (ref && ref.current?.value?.length > 0)
+                                    (ref && ref.current?.value?.length > 0) ||
+                                    (inputRef &&
+                                        inputRef.current?.value?.length > 0)
                                 )
                             }>
                             {required ? `${label} *` : label}
@@ -292,7 +197,9 @@ export const Textfield = forwardRef(
                             !!(
                                 focused ||
                                 (props.value && props.value.length) ||
-                                (ref && ref.current?.value?.length > 0)
+                                (ref && ref.current?.value?.length > 0) ||
+                                (inputRef &&
+                                    inputRef.current?.value?.length > 0)
                             )
                                 ? "focused"
                                 : undefined
@@ -300,7 +207,7 @@ export const Textfield = forwardRef(
                         {required ? `${label} *` : label}
                     </InputLabel>
                     <BaseInput
-                        ref={ref}
+                        ref={ref || inputRef}
                         type="text"
                         {...props}
                         onChange={e => {
@@ -308,6 +215,7 @@ export const Textfield = forwardRef(
                         }}
                         onFocus={e => {
                             setFocused(true);
+                            onFocus && onFocus(e);
                         }}
                         onClick={e => {
                             // setFocused(true);
@@ -324,13 +232,88 @@ export const Textfield = forwardRef(
                     />
                 </TextfieldWrapper>
                 {props.error && focused && (
-                    <ErrorText>
-                        {props.helperText ? props.helperText : "Invalid input"}
-                    </ErrorText>
+                    <ErrorText>{props.helperText}</ErrorText>
                 )}
-            </Container>
+                {props.type === "password" && label !== "Confirm Password" && (
+                    <Collapse open={props.error && focused}>
+                        <PasswordInfo
+                            password={props.value || ref?.current?.value}
+                        />
+                    </Collapse>
+                )}
+            </Label>
         );
     }
 );
+
+const PasswordInfoEntryContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+`;
+
+const PasswordInfoEntryIcon = styled.div`
+    width: 30px;
+    height: 30px;
+    /* border: 2px solid black; */
+`;
+
+function PasswordInfoEntry({ correct, text }) {
+    const theme = useTheme();
+
+    return (
+        <PasswordInfoEntryContainer>
+            <PasswordInfoEntryIcon>
+                <SvgIcon
+                    svgData={correct ? CheckSvgData : CrossSvgData}
+                    fill={correct ? "gradient" : `${theme.colours.error}`}
+                    width={"100%"}
+                    height={"100%"}
+                />
+            </PasswordInfoEntryIcon>
+            <TextWrapper
+                mainGradient={correct}
+                color={!correct ? theme.colours.error : undefined}>
+                {text}
+            </TextWrapper>
+        </PasswordInfoEntryContainer>
+    );
+}
+
+function PasswordInfo({ password }) {
+    return (
+        <PasswordInfoContainer>
+            <PasswordInfoEntry
+                correct={PASSWORD_LENGTH_REGEX.test(password)}
+                text="Password must be between 8 and 24 characters"
+            />
+            <PasswordInfoEntry
+                correct={CONTAINS_LOWERCASE_REGEX.test(password)}
+                text="Password must contain at least 1 lowercase letter"
+            />
+            <PasswordInfoEntry
+                correct={CONTAINS_UPPERCASE_REGEX.test(password)}
+                text="Password must contain at least 1 uppercase letter"
+            />
+            <PasswordInfoEntry
+                correct={CONTAINS_NUMBER_REGEX.test(password)}
+                text="Password must contain at least 1 number"
+            />
+            <PasswordInfoEntry
+                correct={CONTAINS_SPECIAL_CHARACTER_REGEX.test(password)}
+                text="Password must contain at least 1 special character"
+            />
+        </PasswordInfoContainer>
+    );
+}
+
+const PasswordInfoContainer = styled.div`
+    box-shadow: rgba(76, 72, 72, 0.5) 0px 1px 3px 0px,
+        rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
 
 export default Textfield;

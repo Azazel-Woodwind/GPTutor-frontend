@@ -8,6 +8,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PageWrapper from "./styles/containers/PageWrapper";
+import { NotificationContextProvider } from "./context/NotificationContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <ThemeProvider theme={Theme}>
@@ -25,10 +26,12 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             toastStyle={{ fontSize: "20px" }}
         />
         <GlobalStyles />
-        <SessionContextProvider>
-            <Router />
-            <Ellipse1 />
-            <Ellipse2 />
-        </SessionContextProvider>
+        <NotificationContextProvider>
+            <SessionContextProvider>
+                <Router />
+                <Ellipse1 />
+                <Ellipse2 />
+            </SessionContextProvider>
+        </NotificationContextProvider>
     </ThemeProvider>
 );

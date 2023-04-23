@@ -63,6 +63,7 @@ const ApplicationInternalStyle = styled.div`
     position: relative;
     width: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;

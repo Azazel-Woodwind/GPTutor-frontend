@@ -99,9 +99,9 @@ const useAvatar = ({
     };
 };
 
-const Avatar = ({ size, rings, controls }) => {
+const Avatar = ({ size, rings, controls, ...props }) => {
     return (
-        <AvatarWrapper size={size}>
+        <AvatarWrapper size={size} as={motion.div} {...props}>
             {rings}
             <X
                 size={size}
@@ -124,7 +124,7 @@ const Ring = styled(FillParent)`
 const X = styled(motion.div)`
     position: absolute;
     border-radius: 50%;
-    background-color: #34416150;
+    background-color: #344161;
     width: ${props => props.size}px;
     height: ${props => props.size}px;
     z-index: 1;

@@ -39,7 +39,10 @@ export default function LearningObjectiveImage({
                     whileHover: { scale: 1.05 },
                     whileTap: { scale: 0.95 },
                 })}
-                onClick={() => imagesFields.remove(imageIndex)}
+                onClick={() => {
+                    if (!(imagesFields.fields.length <= MIN_IMAGES))
+                        imagesFields.remove(imageIndex);
+                }}
                 disabled={imagesFields.fields.length <= MIN_IMAGES}>
                 Remove
             </Delete>

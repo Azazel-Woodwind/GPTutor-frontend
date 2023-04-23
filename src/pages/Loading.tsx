@@ -1,31 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
+import { TextWrapper } from "../styles/TextWrappers";
 
 function Loading({ message }) {
     return (
         <Wrapper>
-            <Avatar />
-            <h1>Loading...</h1>
+            <Avatar size={150} />
+            <TextWrapper fontSize="xxl">Loading...</TextWrapper>
         </Wrapper>
     );
 }
 
 const Wrapper = styled.div`
-    top: 0px;
-    right: 0px;
-    width: 100vw;
-    height: 100vh;
-    z-index: 10000000;
+    height: 100%;
+    width: 100%;
+
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
+
+    padding-bottom: 6em;
+    gap: 2em;
     background-color: #040a1e;
-    position: absolute;
-    h1 {
-        font-weight: 200;
-        font-size: 20px;
-    }
 `;
+
 export default Loading;

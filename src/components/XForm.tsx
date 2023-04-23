@@ -33,23 +33,21 @@ function XForm({
     buttonProps,
 }) {
     return (
-        <>
-            <CenteredRow gap="8em" wrap fillparent>
-                <Avatar size={200} hasLogo />
-                <CenteredColumn gap="0.2em">
-                    <Title>{title}</Title>
-                    <FormContainer onSubmit={onSubmit}>
-                        {children}
-                        <SubmitButton
-                            style={{ marginTop: "0.5em" }}
-                            {...buttonProps}>
-                            {submitButtonText}
-                        </SubmitButton>
-                        {link && link}
-                    </FormContainer>
-                </CenteredColumn>
-            </CenteredRow>
-        </>
+        <CenteredRow gap="8em" wrap fillparent>
+            <Avatar size={200} hasLogo />
+            <CenteredColumn gap="1.5em">
+                <Title>{title}</Title>
+                <FormContainer onSubmit={onSubmit}>
+                    {children}
+                    <SubmitButton
+                        style={{ marginTop: "0.5em" }}
+                        {...buttonProps}>
+                        {submitButtonText}
+                    </SubmitButton>
+                    {link && link}
+                </FormContainer>
+            </CenteredColumn>
+        </CenteredRow>
     );
 }
 

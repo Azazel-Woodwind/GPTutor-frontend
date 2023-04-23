@@ -9,6 +9,9 @@ const ProgressBar = ({
     width = "10em",
     onClick = () => {},
     destroyOnClick = true,
+    reverse = false,
+    time,
+    onEnd,
 }) => {
     stops = stops.sort((a, b) => a.location - b.location);
     const progress = useMotionValue(value);
@@ -53,9 +56,14 @@ const ProgressBar = ({
             })}
             <ProgressContainer width={width}>
                 <Progress
-                    style={{
-                        width: progress_percentage,
-                    }}
+                    {...(time
+                        ? {
+                              animate: { width: "100%" },
+                              transition: { duration: time, ease: "linear" },
+                              onAnimationComplete: onEnd,
+                          }
+                        : { style: { width: progress_percentage } })}
+                    reverse={reverse}
                 />
             </ProgressContainer>
         </Container>
@@ -108,6 +116,8 @@ const Stop = styled.div`
 
 const Progress = styled(motion.div)`
     height: 100%;
+    position: absolute;
+    ${props => (props.reverse ? "right: 0px;" : "left: 0px;")}
     ${props => props.theme.gradient({ animationLength: 5 })}
 `;
 

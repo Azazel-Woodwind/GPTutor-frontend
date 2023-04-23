@@ -43,12 +43,9 @@ const Dashboard = () => {
 
 const Container = styled(FillParent)`
     background-color: ${props => props.theme.colours.tertiary};
-    height: 100vh;
-    width: 100%;
     padding-top: 8em;
-    display: flex;
-    justify-content: left;
     padding-left: 3em;
+    border: 3px solid green;
 `;
 
 const UsedSpace = styled.div`

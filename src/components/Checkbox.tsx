@@ -6,6 +6,7 @@ import Theme from "../styles/Theme";
 import CenteredRow from "../styles/containers/CenteredRow";
 import { TextWrapper } from "../styles/TextWrappers";
 import { motion } from "framer-motion";
+import { CheckSvgData } from "../lib/svgIconData";
 
 const SvgCheckbox = styled.svg`
     width: 100%;
@@ -130,42 +131,54 @@ function Checkbox({ label, checkboxSize, fontSize, ...props }, ref) {
                         <SvgCheckIcon
                             checkboxSize={checkboxSize}
                             borderWidth={borderWidth}
-                            viewBox="0 0 24 24"
+                            viewBox={`0 0 ${CheckSvgData.viewboxWidth} ${CheckSvgData.viewboxHeight}`}
                             focusable="false"
                             xmlns="http://www.w3.org/2000/svg">
                             <defs>
                                 <SvgLinearGradient gradientID={gradientID2} />
                             </defs>
-                            <path
-                                fill={
-                                    checked
-                                        ? `url(#${gradientID2})`
-                                        : hovering
-                                        ? `${Theme.colours.primary}30`
-                                        : "none"
-                                }
-                                d="M9 16.17 5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41L9 16.17z"></path>
+                            {CheckSvgData.paths.map((path, i) => (
+                                <path
+                                    fill={
+                                        checked
+                                            ? `url(#${gradientID2})`
+                                            : hovering
+                                            ? `${Theme.colours.primary}30`
+                                            : "none"
+                                    }
+                                    d={path}></path>
+                            ))}
                         </SvgCheckIcon>
                     </CheckIconWrapper>
                 </CheckboxContainer>
                 {label && (
-                    <TextWrapper
+                    <CheckboxText
+                        content={label}
                         fontSize={fontSize || "1.2em"}
-                        mainGradient
                         nowrap
                         color={
-                            checked
-                                ? "transparent"
-                                : hovering
+                            hovering
                                 ? Theme.colours.primary
                                 : "rgb(152, 152, 152)"
-                        }>
+                        }
+                        {...(checked && { mainGradient: true })}>
                         {label}
-                    </TextWrapper>
+                    </CheckboxText>
                 )}
             </Container>
         </label>
     );
 }
+
+const CheckboxText = styled(TextWrapper)`
+    ::after {
+        display: block;
+        content: attr(content);
+        font-weight: 500;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+    }
+`;
 
 export default React.forwardRef(Checkbox);

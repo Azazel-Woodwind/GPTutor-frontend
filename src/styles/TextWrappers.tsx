@@ -12,11 +12,15 @@ export const TextWrapper = styled.span`
                 : ""
         };
         ${props.fontWeight ? `font-weight: ${props.fontWeight}` : ""};
-        ${props.mainGradient ? props.theme.utils.gradientText : ""};
         ${
             props.color
-                ? `-webkit-text-fill-color: ${props.color}`
-                : `-webkit-text-fill-color: ${props.theme.colours.primaryStrong}`
+                ? `color: ${props.color}`
+                : `color: ${props.theme.colours.primaryStrong}`
+        };
+        ${
+            props.mainGradient
+                ? `${props.theme.utils.gradientText}; font-weight: 500;`
+                : ""
         };
         ${props.nowrap ? "white-space: nowrap;" : ""};
     `}
@@ -24,8 +28,11 @@ export const TextWrapper = styled.span`
 
 export const LinkWrapper = styled.span`
     text-decoration: underline;
+    text-decoration-color: ${props => props.theme.colours.primaryStrong};
     cursor: pointer;
-    &:hover {
-        color: ${props => props.theme.colours.primaryFaded};
+
+    :hover {
+        color: #999999;
+        text-decoration-color: #999999;
     }
 `;

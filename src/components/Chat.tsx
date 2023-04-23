@@ -52,6 +52,7 @@ const ChatSection = ({ Avatar, AvatarProps, ChatHistory, Controls }) => {
         </>
     );
 };
+
 const BottomSection = styled(CenteredColumn)`
     max-width: 1200px;
     width: 100%;

@@ -5,7 +5,7 @@ const LessonAPI = {
     getPublicLessons: async function (): Promise<Lesson[]> {
         const { data, error } = await supabase
             .from("lessons")
-            .select("*")
+            .select("*, learning_objectives (*, images (*))")
             .eq("is_published", true)
             .eq("is_verified", true);
 
@@ -17,23 +17,26 @@ const LessonAPI = {
     },
 
     getMyLessons: async function (): Promise<Lesson[]> {
-        // const {
-        //     data: { session },
-        //     error,
-        // } = await supabase.auth.getSession();
-
-        // if (error) {
-        //     throw error;
-        // }
-
-        // if (!session) {
-        //     throw "Must be logged in to get your lessons";
-        // }
-
-        const { data, error } = await supabase.from("lessons").select("*");
+        const {
+            data: { session },
+            error,
+        } = await supabase.auth.getSession();
 
         if (error) {
             throw error;
+        }
+
+        if (!session) {
+            throw "Must be logged in to get your lessons";
+        }
+
+        const { data, error: error2 } = await supabase
+            .from("lessons")
+            .select("*, learning_objectives (*, images (*))")
+            .eq("author_id", session.user.id);
+
+        if (error2) {
+            throw error2;
         }
 
         return data as Lesson[];

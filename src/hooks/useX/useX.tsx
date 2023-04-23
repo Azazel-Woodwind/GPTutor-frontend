@@ -88,9 +88,18 @@ function useX(config: Config) {
     };
 
     useEffect(() => {
+        return () => {
+            audioQueue.current = [];
+            audio.current!.src = "";
+            audio.current!.load();
+            Socket.off(`${channel}_audio_data`);
+        };
+    }, []);
+
+    useEffect(() => {
         if (!Socket) return;
 
-        audio.current!.autoplay = true;
+        // audio.current!.autoplay = true;
 
         // audio.current!.muted = true;
 
@@ -130,18 +139,34 @@ function useX(config: Config) {
         };
 
         Socket.on(`${channel}_response_stream`, delta => {
-            // console.log("response_stream")
+            // console.log("DELTA:", delta, delta.length);
             setStreaming(true);
-            currentSentence.current += delta;
+            // currentSentence.current += delta;
             onDelta(delta);
             setLoading(false);
             setCurrentMessage(prevMessage => prevMessage + delta);
-            if (delta === "." || delta === "?" || delta === "!") {
-                console.log("emitting text_data: ", currentSentence.current);
+            // if (delta.audio) {
+            //     console.log("received audio_data");
+            //     if (audio.current!.paused) {
+            //         audio.current!.src =
+            //             audioQueue.current.length === 0
+            //                 ? `data:audio/x-wav;base64,${delta.audio}`
+            //                 : `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
+            //         audio.current!.play();
+            //     } else {
+            //         // console.log("queueing audio_data");
+            //         audioQueue.current.push(delta.audio);
+            //     }
+            // }
+            // if (delta === "." || delta === "?" || delta === "!") {
+            //     console.log("emitting text_data: ", currentSentence.current);
 
-                Socket.emit(`text_data`, currentSentence.current);
-                currentSentence.current = "";
-            }
+            //     Socket.emit(`text_data`, {
+            //         text: currentSentence.current,
+            //         channel,
+            //     });
+            //     currentSentence.current = "";
+            // }
         });
 
         Socket.on(`${channel}_error`, err => {
@@ -149,8 +174,8 @@ function useX(config: Config) {
             setLoading(false);
         });
 
-        Socket.on(`audio_data`, data => {
-            // console.log("received audio_data")
+        Socket.on(`${channel}_audio_data`, data => {
+            console.log("received audio_data");
             if (audio.current!.paused) {
                 audio.current!.src =
                     audioQueue.current.length === 0

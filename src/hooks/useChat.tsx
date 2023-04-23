@@ -31,14 +31,14 @@ const useChat = ({ hook }) => {
     };
 };
 
-const AnimatedAvatar = ({ multiplier }) => {
-    const { Avatar, pulseX, avatarProps } = useAvatar({});
+const AnimatedAvatar = ({ multiplier, ...props }) => {
+    const { Avatar, pulseX, avatarProps } = useAvatar(props);
 
     React.useEffect(() => {
         pulseX(multiplier);
     }, [multiplier]);
 
-    return <Avatar {...avatarProps} />;
+    return <Avatar {...avatarProps} {...props} />;
 };
 
 export default useChat;

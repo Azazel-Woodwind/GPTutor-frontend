@@ -1,13 +1,12 @@
 import * as React from "react";
 import io from "socket.io-client";
-
 import { useNavigate } from "react-router-dom";
-import supabase from "../api/configs/supabase";
 import { useAuth } from "./SessionContext";
+
 export const SocketContext = React.createContext({
     Socket: null,
 });
-// dhaval level code ????
+
 export function SocketContextProvider({ children }: any) {
     const navigate = useNavigate();
     const [Socket, setSocket] = React.useState<any>(null);
@@ -41,9 +40,12 @@ export function SocketContextProvider({ children }: any) {
             Socket.close();
             setSocket(null);
         }
+
+        return () => {
+            if (Socket) Socket.disconnect();
+        };
     }, []);
 
-    //console.log("Socket: ", Socket); // acc FUCKING retarded                                                                                                                                                                                                                                                                            dickhead btw
     if (!Socket) return null;
     return (
         <SocketContext.Provider value={{ Socket }}>

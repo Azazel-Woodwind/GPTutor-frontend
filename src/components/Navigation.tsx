@@ -6,6 +6,7 @@ import { Dashboard } from "@styled-icons/boxicons-solid";
 import { Settings2Outline } from "@styled-icons/evaicons-outline";
 import { BookAdd } from "@styled-icons/boxicons-solid/BookAdd";
 import Icon from "../styles/Icon";
+import Tooltip from "./Tooltip";
 
 const StyledHome = Icon(Home);
 const StyledBook = Icon(JournalBookmark);
@@ -29,7 +30,7 @@ const LinkStyle = styled.div`
     background-color: transparent;
 `;
 
-const LinkWrapper = ({ path, Icon }) => {
+const LinkWrapper = ({ path, Icon, label }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -40,10 +41,12 @@ const LinkWrapper = ({ path, Icon }) => {
     };
 
     return (
-        <LinkStyle focused={focused} onClick={onClick}>
-            <Icon focused={focused} size={25} />
-            {focused && <Boxshadow />}
-        </LinkStyle>
+        <Tooltip label={label} underneath>
+            <LinkStyle focused={focused} onClick={onClick}>
+                <Icon focused={focused} size={25} />
+                {focused && <Boxshadow />}
+            </LinkStyle>
+        </Tooltip>
     );
 };
 
@@ -66,7 +69,12 @@ export default () => {
     return (
         <Navigation>
             <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} />
-            <LinkWrapper focused path="/lessons" Icon={StyledBook} />
+            <LinkWrapper
+                focused
+                path="/lessons"
+                label={"Lessons"}
+                Icon={StyledBook}
+            />
             <LinkWrapper
                 path="/create-lesson"
                 Icon={StyledBookAdd}

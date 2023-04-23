@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import SvgLinearGradient from "./SvgLinearGradient";
 
-export const fontSizeOptions = ["sm", "md", "lg", "xl"];
+export const fontSizeOptions = ["sm", "md", "lg", "xl", "xxl", "xxxl"];
 
 export const getFontSize = (size: string) => {
     switch (size) {
@@ -16,6 +16,10 @@ export const getFontSize = (size: string) => {
             return "20px";
         case "xl":
             return "24px";
+        case "xxl":
+            return "30px";
+        case "xxxl":
+            return "45px";
         default:
             return "16px";
     }
@@ -43,6 +47,7 @@ const ButtonText = styled.span`
     ${props => props.theme.gradient({ animationLength: 5 })}
     -webkit-background-clip: text;
     pointer-events: none;
+    font-weight: 500;
 `;
 
 const SvgBorder = styled.svg`
@@ -137,6 +142,7 @@ const IconSvg = styled.svg`
 
 function OutlinedButton(props) {
     const [buttonRef, setRef] = useState<HTMLButtonElement>();
+    const [hovering, setHovering] = useState(false);
 
     const borderGradientID = useMemo(nanoid, []);
     const iconGradientID = useMemo(nanoid, []);
@@ -153,7 +159,11 @@ function OutlinedButton(props) {
     const borderWidth = props.borderWidth || 2;
 
     return (
-        <OutlinedButtonStyle ref={ref => setRef(ref)} {...props}>
+        <OutlinedButtonStyle
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            ref={ref => setRef(ref)}
+            {...props}>
             <SvgBorder
                 viewBox={`0 0 ${dimensions?.width + 2 * borderWidth || 0} ${
                     dimensions?.height + 2 * borderWidth || 0
@@ -167,7 +177,13 @@ function OutlinedButton(props) {
                     width={dimensions?.width || 0}
                     height={dimensions?.height || 0}
                     rx="10"
-                    fill={props.disabled ? "rgb(0, 0, 0, 0.1)" : "none"}
+                    fill={
+                        props.disabled
+                            ? "rgb(0, 0, 0, 0.1)"
+                            : hovering
+                            ? "rgb(39, 46, 95)"
+                            : "none"
+                    }
                     stroke={
                         props.disabled ? "gray" : `url(#${borderGradientID})`
                     }
@@ -208,9 +224,12 @@ const CustomButton = props => {
             ...props,
             whileHover: {
                 scale: props.whileHoverScale || 1.03,
-                transition: { duration: 0.2 },
+                transition: { duration: 0.1 },
             },
-            whileTap: { scale: props.whileTapScale || 0.95 },
+            whileTap: {
+                scale: props.whileTapScale || 0.95,
+                transition: { duration: 0.1 },
+            },
         };
     }
 

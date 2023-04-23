@@ -18,18 +18,9 @@ const useConversationDisplay = value => {
     React.useEffect(() => {
         setDraggable(!!value);
 
-        if (value === true) {
-            console.log("FULLSCREEN");
-            console.log(width.get(), screen.width);
-
-            animate(width, screen.width, options);
-            // width.set(screen.width);
-        } else if (!value) animate(width, 0, options);
-        else {
-            console.log(width.get(), screen.width);
-            animate(width, setWidth, options);
-            // width.set(setWidth);
-        }
+        if (value == true) animate(width, screen.width, options);
+        else if (!value) animate(width, 0, options);
+        else animate(width, setWidth, options);
     }, []);
 };
 

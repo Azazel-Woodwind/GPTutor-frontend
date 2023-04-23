@@ -235,9 +235,10 @@ function Register() {
             ) : (
                 <XForm
                     onSubmit={register}
-                    submitButtonText={
-                        "WARNING: Do NOT let your wife CATCH you using THIS application"
-                    }
+                    // submitButtonText={
+                    //     "WARNING: Do NOT let your wife CATCH you using THIS application"
+                    // }
+                    submitButtonText={"Register"}
                     title={"Create your account"}
                     link={
                         <Link to="/login">
@@ -308,12 +309,6 @@ function Register() {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                         error={!isValidPassword && password.length > 0}
-                        helperText={
-                            !isValidPassword &&
-                            password &&
-                            passwordFocus &&
-                            "Enter a valid password"
-                        }
                         onFocus={() => setPasswordFocus(true)}
                         onBlur={() => setPasswordFocus(false)}
                     />

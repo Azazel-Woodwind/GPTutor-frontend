@@ -4,4 +4,4 @@ export const PASSWORD_LENGTH_REGEX = /^.{8,24}$/;
 export const CONTAINS_LOWERCASE_REGEX = /[a-z]/;
 export const CONTAINS_UPPERCASE_REGEX = /[A-Z]/;
 export const CONTAINS_NUMBER_REGEX = /[0-9]/;
-export const CONTAINS_SPECIAL_CHARACTER_REGEX = /[!@#$%]/;
+export const CONTAINS_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9]/;

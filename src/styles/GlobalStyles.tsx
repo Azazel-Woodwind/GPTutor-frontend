@@ -7,12 +7,10 @@ const GlobalStyles = createGlobalStyle`
     body, html {
         position: relative;
         z-index: -3;
-        margin: 0;
-        padding: 0;
         height: 100vh;
         width: 100vw;
         color: ${props => props.theme.colours.primary};
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
         overflow-x: clip;
         background-color: ${props => props.theme.colours.background};
         overflow-y: clip;
@@ -27,6 +25,12 @@ const GlobalStyles = createGlobalStyle`
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         box-sizing: border-box; 
+        margin: 0;
+        padding: 0;
+        p, h1, h2, h3, h4, h5{
+            margin: default;
+            padding: default; 
+        }
     }
 
     *::-webkit-scrollbar {

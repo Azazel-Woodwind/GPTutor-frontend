@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import ProgressBar from "./ProgressBar";
+import { InformationSolid } from "@styled-icons/zondicons/InformationSolid";
 
 const timerMax = 1000;
 
@@ -10,15 +11,16 @@ const Notification = ({
     onClick = () => {},
     label,
     destroyOnClick = true,
+    type = "info",
 }) => {
-    const [x, setX] = React.useState(-50);
+    const [animate, setAnimate] = React.useState("visible");
 
     const [drag, setDrag] = React.useState(true);
 
     const [timer, setTimer] = React.useState(0);
 
     const destroy = () => {
-        setX(800);
+        setAnimate("exit");
         setDrag(false);
     };
 
@@ -28,43 +30,78 @@ const Notification = ({
         onClick(e);
     };
 
-    React.useEffect(() => {
-        const interval = setInterval(() => {
-            setTimer(prev => prev + timerMax / duration / 20);
-        }, 50);
-        setTimeout(destroy, duration * 1000 + 500);
-    }, []);
+    const variants = {
+        initial: { x: "calc(100% + 40px)" },
+        visible: {
+            x: 0,
+            transition: {
+                duration: 0.5,
+                type: "spring",
+                damping: 22,
+                stiffness: 500,
+            },
+        },
+        exit: { x: "calc(100% + 40px)", transition: { duration: 0.2 } },
+    };
+
     return (
         <Container
-            transition={{ duration: 0.5, type: "spring", stiffness: 50 }}
-            initial={{ x: 200 }}
-            animate={{ x }}
+            variants={variants}
+            initial="initial"
+            animate={animate}
             drag={drag}
             onClick={click}>
-            {label}
+            <ContentContainer>
+                <InnerContentContainer>
+                    <InfoIcon size={20} />
+                    <LabelContainer>{label}</LabelContainer>
+                </InnerContentContainer>
+            </ContentContainer>
+
             <ProgressContainer>
-                <ProgressBar width={"100%"} max={timerMax} value={timer} />
+                <ProgressBar
+                    reverse
+                    time={duration}
+                    width={"100%"}
+                    onEnd={destroy}
+                    // max={timerMax}
+                    // value={timer}
+                />
             </ProgressContainer>
         </Container>
     );
 };
 
+const InfoIcon = styled(InformationSolid)``;
+
+const LabelContainer = styled.div`
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center; */
+    /* border: 2px solid green; */
+    padding-bottom: 2px;
+`;
+
+const InnerContentContainer = styled.div`
+    /* border: 2px solid red; */
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+`;
+
+const ContentContainer = styled.div`
+    padding: 0.7em 1em 0.5em 1em;
+`;
+
 const ProgressContainer = styled.div`
-    position: absolute;
-    bottom: 0px;
-    width: 16em;
-    left: 0px;
+    width: 100%;
 `;
 const Container = styled(motion.div)`
     position: absolute;
-    width: 16em;
-    height: 6em;
-    right: 0px;
-    padding: 1em 2em;
-    padding-bottom: 0em;
+    min-width: 16em;
     top: 40px;
+    right: 40px;
     cursor: pointer;
-    float: right;
-    background-color: ${props => props.theme.colours.contrast};
+    background-color: ${props => props.theme.colours.glow};
 `;
 export default Notification;

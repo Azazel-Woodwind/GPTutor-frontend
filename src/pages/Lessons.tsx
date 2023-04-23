@@ -19,7 +19,12 @@ function Lessons() {
         <Container>
             <Controls>
                 <SearchBar>
-                    <Textfield label="Advanced Search" type="text" required />
+                    <Textfield
+                        label="Advanced Search"
+                        type="text"
+                        fullwidth
+                        required
+                    />
                 </SearchBar>
                 <span>
                     Example: Search for "GCSE algebra linear equations"{" "}
@@ -27,7 +32,9 @@ function Lessons() {
             </Controls>
             <LessonContainer>
                 {lessons.length ? (
-                    lessons.map(lesson => <LessonCard lesson={lesson} />)
+                    lessons.map(lesson => (
+                        <LessonCard key={lesson.id} lesson={lesson} />
+                    ))
                 ) : (
                     <h1>No lessons found :(</h1>
                 )}

@@ -35,7 +35,15 @@ export default function LearningObjective({
         <Container>
             <CloseIconContainer>
                 <IconButton
-                    onClick={() => learningObjectivesFields.remove(index)}
+                    onClick={() => {
+                        if (
+                            !(
+                                learningObjectivesFields.fields.length <=
+                                MIN_LEARNING_OBJECTIVES
+                            )
+                        )
+                            learningObjectivesFields.remove(index);
+                    }}
                     disabled={
                         learningObjectivesFields.fields.length <=
                         MIN_LEARNING_OBJECTIVES

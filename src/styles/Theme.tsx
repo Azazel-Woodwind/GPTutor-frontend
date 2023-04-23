@@ -51,7 +51,7 @@ const Theme = {
                     width: 100vw;
                     `,
     },
-    gradient: ({ animationLength }: { animationLength: number }) => `
+    gradient: ({ animationLength = 5 }: { animationLength: number }) => `
     
 
     background: ${gradientColour1};

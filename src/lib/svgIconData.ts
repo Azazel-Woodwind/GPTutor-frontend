@@ -19,3 +19,11 @@ export const SendSvgData = {
     viewboxHeight: 24,
     paths: ["M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"],
 };
+
+export const CheckSvgData = {
+    viewboxWidth: 24,
+    viewboxHeight: 24,
+    paths: [
+        "M9 16.17 5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41L9 16.17z",
+    ],
+};

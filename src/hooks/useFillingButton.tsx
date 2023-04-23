@@ -101,7 +101,7 @@ const FillingButton =
                             id={gradientID3}>
                             <stop
                                 offset="0"
-                                stop-color={fillColour || theme.colours.glow}>
+                                stopColor={fillColour || theme.colours.glow}>
                                 <animate
                                     ref={fillAnimationRef1}
                                     dur={`${duration}s`}
