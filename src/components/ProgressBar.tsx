@@ -28,16 +28,18 @@ const ProgressBar = ({
         () =>
             progress.onChange(value => {
                 if (value >= stops[lastCrossed + 1]?.location) {
-                    // console.log("Crossed up");
                     setLastCrossed(prev => prev + 1);
                 } else if (value < stops[lastCrossed]?.location) {
-                    console.log("Crossed down");
                     setLastCrossed(prev => prev - 1);
                 }
             }),
         [stops, value, lastCrossed]
     );
-    animate(progress, value);
+
+    React.useEffect(() => {
+        animate(progress, value);
+    }, [value]);
+    //React.useEffect(() => animate(progress, value));
 
     return (
         <Container width={width}>

@@ -110,6 +110,8 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
             ].images.map((image: any) => image.link),
         ]);
         currentLearningObjectiveIndex = images.length;
+        console.log(lesson);
+        // console.log(JSON.stringify(lesson));
         setCurrentImageLink(
             lesson.learning_objectives[learningObjectiveNumber - 1].images[0]
                 .link

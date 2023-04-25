@@ -5,6 +5,7 @@ import styled from "styled-components";
 import SvgLinearGradient from "./SvgLinearGradient";
 
 const IconButtonStyle = styled(motion.div)`
+    position: relative;
     width: 2.4em;
     height: 2.4em;
     display: flex;
@@ -41,8 +42,8 @@ const IconButtonStyle = styled(motion.div)`
         ::after {
             content: "";
             position: absolute;
-            width: 2.4em;
-            height: 2.4em;
+            width: 100%;
+            height: 100%;
             scale: 0;
             border-radius: 50%;
             background-color: #ffffff20;
@@ -151,7 +152,14 @@ function OutlinedIconButton({
 }
 
 function BasicIconButton(props) {
-    return <IconButtonStyle {...props}>{props.children}</IconButtonStyle>;
+    return (
+        <IconButtonStyle
+            onMouseDown={e => e.preventDefault()}
+            onMouseOver={e => e.currentTarget.blur()}
+            {...props}>
+            {props.children}
+        </IconButtonStyle>
+    );
 }
 
 export default function IconButton(props) {

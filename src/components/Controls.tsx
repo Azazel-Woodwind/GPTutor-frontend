@@ -13,7 +13,12 @@ import CustomButton from "./Button";
 import { Send } from "@styled-icons/material/Send";
 import { BaseInputStyle } from "./BaseInput";
 
-const Controls = ({ prompts, hook: { sendMessage }, height, prompt }) => {
+const Controls = ({
+    prompts,
+    hook: { sendMessage, streaming, loading },
+    height,
+    prompt,
+}) => {
     const [placeholder] = React.useState(
         prompts
             ? prompts[Math.floor(Math.random() * prompts.length)]
@@ -21,20 +26,20 @@ const Controls = ({ prompts, hook: { sendMessage }, height, prompt }) => {
     );
 
     const [chatHeight, setChatHeight] = React.useState("100%");
+    const [messageInput, setMessageInput] = React.useState("");
 
     const location = useLocation();
-    const messageInput = React.useRef(undefined);
+    const messageInputRef = React.useRef(undefined);
     const chatFormRef = React.useRef(undefined);
 
     const onSubmit = e => {
         e.preventDefault();
 
-        const message = messageInput.current.value;
-        messageInput.current.value = "";
-
-        if (message.replaceAll(" ", "") == "") return;
-        sendMessage(message, { path: location.pathname });
-        messageInput.current.focus();
+        if (messageInput.replaceAll(" ", "") == "") return;
+        if (sendMessage(messageInput, { path: location.pathname })) {
+            setMessageInput("");
+        }
+        messageInputRef.current.focus();
     };
 
     const { Socket } = React.useContext(SocketContext);
@@ -68,7 +73,7 @@ const Controls = ({ prompts, hook: { sendMessage }, height, prompt }) => {
 
     React.useEffect(() => {
         if (transcript) {
-            messageInput.current.value = transcript;
+            setMessageInput(transcript);
         }
     }, [transcript]);
 
@@ -124,7 +129,9 @@ const Controls = ({ prompts, hook: { sendMessage }, height, prompt }) => {
                     // onBlur={e => {
                     //     setChatHeight("100%");
                     // }}
-                    ref={messageInput}
+                    ref={messageInputRef}
+                    value={messageInput}
+                    onChange={e => setMessageInput(e.target.value)}
                     placeholder={placeholder}
                 />
             </ChatForm>
@@ -132,11 +139,11 @@ const Controls = ({ prompts, hook: { sendMessage }, height, prompt }) => {
                 scale={1.2}
                 outline
                 {...CrossSvgData}
-                onClick={() => (messageInput.current.value = "")}
+                onClick={() => setMessageInput("")}
                 iconSize={30}
             />
-            {/* <IconButton scale={1.2} outline {...SendSvgData} iconSize={22} /> */}
             <CustomButton
+                disabled={messageInput == "" || streaming || loading}
                 onClick={onSubmit}
                 style={{ padding: "10px", borderRadius: "7px" }}
                 whileHoverScale={1.1}>

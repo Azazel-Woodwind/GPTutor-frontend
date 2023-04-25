@@ -6,12 +6,6 @@ import styled from "styled-components";
 import CustomButton from "./Button";
 import { ArrowBoldRight } from "@styled-icons/entypo/ArrowBoldRight";
 
-const images = [
-    "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
-    "https://d33wubrfki0l68.cloudfront.net/49de349d12db851952c5556f3c637ca772745316/cfc56/static/images/wallpapers/bridge-02@2x.png",
-    "https://d33wubrfki0l68.cloudfront.net/594de66469079c21fc54c14db0591305a1198dd6/3f4b1/static/images/wallpapers/bridge-01@2x.png",
-];
-
 //From framer motion documentation
 
 const variants = {
@@ -44,16 +38,13 @@ const variants = {
  * Should accomodate longer swipes and short flicks without having binary checks on
  * just distance thresholds and velocity > 0.
  */
+
 const swipeConfidenceThreshold = 10000;
 const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
 };
 
-const Gallery = (
-    {
-        /*images = []*/
-    }
-) => {
+const Gallery = ({ images = [] }) => {
     const [[page, direction], setPage] = useState([0, 0]);
 
     // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -71,12 +62,18 @@ const Gallery = (
 
     // console.log(images);
     return (
-        <LayoutGroup>
-            <Container imageClicked={selected !== -1}>
+        // <LayoutGroup>
+        <Container>
+            <ImageContainer
+                onClick={() => {
+                    if (dragging) return;
+                    setSelected(-1);
+                }}
+                imageClicked={selected !== -1}>
                 <AnimatePresence initial={false} custom={direction}>
                     <Image
                         key={page}
-                        layoutId="gallery"
+                        // layoutId="gallery"
                         src={images[imageIndex]}
                         custom={direction}
                         variants={variants}
@@ -84,7 +81,8 @@ const Gallery = (
                         animate="center"
                         layout
                         selected={selected === imageIndex}
-                        onClick={() => {
+                        onClick={e => {
+                            e.stopPropagation();
                             if (dragging) return;
                             setSelected(
                                 selected === imageIndex ? -1 : imageIndex
@@ -115,71 +113,80 @@ const Gallery = (
                         }}
                     />
                 </AnimatePresence>
-
-                <Next onClick={() => paginate(1)}>
-                    <CustomButton
-                        style={{ padding: "10px", borderRadius: "50%" }}
-                        whileHoverScale={1.1}>
-                        <ArrowBoldRight size={22} />
-                    </CustomButton>
-                </Next>
-                <Prev onClick={() => paginate(-1)}>
-                    <CustomButton
-                        style={{ padding: "10px", borderRadius: "50%" }}
-                        whileHoverScale={1.1}>
-                        <ArrowBoldRight size={22} />
-                    </CustomButton>
-                </Prev>
-            </Container>
-            <AnimatePresence>
-                {selected !== -1 && (
-                    <SelectedImageContainer
-                        onClick={() => setSelected(-1)}
-                        key={selected}>
-                        <Image
-                            key={selected}
-                            layoutId="gallery"
-                            src={images[selected]}
-                            onClick={() => setSelected(-1)}
-                        />
-                    </SelectedImageContainer>
-                )}
-            </AnimatePresence>
-        </LayoutGroup>
+            </ImageContainer>
+            <Next onClick={() => paginate(1)}>
+                <CustomButton
+                    style={{ padding: "10px", borderRadius: "50%" }}
+                    whileHoverScale={1.1}>
+                    <ArrowBoldRight size={22} />
+                </CustomButton>
+            </Next>
+            <Prev onClick={() => paginate(-1)}>
+                <CustomButton
+                    style={{ padding: "10px", borderRadius: "50%" }}
+                    whileHoverScale={1.1}>
+                    <ArrowBoldRight size={22} />
+                </CustomButton>
+            </Prev>
+        </Container>
+        //     {/* <AnimatePresence>
+        //         {selected !== -1 && (
+        //             <SelectedImageContainer
+        //                 onClick={() => setSelected(-1)}
+        //                 key={selected}>
+        //                 <Image
+        //                     key={selected}
+        //                     layoutId="gallery"
+        //                     src={images[selected]}
+        //                     onClick={() => setSelected(-1)}
+        //                 />
+        //             </SelectedImageContainer>
+        //         )}
+        //     </AnimatePresence>
+        // </LayoutGroup> */}
     );
 };
 
-const SelectedImageContainer = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+const ImageContainer = styled.div`
+    height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 100000;
-    background: rgba(0, 0, 0, 0.5);
+
+    ${props =>
+        props.imageClicked &&
+        `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100000000000000000000000000000000000000;
+    `}
 `;
 
 const Container = styled.div`
     position: relative;
     background: ${props => props.theme.colours.tertiary};
-    overflow: hidden;
-    display: flex;
+    overflow: ${props => (props.imageClicked ? "visible" : "hidden")};
+
     height: 100%;
     width: 100%;
+`;
 
-    justify-content: center;
-    align-items: center;
-`;
 const Image = styled(motion.img)`
+    /* width: 100%; */
     position: absolute;
-    max-width: 100vw;
+    /* max-width: 100vw; */
     cursor: pointer;
+    /* border: 10px solid green; */
+
     /* z-index: 10; */
-    /* ${props => props.selected && `left: -100px; z-index: 100000;`}; */
+    ${props => !props.selected && `width: 100%;`};
 `;
+
 const Button = styled.div`
     top: calc(50% - 20px);
     position: absolute;

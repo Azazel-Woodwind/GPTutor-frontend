@@ -11,10 +11,8 @@ const General = () => {
     const onSubmit = () => {};
     return (
         <Container>
-            <div>
-                <h1> General Settings </h1>
-                <p>Application settings.</p>
-            </div>
+            <h1> General Settings </h1>
+            <p>Application settings.</p>
             <Usage>
                 <ProgressBar
                     width="90%"
@@ -55,13 +53,13 @@ const General = () => {
 };
 
 const Usage = styled.div`
-    padding-bottom: 4em;
+    margin-bottom: 2em;
     width: 100%;
 `;
 const Container = styled.div`
     display: flex;
     width: 100%;
     flex-direction: column;
-    gap: 0.7em;
+    gap: 1em;
 `;
 export default General;

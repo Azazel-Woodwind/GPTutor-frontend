@@ -99,15 +99,30 @@ const useAvatar = ({
     };
 };
 
-const Avatar = ({ size, rings, controls, ...props }) => {
+const Avatar = ({
+    size,
+    rings,
+    controls,
+    clickable,
+    onClick,
+    XProps,
+    ...props
+}) => {
     return (
         <AvatarWrapper size={size} as={motion.div} {...props}>
             {rings}
             <X
+                clickable={clickable}
+                {...(clickable && {
+                    whileHover: { scale: 1.1 },
+                    whileTap: { scale: 0.95 },
+                    onClick,
+                })}
                 size={size}
-                transition={{ duration: 0.1 }}
+                transition={{ duration: 0.3 }}
                 initial={{ scale: 1 }}
                 animate={controls}
+                {...XProps}
             />
         </AvatarWrapper>
     );
@@ -123,6 +138,7 @@ const Ring = styled(FillParent)`
 
 const X = styled(motion.div)`
     position: absolute;
+    ${props => props.clickable && `cursor: pointer;`}
     border-radius: 50%;
     background-color: #344161;
     width: ${props => props.size}px;

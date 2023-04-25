@@ -35,6 +35,7 @@ const AnimatedAvatar = ({ multiplier, ...props }) => {
     const { Avatar, pulseX, avatarProps } = useAvatar(props);
 
     React.useEffect(() => {
+        console.log("multiplier", multiplier);
         pulseX(multiplier);
     }, [multiplier]);
 

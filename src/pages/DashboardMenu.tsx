@@ -45,7 +45,7 @@ const Container = styled(FillParent)`
     background-color: ${props => props.theme.colours.tertiary};
     padding-top: 8em;
     padding-left: 3em;
-    border: 3px solid green;
+    /* border: 3px solid green; */
 `;
 
 const UsedSpace = styled.div`

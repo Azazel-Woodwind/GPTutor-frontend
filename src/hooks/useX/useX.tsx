@@ -37,7 +37,6 @@ function useX(config: Config) {
     const [speaking, setSpeaking] = useState(false);
     const [multiplier, setMultiplier] = useState(1);
 
-    const currentSentence = useRef<string>("");
     const audio = useRef<HTMLMediaElement>(new Audio());
     const audioContext = useRef<AudioContext | null>(new AudioContext());
     const analyserNode = useRef<AnalyserNode | null>(null);
@@ -52,7 +51,7 @@ function useX(config: Config) {
     };
 
     const sendMessage = (message: string, context: object | undefined) => {
-        if (message === "" || streaming || loading) return;
+        if (message === "" || streaming || loading) return false;
         if (!audio.current!.paused) {
             audioQueue.current = [];
             audio.current!.src = "";
@@ -63,14 +62,30 @@ function useX(config: Config) {
         onMessage({ role: "user", content: message });
         Socket.emit(`${channel}_message_x`, { message, context });
         setLoading(true);
+
+        return true;
     };
 
     const toggleMute = () => {
         audio.current!.muted = !audio.current!.muted;
+        console.log(audio.current.muted);
+    };
+
+    const getSpeed = () => {
+        return audio.current!.playbackRate;
     };
 
     const setSpeed = (speed: number) => {
         audio.current!.playbackRate = speed;
+    };
+
+    const pause = () => {
+        audio.current!.pause();
+    };
+
+    const play = () => {
+        animate();
+        audio.current!.play();
     };
 
     const updateMultiplier = () => {
@@ -87,41 +102,40 @@ function useX(config: Config) {
         animationId.current = requestAnimationFrame(updateMultiplier);
     };
 
-    useEffect(() => {
-        return () => {
-            audioQueue.current = [];
-            audio.current!.src = "";
-            audio.current!.load();
-            Socket.off(`${channel}_audio_data`);
-        };
-    }, []);
+    // useEffect(() => {
+    //     return () => {
+    //         audioQueue.current = [];
+    //         audio.current!.src = "";
+    //         audio.current!.load();
+    //         Socket.off(`${channel}_audio_data`);
+    //     };
+    // }, []);
+
+    const animate = () => {
+        audioContext.current = new AudioContext();
+        if (!audioSource.current) {
+            analyserNode.current = audioContext.current.createAnalyser();
+            audioSource.current = audioContext.current.createMediaElementSource(
+                audio.current
+            );
+            audioSource.current.connect(analyserNode.current);
+            analyserNode.current.connect(audioContext.current.destination);
+        }
+
+        const bufferLength = analyserNode.current!.frequencyBinCount;
+        dataArray.current = new Uint8Array(bufferLength);
+
+        animationId.current = requestAnimationFrame(updateMultiplier);
+    };
 
     useEffect(() => {
         if (!Socket) return;
 
         // audio.current!.autoplay = true;
 
-        // audio.current!.muted = true;
-
         audio.current!.onplay = () => {
             console.log("track playing");
             setSpeaking(true);
-
-            audioContext.current = new AudioContext();
-            if (!audioSource.current) {
-                analyserNode.current = audioContext.current.createAnalyser();
-                audioSource.current =
-                    audioContext.current.createMediaElementSource(
-                        audio.current
-                    );
-                audioSource.current.connect(analyserNode.current);
-                analyserNode.current.connect(audioContext.current.destination);
-            }
-
-            const bufferLength = analyserNode.current!.frequencyBinCount;
-            dataArray.current = new Uint8Array(bufferLength);
-
-            animationId.current = requestAnimationFrame(updateMultiplier);
         };
 
         audio.current!.onended = () => {
@@ -130,7 +144,7 @@ function useX(config: Config) {
             if (audioQueue.current.length > 0) {
                 audio.current!.src = `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
                 // audio.current!.muted = false;
-                audio.current!.play();
+                play();
             } else {
                 setSpeaking(false);
                 cancelAnimationFrame(animationId.current!);
@@ -138,35 +152,18 @@ function useX(config: Config) {
             }
         };
 
+        audio.current.onpause = () => {
+            console.log("track paused");
+            setSpeaking(false);
+            // cancelAnimationFrame(animationId.current!);
+            // setMultiplier(1);
+        };
+
         Socket.on(`${channel}_response_stream`, delta => {
-            // console.log("DELTA:", delta, delta.length);
             setStreaming(true);
-            // currentSentence.current += delta;
             onDelta(delta);
             setLoading(false);
             setCurrentMessage(prevMessage => prevMessage + delta);
-            // if (delta.audio) {
-            //     console.log("received audio_data");
-            //     if (audio.current!.paused) {
-            //         audio.current!.src =
-            //             audioQueue.current.length === 0
-            //                 ? `data:audio/x-wav;base64,${delta.audio}`
-            //                 : `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
-            //         audio.current!.play();
-            //     } else {
-            //         // console.log("queueing audio_data");
-            //         audioQueue.current.push(delta.audio);
-            //     }
-            // }
-            // if (delta === "." || delta === "?" || delta === "!") {
-            //     console.log("emitting text_data: ", currentSentence.current);
-
-            //     Socket.emit(`text_data`, {
-            //         text: currentSentence.current,
-            //         channel,
-            //     });
-            //     currentSentence.current = "";
-            // }
         });
 
         Socket.on(`${channel}_error`, err => {
@@ -177,11 +174,12 @@ function useX(config: Config) {
         Socket.on(`${channel}_audio_data`, data => {
             console.log("received audio_data");
             if (audio.current!.paused) {
-                audio.current!.src =
-                    audioQueue.current.length === 0
-                        ? `data:audio/x-wav;base64,${data}`
-                        : `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
-                audio.current!.play();
+                if (audioQueue.current.length === 0) {
+                    audio.current!.src = `data:audio/x-wav;base64,${data}`;
+                } else {
+                    audioQueue.current.push(data);
+                }
+                play();
             } else {
                 // console.log("queueing audio_data");
                 audioQueue.current.push(data);
@@ -207,6 +205,23 @@ function useX(config: Config) {
         });
     }, [Socket]);
 
+    useEffect(() => {
+        return () => {
+            audio.current!.muted = true;
+
+            Socket.off(`${channel}_audio_data`);
+            Socket.emit(`${channel}_exit`);
+            audioQueue.current = [];
+            audio.current!.src = "";
+            audio.current!.load();
+            Socket.off(`${channel}_response_stream`);
+            Socket.off(`${channel}_error`);
+
+            Socket.off(`${channel}_response_data`);
+            Socket.off(`${channel}_message_user`);
+        };
+    }, []);
+
     // console.log("MULTIPLIER", multiplier);
 
     return {
@@ -219,8 +234,11 @@ function useX(config: Config) {
         streaming,
         speaking,
         toggleMute,
+        getSpeed,
         setSpeed,
         multiplier,
+        pause,
+        play,
     };
 }
 

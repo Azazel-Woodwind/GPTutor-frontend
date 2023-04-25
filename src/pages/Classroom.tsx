@@ -16,7 +16,18 @@ import CustomButton from "../components/Button";
 import useModal from "../hooks/useModal";
 import Loading from "./Loading";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
-// import LessonFinished from "./LessonFinished";
+import ProgressBar from "../components/ProgressBar";
+
+import IconButton from "../components/IconButton";
+import XControls from "../components/Classroom/XControls";
+import EndOfLessonModal from "../components/Classroom/EndOfLessonModal";
+import StartLessonModal from "../components/Classroom/StartLessonModal";
+
+const images = [
+    "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
+    "https://d33wubrfki0l68.cloudfront.net/49de349d12db851952c5556f3c637ca772745316/cfc56/static/images/wallpapers/bridge-02@2x.png",
+    "https://d33wubrfki0l68.cloudfront.net/594de66469079c21fc54c14db0591305a1198dd6/3f4b1/static/images/wallpapers/bridge-01@2x.png",
+];
 
 function Classroom() {
     useConversationDisplay(false);
@@ -25,7 +36,6 @@ function Classroom() {
     const navigate = useNavigate();
 
     const currentLesson = useLoaderData();
-
     const hook = useLesson({
         currentLesson,
         delay: 1000,
@@ -46,20 +56,37 @@ function Classroom() {
         previousImage,
         currentImageLink,
         images,
+        toggleMute,
+        getSpeed,
+        setSpeed,
+        speaking,
+        pause,
+        play,
     } = hook;
 
-    const imagesA = [
-        "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
-        "https://d33wubrfki0l68.cloudfront.net/49de349d12db851952c5556f3c637ca772745316/cfc56/static/images/wallpapers/bridge-02@2x.png",
-        "https://d33wubrfki0l68.cloudfront.net/594de66469079c21fc54c14db0591305a1198dd6/3f4b1/static/images/wallpapers/bridge-01@2x.png",
-    ];
-
-    const { open, handleClose, handleOpen, ModalProps, Modal } = useModal({
-        initialOpen: true,
-    });
+    const [isMuted, setIsMuted] = React.useState(false);
+    const [showControls, setShowControls] = React.useState(false);
 
     return (
         <AnimatePresence mode="wait" initial={false}>
+            <Header>
+                <ExitButton>
+                    <CustomButton outline onClick={() => navigate("/lessons")}>
+                        Exit Lesson
+                    </CustomButton>
+                </ExitButton>
+                <Title>
+                    {learningObjectiveNumber > 0 && (
+                        <ProgressBar
+                            width="35em"
+                            value={learningObjectiveNumber}
+                            max={currentLesson.learning_objectives.length}
+                        />
+                    )}
+                    {currentLearningObjective?.title &&
+                        currentLearningObjective.title + " 🗿"}
+                </Title>
+            </Header>
             {started === undefined ? (
                 <LoadingScreenWrapper
                     key="loading"
@@ -77,16 +104,11 @@ function Classroom() {
                         visible: { opacity: 1, transition: { duration: 0.5 } },
                     }}
                     exit={{ opacity: 0, transition: { duration: 0.5 } }}>
-                    <Modal {...ModalProps}>
-                        <CenteredColumn fillparent>
-                            <CustomButton
-                                onClick={() => {
-                                    setStarted(true);
-                                }}>
-                                Click here to start the lesson!
-                            </CustomButton>
-                        </CenteredColumn>
-                    </Modal>
+                    <StartLessonModal
+                        onClick={() => {
+                            setStarted(true);
+                        }}
+                    />
                 </motion.div>
             ) : !finished ? (
                 <Container
@@ -96,22 +118,44 @@ function Classroom() {
                     exit={{ opacity: 0, transition: { duration: 0.5 } }}>
                     <DualDisplay>
                         <LayoutGroup>
-                            <Avatar
-                                {...AvatarProps}
-                                size={140}
-                                layout
-                                layoutId="avatar"
-                                transition={{ duration: 0.5 }}
-                                variants={{
-                                    hidden: { opacity: 0 },
-                                    visible: {
-                                        opacity: 1,
-                                        transition: { duration: 0.5 },
-                                    },
-                                }}
-                            />
+                            <div
+                                onMouseEnter={() => setShowControls(true)}
+                                onMouseLeave={() => setShowControls(false)}
+                                style={{
+                                    // border: "3px solid black",
+                                    position: "relative",
+                                }}>
+                                <Avatar
+                                    {...AvatarProps}
+                                    clickable
+                                    size={140}
+                                    layout
+                                    layoutId="avatar"
+                                    transition={{ duration: 0.5 }}
+                                    variants={{
+                                        hidden: { opacity: 0 },
+                                        visible: {
+                                            opacity: 1,
+                                            transition: { duration: 0.5 },
+                                        },
+                                    }}
+                                    XProps={{
+                                        onClick: speaking ? pause : play,
+                                    }}
+                                />
+                                <AnimatePresence>
+                                    {showControls && (
+                                        <XControls
+                                            isMuted={isMuted}
+                                            setIsMuted={setIsMuted}
+                                            toggleMute={toggleMute}
+                                        />
+                                    )}
+                                </AnimatePresence>
+                            </div>
+
                             <AnimatePresence>
-                                {imagesA && (
+                                {images?.length > 0 && (
                                     <GalleryContainer
                                         as={motion.div}
                                         layout
@@ -130,7 +174,7 @@ function Classroom() {
                                                 },
                                             },
                                         }}>
-                                        <Gallery images={imagesA} />
+                                        <Gallery images={images} />
                                     </GalleryContainer>
                                 )}
                             </AnimatePresence>
@@ -166,22 +210,34 @@ function Classroom() {
                         visible: { opacity: 1, transition: { duration: 0.5 } },
                     }}
                     exit={{ opacity: 0, transition: { duration: 0.5 } }}>
-                    <Modal {...ModalProps}>
-                        <CenteredColumn fillparent>
-                            <h1> Lesson has been completed </h1>
-                            <CustomButton
-                                onClick={() => {
-                                    navigate("/hub");
-                                }}>
-                                Return to main menu
-                            </CustomButton>
-                        </CenteredColumn>
-                    </Modal>
+                    <EndOfLessonModal />
                 </motion.div>
             )}
         </AnimatePresence>
     );
 }
+
+const Title = styled.h3`
+    margin: auto;
+    align-items: center;
+    justify-content: center;
+`;
+const Header = styled.div`
+    position: absolute;
+    top: 0px;
+    padding: 1.5em;
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: center;
+`;
+
+const ExitButton = styled.div`
+    position: absolute;
+    top: 1em;
+    right: 1em;
+`;
 
 const LoadingScreenWrapper = styled(motion.div)`
     height: 100%;

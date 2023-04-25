@@ -82,13 +82,6 @@ export default function header() {
                     </defs>
                 </LogoSvg>
             </Container>
-            {inClassroomRegex.test(location.pathname + location.search) && (
-                <ExitLessonButtonContainer>
-                    <CustomButton outline onClick={() => navigate("/lessons")}>
-                        Exit Lesson
-                    </CustomButton>
-                </ExitLessonButtonContainer>
-            )}
         </>
     );
 }

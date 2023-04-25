@@ -19,7 +19,12 @@ const Profile = () => {
 
     return (
         <Container>
-            <div>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "1em",
+                }}>
                 <h1> Account Settings </h1>
                 <p>
                     Change your email, phone number, name etc and sign out of or
@@ -46,6 +51,6 @@ const Profile = () => {
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.7em;
+    gap: 1em;
 `;
 export default Profile;

@@ -33,8 +33,6 @@ export const BaseInput = React.forwardRef(
                             style={{ paddingRight: "0.7em" }}
                             ref={ref => setRef(ref)}>
                             <IconButton
-                                onMouseDown={e => e.preventDefault()}
-                                onMouseOver={e => e.currentTarget.blur()}
                                 onKeyUp={e => {
                                     if (e.key === "Enter") {
                                         setVisible(!visible);
