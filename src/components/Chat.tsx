@@ -5,12 +5,15 @@ import GradientOutline from "../styles/GradientOutline";
 import { ChatContext } from "../context/ChatContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "./Navigation";
-import useChat from "../hooks/useChat";
+import useChat, { AnimatedAvatar } from "../hooks/useChat";
 import useXConversation from "../hooks/useX/useXConversation";
 import CenteredRow from "../styles/containers/CenteredRow";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import useAvatar from "../hooks/useAvatar";
 import Resizable from "./Resizable";
+import { fade_animation } from "../styles/FramerAnimations";
+import ChatHistory from "./ChatHistory";
+import Controls from "./Controls";
 
 const prompts = [
     "Hi X. Can you show me the available lessons?",
@@ -24,30 +27,31 @@ const Chat = props => {
     const { width } = React.useContext(ChatContext);
     const location = useLocation();
     const hook = useXConversation();
-    const chat = useChat({ hook });
+    // const chat = useChat({ hook });
 
     return (
         <Resizable number={width} min={400}>
             <Window>
-                <ChatSection {...chat} />
+                <ChatSection hook={hook} />
             </Window>
         </Resizable>
     );
 };
 
-const ChatSection = ({ Avatar, AvatarProps, ChatHistory, Controls }) => {
+const ChatSection = ({ hook }) => {
     return (
         <>
             <Navigation />
-            <Avatar size={120} {...AvatarProps} />
+            <AnimatedAvatar size={120} {...hook} hasControls />
             <BottomSection>
                 <ChatHistory
                     height="20em"
                     prompt={
                         "This is X, your personal AI tutor. You can have him navigate the application for you, or for example answer any questions related to the application or your subjects"
                     }
+                    hook={hook}
                 />
-                <Controls prompts={prompts} />
+                <Controls prompts={prompts} hook={hook} />
             </BottomSection>
         </>
     );

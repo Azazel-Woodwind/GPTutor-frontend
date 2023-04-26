@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { useState } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { wrap } from "popmotion";
@@ -44,7 +44,7 @@ const swipePower = (offset: number, velocity: number) => {
     return Math.abs(offset) * velocity;
 };
 
-const Gallery = ({ images = [] }) => {
+const Gallery = ({ images = [], currentImageIndex }) => {
     const [[page, direction], setPage] = useState([0, 0]);
 
     // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -60,6 +60,13 @@ const Gallery = ({ images = [] }) => {
     const [dragging, setDragging] = useState(false);
     const [selected, setSelected] = useState(-1);
 
+    React.useEffect(() => {
+        setSelected(-1);
+        if (currentImageIndex - imageIndex > 0) {
+            paginate(currentImageIndex - imageIndex);
+        }
+    }, [currentImageIndex]);
+
     // console.log(images);
     return (
         // <LayoutGroup>
@@ -73,7 +80,6 @@ const Gallery = ({ images = [] }) => {
                 <AnimatePresence initial={false} custom={direction}>
                     <Image
                         key={page}
-                        // layoutId="gallery"
                         src={images[imageIndex]}
                         custom={direction}
                         variants={variants}
@@ -129,21 +135,6 @@ const Gallery = ({ images = [] }) => {
                 </CustomButton>
             </Prev>
         </Container>
-        //     {/* <AnimatePresence>
-        //         {selected !== -1 && (
-        //             <SelectedImageContainer
-        //                 onClick={() => setSelected(-1)}
-        //                 key={selected}>
-        //                 <Image
-        //                     key={selected}
-        //                     layoutId="gallery"
-        //                     src={images[selected]}
-        //                     onClick={() => setSelected(-1)}
-        //                 />
-        //             </SelectedImageContainer>
-        //         )}
-        //     </AnimatePresence>
-        // </LayoutGroup> */}
     );
 };
 
@@ -169,7 +160,6 @@ const ImageContainer = styled.div`
 
 const Container = styled.div`
     position: relative;
-    background: ${props => props.theme.colours.tertiary};
     overflow: ${props => (props.imageClicked ? "visible" : "hidden")};
 
     height: 100%;
@@ -184,7 +174,7 @@ const Image = styled(motion.img)`
     /* border: 10px solid green; */
 
     /* z-index: 10; */
-    ${props => !props.selected && `width: 100%;`};
+    ${props => (props.selected ? `width: 70%;` : `width: 100%;`)};
 `;
 
 const Button = styled.div`

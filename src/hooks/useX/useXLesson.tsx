@@ -10,8 +10,6 @@ type XLessonProps = {
     lessonId: string;
 };
 
-const learningObjectiveIndicies = new Map<number, number>();
-let currentLearningObjectiveIndex = 0;
 function useXLesson({ currentLesson, delay, ...props }: any) {
     const [lesson, setLesson] = React.useState<any>(currentLesson);
     const [learningObjectiveNumber, setLearningObjectiveNumber] =
@@ -22,6 +20,10 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
         React.useState({});
     const [images, setImages] = React.useState<any[]>([]);
     const [currentImageLink, setCurrentImageLink] = React.useState("");
+    const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+
+    const learningObjectiveIndicies = React.useRef(new Map<number, number>());
+    const currentLearningObjectiveIndex = React.useRef(0);
 
     const { Socket } = React.useContext(SocketContext);
 
@@ -31,15 +33,15 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
     });
 
     const nextImage = () => {
-        if (currentLearningObjectiveIndex + 1 >= images.length) return;
-        setCurrentImageLink(images[currentLearningObjectiveIndex + 1]);
-        currentLearningObjectiveIndex++;
+        if (currentLearningObjectiveIndex.current + 1 >= images.length) return;
+        setCurrentImageLink(images[currentLearningObjectiveIndex.current + 1]);
+        currentLearningObjectiveIndex.current++;
     };
 
     const previousImage = () => {
-        if (currentLearningObjectiveIndex - 1 < 0) return;
-        setCurrentImageLink(images[currentLearningObjectiveIndex - 1]);
-        currentLearningObjectiveIndex--;
+        if (currentLearningObjectiveIndex.current - 1 < 0) return;
+        setCurrentImageLink(images[currentLearningObjectiveIndex.current - 1]);
+        currentLearningObjectiveIndex.current--;
     };
 
     useEffect(() => {
@@ -74,34 +76,40 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
             });
         }, delay);
 
-        return () => clearTimeout(timer);
-
-        //I think grabbing the lesson info makes more sense from the db here?
-        // :moyai: no.
-        // Socket.on("lesson_info", data => setLesson(data));
+        return () => {
+            clearTimeout(timer);
+            Socket.off("lesson_response_data");
+            Socket.off("lesson_finished");
+        };
     }, [started]);
 
     useEffect(() => {
         if (!lesson || !started) return;
 
-        setCurrentLearningObjective(
-            lesson.learning_objectives[learningObjectiveNumber - 1]
-        );
         if (learningObjectiveNumber === -1) {
             setCurrentImageLink("");
             return;
         }
-        if (learningObjectiveIndicies.has(learningObjectiveNumber)) {
+
+        setCurrentLearningObjective(
+            lesson.learning_objectives[learningObjectiveNumber - 1]
+        );
+
+        if (learningObjectiveIndicies.current.has(learningObjectiveNumber)) {
             setCurrentImageLink(
                 images[
-                    learningObjectiveIndicies.get(
+                    learningObjectiveIndicies.current.get(
                         learningObjectiveNumber
                     ) as number
                 ]
             );
             return;
         }
-        learningObjectiveIndicies.set(learningObjectiveNumber, images.length);
+
+        learningObjectiveIndicies.current.set(
+            learningObjectiveNumber,
+            images.length
+        );
 
         setImages(prev => [
             ...prev,
@@ -109,13 +117,14 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
                 learningObjectiveNumber - 1
             ].images.map((image: any) => image.link),
         ]);
-        currentLearningObjectiveIndex = images.length;
-        console.log(lesson);
+        currentLearningObjectiveIndex.current = images.length;
+        // console.log(lesson);
         // console.log(JSON.stringify(lesson));
         setCurrentImageLink(
             lesson.learning_objectives[learningObjectiveNumber - 1].images[0]
                 .link
         );
+        setCurrentImageIndex(images.length);
     }, [learningObjectiveNumber, started]);
 
     return {
@@ -129,6 +138,7 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
         nextImage,
         previousImage,
         currentImageLink,
+        currentImageIndex,
         images,
     };
 }

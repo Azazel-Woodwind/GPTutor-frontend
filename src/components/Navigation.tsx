@@ -50,6 +50,38 @@ const LinkWrapper = ({ path, Icon, label }) => {
     );
 };
 
+export const NavigateHome = () => (
+    <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} />
+);
+
+export const NavigateLessons = () => (
+    <LinkWrapper path="/lessons" label={"Lessons"} Icon={StyledBook} />
+);
+
+export const NavigateCreateLesson = () => (
+    <LinkWrapper
+        path="/create-lesson"
+        Icon={StyledBookAdd}
+        label={"Create Lesson"}
+    />
+);
+
+export const NavigateDashboard = () => (
+    <LinkWrapper
+        path="/dashboard/my-lessons"
+        Icon={StyledDashboard}
+        label={"Dashboard"}
+    />
+);
+
+export const NavigateSettings = () => (
+    <LinkWrapper
+        path="/settings/general"
+        Icon={StyledSettings}
+        label={"Settings"}
+    />
+);
+
 const Navigation = styled.div`
     position: relative;
     display: flex;
@@ -68,28 +100,11 @@ export default () => {
 
     return (
         <Navigation>
-            <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} />
-            <LinkWrapper
-                focused
-                path="/lessons"
-                label={"Lessons"}
-                Icon={StyledBook}
-            />
-            <LinkWrapper
-                path="/create-lesson"
-                Icon={StyledBookAdd}
-                label={"Create Lesson"}
-            />
-            <LinkWrapper
-                path="/dashboard/my-lessons"
-                Icon={StyledDashboard}
-                label={"Dashboard"}
-            />
-            <LinkWrapper
-                path="/settings/general"
-                Icon={StyledSettings}
-                label={"Settings"}
-            />
+            <NavigateHome />
+            <NavigateLessons />
+            <NavigateDashboard />
+            <NavigateCreateLesson />
+            <NavigateSettings />
         </Navigation>
     );
 };

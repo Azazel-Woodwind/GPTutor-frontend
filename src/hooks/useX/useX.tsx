@@ -1,5 +1,6 @@
+import { nanoid } from "nanoid";
 import { SocketContext } from "../../context/SocketContext";
-import { useEffect, useContext, useState, useRef } from "react";
+import { useEffect, useContext, useState, useRef, useCallback } from "react";
 
 export type Config = {
     channel?: string;
@@ -36,14 +37,16 @@ function useX(config: Config) {
     const [currentMessage, setCurrentMessage] = useState("");
     const [speaking, setSpeaking] = useState(false);
     const [multiplier, setMultiplier] = useState(1);
+    const [userPaused, setUserPaused] = useState(false);
 
     const audio = useRef<HTMLMediaElement>(new Audio());
-    const audioContext = useRef<AudioContext | null>(new AudioContext());
+    const audioContext = useRef<AudioContext | null>();
     const analyserNode = useRef<AnalyserNode | null>(null);
     const dataArray = useRef<Uint8Array | null>(null);
     const animationId = useRef<number | null>(null);
     const audioSource = useRef<MediaElementAudioSourceNode | null>(null);
     const audioQueue = useRef<string[]>([]);
+    const currentResponseId = useRef(undefined);
 
     const sendSystemMessage = message => {
         console.log("Received system message request: ", message);
@@ -52,15 +55,20 @@ function useX(config: Config) {
 
     const sendMessage = (message: string, context: object | undefined) => {
         if (message === "" || streaming || loading) return false;
-        if (!audio.current!.paused) {
-            audioQueue.current = [];
-            audio.current!.src = "";
-            audio.current!.load();
-        }
+        audioQueue.current = [];
+        audio.current.src = "";
+        audio.current.load();
+        setSpeaking(false);
+        animationId.current && cancelAnimationFrame(animationId.current);
 
         setHistory(prev => [...prev, { role: "user", content: message }]);
         onMessage({ role: "user", content: message });
-        Socket.emit(`${channel}_message_x`, { message, context });
+        currentResponseId.current = nanoid();
+        Socket.emit(`${channel}_message_x`, {
+            message,
+            context,
+            id: currentResponseId.current,
+        });
         setLoading(true);
 
         return true;
@@ -68,7 +76,6 @@ function useX(config: Config) {
 
     const toggleMute = () => {
         audio.current!.muted = !audio.current!.muted;
-        console.log(audio.current.muted);
     };
 
     const getSpeed = () => {
@@ -80,12 +87,19 @@ function useX(config: Config) {
     };
 
     const pause = () => {
+        setUserPaused(true);
         audio.current!.pause();
+        animationId.current && cancelAnimationFrame(animationId.current);
     };
 
     const play = () => {
-        animate();
-        audio.current!.play();
+        setUserPaused(false);
+        if (audio.current.src && audio.current.src.startsWith("data:")) {
+            audio.current!.play();
+            animate();
+        } else {
+            console.log("NO AUDIO SOURCE:", audio.current.src);
+        }
     };
 
     const updateMultiplier = () => {
@@ -95,21 +109,12 @@ function useX(config: Config) {
             dataArray.current!.reduce((acc, val) => acc + val) /
             dataArray.current!.length;
         const frequencyRatio = averageFrequency / 255;
-        const multiplier = 1 + frequencyRatio * 1.4;
+        const multiplier = 1 + frequencyRatio * 1.35;
 
         setMultiplier(multiplier);
         // console.log(pulseSpeed);
         animationId.current = requestAnimationFrame(updateMultiplier);
     };
-
-    // useEffect(() => {
-    //     return () => {
-    //         audioQueue.current = [];
-    //         audio.current!.src = "";
-    //         audio.current!.load();
-    //         Socket.off(`${channel}_audio_data`);
-    //     };
-    // }, []);
 
     const animate = () => {
         audioContext.current = new AudioContext();
@@ -128,10 +133,51 @@ function useX(config: Config) {
         animationId.current = requestAnimationFrame(updateMultiplier);
     };
 
+    const paused = () => {
+        return audio.current!.paused;
+    };
+
+    const onReceiveAudioData = useCallback(
+        data => {
+            console.log("received audio_data");
+
+            if (!data.first && data.id !== currentResponseId.current) {
+                console.log(
+                    "ignoring audio_data because it's not the current response"
+                );
+                return;
+            }
+
+            if (audio.current!.paused) {
+                if (!userPaused) {
+                    audio.current!.src = `data:audio/x-wav;base64,${data.audio}`;
+                    play();
+                } else {
+                    if (audio.current.src.startsWith("data:")) {
+                        console.log(
+                            "queueing audio_data because track is paused by user"
+                        );
+                        audioQueue.current.push(data.audio);
+                    } else {
+                        audio.current!.src = `data:audio/x-wav;base64,${data.audio}`;
+                    }
+                }
+            } else {
+                console.log("queueing audio_data because track is playing");
+                audioQueue.current.push(data.audio);
+            }
+        },
+        [userPaused]
+    );
+
     useEffect(() => {
         if (!Socket) return;
+        Socket.off(`${channel}_audio_data`);
+        Socket.on(`${channel}_audio_data`, onReceiveAudioData);
+    }, [onReceiveAudioData]);
 
-        // audio.current!.autoplay = true;
+    useEffect(() => {
+        if (!Socket) return;
 
         audio.current!.onplay = () => {
             console.log("track playing");
@@ -143,9 +189,9 @@ function useX(config: Config) {
             console.log(audioQueue.current.length);
             if (audioQueue.current.length > 0) {
                 audio.current!.src = `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
-                // audio.current!.muted = false;
                 play();
             } else {
+                audio.current!.src = "";
                 setSpeaking(false);
                 cancelAnimationFrame(animationId.current!);
                 setMultiplier(1);
@@ -169,21 +215,6 @@ function useX(config: Config) {
         Socket.on(`${channel}_error`, err => {
             sendSystemMessage(err);
             setLoading(false);
-        });
-
-        Socket.on(`${channel}_audio_data`, data => {
-            console.log("received audio_data");
-            if (audio.current!.paused) {
-                if (audioQueue.current.length === 0) {
-                    audio.current!.src = `data:audio/x-wav;base64,${data}`;
-                } else {
-                    audioQueue.current.push(data);
-                }
-                play();
-            } else {
-                // console.log("queueing audio_data");
-                audioQueue.current.push(data);
-            }
         });
 
         Socket.on(`${channel}_response_data`, data => {
@@ -232,13 +263,14 @@ function useX(config: Config) {
         currentMessage,
         sendSystemMessage,
         streaming,
-        speaking,
+        paused,
         toggleMute,
         getSpeed,
         setSpeed,
         multiplier,
         pause,
         play,
+        speaking,
     };
 }
 

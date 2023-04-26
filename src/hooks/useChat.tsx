@@ -12,7 +12,6 @@ const useChat = ({ hook }) => {
         currentMessage,
         sendSystemMessage,
         streaming,
-        speaking,
         toggleMute,
         setSpeed,
         multiplier,
@@ -21,8 +20,9 @@ const useChat = ({ hook }) => {
     return {
         ChatHistory: useCallback(
             props => <ChatHistory {...props} hook={hook} />,
-            [history, currentMessage]
+            [hook.history, hook.currentMessage]
         ),
+        ChatHistoryProps: {},
         Controls: useCallback(props => <Controls {...props} hook={hook} />, []),
         Avatar: AnimatedAvatar,
         AvatarProps: {
@@ -31,11 +31,11 @@ const useChat = ({ hook }) => {
     };
 };
 
-const AnimatedAvatar = ({ multiplier, ...props }) => {
+export const AnimatedAvatar = ({ multiplier, ...props }) => {
     const { Avatar, pulseX, avatarProps } = useAvatar(props);
 
     React.useEffect(() => {
-        console.log("multiplier", multiplier);
+        // console.log("multiplier", multiplier);
         pulseX(multiplier);
     }, [multiplier]);
 

@@ -134,11 +134,12 @@ const Modal = ({ children, handleClose, type, ...props }) => {
 };
 
 const ModalStyle = styled(motion.div)`
-    width: clamp(50%, 700px, 90%);
-    height: min(50%, 300px);
+    position: relative;
+    width: clamp(50%, 1200px, 90%);
+    height: min(50%, 600px);
 
     /* border: 5px solid blue; */
-    background-color: ${props => props.theme.colours.glow};
+    background-color: ${props => props.theme.colours.primary}10;
     padding: 10px;
     border-radius: 12px;
 `;

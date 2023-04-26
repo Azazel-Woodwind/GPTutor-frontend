@@ -81,9 +81,8 @@ export const EndAdornmentWrapper = styled.div`
 export const BaseInputStyle = styled.input`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
-    margin: 0;
-    /* margin-top: 5px;  */
     padding: 0 0.7em;
+    padding-top: 5px;
     /* padding-bottom: 0.4em; */
     ${props =>
         props.as === "textarea" && `margin-top: 21px; margin-bottom: 0.7em;`};
@@ -98,7 +97,6 @@ export const BaseInputStyle = styled.input`
     border: none;
     /* height: 100%; */
     width: 100%;
-
     /* border: none; */
     box-sizing: border-box;
     :-webkit-autofill,

@@ -20,6 +20,10 @@ function useXConversation(props: any) {
         });
 
         Socket.emit("start_chat");
+
+        return () => {
+            Socket.off("navigate");
+        };
     }, []);
 
     return {

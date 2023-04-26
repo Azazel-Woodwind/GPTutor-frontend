@@ -51,6 +51,7 @@ import MyLessons from "./pages/dashboard/MyLessons";
 import { ADMIN_ACCESS_LEVEL } from "./lib/accessLevels";
 import EducationLevelsAPI from "./api/EducationLevelAPI";
 import UserAPI from "./api/UserAPI";
+import EndOfLessonModal from "./pages/classroom/EndOfLessonModal";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -119,6 +120,10 @@ function PublicWrapper() {
 }
 
 const router = createBrowserRouter([
+    {
+        path: "/end",
+        element: <EndOfLessonModal />,
+    },
     {
         path: "/loading",
         element: <Loading />,

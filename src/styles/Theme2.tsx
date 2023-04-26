@@ -1,16 +1,14 @@
-export const gradientColour1 = "#fe5858";
-export const gradientColour2 = "#ff2424";
-export const gradientColour3 = "#ff0101";
-export const gradientAngle = 45;
-
-//make your fucking svg shit use the actual theme
+export const gradientColour1 = "#58c1fe";
+export const gradientColour2 = "#24aaff";
+export const gradientColour3 = "#0163ff";
+export const gradientAngle = 149;
 
 const Theme = {
     colours: {
         background: "#0C1437",
         primary: "#ffffff",
         primaryFaded: "rgba(255, 255, 255, 0.5)",
-        primaryStrong: "rgba(255, 255, 255, 0.9)",
+        primaryStrong: "rgb(255, 255, 255, 0.9)",
         secondary: gradientColour3,
         tertiary: "#040a1e",
         contrast: "#E323F0",
@@ -54,27 +52,41 @@ const Theme = {
                     `,
     },
     contrastGradient: `
-        background: rgb(63,94,251);
-        background: -moz-radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        background: -webkit-radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1); 
+    background: rgb(63,94,251);
+    background: -moz-radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(252,70,107,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#3f5efb",endColorstr="#fc466b",GradientType=1); 
     `,
     gradient: ({ animationLength = 5 }: { animationLength: number }) => `
     
 
     background: ${gradientColour1};
-    background: linear-gradient(
+    background: -moz-linear-gradient(
         ${gradientAngle}deg,
-        ${gradientColour1},
-        ${gradientColour2},
-        ${gradientColour1}
+        ${gradientColour1} 0%,
+        ${gradientColour2} 25%,
+        ${gradientColour3} 75%,
+        ${gradientColour1} 100%
     );
-
-    background-size: 200% 200%;
-    background-position: 0% 100%;
+    
+    background: -webkit-linear-gradient(
+        ${gradientAngle}deg,
+        ${gradientColour1}  0%,
+        ${gradientColour2}  25%,
+        ${gradientColour3}  75%,
+        ${gradientColour1}  100%
+    );
+    background: linear-gradient(
+        ${gradientAngle}  deg,
+        ${gradientColour1}  0%,
+        ${gradientColour2}  25%,
+        ${gradientColour3}  75%,
+        ${gradientColour1}  100%
+    );
+    background-size: 800% auto;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="${gradientColour1}",endColorstr="${gradientColour1}",GradientType=1);
     animation: gradient ${animationLength}s linear infinite;
-    animation-direction: alternate;
     `,
     gradientFaded: ({ animationLength }: { length: number }) => `
     

@@ -5,9 +5,11 @@ import GradientOutline from "../styles/GradientOutline";
 import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
 
 const AvatarStyle = styled.div`
+    /* margin-top: 5px; */
+    position: relative;
     flex-shrink: 0;
-    width: 26px;
-    height: 26px;
+    width: 30px;
+    height: 30px;
     /* padding: 5px; */
     background-color: ${props => props.theme.colours.secondary};
     ${props =>
@@ -18,10 +20,13 @@ const AvatarStyle = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    ${props => props.type === "assistant" && ``}
+    font-size: 20px;
+    font-weight: 600;
     box-sizing: border-box;
     border-radius: 20%;
+    ${props => props.type === "user" && `padding-bottom: 1px;`}
+    ${props =>
+        props.type === "assistant" && `padding-top: 1px; padding-left: 0.5px;`}
 `;
 
 const Avatar = ({ type, highlighted }) => {
@@ -32,8 +37,8 @@ const Avatar = ({ type, highlighted }) => {
         case "assistant":
             symbol = (
                 <svg
-                    width="14"
-                    height="14"
+                    width="17"
+                    height="17"
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +55,7 @@ const Avatar = ({ type, highlighted }) => {
                 .toUpperCase();
             break;
         case "system":
-            symbol = <InfoCircle size={20} style={{ marginLeft: "1px" }} />;
+            symbol = <InfoCircle size={20} />;
             break;
     }
 
@@ -66,7 +71,7 @@ const Message = ({ type, message }) => {
 
     // console.log(type);
     return (
-        <GradientOutline hidden={type !== "system"}>
+        <GradientOutline contrast hidden={type !== "system"}>
             <Container highlighted={highlighted}>
                 <Avatar highlighted={highlighted} type={type} />
                 <span> {message} </span>
@@ -77,8 +82,9 @@ const Message = ({ type, message }) => {
 
 const Container = styled.div`
     display: flex;
-    align-items: center;
-    font-size: 14px;
+    /* align-items: center; */
+
+    font-size: 18px;
     padding: 1em;
     color: ${props =>
         props.highlighted

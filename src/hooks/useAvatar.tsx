@@ -3,8 +3,10 @@ import styled from "styled-components";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
 import FillParent from "../styles/containers/FillParent";
-
-import { motion, useAnimation } from "framer-motion";
+import { VolumeUp } from "@styled-icons/material-sharp/VolumeUp";
+import { VolumeOff } from "@styled-icons/material-sharp/VolumeOff";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
+import IconButton from "../components/IconButton";
 
 const animation = {
     boxShadow: [
@@ -68,6 +70,9 @@ const useAvatar = ({
 
         controls.start({
             scale: scale || 1,
+            transition: {
+                duration: 0.03,
+            },
         });
     };
 
@@ -103,30 +108,103 @@ const Avatar = ({
     size,
     rings,
     controls,
-    clickable,
     onClick,
-    XProps,
+    hasControls,
+    toggleMute,
+    paused,
+    play,
+    pause,
     ...props
 }) => {
+    const [isMuted, setIsMuted] = React.useState(false);
+    const [showControls, setShowControls] = React.useState(false);
+
+    if (hasControls) {
+        return (
+            <ControlsContainer
+                onMouseEnter={() => setShowControls(true)}
+                onMouseLeave={() => setShowControls(false)}>
+                <AvatarWrapper size={size} as={motion.div} {...props}>
+                    {rings}
+                    <X
+                        clickable
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        size={size}
+                        transition={{ duration: 0.3 }}
+                        initial={{ scale: 1 }}
+                        animate={controls}
+                        onClick={() => {
+                            if (paused()) {
+                                play();
+                            } else {
+                                pause();
+                            }
+                        }}
+                    />
+                </AvatarWrapper>
+                <AnimatePresence>
+                    {showControls && (
+                        <XControls
+                            isMuted={isMuted}
+                            setIsMuted={setIsMuted}
+                            toggleMute={toggleMute}
+                        />
+                    )}
+                </AnimatePresence>
+            </ControlsContainer>
+        );
+    }
+
     return (
         <AvatarWrapper size={size} as={motion.div} {...props}>
             {rings}
             <X
-                clickable={clickable}
-                {...(clickable && {
-                    whileHover: { scale: 1.1 },
-                    whileTap: { scale: 0.95 },
-                    onClick,
-                })}
                 size={size}
                 transition={{ duration: 0.3 }}
                 initial={{ scale: 1 }}
                 animate={controls}
-                {...XProps}
             />
         </AvatarWrapper>
     );
 };
+
+function XControls({ isMuted, setIsMuted, toggleMute }) {
+    return (
+        <motion.div
+            key="modal"
+            initial="hidden"
+            animate="visible"
+            variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                    opacity: 1,
+                },
+            }}
+            exit="hidden"
+            style={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+            }}>
+            <IconButton
+                style={{
+                    width: "3em",
+                    height: "3em",
+                }}
+                onClick={() => {
+                    setIsMuted(!isMuted);
+                    toggleMute();
+                }}>
+                {isMuted ? <VolumeOff size={30} /> : <VolumeUp size={30} />}
+            </IconButton>
+        </motion.div>
+    );
+}
+
+const ControlsContainer = styled.div`
+    position: relative;
+`;
 
 const Ring = styled(FillParent)`
     position: absolute;
@@ -140,7 +218,9 @@ const X = styled(motion.div)`
     position: absolute;
     ${props => props.clickable && `cursor: pointer;`}
     border-radius: 50%;
-    background-color: #344161;
+    ${props => props.theme.gradient({ animationLength: 5 })}
+    opacity: 0.85;
+    backdrop-filter: blur(10px);
     width: ${props => props.size}px;
     height: ${props => props.size}px;
     z-index: 1;

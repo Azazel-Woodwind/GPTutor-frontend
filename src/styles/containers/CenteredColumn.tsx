@@ -6,6 +6,21 @@ const CenteredColumnStyle = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        margin: 0.3em;
+        max-width: 80ch;
+    }
+
+    p {
+        margin-bottom: 0.5em;
+    }
+
     ${props => props.gap && `gap: ${props.gap}`};
     ${props => props.fullscreen && `height: 100vh; width: 100vw;`};
     ${props => props.wrap && `flex-wrap: wrap;`};
