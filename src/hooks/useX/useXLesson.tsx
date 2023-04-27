@@ -72,6 +72,11 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
             Socket.on("lesson_finished", () => setFinished(true));
             Socket.on("lesson_response_data", data => {
                 const { learningObjectiveNumber } = data;
+                console.log(
+                    "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+                    learningObjectiveNumber
+                );
+
                 setLearningObjectiveNumber(learningObjectiveNumber);
             });
         }, delay);
@@ -118,7 +123,7 @@ function useXLesson({ currentLesson, delay, ...props }: any) {
             ].images.map((image: any) => image.link),
         ]);
         currentLearningObjectiveIndex.current = images.length;
-        // console.log(lesson);
+        console.log(lesson);
         // console.log(JSON.stringify(lesson));
         setCurrentImageLink(
             lesson.learning_objectives[learningObjectiveNumber - 1].images[0]

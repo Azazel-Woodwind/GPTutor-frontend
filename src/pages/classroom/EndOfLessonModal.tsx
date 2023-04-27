@@ -19,7 +19,7 @@ function EndOfLessonModal() {
     return (
         <motion.div {...fade_animation()}>
             <Modal {...ModalProps}>
-                <CenteredColumn fillparent>
+                <CenteredColumn fillparent gap="1em">
                     <Title> Lesson has been completed </Title>
                     <p>
                         Thanks for participating in XTutor's alpha. We would
@@ -31,12 +31,12 @@ function EndOfLessonModal() {
                         type="text"
                         multiline
                     />
-                    <ExitButton
+                    <CustomButton
                         onClick={() => {
                             navigate("/hub");
                         }}>
                         Submit and return to main menu
-                    </ExitButton>
+                    </CustomButton>
                 </CenteredColumn>
             </Modal>
         </motion.div>
@@ -45,8 +45,8 @@ function EndOfLessonModal() {
 
 const Title = styled.h1``;
 
-const ExitButton = styled(CustomButton)`
-    position: absolute;
-    bottom: 2em;
-`;
+// const ExitButton = styled(CustomButton)`
+//     position: absolute;
+//     bottom: 2em;
+// `;
 export default EndOfLessonModal;

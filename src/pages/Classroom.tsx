@@ -72,7 +72,9 @@ function Classroom() {
         }
 
         return (
-            <Container key="classroom">
+            <Container
+                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                key="classroom">
                 <Header
                     currentLearningObjective={currentLearningObjective}
                     currentLesson={currentLesson}
