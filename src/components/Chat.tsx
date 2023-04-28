@@ -14,6 +14,7 @@ import Resizable from "./Resizable";
 import { fade_animation } from "../styles/FramerAnimations";
 import ChatHistory from "./ChatHistory";
 import Controls from "./Controls";
+import { motion, useMotionValue } from "framer-motion";
 
 const prompts = [
     "Hi X. Can you show me the available lessons?",
@@ -25,43 +26,57 @@ const prompts = [
 
 const Chat = props => {
     const { width } = React.useContext(ChatContext);
-    const location = useLocation();
     const hook = useXConversation();
     // const chat = useChat({ hook });
 
     return (
         <Resizable number={width} min={400}>
             <Window>
-                <ChatSection hook={hook} />
+                <Navigation />
+                <AvatarContainer>
+                    <AnimatedAvatar size={120} {...hook} hasControls />
+                </AvatarContainer>
+                <ChatSection
+                    hook={hook}
+                    prompt="This is X, your personal AI tutor. You can have him navigate the application for you, or for example answer any questions related to the application or your subjects"
+                    prompts={prompts}
+                />
             </Window>
         </Resizable>
     );
 };
 
-const ChatSection = ({ hook }) => {
+export const ChatSection = ({ hook, prompt, prompts }) => {
+    const containerHeight = useMotionValue("100%");
+
+    const callback = React.useCallback(ref => {
+        if (ref) {
+            containerHeight.set(ref.offsetHeight);
+        }
+    }, []);
+
     return (
-        <>
-            <Navigation />
-            <AnimatedAvatar size={120} {...hook} hasControls />
-            <BottomSection>
-                <ChatHistory
-                    height="20em"
-                    prompt={
-                        "This is X, your personal AI tutor. You can have him navigate the application for you, or for example answer any questions related to the application or your subjects"
-                    }
-                    hook={hook}
-                />
-                <Controls prompts={prompts} hook={hook} />
-            </BottomSection>
-        </>
+        <BottomSection ref={callback} style={{ height: containerHeight }}>
+            <ChatHistory
+                containerHeight={containerHeight}
+                prompt={prompt}
+                hook={hook}
+            />
+            <Controls prompts={prompts} hook={hook} />
+        </BottomSection>
     );
 };
 
-const BottomSection = styled(CenteredColumn)`
+const AvatarContainer = styled(CenteredColumn)`
+    flex-grow: 1;
+    margin: 10px;
+`;
+
+const BottomSection = styled(motion.div)`
     max-width: 1200px;
     width: 100%;
-    flex-grow: 1;
-    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Window = styled.div`

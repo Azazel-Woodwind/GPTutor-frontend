@@ -17,6 +17,7 @@ export const BaseInput = React.forwardRef(
             <>
                 <BaseInputStyle
                     {...props}
+                    autocomplete="off"
                     type={visible ? "text" : type}
                     ref={ref}
                     adornmentWidth={endAdornmentWidth}
@@ -83,21 +84,17 @@ export const BaseInputStyle = styled.input`
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
     padding: 0 0.7em;
     padding-top: 5px;
-    /* padding-bottom: 0.4em; */
+    padding-bottom: 2px;
     ${props =>
         props.as === "textarea" && `margin-top: 21px; margin-bottom: 0.7em;`};
     /* border: 2px solid black; */
     position: relative;
     color: ${props => (props.color ? props.color : "white")};
     font-size: 16px;
-    /* flex: 1; */
-    /* z-index: 5; */
     background: rgba(0, 0, 0, 0);
     outline: none;
     border: none;
-    /* height: 100%; */
     width: 100%;
-    /* border: none; */
     box-sizing: border-box;
     :-webkit-autofill,
     :-webkit-autofill:hover,

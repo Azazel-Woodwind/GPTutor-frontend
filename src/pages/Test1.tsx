@@ -22,41 +22,15 @@ function Test1() {
 
     return (
         <CenteredColumn fillparent>
-            <AnimatePresence mode="wait">
-                <Test />
-            </AnimatePresence>
+            <Container />
         </CenteredColumn>
     );
 }
 
-const Test = styled.div`
-    width: 400px;
-    height: 400px;
-    ${props => props.theme.gradient({ animationLength: 2 })};
+const Container = styled(motion.div)`
+    width: 600px;
+    height: 600px;
+    ${props => props.theme.gradient({ animationLength: 5 })}
 `;
-
-function Test2(props) {
-    const [show, setShow] = React.useState(false);
-
-    return (
-        <>
-            {show ? (
-                <Container key="one" {...fade_animation()}>
-                    <CustomButton onClick={() => setShow(false)}>
-                        BUTTON 1
-                    </CustomButton>
-                </Container>
-            ) : (
-                <Container key="two" {...fade_animation()}>
-                    <CustomButton onClick={() => setShow(true)}>
-                        BUTTON 2
-                    </CustomButton>
-                </Container>
-            )}
-        </>
-    );
-}
-
-const Container = styled(motion.div)``;
 
 export default Test1;

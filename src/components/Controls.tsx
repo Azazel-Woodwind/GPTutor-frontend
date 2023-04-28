@@ -33,7 +33,7 @@ const Controls = ({
     const chatFormRef = React.useRef(undefined);
 
     const onSubmit = e => {
-        e.preventDefault();
+        e && e.preventDefault();
 
         if (messageInput.replaceAll(" ", "") == "") return;
         if (sendMessage(messageInput, { path: location.pathname })) {
@@ -44,11 +44,15 @@ const Controls = ({
 
     const { Socket } = React.useContext(SocketContext);
 
-    const { startRecording, stopRecording, transcript, recording } = useWhisper(
-        {
-            Socket,
-        }
-    );
+    const {
+        startRecording,
+        stopRecording,
+        transcript,
+        recording,
+        finalTranscript,
+    } = useWhisper({
+        Socket,
+    });
 
     // console.log("RECORDING:", recording);
 
@@ -66,7 +70,7 @@ const Controls = ({
             startRecording();
         },
         onAnimationEnd: () => {
-            // console.log("ANIMATION STOPPED");
+            console.log("ANIMATION STOPPED");
             stopRecording();
         },
     });
@@ -76,6 +80,19 @@ const Controls = ({
             setMessageInput(transcript);
         }
     }, [transcript]);
+
+    React.useEffect(() => {
+        if (finalTranscript) {
+            console.log("SENDING FINAL TRANSCRIPT");
+            if (finalTranscript.replaceAll(" ", "") == "") return;
+            if (sendMessage(finalTranscript, { path: location.pathname })) {
+                setMessageInput("");
+            }
+            messageInputRef.current.focus();
+        }
+    }, [finalTranscript]);
+
+    // console.log(messageInput, streaming, loading);
 
     return (
         <Container>
@@ -166,7 +183,9 @@ const ChatInput = styled(BaseInputStyle)`
 `;
 
 const Container = styled.div`
-    background-color: rgb(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.321);
     border-top: 1px solid ${props => props.theme.colours.primary}30;
 
     width: 100%;

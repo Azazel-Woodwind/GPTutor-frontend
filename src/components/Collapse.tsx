@@ -4,7 +4,7 @@ import styled from "styled-components";
 const CollapseContainer = styled.div`
     width: 100%;
     position: absolute;
-    z-index: 100;
+    z-index: 10000;
     background-color: ${props => props.theme.colours.highlight1};
     overflow: hidden;
     border-radius: 8px;

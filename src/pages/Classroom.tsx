@@ -5,7 +5,12 @@ import useLesson from "../hooks/useX/useXLesson";
 import useChat, { AnimatedAvatar } from "../hooks/useChat";
 import Gallery from "../components/Gallery";
 import Loading from "./Loading";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import {
+    AnimatePresence,
+    LayoutGroup,
+    motion,
+    useMotionValue,
+} from "framer-motion";
 import Header from "./classroom/Header";
 
 import { fade_exit, fade_animation } from "../styles/FramerAnimations";
@@ -13,6 +18,7 @@ import EndOfLessonModal from "./classroom/EndOfLessonModal";
 import StartLessonModal from "./classroom/StartLessonModal";
 import ChatHistory from "../components/ChatHistory";
 import Controls from "../components/Controls";
+import React from "react";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -47,6 +53,14 @@ function Classroom() {
         play,
         currentImageIndex,
     } = hook;
+
+    const containerHeight = useMotionValue("100%");
+
+    const callback = React.useCallback(ref => {
+        if (ref) {
+            containerHeight.set(ref.offsetHeight);
+        }
+    }, []);
 
     const renderComponent = () => {
         if (started === undefined) {
@@ -108,18 +122,16 @@ function Classroom() {
                     </LayoutGroup>
                 </DualDisplay>
                 <ChatSection
-                    style={{ width: "100%", maxWidth: "1200px" }}
-                    {...fade_animation({ delayed: true })}>
-                    <ChatHistoryWrapper>
-                        <ChatHistory
-                            hook={hook}
-                            height="12em"
-                            prompt={"This is the classroom environment."}
-                        />
-                    </ChatHistoryWrapper>
-                    <ControlSection>
-                        <Controls hook={hook} />
-                    </ControlSection>
+                    {...fade_animation({ delayed: true })}
+                    ref={callback}
+                    style={{ height: containerHeight }}>
+                    <ChatHistory
+                        hook={hook}
+                        // initialHeight={300}
+                        containerHeight={containerHeight}
+                        prompt={"This is the classroom environment."}
+                    />
+                    <Controls hook={hook} />
                 </ChatSection>
             </Container>
         );
@@ -129,8 +141,14 @@ function Classroom() {
 }
 
 const ChatSection = styled(motion.div)`
-    width: 100%;
     max-width: 1200px;
+    width: 100%;
+    /* height: 300px; */
+    /* flex: 0 1 100%; */
+    /* flex-basis: 100%; */
+    display: flex;
+    flex-direction: column;
+    /* border: 5px solid red; */
 `;
 const LoadingScreenWrapper = styled(motion.div)`
     height: 100%;
@@ -149,14 +167,6 @@ const GalleryContainer = styled.div`
     background-color: ${props => props.theme.colours.tertiary};
 `;
 
-const ChatHistoryWrapper = styled.div`
-    width: 100%;
-    //background-color: rgb(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: reverse-column;
-    max-width: 1200px;
-`;
-
 const DualDisplay = styled.div`
     display: flex;
     align-items: center;
@@ -166,22 +176,16 @@ const DualDisplay = styled.div`
     flex-grow: 1;
 `;
 
-const ControlSection = styled.div`
-    background-color: rgb(0, 0, 0, 0.1);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 1200px;
-`;
 const Container = styled(motion.div)`
     width: 100vw;
     height: 100vh;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
     gap: 2em;
     align-items: center;
-    margin-top: 5em;
+    padding-top: 5em;
+    /* border: 3px solid blue; */
 `;
 
 export default Classroom;

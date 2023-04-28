@@ -47,7 +47,7 @@ const ButtonText = styled.span`
     ${props => props.theme.gradient({ animationLength: 5 })}
     -webkit-background-clip: text;
     pointer-events: none;
-    font-weight: 500;
+    font-weight: 600;
 `;
 
 const SvgBorder = styled.svg`

@@ -82,9 +82,11 @@ const Resizable = ({ number, children, min }) => {
 
             if (
                 newWidth > navigateThreshold &&
-                !location.pathname.includes("hub")
-            )
+                !(location.pathname === "/hub")
+            ) {
+                console.log("navigate");
                 return navigate("/hub");
+            }
 
             number.set(newWidth);
             if (newWidth > min + 10 && info.delta.x <= 0) {
@@ -102,31 +104,30 @@ const Resizable = ({ number, children, min }) => {
                 style={{
                     width: number,
                 }}>
-                {!location.pathname.includes("hub") && draggable && (
-                    <Handle
-                        as={motion.div}
-                        drag="x"
-                        onDoubleClick={() => {
-                            if (isCollapsed) uncollapse();
-                            else collapse();
-                        }}
-                        dragConstraints={{
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                        }}
-                        dragElastic={0}
-                        dragMomentum={false}
-                        onDrag={handleDrag}
-                        onDragEnd={() => {
-                            setIsDragging(false);
-                        }}
-                        onDragStart={() => {
-                            setIsDragging(true);
-                        }}
-                    />
-                )}
+                <Handle
+                    as={motion.div}
+                    drag="x"
+                    onDoubleClick={() => {
+                        if (isCollapsed) uncollapse();
+                        else collapse();
+                    }}
+                    dragConstraints={{
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                    }}
+                    dragElastic={0}
+                    dragMomentum={false}
+                    onDrag={!(location.pathname === "/hub") && handleDrag}
+                    onDragEnd={() => {
+                        setIsDragging(false);
+                    }}
+                    onDragStart={() => {
+                        setIsDragging(true);
+                    }}
+                    visible={!(location.pathname === "/hub")}
+                />
                 {children}
             </motion.div>
         </Container>
@@ -138,12 +139,12 @@ const Handle = styled.div`
     background-color: ${props => props.theme.colours.secondary};
     width: 20px;
     height: 100px;
-    cursor: row-resize;
     position: absolute;
     top: calc(50% - 50px);
     left: -20px;
     z-index: 100;
     cursor: e-resize;
+    visibility: ${props => (props.visible ? "visible" : "hidden")};
 `;
 
 const Container = styled.div`

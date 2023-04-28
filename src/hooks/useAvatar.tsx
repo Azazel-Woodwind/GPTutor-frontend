@@ -218,8 +218,9 @@ const X = styled(motion.div)`
     position: absolute;
     ${props => props.clickable && `cursor: pointer;`}
     border-radius: 50%;
-    ${props => props.theme.gradient({ animationLength: 5 })}
-    opacity: 0.85;
+    /* ${props => props.theme.gradient({ animationLength: 5 })} */
+    background-color: #ffffff30;
+    /* opacity: 0.85; */
     backdrop-filter: blur(10px);
     width: ${props => props.size}px;
     height: ${props => props.size}px;

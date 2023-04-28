@@ -20,7 +20,7 @@ function WaitingList() {
         e.preventDefault();
 
         if (!emailInput?.current?.value || !passwordInput?.current?.value) {
-            toast.error("deez FUCKING nuts", {
+            toast.error("Please fill in all fields", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -86,14 +86,15 @@ function WaitingList() {
     return (
         <XForm
             onSubmit={login}
-            submitButtonText={
-                "WARNING: Do NOT let your wife CATCH you using THIS application"
-            }
+            // submitButtonText={
+            //     "WARNING: Do NOT let your wife CATCH you using THIS application"
+            // }
+            submitButtonText={"Login"}
             title={"Sign in to XTutor"}
             link={
                 <Link to="/register">
                     <TextWrapper>
-                        <LinkWrapper>No father?</LinkWrapper>
+                        <LinkWrapper>No account? Register here</LinkWrapper>
                     </TextWrapper>
                 </Link>
             }>

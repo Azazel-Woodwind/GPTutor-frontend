@@ -183,7 +183,7 @@ function Register() {
         e.preventDefault();
 
         if (!validateAllData) {
-            toast.error("Fill in all the FUCKING fields.", {
+            toast.error("Please fill in all fields.", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

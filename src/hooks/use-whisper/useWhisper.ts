@@ -29,7 +29,7 @@ const defaultConfig: UseWhisperConfig = {
     removeSilence: false,
     stopTimeout: defaultStopTimeout,
     streaming: true,
-    timeSlice: 1_500,
+    timeSlice: 1_100,
     onDataAvailable: undefined,
     onTranscribe: undefined,
     Socket: undefined,
@@ -59,17 +59,33 @@ export const useWhisper: UseWhisperHook = config => {
         Socket,
         onDataAvailable: onDataAvailableCallback,
         onTranscribe: onTranscribeCallback,
+        onFinalTranscript,
     } = {
         ...defaultConfig,
         ...config,
     };
 
-    Socket!.on("transcribed_audio", message => {
-        // console.log("onInterim", { message });
-        if (message) {
-            setTranscript(message);
+    useEffect(() => {
+        if (Socket) {
+            Socket!.off("transcribed_audio");
+            Socket!.on("transcribed_audio", data => {
+                // console.log("onInterim", { message });
+                if (data.transcription) {
+                    if (data.final) {
+                        console.log("FINAL TRANSCRIPT:", data.transcription);
+                        setFinalTranscript(data.transcription);
+                    }
+                    setTranscript(data.transcription);
+                }
+            });
         }
-    });
+
+        return () => {
+            if (Socket) {
+                Socket!.off("transcribed_audio");
+            }
+        };
+    }, [Socket]);
 
     const chunks = useRef<Blob[]>([]);
     const listener = useRef<Harker>();
@@ -82,6 +98,7 @@ export const useWhisper: UseWhisperHook = config => {
     const [transcribing, setTranscribing] = useState<boolean>(false);
     const [blob, setBlob] = useState<Blob>();
     const [transcript, setTranscript] = useState<string>("");
+    const [finalTranscript, setFinalTranscript] = useState<string>("");
 
     /**
      * cleanup on component unmounted
@@ -127,6 +144,8 @@ export const useWhisper: UseWhisperHook = config => {
      * start speech recording and start listen for speaking event
      */
     const startRecording = async () => {
+        setFinalTranscript("");
+        setTranscript("");
         await onStartRecording();
     };
 
@@ -416,7 +435,7 @@ export const useWhisper: UseWhisperHook = config => {
                                 type: "audio/mpeg",
                             });
                         }
-                        Socket!.emit("transcribe_audio", { file });
+                        Socket!.emit("transcribe_audio", { file, final: true });
                         // const text = await onWhispered(file);
                         // console.log("onTranscribing", { text });
                         setBlob(blob);
@@ -497,6 +516,7 @@ export const useWhisper: UseWhisperHook = config => {
         speaking,
         transcribing,
         transcript,
+        finalTranscript,
         blob,
         pauseRecording,
         startRecording,

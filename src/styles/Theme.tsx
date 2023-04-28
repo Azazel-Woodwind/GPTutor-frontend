@@ -1,6 +1,15 @@
-export const gradientColour1 = "#fe5858";
-export const gradientColour2 = "#ff2424";
-export const gradientColour3 = "#ff0101";
+// export const gradientColour1 = "#00beff";
+// export const gradientColour2 = "#0000ff";
+// export const gradientColour3 = "#005eff";
+// export const gradientColour4 = "#00beff";
+// export const gradientColour1 = "#32b4ff";
+// export const gradientColour2 = "#24aaff";
+// export const gradientColour3 = "#0163ff";
+// export const gradientColour4 = "#32b4ff";
+export const gradientColour1 = "#34b5ff";
+export const gradientColour2 = "#24aaff";
+export const gradientColour3 = "#0163ff";
+export const gradientColour4 = "#34b5ff";
 export const gradientAngle = 45;
 
 //make your fucking svg shit use the actual theme
@@ -65,52 +74,35 @@ const Theme = {
 
     background: ${gradientColour1};
     background: linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1},
-        ${gradientColour2},
-        ${gradientColour1}
-    );
+        ${gradientAngle}deg, 
+        ${gradientColour1} 0%, 
+        ${gradientColour3} 33%, 
+        ${gradientColour3} 67%, 
+        ${gradientColour4} 100%);
 
     background-size: 200% 200%;
     background-position: 0% 100%;
-    animation: gradient ${animationLength}s linear infinite;
+    animation: gradient ${animationLength}s ease-in-out infinite;
     animation-direction: alternate;
     `,
     gradientFaded: ({ animationLength }: { length: number }) => `
-    
-
     background: ${gradientColour1};
-    background: -moz-linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1}90 0%,
-        ${gradientColour2}90 25%,
-        ${gradientColour3}90 75%,
-        ${gradientColour1}90 100%
-    );
-    
-    background: -webkit-linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1}90  0%,
-        ${gradientColour2}90  25%,
-        ${gradientColour3}90  75%,
-        ${gradientColour1}90  100%
-    );
     background: linear-gradient(
-        ${gradientAngle}  deg,
-        ${gradientColour1}90  0%,
-        ${gradientColour2}90  25%,
-        ${gradientColour3}90  75%,
-        ${gradientColour1}70  100%
-    );
-    background-size: 800% auto;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="${gradientColour1}",endColorstr="${gradientColour1}",GradientType=1);
-    animation: gradient ${animationLength}s linear infinite;
+        ${gradientAngle}deg, 
+        ${gradientColour1}95 0%, 
+        ${gradientColour3}95 33%, 
+        ${gradientColour3}95 67%, 
+        ${gradientColour4}95 100%);
+
+    background-size: 200% 200%;
+    background-position: 0% 100%;
+    animation: gradient ${animationLength}s ease-in-out infinite;
+    animation-direction: alternate;
     `,
     linearGradient: `linear-gradient(
         ${gradientAngle}  deg,
         ${gradientColour1}  0%,
         ${gradientColour2}  25%,
-        ${gradientColour3}  75%,
         ${gradientColour1}  100%
     );
     `,

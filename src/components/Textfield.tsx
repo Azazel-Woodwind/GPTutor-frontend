@@ -56,7 +56,7 @@ export const CustomFieldset = styled.fieldset.withConfig({
     ${props =>
         props.focused &&
         `
-        border-width: 2px;
+        border-width: 3px;
     `}
 
     transition: border-color 0.15s;
