@@ -10,18 +10,18 @@ const ChatHistoryStyle = styled.div`
     padding-top: 0.8em;
     overflow-x: clip;
     overflow-y: auto;
-
+    /* border: 1px solid green; */
     /* background-color: black; */
 `;
 
-const DirectionReverse = styled.div`
-    display: flex;
-    flex-direction: column-reverse;
-    overflow-y: auto;
-    width: 100%;
-    height: 100%;
-    /* border: 1px solid red; */
-`;
+// const DirectionReverse = styled.div`
+//     display: flex;
+//     flex-direction: column-reverse;
+//     overflow: auto;
+//     width: 100%;
+//     height: 100%;
+//     border: 1px solid red;
+// `;
 
 const Container = styled(motion.div)`
     /* height: ${props => props.height && props.height}px; */
@@ -67,11 +67,12 @@ function ChatHistory({
 }) {
     const chatHistoryHeight = useMotionValue("100%");
 
+    const [scrolledToBottom, setScrolledToBottom] = React.useState(true);
+
     const handleRef = React.useRef(null);
     const draggableChatRef = React.useRef(null);
     const chatHandleContainer = React.useRef(null);
-
-    const [startedDragging, setStartedDragging] = React.useState(false);
+    const chatHistoryRef = React.useRef(null);
 
     const onDrag = (_, info) => {
         const oldY = handleRef.current.getBoundingClientRect().y;
@@ -87,6 +88,14 @@ function ChatHistory({
             draggableChatRef.current.getBoundingClientRect().height
         );
     }, []);
+
+    React.useEffect(() => {
+        // console.log(currentMessage, history);
+        if (scrolledToBottom) {
+            chatHistoryRef.current.scrollTop =
+                chatHistoryRef.current.scrollHeight;
+        }
+    }, [currentMessage, history]);
 
     return (
         <Container>
@@ -108,26 +117,31 @@ function ChatHistory({
                         onDrag={onDrag}
                     />
                 </ChatHandleContainer>
-                <DirectionReverse>
-                    <ChatHistoryStyle>
-                        <Message type={"system"} message={prompt} />
-                        {history.map((chat, i) => {
-                            return (
-                                <Message
-                                    key={i}
-                                    type={chat.role}
-                                    message={chat.content}
-                                />
-                            );
-                        })}
-                        {currentMessage && (
+                {/* <DirectionReverse> */}
+                <ChatHistoryStyle
+                    ref={chatHistoryRef}
+                    onScroll={() => {
+                        setScrolledToBottom(
+                            chatHistoryRef.current.scrollHeight -
+                                chatHistoryRef.current.clientHeight <=
+                                chatHistoryRef.current.scrollTop + 1
+                        );
+                    }}>
+                    <Message type={"system"} message={prompt} />
+                    {history.map((chat, i) => {
+                        return (
                             <Message
-                                type={"assistant"}
-                                message={currentMessage}
+                                key={i}
+                                type={chat.role}
+                                message={chat.content}
                             />
-                        )}
-                    </ChatHistoryStyle>
-                </DirectionReverse>
+                        );
+                    })}
+                    {currentMessage && (
+                        <Message type={"assistant"} message={currentMessage} />
+                    )}
+                </ChatHistoryStyle>
+                {/* </DirectionReverse> */}
             </DraggableChat>
         </Container>
     );
