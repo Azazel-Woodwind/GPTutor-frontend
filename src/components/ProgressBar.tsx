@@ -59,7 +59,7 @@ const ProgressBar = ({
     }, [value]);
 
     React.useEffect(() => {
-        if (time && canStart) {
+        if (time && canStart && !hovering) {
             progressWidth.start({
                 width: "100%",
                 transition: { duration: remainingTime.current },
@@ -69,9 +69,11 @@ const ProgressBar = ({
     }, [canStart]);
 
     React.useEffect(() => {
-        if (!time || !canStart || hovering === undefined) return;
+        // console.log("Hovering", hovering);
+        if (!time || !canStart || !pauseOnHover || hovering === undefined)
+            return;
 
-        if (hovering) {
+        if (hovering && !paused.current) {
             // console.log("pausing animation");
             paused.current = true;
             progressWidth.stop();
@@ -113,6 +115,7 @@ const ProgressBar = ({
                               transition: { duration: time, ease: "linear" },
                               onAnimationComplete: () => {
                                   if (!paused.current) {
+                                      console.log("ok");
                                       onEnd();
                                   }
                               },
