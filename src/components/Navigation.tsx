@@ -28,6 +28,12 @@ const LinkStyle = styled.div`
     cursor: pointer;
     position: relative;
     background-color: transparent;
+
+    :hover {
+        svg {
+            color: ${props => props.theme.colours.primary};
+        }
+    }
 `;
 
 const LinkWrapper = ({ path, Icon, label }) => {

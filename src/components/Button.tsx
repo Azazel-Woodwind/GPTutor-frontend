@@ -156,7 +156,7 @@ function OutlinedButton(props) {
         }
     }, [buttonRef]);
 
-    const borderWidth = props.borderWidth || 2;
+    const borderWidth = props.borderWidth || 3;
 
     return (
         <OutlinedButtonStyle

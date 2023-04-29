@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { motion, useMotionValue, animate, useTransform } from "framer-motion";
+import {
+    motion,
+    useMotionValue,
+    animate,
+    useTransform,
+    useAnimation,
+} from "framer-motion";
 
 const ProgressBar = ({
     value,
@@ -12,13 +18,25 @@ const ProgressBar = ({
     reverse = false,
     time,
     onEnd,
+    colour,
+    unfilledColour = "transparent",
+    filledColour = "gradient",
+    height = "6px",
+    pauseOnHover = true,
+    hovering = undefined,
+    canStart,
 }) => {
+    const paused = React.useRef(false);
+    const lastStart = React.useRef(null);
+    const remainingTime = React.useRef(time);
+
     stops = stops.sort((a, b) => a.location - b.location);
     const progress = useMotionValue(value);
     const progress_percentage = useTransform(
         progress,
         val => `${(val / max) * 100}%`
     );
+    const progressWidth = useAnimation();
 
     const [lastCrossed, setLastCrossed] = React.useState(
         stops.findIndex(stop => value <= stop.location) - 1
@@ -39,10 +57,41 @@ const ProgressBar = ({
     React.useEffect(() => {
         animate(progress, value);
     }, [value]);
+
+    React.useEffect(() => {
+        if (time && canStart) {
+            progressWidth.start({
+                width: "100%",
+                transition: { duration: remainingTime.current },
+            });
+            lastStart.current = performance.now();
+        }
+    }, [canStart]);
+
+    React.useEffect(() => {
+        if (!time || !canStart || hovering === undefined) return;
+
+        if (hovering) {
+            // console.log("pausing animation");
+            paused.current = true;
+            progressWidth.stop();
+            remainingTime.current =
+                remainingTime.current -
+                (performance.now() - lastStart.current) / 1000;
+        } else {
+            // console.log("resuming animation");
+            paused.current = false;
+            progressWidth.start({
+                width: "100%",
+                transition: { duration: remainingTime.current },
+            });
+            lastStart.current = performance.now();
+        }
+    }, [hovering]);
     //React.useEffect(() => animate(progress, value));
 
     return (
-        <Container width={width}>
+        <Container width={width} height={height}>
             {stops.map((stop, index) => {
                 const percentage = (stop.location / max) * 100;
                 const active = lastCrossed >= index;
@@ -56,28 +105,42 @@ const ProgressBar = ({
                     </>
                 );
             })}
-            <ProgressContainer width={width}>
+            <ProgressContainer width={width} reverse={reverse}>
                 <Progress
                     {...(time
                         ? {
-                              animate: { width: "100%" },
+                              animate: progressWidth,
                               transition: { duration: time, ease: "linear" },
-                              onAnimationComplete: onEnd,
+                              onAnimationComplete: () => {
+                                  if (!paused.current) {
+                                      onEnd();
+                                  }
+                              },
                           }
                         : { style: { width: progress_percentage } })}
                     reverse={reverse}
+                    colour={filledColour}
                 />
+                <UnfilledProgress colour={unfilledColour} />
             </ProgressContainer>
         </Container>
     );
 };
+
+const UnfilledProgress = styled.div`
+    background-color: ${props => props.colour};
+    height: 100%;
+    flex-grow: 1;
+    /* border: 1px solid black; */
+`;
 
 const Container = styled.div`
     position: relative;
     width: ${props => props.width};
     display: flex;
     align-items: center;
-    background-color: rgb(255, 255, 255, 0.1);
+    background-color: ${props => props.colour || "rgb(255, 255, 255, 0.1)"};
+    height: ${props => props.height};
 `;
 
 const Label = styled.p`
@@ -118,16 +181,22 @@ const Stop = styled.div`
 
 const Progress = styled(motion.div)`
     height: 100%;
-    position: absolute;
-    ${props => (props.reverse ? "right: 0px;" : "left: 0px;")}
-    ${props => props.theme.gradient({ animationLength: 5 })}
+    /* position: absolute;
+    ${props => (props.reverse ? "right: 0px;" : "left: 0px;")} */
+    background-color: ${props => props.colour};
+    /* border: 1px solid blue; */
+    ${props => props.colour === "gradient" && props.theme.gradient()}
 `;
 
 const ProgressContainer = styled(motion.div)`
     position: relative;
-    height: 0.5em;
+
     overflow: clip;
     width: 100%;
-    width: ${props => props.width};
+    height: 100%;
+    /* border: 1px solid red; */
+
+    display: flex;
+    flex-direction: ${props => (props.reverse ? "row-reverse" : "row")};
 `;
 export default ProgressBar;

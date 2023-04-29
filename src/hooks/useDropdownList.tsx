@@ -6,17 +6,15 @@ function useDropdownList({ label, options, required, ...props }) {
 
     return {
         selected,
-        setSelected,
-        Dropdown: (
-            <DropdownList
-                label={label}
-                options={options}
-                selected={selected}
-                setSelected={setSelected}
-                required={required}
-                {...props}
-            />
-        ),
+        Component: DropdownList,
+        props: {
+            label,
+            options,
+            selected,
+            setSelected,
+            required,
+            ...props,
+        },
     };
 }
 

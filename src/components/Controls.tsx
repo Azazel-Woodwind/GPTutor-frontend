@@ -12,6 +12,7 @@ import { SocketContext } from "../context/SocketContext";
 import CustomButton from "./Button";
 import { Send } from "@styled-icons/material/Send";
 import { BaseInputStyle } from "./BaseInput";
+import CenteredRow from "../styles/containers/CenteredRow";
 
 const Controls = ({
     prompts,
@@ -66,12 +67,12 @@ const Controls = ({
         paused,
     } = useFillingButton({
         onAnimationStart: () => {
-            console.log(10);
-            startRecording();
+            // console.log(10);
+            // startRecording();
         },
         onAnimationEnd: () => {
-            console.log("ANIMATION STOPPED");
-            stopRecording();
+            // console.log("ANIMATION STOPPED");
+            // stopRecording();
         },
     });
 
@@ -95,7 +96,7 @@ const Controls = ({
     // console.log(messageInput, streaming, loading);
 
     return (
-        <Container>
+        <Container gap="10px">
             <FillingButton
                 {...MicSvgData}
                 scale={1.2}
@@ -153,9 +154,9 @@ const Controls = ({
                 />
             </ChatForm>
             <IconButton
+                {...CrossSvgData}
                 scale={1.2}
                 outline
-                {...CrossSvgData}
                 onClick={() => setMessageInput("")}
                 iconSize={30}
             />
@@ -173,6 +174,7 @@ const Controls = ({
 const ChatForm = styled.form`
     position: relative;
     /* border: 3px solid blue; */
+    flex: 1 1 0;
     height: 100%;
 `;
 
@@ -182,24 +184,16 @@ const ChatInput = styled(BaseInputStyle)`
     padding: 0.5em 2em;
 `;
 
-const Container = styled.div`
+const Container = styled(CenteredRow)`
     position: relative;
     z-index: 1000;
-    background-color: rgba(0, 0, 0, 0.321);
+    background-color: rgb(15, 13, 27);
     border-top: 1px solid ${props => props.theme.colours.primary}30;
 
     width: 100%;
     padding: 1em 2em;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
 
     flex: 0 1 auto;
-
-    form {
-        flex: 1 1 0;
-    }
 `;
 
 export default Controls;

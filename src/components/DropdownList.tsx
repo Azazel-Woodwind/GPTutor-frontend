@@ -38,9 +38,7 @@ const DropdownListOption = styled.div`
     /* border: 1px solid black; */
     ${props =>
         props.selected
-            ? !props.focused
-                ? props.theme.gradient({ animationLength: 5 })
-                : props.theme.gradientFaded({ animationLength: 5 })
+            ? props.theme.gradient({ opacity: props.focused ? 1 : 0.5 })
             : `background-color: rgb(39, 46, 95)`};
 
     ${props =>
@@ -75,11 +73,7 @@ function DropdownListEndAdornment({
                 onClick={() => setSelected("")}>
                 <MdClose />
             </IconButton>
-            <IconButton
-                onClick={() => {
-                    // console.log(1);
-                    // setOpen(!open);
-                }}>
+            <IconButton>
                 {open ? <MdArrowDropUp /> : <MdArrowDropDown />}
             </IconButton>
         </CenteredRow>
@@ -143,11 +137,12 @@ function DropdownList({
                 if (focusedOption !== null) {
                     setSelected(visibleOptions[focusedOption]);
                     setOpen(false);
+                    e.preventDefault(); // NO idea why this is needed but this breaks on the create lesson page if you remove it
                 }
                 return;
             }
         },
-        [focusedOption, visibleOptions]
+        [focusedOption, visibleOptions, setSelected]
     );
 
     // reregister event listener when focusedOption or visibleOptions change
@@ -184,7 +179,9 @@ function DropdownList({
     }, [inputValue]);
 
     React.useEffect(() => {
+        // console.log(selected);
         if (!selected) {
+            // console.log("here");
             setInputValue("");
             return;
         }
@@ -234,7 +231,6 @@ function DropdownList({
                 onClick={e => {
                     setOpen(!open);
                 }}
-                inAutoComplete={mouseEntered}
                 label={label}
                 type="text"
                 required={required}
@@ -255,6 +251,7 @@ function DropdownList({
                 onMouseOver={() => setMouseEntered(true)}
                 onMouseLeave={() => setMouseEntered(false)}
                 onTransitionEnd={() => setTransitioning(false)}
+                onMouseDown={e => e.stopPropagation()}
                 transitioning={transitioning}
                 open={open}
                 ref={dropdownListRef}>

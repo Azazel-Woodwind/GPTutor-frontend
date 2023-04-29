@@ -222,12 +222,8 @@ export const Textfield = forwardRef(
                             onClick && onClick(e);
                         }}
                         onBlur={e => {
-                            // console.log(e);
-
-                            if (!props.inAutoComplete) {
-                                setFocused(false);
-                                onBlur && onBlur(e);
-                            }
+                            setFocused(false);
+                            onBlur && onBlur(e);
                         }}
                     />
                 </TextfieldWrapper>
@@ -267,8 +263,7 @@ function PasswordInfoEntry({ correct, text }) {
                 <SvgIcon
                     svgData={correct ? CheckSvgData : CrossSvgData}
                     fill={correct ? "gradient" : `${theme.colours.error}`}
-                    width={"100%"}
-                    height={"100%"}
+                    size="100%"
                 />
             </PasswordInfoEntryIcon>
             <TextWrapper

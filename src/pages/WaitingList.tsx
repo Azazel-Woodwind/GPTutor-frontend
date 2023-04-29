@@ -22,9 +22,11 @@ import {
     PASSWORD_LENGTH_REGEX,
 } from "../lib/regexes";
 import Notification from "./Notification";
+import { useNotification } from "../context/NotificationContext";
 
 function WaitingList() {
     const { subjectOptions, educationLevels } = useLoaderData();
+    const sendNotification = useNotification();
 
     const [firstName, setFirstName] = useState("");
     const [isValidFirstName, setIsValidFirstName] = useState(null);
@@ -125,15 +127,20 @@ function WaitingList() {
         e.preventDefault();
 
         if (!validateAllData()) {
-            toast.error("Fill in all the FUCKING fields.", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
+            // toast.error("Fill in all the FUCKING fields.", {
+            //     position: "top-right",
+            //     autoClose: 5000,
+            //     hideProgressBar: false,
+            //     closeOnClick: true,
+            //     pauseOnHover: true,
+            //     draggable: true,
+            //     progress: undefined,
+            //     theme: "colored",
+            // });
+            sendNotification({
+                label: "Please fill in all fields",
+                duration: 5,
+                type: "error",
             });
             return;
         }
@@ -154,15 +161,10 @@ function WaitingList() {
         } catch (error) {
             console.log(error);
 
-            toast.error("Something went wrong?", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
+            sendNotification({
+                label: "Something went wrong?",
+                duration: 5,
+                type: "error",
             });
         }
     };

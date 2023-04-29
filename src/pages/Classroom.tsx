@@ -19,6 +19,7 @@ import StartLessonModal from "./classroom/StartLessonModal";
 import ChatHistory from "../components/ChatHistory";
 import Controls from "../components/Controls";
 import React from "react";
+import { ChatSection } from "../components/Chat";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -27,10 +28,6 @@ function Classroom() {
         currentLesson,
         delay: 1000,
     });
-
-    // const { Controls, ChatHistory, Avatar, AvatarProps } = useChat({
-    //     hook,
-    // });
 
     const display = useConversationDisplay(false);
 
@@ -123,16 +120,9 @@ function Classroom() {
                 </DualDisplay>
                 <ChatSection
                     {...fade_animation({ delayed: true })}
-                    ref={callback}
-                    style={{ height: containerHeight }}>
-                    <ChatHistory
-                        hook={hook}
-                        // initialHeight={300}
-                        containerHeight={containerHeight}
-                        prompt={"This is the classroom environment."}
-                    />
-                    <Controls hook={hook} />
-                </ChatSection>
+                    hook={hook}
+                    prompt={"This is the classroom environment."}
+                />
             </Container>
         );
     };
@@ -140,16 +130,6 @@ function Classroom() {
     return <AnimatePresence mode="wait">{renderComponent()}</AnimatePresence>;
 }
 
-const ChatSection = styled(motion.div)`
-    max-width: 1200px;
-    width: 100%;
-    /* height: 300px; */
-    /* flex: 0 1 100%; */
-    /* flex-basis: 100%; */
-    display: flex;
-    flex-direction: column;
-    /* border: 5px solid red; */
-`;
 const LoadingScreenWrapper = styled(motion.div)`
     height: 100%;
     width: 100%;

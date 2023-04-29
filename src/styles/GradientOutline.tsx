@@ -2,11 +2,13 @@ import styled from "styled-components";
 import React from "react";
 
 const GradientBorder = styled.div`
-    ${props =>
+    /* ${props =>
         props.contrast
             ? props.theme.contrastGradient
-            : props.theme.gradient({ animationLength: 5 })}
+            : props.theme.gradient({ animationLength: 5 })} */
+    ${props => props.theme.gradient()}
     padding: 1px;
+    overflow-x: clip;
 `;
 
 const ChildContainer = styled.div`

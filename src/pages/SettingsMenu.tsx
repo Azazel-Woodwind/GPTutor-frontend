@@ -12,6 +12,7 @@ import { AccountCircle } from "@styled-icons/material";
 import { DarkTheme } from "@styled-icons/fluentui-system-filled";
 import { Payment } from "@styled-icons/fluentui-system-filled";
 import Icon from "../styles/NavIcon";
+import { AlternateGlobalStyle } from "../styles/GlobalStyles";
 
 const Settings = Icon(Settings2Outline);
 const Plans = Icon(Payment);
@@ -25,6 +26,7 @@ const Account = () => {
 
     return (
         <Container>
+            <AlternateGlobalStyle />
             <UsedSpace>
                 <AccountNav>
                     <NavElement Icon={Settings} subPath="general">
@@ -70,8 +72,7 @@ const Account = () => {
 };
 
 const Container = styled(FillParent)`
-    background-color: ${props => props.theme.colours.tertiary};
-    height: 100vh;
+    height: 100%;
     width: 100%;
     padding-top: 8em;
     display: flex;
@@ -80,7 +81,7 @@ const Container = styled(FillParent)`
 `;
 
 const UsedSpace = styled.div`
-    max-width: 1080px;
+    max-width: 950px;
     width: 100%;
     display: flex;
     gap: 4em;

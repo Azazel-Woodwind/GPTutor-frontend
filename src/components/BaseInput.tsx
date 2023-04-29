@@ -43,9 +43,9 @@ export const BaseInput = React.forwardRef(
                                     setVisible(!visible);
                                 }}>
                                 {visible ? (
-                                    <FaEye size="1.4em" />
+                                    <FaEye size="23px" />
                                 ) : (
-                                    <FaEyeSlash size="1.5em" />
+                                    <FaEyeSlash size="25px" />
                                 )}
                             </IconButton>
                         </span>

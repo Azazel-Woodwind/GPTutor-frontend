@@ -27,3 +27,19 @@ export const CheckSvgData = {
         "M9 16.17 5.53 12.7a.996.996 0 1 0-1.41 1.41l4.18 4.18c.39.39 1.02.39 1.41 0L20.29 7.71a.996.996 0 1 0-1.41-1.41L9 16.17z",
     ],
 };
+
+export const InfoSvgData = {
+    viewboxWidth: 20,
+    viewboxHeight: 20,
+    paths: [
+        "M2.93 17.07A10 10 0 1 1 17.07 2.93 10 10 0 0 1 2.93 17.07zM9 11v4h2V9H9v2zm0-6v2h2V5H9z",
+    ],
+};
+
+export const ErrorSvgData = {
+    viewboxWidth: 24,
+    viewboxHeight: 24,
+    paths: [
+        "M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm0-8a1 1 0 0 0-1 .88v5.24a1 1 0 0 0 2 0V7.88A1 1 0 0 0 12 7Z",
+    ],
+};

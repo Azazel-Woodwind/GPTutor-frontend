@@ -1,5 +1,21 @@
 import React from "react";
 import Notification from "../components/Notification";
+import styled from "styled-components";
+
+const NotificationsContainer = styled.div`
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    width: fit-content;
+    gap: 0.5em;
+    z-index: 1000;
+
+    /* border: 3px solid red; */
+`;
 
 export const NotificationContext = React.createContext({
     sendNotification: () => {},
@@ -9,19 +25,27 @@ export function NotificationContextProvider({ children }: any) {
     const [notifications, setNotifications] = React.useState([]);
 
     const sendNotification = props => {
+        const key = Date.now();
         setNotifications(prev => [
             ...prev,
-            <Notification key={Date.now()} {...props} />,
+            <Notification
+                key={key}
+                onEnd={() => {
+                    setNotifications(prev =>
+                        prev.filter(notification => notification.key != key)
+                    );
+                }}
+                {...props}
+            />,
         ]);
-        setTimeout(
-            () => setNotifications(prev => prev.slice(1)),
-            (props.duration + 3 || 8) * 1000
-        );
     };
 
     return (
         <NotificationContext.Provider value={{ sendNotification }}>
-            {notifications}
+            {notifications.length > 0 && (
+                <NotificationsContainer>{notifications}</NotificationsContainer>
+            )}
+
             {children}
         </NotificationContext.Provider>
     );

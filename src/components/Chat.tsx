@@ -46,8 +46,8 @@ const Chat = props => {
     );
 };
 
-export const ChatSection = ({ hook, prompt, prompts }) => {
-    const containerHeight = useMotionValue("100%");
+export const ChatSection = ({ hook, prompt, prompts, ...props }) => {
+    const containerHeight = useMotionValue("100vh");
 
     const callback = React.useCallback(ref => {
         if (ref) {
@@ -56,7 +56,10 @@ export const ChatSection = ({ hook, prompt, prompts }) => {
     }, []);
 
     return (
-        <BottomSection ref={callback} style={{ height: containerHeight }}>
+        <BottomSection
+            ref={callback}
+            style={{ height: containerHeight }}
+            {...props}>
             <ChatHistory
                 containerHeight={containerHeight}
                 prompt={prompt}
@@ -67,7 +70,7 @@ export const ChatSection = ({ hook, prompt, prompts }) => {
     );
 };
 
-const AvatarContainer = styled(CenteredColumn)`
+const AvatarContainer = styled.div`
     flex-grow: 1;
     margin: 10px;
 `;
@@ -82,7 +85,7 @@ const BottomSection = styled(motion.div)`
 const Window = styled.div`
     display: flex;
     width: 100%;
-    background-color: ${props => props.theme.colours.tertiary}90;
+    background-color: ${props => props.theme.colours.tertiary};
     box-shadow: #3523a940 0px 8px 30px;
     ${props => props.width === true && "width: 100vw;"}
     align-items: center;
@@ -91,7 +94,8 @@ const Window = styled.div`
     position: relative;
     z-index: 2;
     height: 100vh;
-    overflow: auto;
+    overflow-x: clip;
+    overflow-y: auto;
 `;
 
 export default Chat;

@@ -24,9 +24,8 @@ const AvatarStyle = styled.div`
     font-weight: 600;
     box-sizing: border-box;
     border-radius: 20%;
-    ${props => props.type === "user" && `padding-bottom: 1px;`}
-    ${props =>
-        props.type === "assistant" && `padding-top: 1px; padding-left: 0.5px;`}
+    ${props => props.type === "user" && `padding-bottom: 1px;`}/* ${props =>
+        props.type === "assistant" && `padding-top: 1px; padding-left: 2px;`} */
 `;
 
 const Avatar = ({ type, highlighted }) => {
@@ -39,6 +38,7 @@ const Avatar = ({ type, highlighted }) => {
                 <svg
                     width="17"
                     height="17"
+                    style={{ marginLeft: "1px" }}
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -81,6 +81,7 @@ const Message = ({ type, message }) => {
 };
 
 const Container = styled.div`
+    /* overflow-x: clip; */
     display: flex;
     /* align-items: center; */
 

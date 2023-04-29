@@ -5,7 +5,7 @@ import SvgLinearGradient from "./SvgLinearGradient";
 
 const SvgIconStyle = styled.svg``;
 
-function SvgIcon({ children, className, svgData, fill, ...props }) {
+function SvgIcon({ children, className, svgData, fill, size, ...props }) {
     const gradientID = React.useMemo(nanoid, []);
 
     // 🗿
@@ -19,6 +19,12 @@ function SvgIcon({ children, className, svgData, fill, ...props }) {
             viewBox={`0 0 ${svgData.viewboxWidth} ${svgData.viewboxHeight}`}
             focusable="false"
             xmlns="http://www.w3.org/2000/svg"
+            width={size || "30px"}
+            height={size || "30px"}
+            style={{
+                minWidth: size || "30px",
+                minHeight: size || "30px",
+            }}
             {...props}>
             <defs>
                 <SvgLinearGradient gradientID={gradientID} />

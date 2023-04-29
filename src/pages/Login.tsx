@@ -8,8 +8,11 @@ import UserAPI from "../api/UserAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { LinkWrapper, TextWrapper } from "../styles/TextWrappers";
 import { useAuth } from "../context/SessionContext";
+import { useNotification } from "../context/NotificationContext";
 
-function WaitingList() {
+function Login() {
+    const sendNotification = useNotification();
+
     const emailInput = useRef<HTMLInputElement>(null);
     const passwordInput = useRef<HTMLInputElement>(null);
 
@@ -30,6 +33,11 @@ function WaitingList() {
                 progress: undefined,
                 theme: "colored",
             });
+            sendNotification({
+                label: "Please fill in all fields",
+                duration: 5,
+                type: "error",
+            });
             return;
         }
 
@@ -39,40 +47,25 @@ function WaitingList() {
                 passwordInput.current.value
             );
             if (!data.session) {
-                toast.error("Invalid email or password.", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
+                sendNotification({
+                    label: "Invalid email or password",
+                    duration: 5,
+                    type: "error",
                 });
                 return;
             } else {
-                toast.success("You are logged in!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
+                sendNotification({
+                    label: "Login successful!",
+                    duration: 5,
+                    type: "success",
                 });
             }
         } catch (error: any) {
             console.log(error.message);
-            toast.error(error.message, {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
+            sendNotification({
+                label: error.message,
+                duration: 5,
+                type: "error",
             });
         }
     };
@@ -109,4 +102,4 @@ function WaitingList() {
     );
 }
 
-export default WaitingList;
+export default Login;

@@ -109,7 +109,7 @@ function useX(config: Config) {
             dataArray.current!.reduce((acc, val) => acc + val) /
             dataArray.current!.length;
         const frequencyRatio = averageFrequency / 255;
-        const multiplier = 1 + frequencyRatio * 1.35;
+        const multiplier = 1 + frequencyRatio * 1.3;
 
         setMultiplier(multiplier);
         // console.log(pulseSpeed);

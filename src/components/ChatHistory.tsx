@@ -3,13 +3,16 @@ import styled from "styled-components";
 import Message from "./Message";
 import { motion, useMotionValue } from "framer-motion";
 
+const handleHeight = 7;
+
 const ChatHistoryStyle = styled.div`
-    height: 100%;
+    /* height: 100%; */
     width: 100%;
     padding: 1em 1em;
     padding-top: 0.8em;
     overflow-x: clip;
     overflow-y: auto;
+    flex: 1 1 auto;
     /* border: 1px solid green; */
     /* background-color: black; */
 `;
@@ -28,8 +31,8 @@ const Container = styled(motion.div)`
     width: 100%;
     height: 100%;
     position: relative;
-    /* border: 5px solid blue; */
-    flex: 1 1 auto;
+    /* border: 2px solid green; */
+    /* flex: 1 1 auto; */
 `;
 
 const DraggableChat = styled(motion.div)`
@@ -46,13 +49,13 @@ const DraggableChat = styled(motion.div)`
 
 const ChatHandle = styled.div`
     width: 100%;
-    height: 7px;
+    height: ${handleHeight}px;
     background-color: transparent;
     cursor: ns-resize;
 
     :hover,
     :active {
-        background-color: blue;
+        background-color: ${props => props.theme.colours.secondary};
     }
 
     transition: background-color 0.2s ease;
@@ -78,15 +81,25 @@ function ChatHistory({
         const oldY = handleRef.current.getBoundingClientRect().y;
         const newY = oldY + info.delta.y;
         info.delta.y = newY < 0 ? -oldY : info.delta.y;
+
         const newHeight = chatHistoryHeight.get() - info.delta.y;
-        chatHistoryHeight.set(Math.max(newHeight, 5));
+        chatHistoryHeight.set(Math.max(newHeight, handleHeight));
+        // chatHistoryHeight.set(newHeight);
+        // console.log(newHeight);
         containerHeight.set(Math.max(containerHeight.get() - info.delta.y, 75));
+        // containerHeight.set(containerHeight.get() - info.delta.y);
     };
 
-    React.useEffect(() => {
-        chatHistoryHeight.set(
-            draggableChatRef.current.getBoundingClientRect().height
-        );
+    // React.useEffect(() => {
+    //     chatHistoryHeight.set(
+    //         draggableChatRef.current.getBoundingClientRect().height
+    //     );
+    // }, []);
+
+    const setHeight = React.useCallback(ref => {
+        if (ref) {
+            chatHistoryHeight.set(Math.max(ref.offsetHeight, handleHeight));
+        }
     }, []);
 
     React.useEffect(() => {
@@ -100,10 +113,10 @@ function ChatHistory({
     return (
         <Container>
             <DraggableChat
-                ref={draggableChatRef}
+                ref={setHeight}
                 style={{
                     height: chatHistoryHeight,
-                    // border: "3px solid blue",
+                    // border: "3px solid red",
                 }}>
                 <ChatHandleContainer ref={chatHandleContainer}>
                     <ChatHandle

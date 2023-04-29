@@ -64,7 +64,7 @@ const IconButtonStyle = styled(motion.div)`
         `}
 `;
 
-const IconSvg = styled.svg`
+export const IconSvg = styled.svg`
     width: ${props => props.iconSize - 2 * props.borderWidth}px;
     height: ${props => props.iconSize - 2 * props.borderWidth}px;
     /* width: 80px;
@@ -76,15 +76,17 @@ const IconSvg = styled.svg`
     /* border: 2px solid black; */
 `;
 
-const BorderSvg = styled.svg`
+export const BorderSvg = styled.svg`
     width: 100%;
     height: 100%;
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
     position: relative;
     width: ${props => props.width || 20}px;
     height: ${props => props.height || 20}px;
+    min-width: ${props => props.width || 20}px;
+    min-height: ${props => props.height || 20}px;
     cursor: pointer;
     /* border: 1px solid black; */
 `;
@@ -100,6 +102,15 @@ function OutlinedIconButton({
     scale,
     ...props
 }) {
+    if (!props.disabled) {
+        props = {
+            ...props,
+            whileFocus: { scale: 1.1, transition: { duration: 0.2 } },
+            whileHover: { scale: 1.1, transition: { duration: 0.2 } },
+            whileTap: { scale: 0.95 },
+        };
+    }
+
     const [hovering, setHovering] = React.useState(false);
 
     const gradientID1 = React.useMemo(nanoid, []);
@@ -163,15 +174,6 @@ function BasicIconButton(props) {
 }
 
 export default function IconButton(props) {
-    if (!props.disabled) {
-        props = {
-            ...props,
-            whileFocus: { scale: 1.1, transition: { duration: 0.2 } },
-            whileHover: { scale: 1.1, transition: { duration: 0.2 } },
-            whileTap: { scale: 0.95 },
-        };
-    }
-
     if (props.outline) {
         return <OutlinedIconButton {...props} />;
     }

@@ -4,9 +4,11 @@ import supabase from "../../api/configs/supabase";
 import CustomButton from "../../components/Button";
 import SubmitButton from "../../components/Button";
 import { Textfield } from "../../components/Textfield";
+import { useNotification } from "../../context/NotificationContext";
 
 const Profile = () => {
     const onSubmit = () => {};
+    const sendNotification = useNotification();
 
     const signOut = async e => {
         e.preventDefault();
@@ -15,6 +17,11 @@ const Profile = () => {
         if (error) {
             console.log(error);
         }
+        sendNotification({
+            label: "Signed out successfully!",
+            duration: 5,
+            type: "success",
+        });
     };
 
     return (

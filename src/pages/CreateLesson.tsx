@@ -282,7 +282,7 @@ function CreateLesson({ action }) {
                             />
                             <Controller
                                 control={form.control}
-                                name={"subject"}
+                                name="subject"
                                 render={({ field }) => (
                                     <DropdownList
                                         label="Subject"

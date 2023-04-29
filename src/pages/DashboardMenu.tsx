@@ -8,6 +8,7 @@ import { ADMIN_ACCESS_LEVEL } from "../lib/accessLevels";
 import Icon from "../styles/NavIcon";
 import NavElement from "../components/NavElement";
 import { UserBadge } from "@styled-icons/boxicons-solid/UserBadge";
+import { AlternateGlobalStyle } from "../styles/GlobalStyles";
 
 const Users = Icon(UserBadge);
 
@@ -17,6 +18,7 @@ const Dashboard = () => {
 
     return (
         <Container>
+            <AlternateGlobalStyle />
             <UsedSpace>
                 <DashboardNav>
                     <NavElement Icon={Users} subPath="my-lessons">
@@ -42,7 +44,6 @@ const Dashboard = () => {
 };
 
 const Container = styled(FillParent)`
-    background-color: ${props => props.theme.colours.tertiary};
     padding-top: 8em;
     padding-left: 3em;
     /* border: 3px solid green; */

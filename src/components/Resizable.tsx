@@ -26,6 +26,8 @@ const Resizable = ({ number, children, min }) => {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [fullscreen, setFullscreen] = useState(false);
 
+    const handleContainerRef = React.useRef(null);
+
     const { width } = useScreensize(
         (oldWidth, oldHeight, newWidth, newHeight) => {}
     );
@@ -104,45 +106,49 @@ const Resizable = ({ number, children, min }) => {
                 style={{
                     width: number,
                 }}>
-                <Handle
-                    as={motion.div}
-                    drag="x"
-                    onDoubleClick={() => {
-                        if (isCollapsed) uncollapse();
-                        else collapse();
-                    }}
-                    dragConstraints={{
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                    }}
-                    dragElastic={0}
-                    dragMomentum={false}
-                    onDrag={!(location.pathname === "/hub") && handleDrag}
-                    onDragEnd={() => {
-                        setIsDragging(false);
-                    }}
-                    onDragStart={() => {
-                        setIsDragging(true);
-                    }}
-                    visible={!(location.pathname === "/hub")}
-                />
+                <HandleContainer ref={handleContainerRef}>
+                    <Handle
+                        as={motion.div}
+                        drag="x"
+                        onDoubleClick={() => {
+                            if (isCollapsed) uncollapse();
+                            else collapse();
+                        }}
+                        dragConstraints={handleContainerRef}
+                        dragElastic={0}
+                        dragMomentum={false}
+                        onDrag={!(location.pathname === "/hub") && handleDrag}
+                        onDragEnd={() => {
+                            setIsDragging(false);
+                        }}
+                        onDragStart={() => {
+                            setIsDragging(true);
+                        }}
+                        visible={!(location.pathname === "/hub")}
+                    />
+                </HandleContainer>
+
                 {children}
             </motion.div>
         </Container>
     );
 };
 
-const Handle = styled.div`
-    display: ${props => (props.hidden ? "none" : "block")};
-    background-color: ${props => props.theme.colours.secondary};
+const HandleContainer = styled.div`
     width: 20px;
     height: 100px;
     position: absolute;
     top: calc(50% - 50px);
     left: -20px;
     z-index: 100;
+`;
+
+const Handle = styled.div`
+    display: ${props => (props.hidden ? "none" : "block")};
+    background-color: ${props => props.theme.colours.secondary};
+    width: 100%;
+    height: 100%;
+
     cursor: e-resize;
     visibility: ${props => (props.visible ? "visible" : "hidden")};
 `;

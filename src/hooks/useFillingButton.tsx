@@ -3,27 +3,7 @@ import { nanoid } from "nanoid";
 import React from "react";
 import styled, { useTheme } from "styled-components";
 import SvgLinearGradient from "../components/SvgLinearGradient";
-
-const IconSvg = styled.svg`
-    width: ${props => props.iconSize - 2 * props.borderWidth}px;
-    height: ${props => props.iconSize - 2 * props.borderWidth}px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-`;
-
-const BorderSvg = styled.svg`
-    width: 100%;
-    height: 100%;
-`;
-
-const Container = styled.div`
-    position: relative;
-    width: ${props => props.width || 20}px;
-    height: ${props => props.height || 20}px;
-    cursor: pointer;
-`;
+import { Container, BorderSvg, IconSvg } from "../components/IconButton";
 
 const FillingButton =
     ({
@@ -60,6 +40,7 @@ const FillingButton =
 
         const theme = useTheme();
         const [hovering, setHovering] = React.useState(false);
+        const [animating, setAnimating] = React.useState(false);
         const gradientID1 = React.useMemo(nanoid, []);
         const gradientID2 = React.useMemo(nanoid, []);
         const gradientID3 = React.useMemo(nanoid, []);
@@ -73,9 +54,14 @@ const FillingButton =
 
         React.useEffect(() => {
             fillAnimationRef2.current.onend = e => {
+                setAnimating(false);
                 resetAnimation1Ref.current.beginElement();
                 resetAnimation2Ref.current.beginElement();
                 onAnimationEnd();
+            };
+
+            fillAnimationRef2.current.onbegin = () => {
+                setAnimating(true);
             };
         }, []);
 
@@ -101,7 +87,9 @@ const FillingButton =
                             id={gradientID3}>
                             <stop
                                 offset="0"
-                                stopColor={fillColour || theme.colours.glow}>
+                                stopColor={
+                                    fillColour || theme.colours.secondary
+                                }>
                                 <animate
                                     ref={fillAnimationRef1}
                                     dur={`${duration}s`}
@@ -111,7 +99,6 @@ const FillingButton =
                                     from="0"
                                     to="1"
                                     begin="indefinite"
-                                    // repeatCount="2"
                                     restart="always"
                                 />
                                 <set
@@ -169,7 +156,7 @@ const FillingButton =
                         <path
                             key={i}
                             fill={
-                                recording
+                                animating
                                     ? theme.colours.error
                                     : `url(#${gradientID2})`
                             }

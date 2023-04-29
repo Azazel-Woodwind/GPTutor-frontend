@@ -1,24 +1,21 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
-    :root {
-        --toastify-toast-width: 350px;
-    }
+
     body, html {
         position: relative;
         z-index: -3;
-        height: 100vh;
-        width: 100vw;
+        height: 100%;
         color: ${props => props.theme.colours.primary};
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
         overflow-x: clip;
         background-color: ${props => props.theme.colours.background};
         overflow-y: clip;
-        ${props => props.theme.utils.fullScreen};
     }
 
     #root {
-        ${props => props.theme.utils.fullScreen};
+        height: 100%;
+        width: 100%;
     }
 
     * {
@@ -27,7 +24,7 @@ const GlobalStyles = createGlobalStyle`
         box-sizing: border-box; 
         margin: 0;
         padding: 0;
-        p, h1, h2, h3, h4, h5{
+        p, h1, h2, h3, h4, h5 {
             margin: default;
             padding: default; 
         }
@@ -46,10 +43,19 @@ const GlobalStyles = createGlobalStyle`
     
     *::-webkit-scrollbar-thumb {
         /* background-color: ${props => props.theme.colours.contrast}; */
-        ${props => props.theme.gradient({ animationLength: 4 })}
+        ${props => props.theme.gradient()}
+
         border-radius: 10px;
-        cursor: pointer;
     }
+
+    *::-webkit-scrollbar-thumb:hover {
+        ${props => props.theme.gradient({ opacity: 0.75 })}
+    }
+
+    *::-webkit-scrollbar-thumb:active {
+        ${props => props.theme.gradient({ opacity: 0.55 })}
+    }
+
 
     @keyframes pulse {
         0% {
@@ -83,6 +89,12 @@ const GlobalStyles = createGlobalStyle`
         to {
             background-position: 100% 0;
         }
+    }
+`;
+
+export const AlternateGlobalStyle = createGlobalStyle`
+    body, html {
+        background-color: ${props => props.theme.colours.tertiary};
     }
 `;
 
