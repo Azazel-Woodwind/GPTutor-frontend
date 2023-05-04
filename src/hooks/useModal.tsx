@@ -1,6 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
-import Modal from "../components/Modals/Modal";
+import Modal from "../components/Modal/Modal";
 
 function AnimatedModal({ children, handleClose, open, ...props }) {
     return (

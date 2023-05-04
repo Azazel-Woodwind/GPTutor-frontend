@@ -3,6 +3,7 @@ import SubmitButton from "../components/Button";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
 import Avatar from "./Avatar";
+import React from "react";
 
 // Embrace the shadows ; find the truth
 
@@ -24,14 +25,9 @@ const Subheading = styled.div`
     font-size: 1.8em;
 `;
 
-function XForm({
-    children,
-    submitButtonText,
-    onSubmit,
-    title,
-    link,
-    buttonProps,
-}) {
+function XForm({ children, submitButtonText, onSubmit, title, link, isValid }) {
+    console.log("rerender");
+
     return (
         <CenteredRow gap="8em" wrap fillparent>
             <Avatar size={200} hasLogo />
@@ -41,7 +37,7 @@ function XForm({
                     {children}
                     <SubmitButton
                         style={{ marginTop: "0.5em" }}
-                        {...buttonProps}>
+                        disabled={isValid}>
                         {submitButtonText}
                     </SubmitButton>
                     {link && link}
@@ -51,4 +47,12 @@ function XForm({
     );
 }
 
-export default XForm;
+function formPropsAreEqual(prevProps, nextProps) {
+    // console.log(
+    //     prevProps.form.control === nextProps.form.control &&
+    //         prevProps.form.formState === nextProps.form.formState
+    // );
+    return prevProps.isValid === nextProps.isValid;
+}
+
+export default React.memo(XForm, formPropsAreEqual);

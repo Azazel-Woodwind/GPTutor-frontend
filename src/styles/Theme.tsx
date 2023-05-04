@@ -22,7 +22,7 @@ const Theme = {
         tertiary: "#040a1e",
         contrast: "#E323F0",
         highlight1: "#1D1054",
-        highlight2: "#2B91FF",
+        highlight2: gradientColour3,
         glow: "#3523a9",
         error: "#ff5252",
     },
@@ -110,43 +110,6 @@ const Theme = {
     animation-direction: alternate;
     `;
     },
-    gradientFaded: ({ animationLength }: { length: number }) => `
-
-    background: ${gradientColour1};
-    background: -moz-linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1}90 0%,
-        ${gradientColour2}90 20%,
-        ${gradientColour3}90 45%,
-        ${gradientColour4}90 55%,
-        ${gradientColour5}90 80%,
-        ${gradientColour6}90 100%
-    );
-    background: -webkit-linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1}90 0%,
-        ${gradientColour2}90 20%,
-        ${gradientColour3}90 45%,
-        ${gradientColour4}90 55%,
-        ${gradientColour5}90 80%,
-        ${gradientColour6}90 100%
-    );
-    background: linear-gradient(
-        ${gradientAngle}deg,
-        ${gradientColour1}90 0%,
-        ${gradientColour2}90 20%,
-        ${gradientColour3}90 45%,
-        ${gradientColour4}90 55%,
-        ${gradientColour5}90 80%,
-        ${gradientColour6}90 100%
-    );
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=${gradientColour1}90,endColorstr=${gradientColour1}90,GradientType=1);
-
-    background-size: 200% 200%;
-    background-position: 0% 100%;
-    animation: gradient ${animationLength}s ease-in-out infinite;
-    animation-direction: alternate;
-    `,
 };
 
 Theme.utils["gradientText"] = `

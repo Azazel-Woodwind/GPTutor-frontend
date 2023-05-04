@@ -20,7 +20,7 @@ const animation = {
         "rgba(255, 255, 255, 0)",
     ],
     scale: [1, 3],
-    opacity: [0, 1, 1],
+    opacity: [0.5, 1, 1],
 };
 
 const transition = {
@@ -96,6 +96,7 @@ const useAvatar = ({
             size,
             controls,
             rings,
+            pulse,
         },
         pulse,
         pulseX,
@@ -107,6 +108,7 @@ const useAvatar = ({
 const Avatar = ({
     size,
     rings,
+    pulse,
     controls,
     onClick,
     hasControls,
@@ -119,12 +121,13 @@ const Avatar = ({
     const [isMuted, setIsMuted] = React.useState(false);
     const [showControls, setShowControls] = React.useState(false);
 
+    // console.log(pulse);
     if (hasControls) {
         return (
             <ControlsContainer
                 onMouseEnter={() => setShowControls(true)}
                 onMouseLeave={() => setShowControls(false)}>
-                <AvatarWrapper size={size} as={motion.div} {...props}>
+                <AvatarWrapper size={size} as={motion.div}>
                     {rings}
                     <X
                         clickable
@@ -133,6 +136,10 @@ const Avatar = ({
                         size={size}
                         transition={{ duration: 0.3 }}
                         initial={{ scale: 1 }}
+                        onTap={() => {
+                            // console.log("ok");
+                            pulse();
+                        }}
                         animate={controls}
                         onClick={() => {
                             if (paused()) {
@@ -218,9 +225,7 @@ const X = styled(motion.div)`
     position: absolute;
     ${props => props.clickable && `cursor: pointer;`}
     border-radius: 50%;
-    /* ${props => props.theme.gradient({ animationLength: 5 })} */
-    background-color: #ffffff30;
-    /* opacity: 0.85; */
+    ${props => props.theme.gradient({ animationLength: 5, opacity: 0.75 })}
     backdrop-filter: blur(10px);
     width: ${props => props.size}px;
     height: ${props => props.size}px;

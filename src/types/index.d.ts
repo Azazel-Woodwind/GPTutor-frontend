@@ -46,6 +46,7 @@ type Lesson = {
     title: string;
     subject: Subject;
     education_level: EducationLevel;
+    exam_board: string;
     description: string;
     caption: string;
     learning_objectives: LearningObjective[];

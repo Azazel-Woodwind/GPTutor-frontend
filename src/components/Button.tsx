@@ -62,7 +62,9 @@ const SvgBorder = styled.svg`
 const FilledButtonStyle = styled(motion.button)`
     ${BaseButtonStyles}
 
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     border: unset;
     outline: unset;
@@ -74,9 +76,13 @@ const FilledButtonStyle = styled(motion.button)`
     ${props =>
         props.disabled
             ? "background-color: rgb(0, 0, 0, 0.1); color: gray;"
-            : `${props.theme.gradient({
-                  animationLength: 5,
-              })}; cursor: pointer;`}
+            : `${
+                  props.type === "error"
+                      ? `background-color: ${props.theme.colours.error};`
+                      : props.theme.gradient({
+                            animationLength: 5,
+                        })
+              }; cursor: pointer;`}
 
     transition: all 0.2s;
     /* background: rgba(255, 255, 255, 0); */

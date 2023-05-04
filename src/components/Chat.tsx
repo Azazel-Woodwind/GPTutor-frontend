@@ -73,6 +73,7 @@ export const ChatSection = ({ hook, prompt, prompts, ...props }) => {
 const AvatarContainer = styled.div`
     flex-grow: 1;
     margin: 10px;
+    margin-top: 40px;
 `;
 
 const BottomSection = styled(motion.div)`
@@ -80,12 +81,13 @@ const BottomSection = styled(motion.div)`
     width: 100%;
     display: flex;
     flex-direction: column;
+    /* border: 5px solid red; */
 `;
 
 const Window = styled.div`
     display: flex;
     width: 100%;
-    background-color: ${props => props.theme.colours.tertiary};
+    background-color: ${props => props.theme.colours.tertiary}50;
     box-shadow: #3523a940 0px 8px 30px;
     ${props => props.width === true && "width: 100vw;"}
     align-items: center;

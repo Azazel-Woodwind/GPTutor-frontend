@@ -21,6 +21,8 @@ const threshold = 0.8;
 
 let resizableProportion: number;
 
+const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
+
 const Resizable = ({ number, children, min }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -47,7 +49,7 @@ const Resizable = ({ number, children, min }) => {
         resizableProportion = number.get() / width;
     }, []);
 
-    React.useEffect(() => number.onChange(onChange), [onChange]);
+    React.useEffect(() => number.on("change", onChange), [onChange]);
 
     React.useEffect(() => {
         setNavigateThreshold(width * threshold);
@@ -124,7 +126,14 @@ const Resizable = ({ number, children, min }) => {
                         onDragStart={() => {
                             setIsDragging(true);
                         }}
-                        visible={!(location.pathname === "/hub")}
+                        visible={
+                            !(
+                                location.pathname === "/hub" ||
+                                inClassroomRegex.test(
+                                    location.pathname + location.search
+                                )
+                            )
+                        }
                     />
                 </HandleContainer>
 

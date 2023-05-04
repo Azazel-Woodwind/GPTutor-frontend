@@ -1,97 +1,124 @@
 import React from "react";
-import { useLoaderData, useSubmit } from "react-router-dom";
+import { useActionData, useLoaderData, useSubmit } from "react-router-dom";
 import LessonAPI from "../../api/LessonAPI";
-import styled, { css } from "styled-components";
+import styled, { css, useTheme } from "styled-components";
 import { formatEducationLevel, formatSubject } from "../../lib/stringUtils";
-import { EditAlt } from "@styled-icons/boxicons-regular";
-import { Delete } from "@styled-icons/fluentui-system-regular";
 import { useNavigate } from "react-router-dom";
 import { PublishedWithChanges } from "@styled-icons/material/PublishedWithChanges";
 import { Play } from "@styled-icons/fluentui-system-regular/Play";
 import Table from "../../styles/Dashboard/Table";
-import Row from "../../styles/Dashboard/Row";
+import Row, { Cell } from "../../styles/Dashboard/Row";
 import IconsContainer from "../../styles/Dashboard/IconsContainer";
 import IconStyles from "../../styles/Dashboard/IconStyles";
+import Checkbox from "../../components/Checkbox";
+import SvgIcon from "../../components/SvgIcon";
+import { CheckSvgData, CrossSvgData } from "../../lib/svgIconData";
+import { lessonFormSchema } from "../../lib/lessonFormSchema";
+import { useAppData } from "../../context/AppDataContext";
+import { useNotification } from "../../context/NotificationContext";
+import useModal from "../../hooks/useModal";
+import PublishLessonModal from "../../components/Dashboard/PublishLessonModal";
+import InvalidLessonModal from "../../components/Dashboard/InvalidLessonModal";
+import UnpublishLessonModal from "../../components/Dashboard/UnpublishLessonModal";
+import DeleteLessonModal from "../../components/Dashboard/DeleteLessonModal";
+import CustomButton from "../../components/Button";
+import LessonRow from "../../components/Dashboard/LessonRow";
 
 function MyLessons() {
     const lessons = useLoaderData();
     const navigate = useNavigate();
-    const submit = useSubmit();
-    console.log(lessons);
+    const res = useActionData();
+    const sendNotification = useNotification();
+
+    const { Modal: PublishModalComponent, ...PublishModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: InvalidModalComponent, ...InvalidModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: UnpublishModalComponent, ...UnpublishModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: DeleteModalComponent, ...DeleteModal } = useModal({
+        initialOpen: false,
+    });
+
+    const [selectedLesson, setSelectedLesson] = React.useState(null);
+
+    React.useEffect(() => {
+        if (!res) return;
+        sendNotification({
+            label: res.message,
+            duration: 5,
+            type: res.ok ? "success" : "error",
+        });
+    }, [res]);
+
     return (
         <Container>
             <h1> My Lessons</h1>
             <Table>
                 <Row headings>
-                    <span>Title</span>
-                    <span>Subject</span>
-                    <span>Education Level</span>
-                    <span>Created On</span>
-                    <span>Visibility</span>
-                    <span>Status</span>
+                    <Cell>Title</Cell>
+                    <Cell>Subject</Cell>
+                    <Cell>Education Level</Cell>
+                    <Cell>Created On</Cell>
+                    <Cell>Published?</Cell>
+                    <Cell>Verified?</Cell>
                 </Row>
-                {lessons.map(lesson => {
-                    const time = new Date(lesson.created_at);
-
-                    return (
-                        <Row>
-                            <span> {lesson.title} </span>
-                            <span> {formatSubject(lesson.subject)} </span>
-                            <span>
-                                {formatEducationLevel(lesson.education_level)}
-                            </span>
-                            <span>{time.toLocaleDateString()}</span>
-                            <span>
-                                {lesson.is_published ? "Published" : "Draft"}
-                            </span>
-                            <span>
-                                {lesson.is_verified ? "Verified" : "Unverified"}
-                            </span>
-                            <IconsContainer>
-                                <DeleteIcon
-                                    onClick={() => {
-                                        submit(
-                                            { id: lesson.id },
-                                            {
-                                                method: "delete",
-                                                action: "/dashboard/my-lessons",
-                                            }
-                                        );
-                                    }}
-                                />
-                                <EditIcon
-                                    onClick={() =>
-                                        navigate(`/edit-lesson?id=${lesson.id}`)
-                                    }
-                                />
-                                <PlayIcon
-                                    onClick={() =>
-                                        navigate(
-                                            `/lessons/${lesson.title.replaceAll(
-                                                " ",
-                                                "-"
-                                            )}?id=${lesson.id}`
-                                        )
-                                    }
-                                />
-                            </IconsContainer>
-                        </Row>
-                    );
-                })}
+                {lessons
+                    .sort((a, b) => a.title.localeCompare(b.title))
+                    .map(lesson => (
+                        <LessonRow
+                            key={lesson.created_at}
+                            lesson={lesson}
+                            setSelectedLesson={setSelectedLesson}
+                            PublishModal={PublishModal}
+                            InvalidModal={InvalidModal}
+                            UnpublishModal={UnpublishModal}
+                            DeleteModal={DeleteModal}
+                        />
+                    ))}
+                <CustomButton
+                    outline
+                    style={{ width: "fit-content", marginTop: "13px" }}
+                    onClick={() => navigate("/create-lesson")}>
+                    Create New Lesson
+                </CustomButton>
             </Table>
+
+            <PublishModalComponent {...PublishModal.ModalProps} type="dropIn">
+                <PublishLessonModal
+                    lesson={selectedLesson}
+                    handleClose={PublishModal.handleClose}
+                />
+            </PublishModalComponent>
+
+            <InvalidModalComponent {...InvalidModal.ModalProps} type="dropIn">
+                <InvalidLessonModal handleClose={InvalidModal.handleClose} />
+            </InvalidModalComponent>
+
+            <UnpublishModalComponent
+                {...UnpublishModal.ModalProps}
+                type="dropIn">
+                <UnpublishLessonModal
+                    lesson={selectedLesson}
+                    handleClose={UnpublishModal.handleClose}
+                />
+            </UnpublishModalComponent>
+
+            <DeleteModalComponent {...DeleteModal.ModalProps} type="dropIn">
+                <DeleteLessonModal
+                    lesson={selectedLesson}
+                    handleClose={DeleteModal.handleClose}
+                />
+            </DeleteModalComponent>
         </Container>
     );
 }
-
-const EditIcon = styled(EditAlt)`
-    ${IconStyles}
-`;
-const DeleteIcon = styled(Delete)`
-    ${IconStyles}
-`;
-const PlayIcon = styled(Play)`
-    ${IconStyles}
-`;
 
 const Container = styled.div`
     display: flex;

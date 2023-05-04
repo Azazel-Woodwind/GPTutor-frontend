@@ -18,11 +18,14 @@ import RadioButtonsContainer from "../styles/containers/HorizontalRadioButtonCon
 import { TextWrapper } from "../styles/TextWrappers";
 import CustomButton from "../components/Button";
 import Checkbox from "../components/Checkbox";
-import { toast } from "react-toastify";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import { formatEducationLevel, formatSubject } from "../lib/stringUtils";
 import RadioButton from "../components/RadioButton";
 import DropdownList from "../components/DropdownList";
+import { useNotification } from "../context/NotificationContext";
+import Prompt from "../components/Prompt";
+import { lessonFormSchema } from "../lib/lessonFormSchema";
+import { useAppData } from "../context/AppDataContext";
 
 const CreateLessonForm = styled.form`
     margin: 0 auto;
@@ -35,7 +38,6 @@ const CreateLessonForm = styled.form`
 `;
 
 const Container = styled.div`
-    margin-top: 8em;
     margin-left: 2em;
     margin-right: 2em;
 
@@ -44,11 +46,19 @@ const Container = styled.div`
     height: 100%;
 `;
 
+const onLeaveMessage =
+    "Are you sure you want to leave? Your changes will be lost.";
+
 function CreateLesson({ action }) {
-    const { subjectOptions, educationLevels } = useLoaderData();
+    const { subjectOptions, educationLevels, examBoards } = useAppData();
+
     const [searchParams, setSearchParams] = useSearchParams();
     const [lesson, setLesson] = useState(null);
+    const [valid, setValid] = useState(false);
+
     useConversationDisplay(0.3);
+
+    const sendNotification = useNotification();
 
     const form = useForm({
         defaultValues: {
@@ -56,6 +66,7 @@ function CreateLesson({ action }) {
             description: "",
             education_level: null,
             subject: "",
+            exam_board: "",
             caption: "",
             learning_objectives: Array(3).fill({
                 title: "",
@@ -69,6 +80,8 @@ function CreateLesson({ action }) {
             is_published: false,
         },
     });
+
+    const is_published = form.watch("is_published");
 
     const learningObjectivesFields = useFieldArray({
         control: form.control,
@@ -90,6 +103,7 @@ function CreateLesson({ action }) {
             description: currentLesson.description,
             education_level: currentLesson.education_level,
             subject: formatSubject(currentLesson.subject),
+            exam_board: currentLesson.exam_board ?? "",
             caption: currentLesson.caption,
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
@@ -109,15 +123,10 @@ function CreateLesson({ action }) {
         if (action === "edit") {
             const lessonID = searchParams.get("id");
             if (!lessonID) {
-                toast.error("No Lesson ID Provided", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
+                sendNotification({
+                    label: "No Lesson ID Provided",
+                    duration: 5,
+                    type: "error",
                 });
                 return navigate("/create-lesson");
             }
@@ -125,15 +134,10 @@ function CreateLesson({ action }) {
                 .then(lesson => {
                     console.log(lesson);
                     if (!lesson) {
-                        toast.error("Lesson not found", {
-                            position: "top-right",
-                            autoClose: 5000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                            theme: "colored",
+                        sendNotification({
+                            label: "Lesson not found",
+                            duration: 5,
+                            type: "error",
                         });
                         return navigate("/create-lesson");
                     }
@@ -142,15 +146,10 @@ function CreateLesson({ action }) {
                     setDefaultValues(lesson);
                 })
                 .catch(err => {
-                    toast.error("Lesson not found", {
-                        position: "top-right",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "colored",
+                    sendNotification({
+                        label: "Lesson not found",
+                        duration: 5,
+                        type: "error",
                     });
                     return navigate("/create-lesson");
                 });
@@ -161,50 +160,66 @@ function CreateLesson({ action }) {
         console.log("FORM SUBMITTED");
         console.log(data);
 
+        const validatedResult = lessonFormSchema({
+            subjectOptions,
+            educationLevels,
+        }).safeParse(data);
+
+        if (data.is_published) {
+            if (!validatedResult.success) {
+                sendNotification({
+                    label: "Only a valid lesson may be published",
+                    duration: 5,
+                    type: "error",
+                });
+                throw new Error("Invalid lesson");
+            }
+        } else {
+            if (!form.formState.isDirty) {
+                sendNotification({
+                    label: "You must make changes before saving",
+                    duration: 5,
+                    type: "error",
+                });
+                throw new Error("No changes made");
+            }
+        }
+
         try {
-            console.log(JSON.stringify(data, null, 2));
+            // console.log(JSON.stringify(data, null, 2));
+            const lessonData = {
+                title: data.title || null,
+                subject: (data.subject.toLowerCase() as Subject) || null,
+                description: data.description || null,
+                caption: data.caption || null,
+                exam_board: data.exam_board || null,
+                education_level:
+                    (data.education_level?.toLowerCase() as EducationLevel) ??
+                    null,
+                learning_objectives: data.learning_objectives,
+                is_published: data.is_published,
+            };
             let newLesson;
             if (action === "edit") {
-                newLesson = await LessonAPI.updateOwnedByid(lesson.id, {
-                    title: data.title,
-                    subject: data.subject.toLowerCase() as Subject,
-                    description: data.description,
-                    caption: data.caption,
-                    education_level:
-                        data.education_level.toLowerCase() as EducationLevel,
-                    learning_objectives: data.learning_objectives,
-                    is_published: data.is_published,
-                });
-                toast.success("Lesson successfully updated!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
+                newLesson = await LessonAPI.updateOwnedByid(
+                    lesson.id,
+                    lessonData
+                );
+                sendNotification({
+                    label: "Lesson successfully updated!",
+                    duration: 5,
+                    type: "success",
                 });
             } else {
-                newLesson = await LessonAPI.create({
-                    title: data.title,
-                    subject: data.subject.toLowerCase() as Subject,
-                    description: data.description,
-                    caption: data.caption,
-                    education_level:
-                        data.education_level.toLowerCase() as EducationLevel,
-                    learning_objectives: data.learning_objectives,
-                    is_published: data.is_published,
-                });
-                toast.success("Lesson successfully created!", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
+                newLesson = await LessonAPI.create(lessonData);
+                sendNotification({
+                    label: is_published
+                        ? action === "edit"
+                            ? "Lesson successfully saved and published!"
+                            : "Lesson successfully created and published!"
+                        : "Draft successfully saved!",
+                    duration: 5,
+                    type: "success",
                 });
             }
 
@@ -213,8 +228,28 @@ function CreateLesson({ action }) {
             resetForm();
         } catch (error) {
             console.log(JSON.stringify(error));
+
+            sendNotification({
+                label: "Error creating lesson",
+                duration: 5,
+                type: "error",
+            });
+
+            throw error;
         }
     };
+
+    React.useEffect(() => {
+        const subscription = form.watch((value, { name, type }) => {
+            const result = lessonFormSchema({
+                subjectOptions,
+                educationLevels,
+            }).safeParse(value);
+            // console.log(value);
+            setValid(result.success);
+        });
+        return () => subscription.unsubscribe();
+    }, [form.watch]);
 
     return (
         <Container>
@@ -266,14 +301,9 @@ function CreateLesson({ action }) {
                                             <RadioButton
                                                 key={level}
                                                 label={level}
-                                                checked={
-                                                    field.value ===
-                                                    level.toLowerCase()
-                                                }
+                                                checked={field.value === level}
                                                 onChange={e =>
-                                                    field.onChange(
-                                                        level.toLowerCase()
-                                                    )
+                                                    field.onChange(level)
                                                 }
                                             />
                                         ))}
@@ -309,20 +339,37 @@ function CreateLesson({ action }) {
                         )}
                     />
                 </div>
-                <Controller
-                    name="caption"
-                    control={form.control}
-                    render={({ field }) => (
-                        <Textfield
-                            label="Caption"
-                            type="text"
-                            fullwidth
-                            required
-                            // rows={5}
-                            {...field}
-                        />
-                    )}
-                />
+                <div style={{ display: "flex", gap: "1em" }}>
+                    <Controller
+                        control={form.control}
+                        name="exam_board"
+                        render={({ field }) => (
+                            <DropdownList
+                                label="Exam Board"
+                                options={examBoards}
+                                selected={field.value}
+                                setSelected={field.onChange}
+                                required
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        name="caption"
+                        control={form.control}
+                        render={({ field }) => (
+                            <Textfield
+                                label="Caption"
+                                type="text"
+                                fullwidth
+                                required
+                                // rows={5}
+                                {...field}
+                            />
+                        )}
+                    />
+                </div>
+
                 <div
                     style={{
                         paddingTop: "1em",
@@ -374,20 +421,41 @@ function CreateLesson({ action }) {
                         gap: "1em",
                     }}>
                     <div style={{ marginTop: "8px" }}>
-                        <Checkbox
-                            checkboxSize={31}
-                            borderWidth={2}
-                            fontSize="1.1em"
-                            label="Publish this lesson"
-                            {...form.register("is_published")}
+                        <Controller
+                            name="is_published"
+                            control={form.control}
+                            render={({ field }) => (
+                                <Checkbox
+                                    checkboxSize={31}
+                                    borderWidth={2}
+                                    fontSize="1.1em"
+                                    label="Publish this lesson"
+                                    checked={field.value}
+                                    onChange={e =>
+                                        field.onChange(e.target.checked)
+                                    }
+                                />
+                            )}
                         />
                     </div>
 
-                    <CustomButton style={{ marginTop: "0.6em", width: "100%" }}>
-                        {action === "edit" ? "Save changes" : "Create Lesson"}
+                    <CustomButton
+                        style={{ marginTop: "0.6em", width: "100%" }}
+                        disabled={
+                            !(
+                                (!is_published && form.formState.isDirty) ||
+                                (is_published && valid)
+                            )
+                        }>
+                        {is_published
+                            ? action === "edit"
+                                ? "Save and Publish Lesson"
+                                : "Create and publish Lesson"
+                            : "Save Lesson as Draft"}
                     </CustomButton>
                 </div>
             </CreateLessonForm>
+            <Prompt when={form.formState.isDirty} message={onLeaveMessage} />
         </Container>
     );
 }

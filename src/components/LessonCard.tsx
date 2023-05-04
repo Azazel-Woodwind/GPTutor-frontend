@@ -30,10 +30,37 @@ function LessonCard({ lesson }: PropsTypes) {
             <Title>{capitaliseFirstLetter(lesson.title)}</Title>
             <Subject>{capitaliseFirstLetter(lesson.subject)}</Subject>
             <Description>{lesson.caption}</Description>
-            <Level>{formatEducationLevel(lesson.education_level)}</Level>
+            <Footer>
+                <Level>{formatEducationLevel(lesson.education_level)}</Level>
+                <ExamBoard>{lesson.exam_board || "Edexcel"}</ExamBoard>
+            </Footer>
         </Container>
     );
 }
+
+const Footer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* border: 1px solid red; */
+
+    position: absolute;
+    left: 0;
+    bottom: 1em;
+
+    padding: 0 20px;
+
+    h3 {
+        font-size: 18px;
+    }
+`;
+
+const ExamBoard = styled.h3`
+    margin: 0;
+    font-size: 16px;
+    z-index: 4;
+`;
 
 const Title = styled.h1`
     margin: 0;
@@ -56,8 +83,6 @@ const Subject = styled.h3`
 const Level = styled.h3`
     margin: 0;
     font-size: 16px;
-    position: absolute;
-    bottom: 1em;
     z-index: 4;
 `;
 const AvatarContainer = styled.div`
@@ -85,6 +110,9 @@ const Container = styled.div`
     border-bottom-right-radius: 0px;
     cursor: pointer;
     z-index: 2;
+    gap: 10px;
+
+    /* border: 5px solid green; */
 `;
 
 export default LessonCard;

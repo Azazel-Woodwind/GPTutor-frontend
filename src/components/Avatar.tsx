@@ -40,4 +40,4 @@ const Container = styled.div`
     justify-content: center; */
     /* border: 5px solid blue; */
 `;
-export default Avatar;
+export default React.memo(Avatar);

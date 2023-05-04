@@ -145,7 +145,7 @@ const InnerContentContainer = styled.div`
 `;
 
 const ContentContainer = styled.div`
-    margin: 1em 0 0.8em 0.7em;
+    margin: 1em 2em 0.8em 0.7em;
 `;
 
 const ProgressContainer = styled.div`

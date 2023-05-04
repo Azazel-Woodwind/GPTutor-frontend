@@ -11,7 +11,10 @@ const NavElementWrapper = styled.div`
     cursor: pointer;
 `;
 
-const NavElementStyle = styled.div`
+const NavElementStyle = styled.div.withConfig({
+    shouldForwardProp: (prop, defaultValidatorFn) =>
+        !["active"].includes(prop) && defaultValidatorFn(prop),
+})`
     border-radius: 5px;
     display: flex;
     align-items: center;
@@ -38,7 +41,7 @@ const NavElement = ({ children, Icon, subPath }) => {
     const active = subPath == currentSubPath;
     const navigate = useNavigate();
     const onClick = e => navigate(`/${path}/${subPath}`);
-    console.log(active);
+    // console.log(active);
     return (
         <NavElementWrapper onClick={onClick} active={active}>
             <NavElementStyle active={active}>

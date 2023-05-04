@@ -154,7 +154,7 @@ const ImageContainer = styled.div`
         width: 100vw;
         height: 100vh;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 100;
+        z-index: 10000;
     `}
 `;
 
@@ -174,7 +174,7 @@ const Image = styled(motion.img)`
     /* border: 10px solid green; */
 
     /* z-index: 10; */
-    ${props => (props.selected ? `width: 70%;` : `width: 100%;`)};
+    ${props => (props.selected ? `width: 70%;` : `width: 100%;`)}
 `;
 
 const Button = styled.div`

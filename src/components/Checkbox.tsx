@@ -60,9 +60,11 @@ const SvgCheckIcon = styled.svg`
     /* border: 2px solid black; */
 `;
 
-function Checkbox({ label, checkboxSize, fontSize, ...props }, ref) {
+function Checkbox(
+    { label, checkboxSize, fontSize, checked, onChange, ...props },
+    ref
+) {
     const [hovering, setHovering] = React.useState(false);
-    const [checked, setChecked] = React.useState(false);
 
     React.useEffect(() => {
         if (props.checked) {
@@ -77,7 +79,7 @@ function Checkbox({ label, checkboxSize, fontSize, ...props }, ref) {
     const borderWidth = props.borderWidth || 0.1 * checkboxSize;
 
     return (
-        <label {...props}>
+        <label>
             <Container
                 onMouseEnter={() => setHovering(true)}
                 onMouseLeave={() => setHovering(false)}
@@ -114,18 +116,9 @@ function Checkbox({ label, checkboxSize, fontSize, ...props }, ref) {
                     <CheckboxInput
                         {...props}
                         type="checkbox"
-                        onChange={e => {
-                            setChecked(e.target.checked);
-                            if (props.onChange) {
-                                props.onChange(e);
-                            }
-                        }}
-                        ref={node => {
-                            ref(node);
-                            if (node) {
-                                setChecked(node.checked);
-                            }
-                        }}
+                        checked={checked}
+                        onChange={onChange}
+                        ref={ref}
                     />
                     <CheckIconWrapper>
                         <SvgCheckIcon
@@ -139,6 +132,7 @@ function Checkbox({ label, checkboxSize, fontSize, ...props }, ref) {
                             </defs>
                             {CheckSvgData.paths.map((path, i) => (
                                 <path
+                                    key={path}
                                     fill={
                                         checked
                                             ? `url(#${gradientID2})`

@@ -3,9 +3,9 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useModal from "../../hooks/useModal";
 import CenteredColumn from "../../styles/containers/CenteredColumn";
-import CustomButton from "../../components/Button";
-import Modal from "../../components/Modals/Modal";
-import Textfield from "../../components/Textfield";
+import CustomButton from "../Button";
+import Modal from "../Modal/Modal";
+import Textfield from "../Textfield";
 import styled from "styled-components";
 import { fade_animation } from "../../styles/FramerAnimations";
 

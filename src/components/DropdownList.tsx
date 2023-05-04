@@ -51,7 +51,7 @@ const DropdownListOption = styled.div`
                         ? props.theme.gradient({ animationLength: 5 })
                         : `background-color: ${props.theme.colours.glow};`
                     : props.selected &&
-                      props.theme.gradientFaded({ animationLength: 5 })
+                      props.theme.gradient({ animationLength: 5, opacity: 0.5 })
             }
 
     `}
@@ -100,7 +100,7 @@ function DropdownList({
     const dropdownListRef = React.useRef(null);
 
     const filterVisibleOptions = () => {
-        // console.log(options, inputValue);
+        console.log(options, inputValue);
 
         setVisibleOptions(
             options.filter(option =>

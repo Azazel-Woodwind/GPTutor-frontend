@@ -159,6 +159,8 @@ export const Textfield = forwardRef(
             },
         };
 
+        // console.log(props.value, ref?.current?.value);
+
         return (
             <Label {...props}>
                 <TextfieldWrapper
@@ -227,13 +229,13 @@ export const Textfield = forwardRef(
                         }}
                     />
                 </TextfieldWrapper>
-                {props.error && focused && (
+                {props.error && focused && props.helperText && (
                     <ErrorText>{props.helperText}</ErrorText>
                 )}
                 {props.type === "password" && label !== "Confirm Password" && (
                     <Collapse open={props.error && focused}>
                         <PasswordInfo
-                            password={props.value || ref?.current?.value}
+                            password={props.value ?? ref?.current?.value}
                         />
                     </Collapse>
                 )}

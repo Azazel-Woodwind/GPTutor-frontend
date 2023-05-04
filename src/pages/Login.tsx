@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Textfield } from "../components/Textfield";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import XForm from "../components/XForm";
-import { toast } from "react-toastify";
 import Centerer from "../styles/containers/Centerer";
 import UserAPI from "../api/UserAPI";
 import { Link, useNavigate } from "react-router-dom";
@@ -23,16 +22,6 @@ function Login() {
         e.preventDefault();
 
         if (!emailInput?.current?.value || !passwordInput?.current?.value) {
-            toast.error("Please fill in all fields", {
-                position: "top-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-            });
             sendNotification({
                 label: "Please fill in all fields",
                 duration: 5,

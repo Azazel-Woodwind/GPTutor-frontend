@@ -58,7 +58,7 @@ const LessonAPI = {
     },
 
     create: async function (newLesson: Omit<Lesson, "id">) {
-        console.log(newLesson);
+        // console.log(newLesson);
 
         const { data, error } = await supabase.rpc("create_lesson", newLesson);
 
@@ -81,12 +81,14 @@ const LessonAPI = {
         return res.data;
     },
 
-    publishById: async function (lesson_id: string) {
-        const { data, error } = await supabase
-            .from("editable_lesson")
-            .update({ is_published: true })
-            .eq("id", lesson_id)
-            .select();
+    togglePublishById: async function (lesson_id: string) {
+        // console.log(lesson_id);
+        const { data, error } = await supabase.rpc("toggle_is_published", {
+            lesson_id,
+        });
+
+        // console.log(JSON.stringify(data, null, 2));
+        // console.log(JSON.stringify(error, null, 2));
 
         if (error) {
             throw error;

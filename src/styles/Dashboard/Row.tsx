@@ -10,9 +10,14 @@ const Row = styled.div`
     position: relative;
     width: 100%;
     span {
-        width: 8em;
         ${props => props.headings && "font-weight: bold;"}//dickhead
     }
+`;
+
+export const Cell = styled.span`
+    display: flex;
+    width: 8em;
+    /* border: 2px solid red; */
 `;
 
 export default Row;

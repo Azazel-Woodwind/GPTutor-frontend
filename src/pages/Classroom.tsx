@@ -11,18 +11,21 @@ import {
     motion,
     useMotionValue,
 } from "framer-motion";
-import Header from "./classroom/Header";
+import Header from "../components/Classroom/ClassroomHeader";
 
 import { fade_exit, fade_animation } from "../styles/FramerAnimations";
-import EndOfLessonModal from "./classroom/EndOfLessonModal";
-import StartLessonModal from "./classroom/StartLessonModal";
+import EndOfLessonModal from "../components/Classroom/EndOfLessonModal";
+import StartLessonModal from "../components/Classroom/StartLessonModal";
 import ChatHistory from "../components/ChatHistory";
 import Controls from "../components/Controls";
 import React from "react";
 import { ChatSection } from "../components/Chat";
+import { SessionContext } from "../context/SessionContext";
 
 function Classroom() {
     const currentLesson = useLoaderData();
+
+    const [classroomHeight, setClassroomHeight] = React.useState(undefined);
 
     const hook = useLesson({
         currentLesson,
@@ -49,13 +52,13 @@ function Classroom() {
         pause,
         play,
         currentImageIndex,
+        streaming,
+        speaking,
     } = hook;
 
-    const containerHeight = useMotionValue("100%");
-
-    const callback = React.useCallback(ref => {
+    const getClassroomHeight = React.useCallback(ref => {
         if (ref) {
-            containerHeight.set(ref.offsetHeight);
+            setClassroomHeight(ref.offsetHeight);
         }
     }, []);
 
@@ -63,7 +66,7 @@ function Classroom() {
         if (started === undefined) {
             return (
                 <LoadingScreenWrapper key="loading" {...fade_animation()}>
-                    <Loading />
+                    <Loading centered={false} />
                 </LoadingScreenWrapper>
             );
         }
@@ -78,51 +81,61 @@ function Classroom() {
             );
         }
 
-        if (finished) {
+        if (finished && !streaming && !speaking) {
             return <EndOfLessonModal key="endModal" lesson={currentLesson} />;
         }
 
         return (
             <Container
+                ref={getClassroomHeight}
+                classroomHeight={classroomHeight}
                 exit={{ opacity: 0, transition: { duration: 0.5 } }}
                 key="classroom">
-                <Header
-                    currentLearningObjective={currentLearningObjective}
-                    currentLesson={currentLesson}
-                    learningObjectiveNumber={learningObjectiveNumber}
-                />
-                <DualDisplay>
-                    <LayoutGroup>
-                        <AnimatedAvatar
-                            {...hook}
-                            hasControls
-                            clickable
-                            size={140}
-                            layout
-                            layoutId="avatar"
-                            {...fade_animation()}
+                {classroomHeight && (
+                    <>
+                        <Header
+                            currentLearningObjective={currentLearningObjective}
+                            currentLesson={currentLesson}
+                            learningObjectiveNumber={learningObjectiveNumber}
                         />
-                        <AnimatePresence>
-                            {images?.length > 0 && (
-                                <GalleryContainer
-                                    as={motion.div}
+                        <DualDisplay>
+                            <LayoutGroup>
+                                <AnimatedAvatar
+                                    {...hook}
+                                    hasControls
+                                    clickable
+                                    size={140}
                                     layout
-                                    layoutId="container"
-                                    {...fade_animation({ delayed: true })}>
-                                    <Gallery
-                                        images={images}
-                                        currentImageIndex={currentImageIndex}
-                                    />
-                                </GalleryContainer>
-                            )}
-                        </AnimatePresence>
-                    </LayoutGroup>
-                </DualDisplay>
-                <ChatSection
-                    {...fade_animation({ delayed: true })}
-                    hook={hook}
-                    prompt={"This is the classroom environment."}
-                />
+                                    layoutId="avatar"
+                                    {...fade_animation()}
+                                />
+                                <AnimatePresence>
+                                    {images?.length > 0 && (
+                                        <GalleryContainer
+                                            as={motion.div}
+                                            layout
+                                            layoutId="container"
+                                            {...fade_animation({
+                                                delayed: true,
+                                            })}>
+                                            <Gallery
+                                                images={images}
+                                                currentImageIndex={
+                                                    currentImageIndex
+                                                }
+                                            />
+                                        </GalleryContainer>
+                                    )}
+                                </AnimatePresence>
+                            </LayoutGroup>
+                        </DualDisplay>
+                        <ChatSection
+                            {...fade_animation({ delayed: true })}
+                            hook={hook}
+                            prompt={"This is the classroom environment."}
+                        />
+                    </>
+                )}
             </Container>
         );
     };
@@ -153,19 +166,21 @@ const DualDisplay = styled.div`
     width: 100%;
     justify-content: center;
     gap: 150px;
-    flex-grow: 1;
+    flex: 1;
 `;
 
 const Container = styled(motion.div)`
-    width: 100vw;
-    height: 100vh;
-    max-height: 100vh;
+    /* position: relative; */
+
     display: flex;
     flex-direction: column;
     gap: 2em;
     align-items: center;
-    padding-top: 5em;
-    /* border: 3px solid blue; */
+    /* border: 3px solid red; */
+    flex-grow: 1;
+    ${props =>
+        props.classroomHeight &&
+        `height: ${props.classroomHeight}px;`}/* border: 3px solid green; */
 `;
 
 export default Classroom;

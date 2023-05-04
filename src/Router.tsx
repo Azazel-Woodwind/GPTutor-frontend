@@ -21,7 +21,7 @@ import Lessons from "./pages/Lessons";
 
 import Login from "./pages/Login";
 import Hub from "./pages/Hub";
-import Header from "./components/Header/header";
+import Header from "./components/Header/Header";
 import Chat from "./components/Chat";
 import Loading from "./pages/Loading";
 import Settings from "./pages/SettingsMenu";
@@ -51,7 +51,7 @@ import MyLessons from "./pages/dashboard/MyLessons";
 import { ADMIN_ACCESS_LEVEL } from "./lib/accessLevels";
 import EducationLevelsAPI from "./api/EducationLevelAPI";
 import UserAPI from "./api/UserAPI";
-import EndOfLessonModal from "./pages/classroom/EndOfLessonModal";
+import EndOfLessonModal from "./components/Classroom/EndOfLessonModal";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -60,15 +60,19 @@ const ApplicationWrapperStyle = styled.div`
 `;
 
 const ApplicationInternalStyle = styled.div`
-    height: 100%;
+    height: 100vh;
     position: relative;
-    width: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
+`;
+
+const OutletWrapper = styled.div`
+    flex: 1 1 auto;
+    border: 10px solid blue;
 `;
 
 function ApplicationWrapper() {
@@ -78,7 +82,7 @@ function ApplicationWrapper() {
 
     return (
         <SocketContextProvider>
-            <ApplicationWrapperStyle fillparent>
+            <ApplicationWrapperStyle>
                 <ChatContextProvider>
                     <ApplicationInternalStyle>
                         <Header />
@@ -147,72 +151,10 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <Register />,
-                loader: async (): Promise<{
-                    subjectOptions: Subject[];
-                    educationLevels: EducationLevel[];
-                }> => {
-                    try {
-                        const subjects = await SubjectsAPI.getAll();
-                        const educationLevels =
-                            await EducationLevelsAPI.getAll();
-                        console.log("ALL SUBJECTS:", subjects);
-                        console.log("ALL EDUCATION LEVELS:", educationLevels);
-
-                        return {
-                            subjectOptions: subjects.map(subject =>
-                                capitaliseFirstLetter(
-                                    subject.subject
-                                        .replaceAll("_", " ")
-                                        .replaceAll("ict", "ICT")
-                                )
-                            ) as Subject[],
-                            educationLevels: educationLevels.map(
-                                educationLevel =>
-                                    formatEducationLevel(
-                                        educationLevel.education_level
-                                    )
-                            ) as EducationLevel[],
-                        };
-                    } catch (error) {
-                        console.log(error);
-                        return { subjectOptions: [], educationLevels: [] };
-                    }
-                },
             },
             {
                 path: "/",
                 element: <WaitingList />,
-                loader: async (): Promise<{
-                    subjectOptions: Subject[];
-                    educationLevels: EducationLevel[];
-                }> => {
-                    try {
-                        const subjects = await SubjectsAPI.getAll();
-                        const educationLevels =
-                            await EducationLevelsAPI.getAll();
-                        console.log("ALL SUBJECTS:", subjects);
-                        console.log("ALL EDUCATION LEVELS:", educationLevels);
-
-                        return {
-                            subjectOptions: subjects.map(subject =>
-                                capitaliseFirstLetter(
-                                    subject.subject
-                                        .replaceAll("_", " ")
-                                        .replaceAll("ict", "ICT")
-                                )
-                            ) as Subject[],
-                            educationLevels: educationLevels.map(
-                                educationLevel =>
-                                    formatEducationLevel(
-                                        educationLevel.education_level
-                                    )
-                            ) as EducationLevel[],
-                        };
-                    } catch (error) {
-                        console.log(error);
-                        return { subjectOptions: [], educationLevels: [] };
-                    }
-                },
             },
         ],
     },
@@ -228,72 +170,10 @@ const router = createBrowserRouter([
             {
                 path: "/create-lesson",
                 element: <CreateLesson action="create" />,
-                loader: async (): Promise<{
-                    subjectOptions: Subject[];
-                    educationLevels: EducationLevel[];
-                }> => {
-                    try {
-                        const subjects = await SubjectsAPI.getAll();
-                        const educationLevels =
-                            await EducationLevelsAPI.getAll();
-                        console.log("ALL SUBJECTS:", subjects);
-                        console.log("ALL EDUCATION LEVELS:", educationLevels);
-
-                        return {
-                            subjectOptions: subjects.map(subject =>
-                                capitaliseFirstLetter(
-                                    subject.subject
-                                        .replaceAll("_", " ")
-                                        .replaceAll("ict", "ICT")
-                                )
-                            ) as Subject[],
-                            educationLevels: educationLevels.map(
-                                educationLevel =>
-                                    formatEducationLevel(
-                                        educationLevel.education_level
-                                    )
-                            ) as EducationLevel[],
-                        };
-                    } catch (error) {
-                        console.log(error);
-                        return { subjectOptions: [], educationLevels: [] };
-                    }
-                },
             },
             {
                 path: "/edit-lesson",
                 element: <CreateLesson action="edit" />,
-                loader: async (): Promise<{
-                    subjectOptions: Subject[];
-                    educationLevels: EducationLevel[];
-                }> => {
-                    try {
-                        const subjects = await SubjectsAPI.getAll();
-                        const educationLevels =
-                            await EducationLevelsAPI.getAll();
-                        console.log("ALL SUBJECTS:", subjects);
-                        console.log("ALL EDUCATION LEVELS:", educationLevels);
-
-                        return {
-                            subjectOptions: subjects.map(subject =>
-                                capitaliseFirstLetter(
-                                    subject.subject
-                                        .replaceAll("_", " ")
-                                        .replaceAll("ict", "ICT")
-                                )
-                            ) as Subject[],
-                            educationLevels: educationLevels.map(
-                                educationLevel =>
-                                    formatEducationLevel(
-                                        educationLevel.education_level
-                                    )
-                            ) as EducationLevel[],
-                        };
-                    } catch (error) {
-                        console.log(error);
-                        return { subjectOptions: [], educationLevels: [] };
-                    }
-                },
             },
             {
                 path: "/settings",
@@ -333,7 +213,7 @@ const router = createBrowserRouter([
                         path: "/dashboard/my-lessons",
                         element: <MyLessons />,
                         action: async ({ request }) => {
-                            if (request.method !== "DELETE") {
+                            if (!["DELETE", "PUT"].includes(request.method)) {
                                 throw new Response("Incorrect request method", {
                                     status: 400,
                                     statusText: "Bad Request",
@@ -350,14 +230,58 @@ const router = createBrowserRouter([
                                 });
                             }
 
-                            await LessonAPI.deleteOwnedByid(lessonID as string);
+                            if (request.method === "DELETE") {
+                                try {
+                                    await LessonAPI.deleteOwnedByid(
+                                        lessonID as string
+                                    );
 
-                            return null;
+                                    return {
+                                        ok: true,
+                                        message: "Lesson successfully deleted!",
+                                    };
+                                } catch (error) {
+                                    console.log(error);
+                                    return {
+                                        ok: false,
+                                        message:
+                                            "There was an error deleting the lesson.",
+                                    };
+                                }
+                            }
+
+                            if (request.method === "PUT") {
+                                try {
+                                    // console.log(lessonID);
+                                    const published =
+                                        await LessonAPI.togglePublishById(
+                                            lessonID as string
+                                        );
+                                    return {
+                                        ok: true,
+                                        message: `Lesson successfully ${
+                                            published
+                                                ? "published"
+                                                : "unpublished"
+                                        }!`,
+                                    };
+                                } catch (error) {
+                                    console.log(error);
+                                    return {
+                                        ok: false,
+                                        message: `There was an error ${
+                                            data.get("is_published")
+                                                ? "publishing"
+                                                : "unpublishing"
+                                        } the lesson.`,
+                                    };
+                                }
+                            }
                         },
                         loader: async (): Promise<Lesson[]> => {
                             try {
                                 const lessons = await LessonAPI.getMyLessons();
-                                console.log("ALL LESSONS:", lessons);
+                                // console.log("ALL LESSONS:", lessons);
                                 return lessons;
                             } catch (error) {
                                 console.log(error);
@@ -365,7 +289,6 @@ const router = createBrowserRouter([
                             }
                         },
                     },
-
                     {
                         path: "/dashboard/users",
                         element: (
@@ -375,7 +298,7 @@ const router = createBrowserRouter([
                         ),
                         loader: async (): Promise<User[]> => {
                             const users = await UserAPI.getAll();
-                            console.log("ALL USERS:", users);
+                            // console.log("ALL USERS:", users);
                             return users;
                         },
                     },
@@ -405,7 +328,7 @@ const router = createBrowserRouter([
                 loader: async ({ request }): Promise<Lesson[]> => {
                     try {
                         const lessons = await LessonAPI.getPublicLessons();
-                        console.log("ALL LESSONS:", lessons);
+                        // console.log("ALL LESSONS:", lessons);
                         return lessons;
                     } catch (error) {
                         console.log(error);
@@ -443,7 +366,7 @@ const router = createBrowserRouter([
                         }
                     }
 
-                    console.log("LESSON:", lesson);
+                    // console.log("LESSON:", lesson);
                     return lesson;
                 },
             },
@@ -453,7 +376,7 @@ const router = createBrowserRouter([
                 loader: async (): Promise<Lesson[]> => {
                     try {
                         const lessons = await LessonAPI.getPublicLessons();
-                        console.log("ALL LESSONS:", lessons);
+                        // console.log("ALL LESSONS:", lessons);
                         return lessons;
                     } catch (error) {
                         console.log(error);

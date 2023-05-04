@@ -44,7 +44,6 @@ const Dashboard = () => {
 };
 
 const Container = styled(FillParent)`
-    padding-top: 8em;
     padding-left: 3em;
     /* border: 3px solid green; */
 `;

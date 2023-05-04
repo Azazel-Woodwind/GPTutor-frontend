@@ -36,7 +36,7 @@ const LinkStyle = styled.div`
     }
 `;
 
-const LinkWrapper = ({ path, Icon, label }) => {
+const LinkWrapper = ({ path, Icon, label, size, ...props }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -49,15 +49,15 @@ const LinkWrapper = ({ path, Icon, label }) => {
     return (
         <Tooltip label={label} underneath>
             <LinkStyle focused={focused} onClick={onClick}>
-                <Icon focused={focused} size={25} />
+                <Icon focused={focused} size={size || 25} />
                 {focused && <Boxshadow />}
             </LinkStyle>
         </Tooltip>
     );
 };
 
-export const NavigateHome = () => (
-    <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} />
+export const NavigateHome = props => (
+    <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} {...props} />
 );
 
 export const NavigateLessons = () => (

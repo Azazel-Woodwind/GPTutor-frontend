@@ -44,7 +44,7 @@ const ProgressBar = ({
 
     React.useEffect(
         () =>
-            progress.onChange(value => {
+            progress.on("change", value => {
                 if (value >= stops[lastCrossed + 1]?.location) {
                     setLastCrossed(prev => prev + 1);
                 } else if (value < stops[lastCrossed]?.location) {
@@ -115,7 +115,7 @@ const ProgressBar = ({
                               transition: { duration: time, ease: "linear" },
                               onAnimationComplete: () => {
                                   if (!paused.current) {
-                                      console.log("ok");
+                                      //   console.log("ok");
                                       onEnd();
                                   }
                               },

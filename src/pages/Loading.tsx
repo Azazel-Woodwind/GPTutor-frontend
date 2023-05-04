@@ -2,10 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import Avatar from "../components/Avatar";
 import { TextWrapper } from "../styles/TextWrappers";
+import { AlternateGlobalStyle } from "../styles/GlobalStyles";
 
-function Loading({ message }) {
+function Loading({ message, ...props }) {
     return (
-        <Wrapper>
+        <Wrapper centered {...props}>
+            <AlternateGlobalStyle />
             <Avatar size={150} />
             <TextWrapper fontSize="xxl">Loading...</TextWrapper>
         </Wrapper>
@@ -19,11 +21,10 @@ const Wrapper = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
+    ${props => (props.centered ? "justify-content: center;" : "")}
+    /* border: 3px solid green; */
 
-    padding-bottom: 6em;
     gap: 2em;
-    background-color: #040a1e;
 `;
 
 export default Loading;

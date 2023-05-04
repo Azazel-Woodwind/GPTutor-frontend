@@ -115,17 +115,24 @@ const variants = {
     },
 };
 
-const Modal = ({ children, handleClose, type, ...props }) => {
-    type = type || "fade";
-
+const Modal = ({
+    children,
+    handleClose,
+    type = "fade",
+    cancellable = true,
+    ...props
+}) => {
     return (
-        <Backdrop onClick={handleClose}>
+        <Backdrop onClick={cancellable && handleClose}>
             <ModalStyle
                 onClick={e => e.stopPropagation()} // Prevent click from closing modal
                 variants={variants[type]}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
+                transition={{
+                    duration: 0.2,
+                }}
                 {...props}>
                 {children}
             </ModalStyle>
@@ -135,12 +142,14 @@ const Modal = ({ children, handleClose, type, ...props }) => {
 
 const ModalStyle = styled(motion.div)`
     position: relative;
-    width: clamp(50%, 1200px, 90%);
-    height: min(50%, 600px);
+    width: ${props => props.width || "800px"};
+    height: ${props => props.height || "300px"};
 
     /* border: 5px solid blue; */
-    background-color: ${props => props.theme.colours.primary}10;
-    padding: 10px;
+    /* background-color: ${props => props.theme.colours.primary}10; */
+    background-color: ${props => props.theme.colours.highlight1};
+    padding: 30px;
+    padding: 30px 40px 30px 40px;
     border-radius: 12px;
 `;
 

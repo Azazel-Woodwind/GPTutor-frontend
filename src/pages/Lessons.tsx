@@ -7,6 +7,7 @@ import Button from "../components/Button";
 import useConversationDisplay from "../hooks/useConversationDisplay";
 import { useLoaderData } from "react-router-dom";
 import { ChatContext } from "../context/ChatContext";
+import Prompt from "../components/Prompt";
 
 function Lessons() {
     const lessons = useLoaderData();
@@ -14,6 +15,8 @@ function Lessons() {
     useConversationDisplay(0.3);
     const { width } = React.useContext(ChatContext);
     // console.log(width.get());
+
+    const [filteredLessons, setFilteredLessons] = React.useState(lessons);
 
     return (
         <Container>
@@ -24,6 +27,13 @@ function Lessons() {
                         type="text"
                         fullwidth
                         required
+                        onChange={e => {
+                            const query = e.target.value;
+                            const filtered = lessons.filter(lesson =>
+                                lesson.title.toLowerCase().includes(query)
+                            );
+                            setFilteredLessons(filtered);
+                        }}
                     />
                 </SearchBar>
                 <span>
@@ -31,12 +41,12 @@ function Lessons() {
                 </span>
             </Controls>
             <LessonContainer>
-                {lessons.length ? (
-                    lessons.map(lesson => (
+                {filteredLessons.length ? (
+                    filteredLessons.map(lesson => (
                         <LessonCard key={lesson.id} lesson={lesson} />
                     ))
                 ) : (
-                    <h1>No lessons found :(</h1>
+                    <h1>No lessons</h1>
                 )}
             </LessonContainer>
         </Container>
@@ -64,7 +74,6 @@ const Container = styled.div`
     flex-direction: column;
     z-index: 5;
     overflow-x: clip;
-    padding-top: 6em;
 `;
 const LessonContainer = styled.div`
     margin-left: 4em;

@@ -57,16 +57,25 @@ const layouts = {
 const Option = ({ option, selected, setSelected, mouseDown }) => {
     const [mouseEnter, setMouseEnter] = React.useState(false);
     const [firstClicked, setFirstClicked] = React.useState(false);
-
     const isSelected = selected.includes(option);
+
     const clicked = () => {
-        setSelected(prev => {
-            if (isSelected) {
-                const clone = [...prev];
-                clone.splice(selected.indexOf(option), 1);
-                return clone;
-            } else return [...prev, option];
-        });
+        // setSelected(prev => {
+        //     if (isSelected) {
+        //         const clone = [...prev];
+        //         clone.splice(selected.indexOf(option), 1);
+        //         return clone;
+        //     } else return [...prev, option];
+        // });
+
+        if (isSelected) {
+            // console.log("selected", selected);
+            // const clone = [...selected];
+            selected.splice(selected.indexOf(option), 1);
+            setSelected(selected);
+        } else {
+            setSelected([...selected, option]);
+        }
     };
 
     useEffect(() => {
@@ -100,7 +109,7 @@ const Option = ({ option, selected, setSelected, mouseDown }) => {
     );
 };
 
-function CustomSelect(props) {
+function CustomSelect({ options, ...props }) {
     const [mouseDown, setMouseDown] = React.useState(false);
     React.useEffect(() => {
         const onMouseUp = () => {
@@ -120,11 +129,13 @@ function CustomSelect(props) {
         };
     }, []);
 
-    const ids = React.useMemo(() => props.options.map(() => nanoid()), []);
+    console.log(options);
+
+    const ids = React.useMemo(() => options.map(() => nanoid()), [options]);
 
     return (
         <Container>
-            {props.options.map((option, i) => (
+            {options.map((option, i) => (
                 <Option
                     key={ids[i]}
                     {...props}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import WaitingListAPI from "../api/WaitingListAPI";
 import { Textfield } from "../components/Textfield";
 import useRadioButtons from "../hooks/useRadioButtons";
@@ -6,11 +6,9 @@ import { occupations } from "../lib/FormData";
 import CenteredRow from "../styles/containers/CenteredRow";
 import XForm from "../components/XForm";
 import RadioButtonsContainer from "../styles/containers/HorizontalRadioButtonContainer";
-import { toast } from "react-toastify";
 import Avatar from "../components/Avatar";
 import useCustomSelect from "../hooks/useCustomSelect";
 import CenteredColumn from "../styles/containers/CenteredColumn";
-import { useLoaderData } from "react-router-dom";
 import { MultiTextfieldRow } from "../styles/containers/MultiTextfieldRow";
 import {
     CONTAINS_LOWERCASE_REGEX,
@@ -23,120 +21,60 @@ import {
 } from "../lib/regexes";
 import Notification from "./Notification";
 import { useNotification } from "../context/NotificationContext";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useForm, Controller } from "react-hook-form";
+import RadioButton from "../components/RadioButton";
+import CustomSelect from "../components/CustomSelect";
+import CustomButton from "../components/Button";
+import {
+    education_level_schema,
+    email_schema,
+    first_name_schema,
+    last_name_schema,
+    occupation_schema,
+    subjects_schema,
+} from "../lib/userFormSchema";
+import { useAppData } from "../context/AppDataContext";
 
 function WaitingList() {
-    const { subjectOptions, educationLevels } = useLoaderData();
-    const sendNotification = useNotification();
-
-    const [firstName, setFirstName] = useState("");
-    const [isValidFirstName, setIsValidFirstName] = useState(null);
-    const [showFirstNameError, setShowFirstNameError] = useState(false);
-    const [firstNameFocus, setFirstNameFocus] = useState(false);
-
-    const [lastName, setLastName] = useState("");
-    const [isValidLastName, setIsValidLastName] = useState(null);
-    const [showLastNameError, setShowLastNameError] = useState(false);
-    const [lastNameFocus, setLastNameFocus] = useState(false);
-
-    const [email, setEmail] = useState("");
-    const [isValidEmail, setIsValidEmail] = useState(false);
-    const [emailFocus, setEmailFocus] = useState(false);
-
     const [success, setSuccess] = useState(false);
 
-    useEffect(() => {
-        if (firstName.length === 0) {
-            setIsValidFirstName(null);
-            return;
-        }
+    const { subjectOptions, educationLevels } = useAppData();
+    const sendNotification = useNotification();
 
-        const result = NAME_REGEX.test(firstName);
-        console.log(firstName);
-        console.log(result);
-        setIsValidFirstName(result);
-    }, [firstName]);
-
-    useEffect(() => {
-        console.log(!isValidFirstName && firstName.length > 0);
-        setShowFirstNameError(!isValidFirstName && firstName.length > 0);
-    }, [isValidFirstName]);
-
-    useEffect(() => {
-        if (lastName.length === 0) {
-            setIsValidLastName(null);
-            return;
-        }
-
-        const result = NAME_REGEX.test(lastName);
-        console.log(lastName);
-        console.log(result);
-        setIsValidLastName(result);
-    }, [lastName]);
-
-    useEffect(() => {
-        console.log(!isValidLastName && lastName.length > 0);
-        setShowLastNameError(!isValidLastName && lastName.length > 0);
-    }, [isValidLastName]);
-
-    useEffect(() => {
-        const result = EMAIL_REGEX.test(email);
-        setIsValidEmail(result);
-    }, [email]);
-
-    const EducationRadioButtons = useRadioButtons(
-        educationLevels.map(level => ({
-            value: level.toLowerCase(),
-            label: level,
-        }))
+    const WaitingListSchema = useMemo(
+        () =>
+            z.object({
+                first_name: first_name_schema,
+                last_name: last_name_schema,
+                email: email_schema,
+                education_level: education_level_schema(educationLevels),
+                occupation: occupation_schema(occupations),
+                subjects: subjects_schema(subjectOptions),
+            }),
+        []
     );
 
-    const [selectedSubjects, Select] = useCustomSelect({
-        options: subjectOptions,
+    const form = useForm({
+        mode: "onChange",
+        resolver: zodResolver(WaitingListSchema),
+        defaultValues: {
+            first_name: "",
+            last_name: "",
+            email: "",
+            education_level: "",
+            occupation: "",
+            subjects: [],
+        },
     });
 
-    const OccupationRadioButtons = useRadioButtons(
-        occupations.map(occupation => ({
-            value: occupation.toLowerCase(),
-            label: occupation,
-        }))
-    );
+    const addToWaitingList = async data => {
+        if (form.formState.isSubmitting) return;
 
-    const formIsInvalid = () => {
-        return (
-            !isValidEmail ||
-            !isValidFirstName ||
-            !isValidLastName ||
-            !EducationRadioButtons.selected ||
-            selectedSubjects.length === 0 ||
-            !OccupationRadioButtons.selected
-        );
-    };
+        console.log(data);
 
-    const validateAllData = () => {
-        return (
-            EMAIL_REGEX.test(email) &&
-            NAME_REGEX.test(firstName) &&
-            NAME_REGEX.test(lastName) &&
-            EducationRadioButtons.selected &&
-            selectedSubjects.length > 0 &&
-            OccupationRadioButtons.selected
-        );
-    };
-
-    const addToWaitingList = async e => {
-        e.preventDefault();
-
-        if (!validateAllData()) {
-            // toast.error("Fill in all the FUCKING fields.", {
-            //     position: "top-right",
-            //     autoClose: 5000,
-            //     hideProgressBar: false,
-            //     closeOnClick: true,
-            //     pauseOnHover: true,
-            //     draggable: true,
-            //     progress: undefined,
-            //     theme: "colored",
-            // });
+        if (!form.formState.isValid) {
             sendNotification({
                 label: "Please fill in all fields",
                 duration: 5,
@@ -146,12 +84,12 @@ function WaitingList() {
         }
         try {
             const response = await WaitingListAPI.addUser({
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                education_level: EducationRadioButtons.selected.toLowerCase(),
-                is_student: OccupationRadioButtons.selected === "Student",
-                subjects: selectedSubjects.map(subject =>
+                first_name: data.first_name,
+                last_name: data.last_name,
+                email: data.email,
+                education_level: data.education_level.toLowerCase(),
+                is_student: data.occupation === "Student",
+                subjects: data.subjects.map(subject =>
                     subject.replaceAll(" ", "_").toLowerCase()
                 ),
             });
@@ -178,75 +116,143 @@ function WaitingList() {
                 />
             ) : (
                 <XForm
-                    onSubmit={addToWaitingList}
+                    onSubmit={form.handleSubmit(addToWaitingList)}
                     // submitButtonText={
                     //     "WARNING: Do NOT let your wife CATCH you using THIS application"
                     // }
-                    submitButtonText={"Join the XTutor Waiting List!"}
+                    submitButtonText="Join the XTutor Waiting List!"
                     title="Join the Waiting List!"
-                    buttonProps={{
-                        disabled: formIsInvalid(),
-                    }}>
+                    isValid={
+                        !form.formState.isValid || form.formState.isSubmitting
+                    }>
                     <MultiTextfieldRow gap="0.8em">
-                        <Textfield
-                            label="First Name"
-                            type="text"
-                            required
-                            value={firstName}
-                            onChange={e => setFirstName(e.target.value)}
-                            error={showFirstNameError}
-                            helperText={
-                                showFirstNameError &&
-                                firstNameFocus &&
-                                "Enter a valid forename"
-                            }
-                            onFocus={() => setFirstNameFocus(true)}
-                            onBlur={() => setFirstNameFocus(false)}
-                            fullwidth
+                        <Controller
+                            name="first_name"
+                            control={form.control}
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <Textfield
+                                    fullwidth
+                                    label="First Name"
+                                    type="text"
+                                    required
+                                    autoComplete="new-password" // to prevent autocomplete for testing purposes
+                                    error={fieldState.invalid}
+                                    helperText={
+                                        fieldState.invalid &&
+                                        fieldState.error?.message
+                                    }
+                                    {...field}
+                                />
+                            )}
                         />
-                        <Textfield
-                            label="Last Name"
-                            type="text"
-                            required
-                            value={lastName}
-                            onChange={e => setLastName(e.target.value)}
-                            error={showLastNameError}
-                            helperText={
-                                showLastNameError &&
-                                lastNameFocus &&
-                                "Enter a valid surname"
-                            }
-                            onFocus={() => setLastNameFocus(true)}
-                            onBlur={() => setLastNameFocus(false)}
-                            fullwidth
+                        <Controller
+                            name="last_name"
+                            control={form.control}
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <Textfield
+                                    fullwidth
+                                    label="Last Name"
+                                    type="text"
+                                    required
+                                    error={fieldState.invalid}
+                                    helperText={
+                                        fieldState.invalid &&
+                                        fieldState.error?.message
+                                    }
+                                    {...field}
+                                />
+                            )}
                         />
                     </MultiTextfieldRow>
-                    <Textfield
-                        label="Email"
-                        type="text"
-                        required
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        error={!isValidEmail && email.length > 0}
-                        helperText={
-                            !isValidEmail &&
-                            email &&
-                            emailFocus &&
-                            "Enter a valid email"
-                        }
-                        onFocus={() => setEmailFocus(true)}
-                        onBlur={() => setEmailFocus(false)}
+                    <Controller
+                        name="email"
+                        control={form.control}
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
+                            <Textfield
+                                fullwidth
+                                label="Email"
+                                type="text"
+                                required
+                                error={fieldState.invalid}
+                                helperText={
+                                    fieldState.invalid &&
+                                    fieldState.error?.message
+                                }
+                                {...field}
+                            />
+                        )}
                     />
-                    {/* <Textfield label="Email" type="text" required /> */}
-                    <RadioButtonsContainer>
-                        {EducationRadioButtons.RadioButtons}
-                    </RadioButtonsContainer>
-                    {Select}
-                    <RadioButtonsContainer>
-                        {OccupationRadioButtons.RadioButtons.map(element => (
-                            <div style={{ width: "100px" }}>{element}</div>
-                        ))}
-                    </RadioButtonsContainer>
+                    <Controller
+                        control={form.control}
+                        name="education_level"
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
+                            <RadioButtonsContainer gap="1.5em">
+                                {educationLevels.map(level => (
+                                    <RadioButton
+                                        key={level}
+                                        label={level}
+                                        checked={field.value === level}
+                                        onChange={e => field.onChange(level)}
+                                    />
+                                ))}
+                            </RadioButtonsContainer>
+                        )}
+                    />
+                    <Controller
+                        name="subjects"
+                        control={form.control}
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
+                            <CustomSelect
+                                // {...field}
+                                selected={field.value}
+                                setSelected={field.onChange}
+                                options={subjectOptions}
+                                defaultValue={[]}
+                            />
+                        )}
+                    />
+                    <Controller
+                        control={form.control}
+                        name="occupation"
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
+                            <RadioButtonsContainer gap="1.5em">
+                                {occupations.map(occupation => (
+                                    <RadioButton
+                                        key={occupation}
+                                        label={occupation}
+                                        checked={field.value === occupation}
+                                        onChange={e =>
+                                            field.onChange(occupation)
+                                        }
+                                    />
+                                ))}
+                            </RadioButtonsContainer>
+                        )}
+                    />
                 </XForm>
             )}
         </>

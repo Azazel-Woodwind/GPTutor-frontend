@@ -87,9 +87,7 @@ const FillingButton =
                             id={gradientID3}>
                             <stop
                                 offset="0"
-                                stopColor={
-                                    fillColour || theme.colours.secondary
-                                }>
+                                stopColor={`${theme.colours.glow}`}>
                                 <animate
                                     ref={fillAnimationRef1}
                                     dur={`${duration}s`}
@@ -109,7 +107,9 @@ const FillingButton =
                             <stop
                                 offset="0"
                                 stopColor={
-                                    hovering ? "rgb(39, 46, 95)" : "none"
+                                    hovering && !animating
+                                        ? "rgb(39, 46, 95)"
+                                        : "none"
                                 }
                                 stopOpacity={hovering ? "1" : "0"}>
                                 <animate
@@ -157,7 +157,7 @@ const FillingButton =
                             key={i}
                             fill={
                                 animating
-                                    ? theme.colours.error
+                                    ? theme.colours.secondary
                                     : `url(#${gradientID2})`
                             }
                             d={path}></path>

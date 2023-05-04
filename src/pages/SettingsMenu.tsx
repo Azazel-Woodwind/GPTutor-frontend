@@ -74,17 +74,17 @@ const Account = () => {
 const Container = styled(FillParent)`
     height: 100%;
     width: 100%;
-    padding-top: 8em;
     display: flex;
     justify-content: left;
     padding-left: 3em;
 `;
 
 const UsedSpace = styled.div`
-    max-width: 950px;
+    max-width: 1000px;
     width: 100%;
     display: flex;
     gap: 4em;
+    padding-right: 50px;
 `;
 const Page = styled.div`
     flex-grow: 1;

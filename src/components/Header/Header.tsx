@@ -1,29 +1,22 @@
 import { redirect, Link, useNavigate, useLocation } from "react-router-dom";
 import React from "react";
-import supabase from "../../api/configs/supabase";
-import Logo from "../../assets/Logo";
 import { useAuth } from "../../context/SessionContext";
 import styled from "styled-components";
-import { ChatContext } from "../../context/ChatContext";
-import CustomButton from "../Button";
+import { useHeader } from "../../context/HeaderContext";
 
 const LogoSvg = styled.svg`
     cursor: pointer;
-    width: 150px;
+    width: 175px;
     height: 100px;
+    /* border: 4px solid black; */
 `;
 
 const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
 
-export default function header() {
+export default function Header() {
     const { session, setLoading } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-
-    // console.log(
-    //     "IN CLASSROOM?",
-    //     inClassroomRegex.test(location.pathname + location.search)
-    // );
 
     return (
         <Container>
@@ -89,17 +82,15 @@ const ExitLessonButtonContainer = styled.div`
 `;
 
 const Container = styled.div`
-    top: 0px;
-    left: 1em;
-    min-height: 2em;
-    height: 100px;
+    /* height: 15vh; */
+    position: relative;
+    width: 100%;
     color: white;
-    z-index: 10000000;
-    position: absolute;
+    z-index: 100;
+    /* border: 2px solid red; */
+    padding: 10px 50px 10px 50px;
 
-    svg {
-        position: absolute;
-        left: 2em;
-        top: 0px;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 `;
