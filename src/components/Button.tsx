@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import SvgLinearGradient from "./SvgLinearGradient";
 
@@ -147,20 +147,11 @@ const IconSvg = styled.svg`
 `;
 
 function OutlinedButton(props) {
-    const [buttonRef, setRef] = useState<HTMLButtonElement>();
     const [hovering, setHovering] = useState(false);
+    const [buttonRef, setButtonRef] = useState(null);
 
     const borderGradientID = useMemo(nanoid, []);
     const iconGradientID = useMemo(nanoid, []);
-
-    const dimensions = useMemo(() => {
-        if (buttonRef) {
-            const { width, height } = buttonRef.getBoundingClientRect();
-            // console.log(width, height);
-
-            return { width, height };
-        }
-    }, [buttonRef]);
 
     const borderWidth = props.borderWidth || 3;
 
@@ -168,20 +159,20 @@ function OutlinedButton(props) {
         <OutlinedButtonStyle
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
-            ref={ref => setRef(ref)}
+            ref={setButtonRef}
             {...props}>
             <SvgBorder
-                viewBox={`0 0 ${dimensions?.width + 2 * borderWidth || 0} ${
-                    dimensions?.height + 2 * borderWidth || 0
-                }`}>
+                viewBox={`0 0 ${
+                    buttonRef?.offsetWidth + 2 * borderWidth || 0
+                } ${buttonRef?.offsetHeight + 2 * borderWidth || 0}`}>
                 <defs>
                     <SvgLinearGradient gradientID={borderGradientID} />
                 </defs>
                 <rect
                     x={borderWidth}
                     y={borderWidth}
-                    width={dimensions?.width || 0}
-                    height={dimensions?.height || 0}
+                    width={buttonRef?.offsetWidth || 0}
+                    height={buttonRef?.offsetHeight || 0}
                     rx="10"
                     fill={
                         props.disabled

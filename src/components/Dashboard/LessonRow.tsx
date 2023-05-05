@@ -21,11 +21,10 @@ function LessonRow({
     InvalidModal,
     UnpublishModal,
     DeleteModal,
+    EditModal,
 }) {
-    const [checked, setChecked] = React.useState(lesson.is_published);
     const { subjectOptions, educationLevels } = useAppData();
     const theme = useTheme();
-    const submit = useSubmit();
     const navigate = useNavigate();
 
     return (
@@ -84,7 +83,14 @@ function LessonRow({
                     }}
                 />
                 <EditIcon
-                    onClick={() => navigate(`/edit-lesson?id=${lesson.id}`)}
+                    onClick={() => {
+                        if (lesson.is_published) {
+                            setSelectedLesson(lesson);
+                            EditModal.handleOpen();
+                        } else {
+                            navigate(`/edit-lesson?id=${lesson.id}`);
+                        }
+                    }}
                 />
                 <PlayIcon
                     onClick={() =>

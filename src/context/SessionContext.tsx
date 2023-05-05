@@ -20,7 +20,9 @@ export const SessionContext = React.createContext({
 } as Store);
 
 export function SessionContextProvider({ children }: any) {
-    const [session, setSession] = React.useState<Session | null>(null);
+    const [session, setSession] = React.useState<Session | null | undefined>(
+        undefined
+    );
     const [fetchedData, setFetchedData] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
 
@@ -42,6 +44,7 @@ export function SessionContextProvider({ children }: any) {
     const initialiseSession = async () => {
         supabase.auth.onAuthStateChange(async (_event, newSession) => {
             if (!newSession || !newSession.user) {
+                console.log("HERE");
                 setSession(null);
             } else {
                 newSession.user.accessLevel = await getAccessLevelById(
@@ -50,7 +53,6 @@ export function SessionContextProvider({ children }: any) {
                 setSession(newSession);
             }
 
-            setFetchedData(true);
             setLoading(false);
         });
     };
@@ -59,11 +61,13 @@ export function SessionContextProvider({ children }: any) {
         initialiseSession();
     }, []);
 
+    // console.log("SESSION", session);
+
     return (
         <SessionContext.Provider
             value={{ session, setSession, loading, setLoading }}>
             {loading && <Loading />}
-            {fetchedData && children}
+            {session !== undefined && children}
         </SessionContext.Provider>
     );
 }

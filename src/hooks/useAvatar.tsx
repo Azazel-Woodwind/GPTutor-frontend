@@ -127,7 +127,7 @@ const Avatar = ({
             <ControlsContainer
                 onMouseEnter={() => setShowControls(true)}
                 onMouseLeave={() => setShowControls(false)}>
-                <AvatarWrapper size={size} as={motion.div}>
+                <AvatarWrapper size={size} as={motion.div} {...props}>
                     {rings}
                     <X
                         clickable

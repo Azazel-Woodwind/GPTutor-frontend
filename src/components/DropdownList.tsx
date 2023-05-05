@@ -100,7 +100,7 @@ function DropdownList({
     const dropdownListRef = React.useRef(null);
 
     const filterVisibleOptions = () => {
-        console.log(options, inputValue);
+        // console.log(options, inputValue);
 
         setVisibleOptions(
             options.filter(option =>
@@ -251,7 +251,10 @@ function DropdownList({
                 onMouseOver={() => setMouseEntered(true)}
                 onMouseLeave={() => setMouseEntered(false)}
                 onTransitionEnd={() => setTransitioning(false)}
-                onMouseDown={e => e.stopPropagation()}
+                onMouseDown={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
                 transitioning={transitioning}
                 open={open}
                 ref={dropdownListRef}>

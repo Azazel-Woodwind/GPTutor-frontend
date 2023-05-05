@@ -23,6 +23,7 @@ import UnpublishLessonModal from "../../components/Dashboard/UnpublishLessonModa
 import DeleteLessonModal from "../../components/Dashboard/DeleteLessonModal";
 import CustomButton from "../../components/Button";
 import LessonRow from "../../components/Dashboard/LessonRow";
+import EditLessonModal from "../../components/Dashboard/EditLessonModal";
 
 function MyLessons() {
     const lessons = useLoaderData();
@@ -43,6 +44,10 @@ function MyLessons() {
     });
 
     const { Modal: DeleteModalComponent, ...DeleteModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: EditModalComponent, ...EditModal } = useModal({
         initialOpen: false,
     });
 
@@ -80,6 +85,7 @@ function MyLessons() {
                             InvalidModal={InvalidModal}
                             UnpublishModal={UnpublishModal}
                             DeleteModal={DeleteModal}
+                            EditModal={EditModal}
                         />
                     ))}
                 <CustomButton
@@ -116,6 +122,13 @@ function MyLessons() {
                     handleClose={DeleteModal.handleClose}
                 />
             </DeleteModalComponent>
+
+            <EditModalComponent {...EditModal.ModalProps} type="dropIn">
+                <EditLessonModal
+                    lesson={selectedLesson}
+                    handleClose={EditModal.handleClose}
+                />
+            </EditModalComponent>
         </Container>
     );
 }

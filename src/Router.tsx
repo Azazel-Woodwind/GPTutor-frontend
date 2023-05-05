@@ -77,8 +77,11 @@ const OutletWrapper = styled.div`
 
 function ApplicationWrapper() {
     const { session } = useAuth();
-
-    if (!session) return <Navigate to={"/login"} replace />;
+    // console.log(session);
+    if (!session) {
+        console.log("NO SESSION FOUND, NAVIGATING TO LOGIN");
+        return <Navigate to={"/login"} replace />;
+    }
 
     return (
         <SocketContextProvider>
@@ -112,8 +115,12 @@ function RouteProtector({ accessLevel, children }: RouteProtectorProps) {
 
 function PublicWrapper() {
     const { session } = useAuth();
+    // console.log(session);
 
-    if (session) return <Navigate to={"/hub"} replace />;
+    if (session) {
+        console.log("SESSION FOUND, NAVIGATING TO HUB");
+        return <Navigate to={"/hub"} replace />;
+    }
 
     return (
         <Scroller>

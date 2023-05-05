@@ -142,6 +142,8 @@ const Modal = ({
 
 const ModalStyle = styled(motion.div)`
     position: relative;
+    /* min-width: ${props => props.width || "800px"};
+    min-height: ${props => props.height || "300px"}; */
     width: ${props => props.width || "800px"};
     height: ${props => props.height || "300px"};
 

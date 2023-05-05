@@ -18,7 +18,7 @@ function Prompt(props) {
     });
 
     useBlocker(args => {
-        console.log(args);
+        // console.log(args);
         if (!confirmed && block) {
             setNextLocation(args.nextLocation.pathname);
             handleOpen();

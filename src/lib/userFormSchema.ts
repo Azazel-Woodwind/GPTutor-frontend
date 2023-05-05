@@ -46,9 +46,7 @@ export const education_level_schema = educationLevels =>
                     .map(level => level.toLowerCase())
                     .includes(val.toLowerCase()),
             {
-                message: `Education level must be one of ${educationLevels.join(
-                    ", "
-                )}`,
+                message: `Lesson must have an education level`,
             }
         );
 
@@ -74,9 +72,20 @@ export const subject_schema = subjectOptions =>
                     .map(subject => subject.toLowerCase())
                     .includes(val.toLowerCase()),
             {
-                message: `Subjects must each be one of ${subjectOptions.join(
-                    ", "
-                )}`,
+                message: `Lesson must have a subject`,
+            }
+        );
+
+export const exam_board_schema = examBoards =>
+    z
+        .string()
+        .refine(
+            val =>
+                examBoards
+                    .map(examBoard => examBoard.toLowerCase())
+                    .includes(val.toLowerCase()),
+            {
+                message: `Lesson must have an exam board`,
             }
         );
 

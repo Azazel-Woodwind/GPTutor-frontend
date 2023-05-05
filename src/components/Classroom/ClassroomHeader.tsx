@@ -11,11 +11,11 @@ const Header = ({
 }) => {
     return (
         <>
-            <Title>
+            <Title progressBarShown={learningObjectiveNumber > 0}>
                 {learningObjectiveNumber > 0 ? (
                     <>
                         <ProgressBar
-                            width="35em"
+                            width="40em"
                             value={learningObjectiveNumber}
                             max={currentLesson.learning_objectives.length}
                         />
@@ -27,7 +27,7 @@ const Header = ({
                 )}
             </Title>
             <ExitButton>
-                <NavigateHome size={50} />
+                <NavigateHome size={40} />
             </ExitButton>
         </>
     );
@@ -36,13 +36,16 @@ const Header = ({
 const Title = styled.div`
     position: absolute;
     left: 50%;
-    top: 45px;
+    top: 30px;
     transform: translateX(-50%);
 
-    font-size: 2em;
+    font-size: 1.5em;
     font-weight: 400;
 
-    @media (max-width: 1600px) {
+    ${props =>
+        props.progressBarShown &&
+        `
+        @media (max-width: 1600px) {
         font-size: 1.5em;
     }
 
@@ -59,6 +62,7 @@ const Title = styled.div`
     @media (max-width: 900px) {
         font-size: 0.5em;
     }
+    `}
 `;
 
 const ExitButton = styled.div`

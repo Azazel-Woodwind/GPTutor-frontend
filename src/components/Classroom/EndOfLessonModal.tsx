@@ -18,7 +18,7 @@ function EndOfLessonModal() {
 
     return (
         <motion.div {...fade_animation()}>
-            <Modal {...ModalProps}>
+            <Modal {...ModalProps} height="370px">
                 <CenteredColumn fillparent gap="1em">
                     <Title> Lesson has been completed </Title>
                     <p>

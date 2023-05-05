@@ -70,7 +70,16 @@ export default function LearningObjective({
             <Controller
                 name={`learning_objectives.${index}.title`}
                 control={form.control}
-                render={({ field }) => <Textfield label="Title" {...field} />}
+                render={({ field, fieldState, formState }) => (
+                    <Textfield
+                        label="Title"
+                        {...field}
+                        error={fieldState.invalid}
+                        helperText={
+                            fieldState.invalid && fieldState.error?.message
+                        }
+                    />
+                )}
             />
             <div
                 style={{

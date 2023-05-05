@@ -28,11 +28,11 @@ function LessonCard({ lesson }: PropsTypes) {
                 )
             }>
             <Title>{capitaliseFirstLetter(lesson.title)}</Title>
-            <Subject>{capitaliseFirstLetter(lesson.subject)}</Subject>
+            <Subject>{lesson.exam_board || "Edexcel"}</Subject>
             <Description>{lesson.caption}</Description>
             <Footer>
                 <Level>{formatEducationLevel(lesson.education_level)}</Level>
-                <ExamBoard>{lesson.exam_board || "Edexcel"}</ExamBoard>
+                <ExamBoard>{capitaliseFirstLetter(lesson.subject)}</ExamBoard>
             </Footer>
         </Container>
     );

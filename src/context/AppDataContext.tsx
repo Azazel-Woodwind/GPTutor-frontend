@@ -22,8 +22,8 @@ export function AppDataContextProvider({ children }: any) {
 
     React.useEffect(() => {
         if (!fetching) {
-            console.log("Finished fetching app data");
-            console.log(subjectOptions, educationLevels);
+            // console.log("Finished fetching app data");
+            // console.log(subjectOptions, educationLevels);
         }
     }, [fetching]);
 

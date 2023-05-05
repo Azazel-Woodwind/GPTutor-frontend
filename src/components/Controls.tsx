@@ -68,11 +68,11 @@ const Controls = ({
     } = useFillingButton({
         onAnimationStart: () => {
             // console.log(10);
-            // startRecording();
+            startRecording();
         },
         onAnimationEnd: () => {
             // console.log("ANIMATION STOPPED");
-            // stopRecording();
+            stopRecording();
         },
     });
 

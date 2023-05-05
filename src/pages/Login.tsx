@@ -61,7 +61,8 @@ function Login() {
 
     useEffect(() => {
         if (session) {
-            navigate("/hub");
+            console.log(session);
+            // navigate("/hub");
         }
     }, [session]);
 

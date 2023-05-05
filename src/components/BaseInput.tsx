@@ -13,6 +13,12 @@ export const BaseInput = React.forwardRef(
             setEndAdornmentWidth(wrapper?.getBoundingClientRect().width);
         });
 
+        const callback = React.useCallback(node => {
+            if (node !== null) {
+                setRef(node);
+            }
+        }, []);
+
         return (
             <>
                 <BaseInputStyle
@@ -30,9 +36,7 @@ export const BaseInput = React.forwardRef(
 
                 {type === "password" ? (
                     <EndAdornmentWrapper>
-                        <span
-                            style={{ paddingRight: "0.7em" }}
-                            ref={ref => setRef(ref)}>
+                        <span style={{ paddingRight: "0.7em" }} ref={callback}>
                             <IconButton
                                 onKeyUp={e => {
                                     if (e.key === "Enter") {
@@ -53,9 +57,7 @@ export const BaseInput = React.forwardRef(
                 ) : (
                     props.endAdornment && (
                         <EndAdornmentWrapper>
-                            <span ref={ref => setRef(ref)}>
-                                {props.endAdornment}
-                            </span>
+                            <span ref={callback}>{props.endAdornment}</span>
                         </EndAdornmentWrapper>
                     )
                 )}

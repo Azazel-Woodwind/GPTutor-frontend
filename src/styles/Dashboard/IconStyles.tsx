@@ -1,7 +1,7 @@
 import { css } from "styled-components";
 
 const IconStyles = css`
-    width: 24px;
+    width: 26px;
     color: ${props => props.theme.colours.secondary};
     cursor: pointer;
 

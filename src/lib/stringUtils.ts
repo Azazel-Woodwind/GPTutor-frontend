@@ -1,3 +1,6 @@
+import { IMAGE_LINK_REGEX, SVG_REGEX } from "./regexes";
+import image from "../assets/image-load-failed.png";
+
 export function capitaliseFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -47,5 +50,19 @@ export function formatSubject(subject: string) {
             return "Science";
         default:
             return subject;
+    }
+}
+
+export function svgStringToSrc(svgString: string) {
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svgString)}`;
+}
+
+export function formatImageSource(src: string) {
+    if (IMAGE_LINK_REGEX.test(src)) {
+        return src;
+    } else if (SVG_REGEX.test(src)) {
+        return svgStringToSrc(src);
+    } else {
+        return image;
     }
 }

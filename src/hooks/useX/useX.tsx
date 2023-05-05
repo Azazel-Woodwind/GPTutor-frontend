@@ -60,6 +60,7 @@ function useX(config: Config) {
         audio.current.load();
         setSpeaking(false);
         animationId.current && cancelAnimationFrame(animationId.current);
+        setMultiplier(1);
 
         setHistory(prev => [...prev, { role: "user", content: message }]);
         onMessage({ role: "user", content: message });

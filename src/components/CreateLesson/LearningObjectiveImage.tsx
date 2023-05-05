@@ -22,15 +22,31 @@ export default function LearningObjectiveImage({
             <Controller
                 name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.link`}
                 control={form.control}
-                render={({ field }) => (
-                    <Textfield fullwidth label="Link" {...field} />
+                render={({ field, fieldState }) => (
+                    <Textfield
+                        fullwidth
+                        label="Link"
+                        error={fieldState.invalid}
+                        helperText={
+                            fieldState.invalid && fieldState.error?.message
+                        }
+                        {...field}
+                    />
                 )}
             />
             <Controller
                 name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.description`}
                 control={form.control}
-                render={({ field }) => (
-                    <Textfield fullwidth label="Description" {...field} />
+                render={({ field, fieldState }) => (
+                    <Textfield
+                        fullwidth
+                        label="Description"
+                        error={fieldState.invalid}
+                        helperText={
+                            fieldState.invalid && fieldState.error?.message
+                        }
+                        {...field}
+                    />
                 )}
             />
             <Delete
@@ -51,10 +67,11 @@ export default function LearningObjectiveImage({
 }
 
 const Delete = styled.p`
+    margin-top: 22px;
     ${props =>
         props.disabled
             ? "color: grey;"
-            : `${props.theme.utils.gradientText};cursor: pointer;font-weight: bold;`}
+            : `${props.theme.utils.gradientText};cursor: pointer;font-weight: bold;`};
 `;
 
 const ObjectiveContainer = styled.div`
@@ -62,5 +79,6 @@ const ObjectiveContainer = styled.div`
     gap: 1em;
     /* padding-top: 1em; */
     width: 100%;
-    align-items: center;
+    min-height: 64px;
+    align-items: flex-start;
 `;

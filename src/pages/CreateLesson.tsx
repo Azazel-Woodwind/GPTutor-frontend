@@ -11,7 +11,7 @@ import CenteredColumn from "../styles/containers/CenteredColumn";
 import styled from "styled-components";
 import useDropdownList from "../hooks/useDropdownList";
 import CenteredRow from "../styles/containers/CenteredRow";
-import Textfield from "../components/Textfield";
+import Textfield, { ErrorText } from "../components/Textfield";
 import useConversationDisplay from "../hooks/useConversationDisplay";
 import useRadioButtons from "../hooks/useRadioButtons";
 import RadioButtonsContainer from "../styles/containers/HorizontalRadioButtonContainer";
@@ -26,6 +26,7 @@ import { useNotification } from "../context/NotificationContext";
 import Prompt from "../components/Prompt";
 import { lessonFormSchema } from "../lib/lessonFormSchema";
 import { useAppData } from "../context/AppDataContext";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const CreateLessonForm = styled.form`
     margin: 0 auto;
@@ -51,6 +52,7 @@ const onLeaveMessage =
 
 function CreateLesson({ action }) {
     const { subjectOptions, educationLevels, examBoards } = useAppData();
+    // console.log(examBoards);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [lesson, setLesson] = useState(null);
@@ -61,10 +63,14 @@ function CreateLesson({ action }) {
     const sendNotification = useNotification();
 
     const form = useForm({
+        mode: "onChange",
+        resolver: zodResolver(
+            lessonFormSchema({ subjectOptions, educationLevels, examBoards })
+        ),
         defaultValues: {
             title: "",
             description: "",
-            education_level: null,
+            education_level: "",
             subject: "",
             exam_board: "",
             caption: "",
@@ -83,6 +89,16 @@ function CreateLesson({ action }) {
 
     const is_published = form.watch("is_published");
 
+    React.useEffect(() => {
+        if (action === "create") {
+            resetForm();
+        }
+    }, [action]);
+
+    React.useEffect(() => {
+        form.trigger();
+    }, [is_published]);
+
     const learningObjectivesFields = useFieldArray({
         control: form.control,
         name: "learning_objectives",
@@ -91,7 +107,25 @@ function CreateLesson({ action }) {
     const navigate = useNavigate();
 
     const resetForm = () => {
-        form.reset();
+        console.log("resetting form");
+        form.reset({
+            title: "",
+            description: "",
+            education_level: "",
+            subject: "",
+            exam_board: "",
+            caption: "",
+            learning_objectives: Array(3).fill({
+                title: "",
+                images: [
+                    {
+                        link: "",
+                        description: "",
+                    },
+                ],
+            }),
+            is_published: false,
+        });
     };
 
     const setDefaultValues = lessonArg => {
@@ -121,6 +155,7 @@ function CreateLesson({ action }) {
     React.useEffect(() => {
         resetForm();
         if (action === "edit") {
+            // console.log("here");
             const lessonID = searchParams.get("id");
             if (!lessonID) {
                 sendNotification({
@@ -160,29 +195,13 @@ function CreateLesson({ action }) {
         console.log("FORM SUBMITTED");
         console.log(data);
 
-        const validatedResult = lessonFormSchema({
-            subjectOptions,
-            educationLevels,
-        }).safeParse(data);
-
-        if (data.is_published) {
-            if (!validatedResult.success) {
-                sendNotification({
-                    label: "Only a valid lesson may be published",
-                    duration: 5,
-                    type: "error",
-                });
-                throw new Error("Invalid lesson");
-            }
-        } else {
-            if (!form.formState.isDirty) {
-                sendNotification({
-                    label: "You must make changes before saving",
-                    duration: 5,
-                    type: "error",
-                });
-                throw new Error("No changes made");
-            }
+        if (!form.formState.isValid) {
+            sendNotification({
+                label: "Form is invalid",
+                duration: 5,
+                type: "error",
+            });
+            throw new Error("Form is not valid");
         }
 
         try {
@@ -194,7 +213,7 @@ function CreateLesson({ action }) {
                 caption: data.caption || null,
                 exam_board: data.exam_board || null,
                 education_level:
-                    (data.education_level?.toLowerCase() as EducationLevel) ??
+                    (data.education_level?.toLowerCase() as EducationLevel) ||
                     null,
                 learning_objectives: data.learning_objectives,
                 is_published: data.is_published,
@@ -230,7 +249,9 @@ function CreateLesson({ action }) {
             console.log(JSON.stringify(error));
 
             sendNotification({
-                label: "Error creating lesson",
+                label: `There was an error ${
+                    action === "edit" ? "updating" : "creating"
+                } the lesson.`,
                 duration: 5,
                 type: "error",
             });
@@ -244,6 +265,7 @@ function CreateLesson({ action }) {
             const result = lessonFormSchema({
                 subjectOptions,
                 educationLevels,
+                examBoards,
             }).safeParse(value);
             // console.log(value);
             setValid(result.success);
@@ -270,56 +292,110 @@ function CreateLesson({ action }) {
                                 resetForm();
                             }
                         }}
+                        record
                         outline>
                         {action === "edit" ? "Reset defaults" : "Clear"}
                     </CustomButton>
                 </div>
 
-                <div style={{ display: "flex", gap: "1em" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "1em",
+                        // alignItems: "flex-start",
+                        // height: "",
+                    }}>
                     <CenteredColumn gap="1em">
                         <Controller
                             name="title"
                             control={form.control}
-                            render={({ field }) => (
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
                                 <Textfield
                                     fullwidth
                                     label="Title"
                                     type="text"
                                     required
+                                    error={fieldState.invalid}
+                                    helperText={
+                                        fieldState.invalid &&
+                                        fieldState.error?.message
+                                    }
                                     {...field}
                                 />
                             )}
                         />
 
-                        <CenteredRow gap="1em">
+                        <CenteredRow
+                            gap="1em"
+                            style={{ alignItems: "flex-start" }}>
                             <Controller
                                 control={form.control}
                                 name={"education_level"}
-                                render={({ field }) => (
-                                    <RadioButtonsContainer gap="1.5em">
-                                        {educationLevels.map(level => (
-                                            <RadioButton
-                                                key={level}
-                                                label={level}
-                                                checked={field.value === level}
-                                                onChange={e =>
-                                                    field.onChange(level)
-                                                }
-                                            />
-                                        ))}
-                                    </RadioButtonsContainer>
+                                render={({
+                                    field, // { onChange, onBlur, value, name, ref }
+                                    fieldState, //{ invalid, isTouched, isDirty, error }
+                                    formState,
+                                }) => (
+                                    <div
+                                        style={{
+                                            minHeight: "64px",
+                                            // border: "2px solid red",
+                                        }}>
+                                        <RadioButtonsContainer
+                                            gap="1.5em"
+                                            style={{
+                                                height: "64px",
+                                                // border: "2px solid blue",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                flex: "1 0 auto",
+                                                margin: 0,
+                                            }}>
+                                            {educationLevels.map(level => (
+                                                <RadioButton
+                                                    key={level}
+                                                    label={level}
+                                                    checked={
+                                                        field.value === level
+                                                    }
+                                                    onChange={e =>
+                                                        field.onChange(level)
+                                                    }
+                                                />
+                                            ))}
+                                        </RadioButtonsContainer>
+                                        {fieldState.invalid &&
+                                            fieldState.error?.message && (
+                                                <ErrorText>
+                                                    {fieldState.error?.message}
+                                                </ErrorText>
+                                            )}
+                                    </div>
                                 )}
                             />
                             <Controller
                                 control={form.control}
                                 name="subject"
-                                render={({ field }) => (
+                                render={({
+                                    field, // { onChange, onBlur, value, name, ref }
+                                    fieldState, //{ invalid, isTouched, isDirty, error }
+                                    formState,
+                                }) => (
                                     <DropdownList
                                         label="Subject"
                                         options={subjectOptions}
                                         selected={field.value}
                                         setSelected={field.onChange}
                                         required
+                                        error={fieldState.invalid}
+                                        helperText={
+                                            fieldState.invalid &&
+                                            fieldState.error?.message
+                                        }
                                     />
                                 )}
                             />
@@ -328,28 +404,48 @@ function CreateLesson({ action }) {
                     <Controller
                         name="description"
                         control={form.control}
-                        render={({ field }) => (
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
                             <Textfield
                                 label="Lesson Description"
                                 width="430px"
                                 multiline
+                                // fullheight
+                                height="144px"
                                 // rows={5}
                                 {...field}
                             />
                         )}
                     />
                 </div>
-                <div style={{ display: "flex", gap: "1em" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "1em",
+                        alignItems: "flex-start",
+                    }}>
                     <Controller
                         control={form.control}
                         name="exam_board"
-                        render={({ field }) => (
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
                             <DropdownList
                                 label="Exam Board"
                                 options={examBoards}
                                 selected={field.value}
                                 setSelected={field.onChange}
                                 required
+                                error={fieldState.invalid}
+                                helperText={
+                                    fieldState.invalid &&
+                                    fieldState.error?.message
+                                }
                             />
                         )}
                     />
@@ -357,12 +453,21 @@ function CreateLesson({ action }) {
                     <Controller
                         name="caption"
                         control={form.control}
-                        render={({ field }) => (
+                        render={({
+                            field, // { onChange, onBlur, value, name, ref }
+                            fieldState, //{ invalid, isTouched, isDirty, error }
+                            formState,
+                        }) => (
                             <Textfield
                                 label="Caption"
                                 type="text"
                                 fullwidth
                                 required
+                                error={fieldState.invalid}
+                                helperText={
+                                    fieldState.invalid &&
+                                    fieldState.error?.message
+                                }
                                 // rows={5}
                                 {...field}
                             />
@@ -372,7 +477,7 @@ function CreateLesson({ action }) {
 
                 <div
                     style={{
-                        paddingTop: "1em",
+                        paddingTop: "5px",
                         display: "flex",
                         flexDirection: "column",
                         gap: "2em",
@@ -442,9 +547,10 @@ function CreateLesson({ action }) {
                     <CustomButton
                         style={{ marginTop: "0.6em", width: "100%" }}
                         disabled={
+                            form.formState.isSubmitting ||
                             !(
-                                (!is_published && form.formState.isDirty) ||
-                                (is_published && valid)
+                                form.formState.isValid &&
+                                (is_published ? true : form.formState.isDirty)
                             )
                         }>
                         {is_published

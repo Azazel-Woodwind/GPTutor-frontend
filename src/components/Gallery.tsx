@@ -5,6 +5,7 @@ import { wrap } from "popmotion";
 import styled from "styled-components";
 import CustomButton from "./Button";
 import { ArrowBoldRight } from "@styled-icons/entypo/ArrowBoldRight";
+import { formatImageSource } from "../lib/stringUtils";
 
 //From framer motion documentation
 
@@ -80,7 +81,7 @@ const Gallery = ({ images = [], currentImageIndex }) => {
                 <AnimatePresence initial={false} custom={direction}>
                     <Image
                         key={page}
-                        src={images[imageIndex]}
+                        src={formatImageSource(images[imageIndex])}
                         custom={direction}
                         variants={variants}
                         initial="enter"

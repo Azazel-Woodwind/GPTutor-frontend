@@ -84,6 +84,8 @@ const LessonContainer = styled.div`
     width: 70%;
     height: fit-content;
     margin-bottom: 2em;
+    align-content: space-evenly;
+    /* border: 2px solid red; */
 `;
 
 export default Lessons;

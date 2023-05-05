@@ -157,7 +157,7 @@ const FillingButton =
                             key={i}
                             fill={
                                 animating
-                                    ? theme.colours.secondary
+                                    ? `${theme.colours.primary}EF`
                                     : `url(#${gradientID2})`
                             }
                             d={path}></path>

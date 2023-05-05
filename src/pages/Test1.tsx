@@ -17,6 +17,9 @@ import PublishLessonModal from "../components/Dashboard/PublishLessonModal";
 import InvalidLessonModal from "../components/Dashboard/InvalidLessonModal";
 import UnpublishLessonModal from "../components/Dashboard/UnpublishLessonModal";
 import DeleteLessonModal from "../components/Dashboard/DeleteLessonModal";
+import { lessonFormSchema } from "../lib/lessonFormSchema";
+import { IMAGE_LINK_REGEX, SVG_REGEX } from "../lib/regexes";
+import { formatImageSource } from "../lib/stringUtils";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -28,6 +31,7 @@ const props = {
     initial: "hidden",
     animate: "visible",
 };
+
 function Test1() {
     const checkbox = React.useRef(null);
     const form = useForm();
@@ -47,6 +51,9 @@ function Test1() {
     const { Modal: DeleteModalComponent, ...DeleteModal } = useModal({
         initialOpen: false,
     });
+
+    const [imageLink, setImageLink] = React.useState("");
+    const [validImageLink, setValidImageLink] = React.useState(false);
 
     return (
         <CenteredColumn fillparent gap="10px">
@@ -99,6 +106,23 @@ function Test1() {
                     handleClose={DeleteModal.handleClose}
                 />
             </DeleteModalComponent>
+
+            <Textfield
+                label="Image Link"
+                fullwidth
+                value={imageLink}
+                onChange={e => setImageLink(e.target.value)}
+            />
+            <CustomButton
+                onClick={() => {
+                    setValidImageLink(formatImageSource(imageLink));
+                }}>
+                Click to validate image link
+            </CustomButton>
+
+            {validImageLink && (
+                <img src={validImageLink} alt="image" width="400px" />
+            )}
         </CenteredColumn>
     );
 }

@@ -42,6 +42,7 @@ import {
     subjects_schema,
 } from "../lib/userFormSchema";
 import { useAppData } from "../context/AppDataContext";
+import { Ctxc } from "styled-icons/crypto";
 
 function Register() {
     const { subjectOptions, educationLevels } = useAppData();

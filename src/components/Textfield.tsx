@@ -16,11 +16,9 @@ import {
 import { BaseInput } from "./BaseInput";
 import Collapse from "./Collapse";
 
-const ErrorText = styled.div`
-    padding: 0;
-    margin: 0;
+export const ErrorText = styled.div`
     color: ${props => props.theme.colours.error};
-    font-size: 0.95em;
+    font-size: 15px;
     font-weight: 620;
     /* border: 2px solid blue; */
     /* height: 100%; */
@@ -118,10 +116,13 @@ const Label = styled.label.withConfig({
     /* border: 1px solid green; */
     position: relative;
     display: inline-block;
-    ${props => props.width && `width: ${props.width};`};
+    width: 100%;
+    flex: 1;
+    /* height: 100%; */
+    /* ${props => props.width && `width: ${props.width};`};
     ${props => props.fullwidth && `width: 100%;`};
     ${props => props.height && `height: ${props.height};`};
-    ${props => props.fullheight && `height: 100%;`}
+    ${props => props.fullheight && `height: 100%;`} */
 `;
 
 export const Textfield = forwardRef(
@@ -162,25 +163,42 @@ export const Textfield = forwardRef(
         // console.log(props.value, ref?.current?.value);
 
         return (
-            <Label {...props}>
-                <TextfieldWrapper
-                    {...props}
-                    onMouseOver={e => {
-                        // console.log("mouse over");
+            <TextfieldContainer {...props}>
+                <Label {...props}>
+                    <TextfieldWrapper
+                        {...props}
+                        onMouseOver={e => {
+                            // console.log("mouse over");
 
-                        setMouseEntered(true);
-                        props.onMouseOver && props.onMouseOver(e);
-                    }}
-                    onMouseLeave={e => {
-                        setMouseEntered(false);
-                        props.onMouseLeave && props.onMouseLeave(e);
-                    }}>
-                    <CustomFieldset
-                        focused={focused}
-                        mouseEntered={mouseEntered}
-                        {...props}>
-                        <CustomLegend
-                            visible={
+                            setMouseEntered(true);
+                            props.onMouseOver && props.onMouseOver(e);
+                        }}
+                        onMouseLeave={e => {
+                            setMouseEntered(false);
+                            props.onMouseLeave && props.onMouseLeave(e);
+                        }}>
+                        <CustomFieldset
+                            focused={focused}
+                            mouseEntered={mouseEntered}
+                            {...props}>
+                            <CustomLegend
+                                visible={
+                                    !!(
+                                        focused ||
+                                        (props.value && props.value.length) ||
+                                        (ref &&
+                                            ref.current?.value?.length > 0) ||
+                                        (inputRef &&
+                                            inputRef.current?.value?.length > 0)
+                                    )
+                                }>
+                                {required ? `${label} *` : label}
+                            </CustomLegend>
+                        </CustomFieldset>
+                        <InputLabel
+                            initial={false}
+                            variants={LabelVariants}
+                            animate={
                                 !!(
                                     focused ||
                                     (props.value && props.value.length) ||
@@ -188,61 +206,60 @@ export const Textfield = forwardRef(
                                     (inputRef &&
                                         inputRef.current?.value?.length > 0)
                                 )
+                                    ? "focused"
+                                    : undefined
                             }>
                             {required ? `${label} *` : label}
-                        </CustomLegend>
-                    </CustomFieldset>
-                    <InputLabel
-                        initial={false}
-                        variants={LabelVariants}
-                        animate={
-                            !!(
-                                focused ||
-                                (props.value && props.value.length) ||
-                                (ref && ref.current?.value?.length > 0) ||
-                                (inputRef &&
-                                    inputRef.current?.value?.length > 0)
-                            )
-                                ? "focused"
-                                : undefined
-                        }>
-                        {required ? `${label} *` : label}
-                    </InputLabel>
-                    <BaseInput
-                        ref={ref || inputRef}
-                        type="text"
-                        {...props}
-                        onChange={e => {
-                            onChange && onChange(e);
-                        }}
-                        onFocus={e => {
-                            setFocused(true);
-                            onFocus && onFocus(e);
-                        }}
-                        onClick={e => {
-                            // setFocused(true);
-                            onClick && onClick(e);
-                        }}
-                        onBlur={e => {
-                            setFocused(false);
-                            onBlur && onBlur(e);
-                        }}
-                    />
-                </TextfieldWrapper>
+                        </InputLabel>
+                        <BaseInput
+                            ref={ref || inputRef}
+                            type="text"
+                            {...props}
+                            onChange={e => {
+                                onChange && onChange(e);
+                            }}
+                            onFocus={e => {
+                                setFocused(true);
+                                onFocus && onFocus(e);
+                            }}
+                            onClick={e => {
+                                // setFocused(true);
+                                onClick && onClick(e);
+                            }}
+                            onBlur={e => {
+                                setFocused(false);
+                                onBlur && onBlur(e);
+                            }}
+                        />
+                    </TextfieldWrapper>
+                    {props.type === "password" &&
+                        label !== "Confirm Password" && (
+                            <Collapse open={props.error && focused}>
+                                <PasswordInfo
+                                    password={
+                                        props.value ?? ref?.current?.value
+                                    }
+                                />
+                            </Collapse>
+                        )}
+                </Label>
                 {props.error && focused && props.helperText && (
                     <ErrorText>{props.helperText}</ErrorText>
                 )}
-                {props.type === "password" && label !== "Confirm Password" && (
-                    <Collapse open={props.error && focused}>
-                        <PasswordInfo
-                            password={props.value ?? ref?.current?.value}
-                        />
-                    </Collapse>
-                )}
-            </Label>
+            </TextfieldContainer>
         );
     }
 );
+
+const TextfieldContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    /* height: 100%; */
+    ${props => props.width && `width: ${props.width};`};
+    ${props => props.fullwidth && `width: 100%;`};
+    ${props => props.height && `height: ${props.height};`};
+    ${props => props.fullheight && `height: 100%;`}
+`;
 
 const PasswordInfoEntryContainer = styled.div`
     display: flex;

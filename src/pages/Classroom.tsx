@@ -62,6 +62,8 @@ function Classroom() {
         }
     }, []);
 
+    console.log("IMAGES:", images);
+
     const renderComponent = () => {
         if (started === undefined) {
             return (
@@ -89,7 +91,7 @@ function Classroom() {
             <Container
                 ref={getClassroomHeight}
                 classroomHeight={classroomHeight}
-                exit={{ opacity: 0, transition: { duration: 0.5 } }}
+                {...fade_animation()}
                 key="classroom">
                 {classroomHeight && (
                     <>
@@ -110,7 +112,8 @@ function Classroom() {
                                     {...fade_animation()}
                                 />
                                 <AnimatePresence>
-                                    {images?.length > 0 && (
+                                    {images?.filter(image => image.length > 0)
+                                        .length > 0 && (
                                         <GalleryContainer
                                             as={motion.div}
                                             layout
