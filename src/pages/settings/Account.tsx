@@ -5,10 +5,11 @@ import CustomButton from "../../components/Button";
 import SubmitButton from "../../components/Button";
 import { Textfield } from "../../components/Textfield";
 import { useNotification } from "../../context/NotificationContext";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
-    const onSubmit = () => {};
     const sendNotification = useNotification();
+    const navigate = useNavigate();
 
     const signOut = async e => {
         e.preventDefault();
@@ -40,6 +41,12 @@ const Profile = () => {
                 </p>
             </div>
             <Textfield label="Email" type="text" required />
+            <CustomButton
+                // style={{ width: "fit-content" }}
+                outline
+                onClick={() => navigate("/settings/reset-password")}>
+                Reset password
+            </CustomButton>
             <p> Est et exercitation dolor cillum sint nisi nisi. </p>
             <Textfield label="Name" type="text" required />
             <Textfield label="Last Name" type="text" required />

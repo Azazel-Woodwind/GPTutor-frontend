@@ -29,7 +29,7 @@ function XForm({ children, submitButtonText, onSubmit, title, link, isValid }) {
     console.log("rerender");
 
     return (
-        <CenteredRow gap="8em" wrap fillparent>
+        <CenteredRow gap="8em" fillparent style={{ overflow: "auto" }}>
             <Avatar size={200} hasLogo />
             <CenteredColumn gap="1.5em">
                 <Title>{title}</Title>

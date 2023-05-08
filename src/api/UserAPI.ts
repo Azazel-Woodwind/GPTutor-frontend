@@ -46,6 +46,20 @@ const UserAPI = {
         if (error) throw error;
     },
 
+    activateMe: async function (password: string) {
+        const { data: data1, error: error1 } = await supabase.auth.updateUser({
+            password,
+        });
+
+        if (error1) throw error1;
+
+        const { data, error } = await supabase.rpc("activate_user");
+
+        if (error) throw error;
+
+        return data;
+    },
+
     updateMe: async function ({
         email,
         password,

@@ -161,10 +161,10 @@ function Register() {
                             </TextWrapper>
                         </Link>
                     }
-                    // isValid={
-                    //     !form.formState.isValid || form.formState.isSubmitting
-                    // }
-                    isValid={false}>
+                    isValid={
+                        !form.formState.isValid || form.formState.isSubmitting
+                    }
+                    >
                     <MultiTextfieldRow gap="0.8em">
                         <Controller
                             name="first_name"

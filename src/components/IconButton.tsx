@@ -149,7 +149,6 @@ function OutlinedIconButton({
                 iconSize={iconSize}
                 borderWidth={borderWidth}
                 viewBox={`0 0 ${viewboxWidth} ${viewboxHeight}`}
-                focusable="false"
                 xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <SvgLinearGradient gradientID={gradientID2} />
@@ -165,6 +164,7 @@ function OutlinedIconButton({
 function BasicIconButton(props) {
     return (
         <IconButtonStyle
+            tabIndex={0}
             onMouseDown={e => e.preventDefault()}
             onMouseOver={e => e.currentTarget.blur()}
             {...props}>

@@ -36,8 +36,11 @@ const OutlinedButtonStyle = styled(motion.button)`
     background-color: transparent;
     border: none;
     ${props => !props.disabled && "cursor: pointer;"}
-    overflow: hidden;
+    /* overflow: hidden; */
     outline: none;
+    /* border: 2px solid red; */
+    width: fit-content;
+    padding: 0;
 `;
 
 const ButtonText = styled.span`
@@ -57,6 +60,8 @@ const SvgBorder = styled.svg`
     width: 100%;
     height: 100%;
     pointer-events: none;
+    /* border: 2px solid blue; */
+    overflow: visible;
 `;
 
 const FilledButtonStyle = styled(motion.button)`
@@ -155,22 +160,26 @@ function OutlinedButton(props) {
 
     const borderWidth = props.borderWidth || 3;
 
+    // console.log(buttonRef?.offsetWidth);
+    // console.log(buttonRef?.offsetHeight);
+
     return (
         <OutlinedButtonStyle
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             ref={setButtonRef}
-            {...props}>
-            <SvgBorder
-                viewBox={`0 0 ${
-                    buttonRef?.offsetWidth + 2 * borderWidth || 0
-                } ${buttonRef?.offsetHeight + 2 * borderWidth || 0}`}>
+            {...props}
+            style={{
+                padding: `0.8em 1.5em`,
+                margin: `${borderWidth}px`,
+            }}>
+            <SvgBorder>
                 <defs>
                     <SvgLinearGradient gradientID={borderGradientID} />
                 </defs>
                 <rect
-                    x={borderWidth}
-                    y={borderWidth}
+                    x={0}
+                    y={0}
                     width={buttonRef?.offsetWidth || 0}
                     height={buttonRef?.offsetHeight || 0}
                     rx="10"

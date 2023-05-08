@@ -23,7 +23,7 @@ function LessonRow({
     DeleteModal,
     EditModal,
 }) {
-    const { subjectOptions, educationLevels } = useAppData();
+    const { subjectOptions, educationLevels, examBoards } = useAppData();
     const theme = useTheme();
     const navigate = useNavigate();
 
@@ -41,6 +41,7 @@ function LessonRow({
                             const validate = lessonFormSchema({
                                 subjectOptions,
                                 educationLevels,
+                                examBoards,
                             }).safeParse(lesson);
 
                             if (validate.success) {

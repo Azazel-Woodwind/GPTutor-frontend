@@ -48,10 +48,17 @@ import DLessons from "./pages/dashboard/Lessons";
 import PageWrapper from "./styles/containers/PageWrapper";
 import Scroller from "./components/Scroller";
 import MyLessons from "./pages/dashboard/MyLessons";
-import { ADMIN_ACCESS_LEVEL } from "./lib/accessLevels";
+import {
+    ADMIN_ACCESS_LEVEL,
+    INACTIVE_ACCESS_LEVEL,
+    STUDENT_ACCESS_LEVEL,
+} from "./lib/accessLevels";
 import EducationLevelsAPI from "./api/EducationLevelAPI";
 import UserAPI from "./api/UserAPI";
 import EndOfLessonModal from "./components/Classroom/EndOfLessonModal";
+import ResetPassword from "./pages/settings/ResetPassword";
+import ActivateAccount from "./pages/ActivateAccount";
+import { HeaderContextProvider } from "./context/HeaderContext";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -76,41 +83,77 @@ const OutletWrapper = styled.div`
 `;
 
 function ApplicationWrapper() {
-    const { session } = useAuth();
-    // console.log(session);
-    if (!session) {
-        console.log("NO SESSION FOUND, NAVIGATING TO LOGIN");
-        return <Navigate to={"/login"} replace />;
-    }
+    // const { session } = useAuth();
+    // const location = useLocation();
+    // // console.log(session);
+    // if (!session) {
+    //     console.log("NO SESSION FOUND, NAVIGATING TO LOGIN");
+    //     return <Navigate to={"/login"} replace />;
+    // }
 
+    // if (location.pathname !== "/activate") {
+    //     if (session.user.accessLevel === INACTIVE_ACCESS_LEVEL) {
+    //         console.log("INACTIVE ACCOUNT, NAVIGATING TO ACTIVATE ACCOUNT");
+    //         return <Navigate to={"/activate"} replace />;
+    //     }
+    // } else if (session.user.access)
     return (
-        <SocketContextProvider>
-            <ApplicationWrapperStyle>
-                <ChatContextProvider>
-                    <ApplicationInternalStyle>
-                        <Header />
-                        <Outlet />
-                    </ApplicationInternalStyle>
-                    <Chat />
-                </ChatContextProvider>
-            </ApplicationWrapperStyle>
-        </SocketContextProvider>
+        <RequireUser>
+            <RouteProtector
+                accessLevel={STUDENT_ACCESS_LEVEL}
+                redirect={"/activate"}>
+                <SocketContextProvider>
+                    <ApplicationWrapperStyle>
+                        <ChatContextProvider>
+                            <ApplicationInternalStyle>
+                                <Header />
+                                <Outlet />
+                            </ApplicationInternalStyle>
+                            <Chat />
+                        </ChatContextProvider>
+                    </ApplicationWrapperStyle>
+                </SocketContextProvider>
+            </RouteProtector>
+        </RequireUser>
     );
 }
 
 type RouteProtectorProps = {
     accessLevel: number;
     children: any;
+    redirect: string;
+    lowerBound: boolean;
 };
 
-function RouteProtector({ accessLevel, children }: RouteProtectorProps) {
+function RouteProtector({
+    accessLevel,
+    redirect,
+    lowerBound = true,
+    children,
+}: RouteProtectorProps) {
     const { session } = useAuth();
 
+    console.log("SESSION IN ROUTER PROTECTOR: ", session);
+    console.log("ACCESS LEVEL: ", accessLevel);
+    console.log("USER: ", session.user);
+    console.log("USER ACCESS LEVEL: ", session?.user.accessLevel);
+
     const location = useLocation();
-    if (session!.user.accessLevel < accessLevel) {
-        return <Navigate to={"/hub"} state={{ from: location }} replace />;
+    const navigateAway = lowerBound
+        ? session!.user.accessLevel < accessLevel
+        : session!.user.accessLevel > accessLevel;
+
+    if (navigateAway) {
+        return (
+            <Navigate
+                to={redirect || "/hub"}
+                state={{ from: location }}
+                replace
+            />
+        );
     }
-    return children ? children : <Outlet />;
+
+    return children || <Outlet />;
 }
 
 function PublicWrapper() {
@@ -118,22 +161,37 @@ function PublicWrapper() {
     // console.log(session);
 
     if (session) {
+        if (session.user.accessLevel === INACTIVE_ACCESS_LEVEL) {
+            console.log("INACTIVE ACCOUNT, NAVIGATING TO ACTIVATE");
+            return <Navigate to={"/activate"} replace />;
+        }
         console.log("SESSION FOUND, NAVIGATING TO HUB");
         return <Navigate to={"/hub"} replace />;
     }
 
     return (
-        <Scroller>
+        <>
             <Outlet />
             <PublicFooter />
-        </Scroller>
+        </>
     );
+}
+
+function RequireUser({ children }) {
+    const { session } = useAuth();
+
+    if (!session) {
+        console.log("NO SESSION FOUND, NAVIGATING TO LOGIN");
+        return <Navigate to={"/login"} replace />;
+    }
+
+    return children || <Outlet />;
 }
 
 const router = createBrowserRouter([
     {
-        path: "/end",
-        element: <EndOfLessonModal />,
+        path: "/test2",
+        element: <ActivateAccount />,
     },
     {
         path: "/loading",
@@ -166,6 +224,19 @@ const router = createBrowserRouter([
         ],
     },
     {
+        path: "/activate",
+        element: (
+            <RequireUser>
+                <RouteProtector
+                    accessLevel={INACTIVE_ACCESS_LEVEL}
+                    redirect={"/hub"}
+                    lowerBound={false}>
+                    <ActivateAccount />
+                </RouteProtector>
+            </RequireUser>
+        ),
+    },
+    {
         path: "/",
         element: <ApplicationWrapper />,
         // errorElement: <Error />, need to implement this
@@ -189,6 +260,10 @@ const router = createBrowserRouter([
                     {
                         path: "/settings/general",
                         element: <General />,
+                    },
+                    {
+                        path: "/settings/reset-password",
+                        element: <ResetPassword />,
                     },
                     {
                         path: "/settings/profile",

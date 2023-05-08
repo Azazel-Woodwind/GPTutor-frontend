@@ -3,15 +3,7 @@ import { Controller } from "react-hook-form";
 import Textfield from "../Textfield";
 
 function PasswordSection({ form }) {
-    const { watch, trigger } = form;
-
-    // Watch for changes in the password field
-    // const password = watch("password");
-
-    // React.useEffect(() => {
-    //     // Trigger validation for the confirm_password field whenever the password field changes
-    //     trigger("confirm_password");
-    // }, [password, trigger]);
+    const { trigger } = form;
 
     return (
         <>
@@ -32,7 +24,7 @@ function PasswordSection({ form }) {
                         {...field}
                         onChange={async e => {
                             field.onChange(e);
-                            await trigger("confirm_password");
+                            trigger("confirm_password");
                         }}
                     />
                 )}

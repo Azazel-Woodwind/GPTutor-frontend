@@ -36,6 +36,7 @@ const CreateLessonForm = styled.form`
     gap: 1em;
     padding: 0 1em;
     padding-bottom: 2em;
+    width: 970px;
 `;
 
 const Container = styled.div`
@@ -45,10 +46,31 @@ const Container = styled.div`
     /* padding-bottom: 2em; */
     /* width: 100%; */
     height: 100%;
+
+    /* border: 5px solid red; */
 `;
 
 const onLeaveMessage =
     "Are you sure you want to leave? Your changes will be lost.";
+
+const defaultValues = {
+    title: "",
+    education_level: "",
+    subject: "",
+    exam_board: "",
+    caption: "",
+    learning_objectives: Array(3).fill({
+        title: "",
+        description: "",
+        images: [
+            {
+                link: "",
+                description: "",
+            },
+        ],
+    }),
+    is_published: false,
+};
 
 function CreateLesson({ action }) {
     const { subjectOptions, educationLevels, examBoards } = useAppData();
@@ -67,24 +89,7 @@ function CreateLesson({ action }) {
         resolver: zodResolver(
             lessonFormSchema({ subjectOptions, educationLevels, examBoards })
         ),
-        defaultValues: {
-            title: "",
-            description: "",
-            education_level: "",
-            subject: "",
-            exam_board: "",
-            caption: "",
-            learning_objectives: Array(3).fill({
-                title: "",
-                images: [
-                    {
-                        link: "",
-                        description: "",
-                    },
-                ],
-            }),
-            is_published: false,
-        },
+        defaultValues,
     });
 
     const is_published = form.watch("is_published");
@@ -108,24 +113,7 @@ function CreateLesson({ action }) {
 
     const resetForm = () => {
         console.log("resetting form");
-        form.reset({
-            title: "",
-            description: "",
-            education_level: "",
-            subject: "",
-            exam_board: "",
-            caption: "",
-            learning_objectives: Array(3).fill({
-                title: "",
-                images: [
-                    {
-                        link: "",
-                        description: "",
-                    },
-                ],
-            }),
-            is_published: false,
-        });
+        form.reset(defaultValues);
     };
 
     const setDefaultValues = lessonArg => {
@@ -134,7 +122,6 @@ function CreateLesson({ action }) {
 
         form.reset({
             title: currentLesson.title,
-            description: currentLesson.description,
             education_level: currentLesson.education_level,
             subject: formatSubject(currentLesson.subject),
             exam_board: currentLesson.exam_board ?? "",
@@ -142,6 +129,7 @@ function CreateLesson({ action }) {
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
                     title: objective.title,
+                    description: objective.description,
                     images: objective.images.map(image => ({
                         link: image.link,
                         description: image.description,
@@ -209,7 +197,6 @@ function CreateLesson({ action }) {
             const lessonData = {
                 title: data.title || null,
                 subject: (data.subject.toLowerCase() as Subject) || null,
-                description: data.description || null,
                 caption: data.caption || null,
                 exam_board: data.exam_board || null,
                 education_level:
@@ -297,15 +284,8 @@ function CreateLesson({ action }) {
                         {action === "edit" ? "Reset defaults" : "Clear"}
                     </CustomButton>
                 </div>
-
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "1em",
-                        // alignItems: "flex-start",
-                        // height: "",
-                    }}>
-                    <CenteredColumn gap="1em">
+                <CenteredColumn gap="1em">
+                    <CenteredRow gap="1em" fillwidth>
                         <Controller
                             name="title"
                             control={form.control}
@@ -315,7 +295,6 @@ function CreateLesson({ action }) {
                                 formState,
                             }) => (
                                 <Textfield
-                                    fullwidth
                                     label="Title"
                                     type="text"
                                     required
@@ -324,59 +303,12 @@ function CreateLesson({ action }) {
                                         fieldState.invalid &&
                                         fieldState.error?.message
                                     }
+                                    style={{ flex: 1 }}
                                     {...field}
                                 />
                             )}
                         />
-
-                        <CenteredRow
-                            gap="1em"
-                            style={{ alignItems: "flex-start" }}>
-                            <Controller
-                                control={form.control}
-                                name={"education_level"}
-                                render={({
-                                    field, // { onChange, onBlur, value, name, ref }
-                                    fieldState, //{ invalid, isTouched, isDirty, error }
-                                    formState,
-                                }) => (
-                                    <div
-                                        style={{
-                                            minHeight: "64px",
-                                            // border: "2px solid red",
-                                        }}>
-                                        <RadioButtonsContainer
-                                            gap="1.5em"
-                                            style={{
-                                                height: "64px",
-                                                // border: "2px solid blue",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                                flex: "1 0 auto",
-                                                margin: 0,
-                                            }}>
-                                            {educationLevels.map(level => (
-                                                <RadioButton
-                                                    key={level}
-                                                    label={level}
-                                                    checked={
-                                                        field.value === level
-                                                    }
-                                                    onChange={e =>
-                                                        field.onChange(level)
-                                                    }
-                                                />
-                                            ))}
-                                        </RadioButtonsContainer>
-                                        {fieldState.invalid &&
-                                            fieldState.error?.message && (
-                                                <ErrorText>
-                                                    {fieldState.error?.message}
-                                                </ErrorText>
-                                            )}
-                                    </div>
-                                )}
-                            />
+                        <CenteredRow gap="1em" style={{ flex: 1 }}>
                             <Controller
                                 control={form.control}
                                 name="subject"
@@ -396,59 +328,35 @@ function CreateLesson({ action }) {
                                             fieldState.invalid &&
                                             fieldState.error?.message
                                         }
+                                        fullwidth
+                                    />
+                                )}
+                            />
+                            <Controller
+                                control={form.control}
+                                name="exam_board"
+                                render={({
+                                    field, // { onChange, onBlur, value, name, ref }
+                                    fieldState, //{ invalid, isTouched, isDirty, error }
+                                    formState,
+                                }) => (
+                                    <DropdownList
+                                        label="Exam Board"
+                                        options={examBoards}
+                                        selected={field.value}
+                                        setSelected={field.onChange}
+                                        required
+                                        error={fieldState.invalid}
+                                        helperText={
+                                            fieldState.invalid &&
+                                            fieldState.error?.message
+                                        }
+                                        fullwidth
                                     />
                                 )}
                             />
                         </CenteredRow>
-                    </CenteredColumn>
-                    <Controller
-                        name="description"
-                        control={form.control}
-                        render={({
-                            field, // { onChange, onBlur, value, name, ref }
-                            fieldState, //{ invalid, isTouched, isDirty, error }
-                            formState,
-                        }) => (
-                            <Textfield
-                                label="Lesson Description"
-                                width="430px"
-                                multiline
-                                // fullheight
-                                height="144px"
-                                // rows={5}
-                                {...field}
-                            />
-                        )}
-                    />
-                </div>
-                <div
-                    style={{
-                        display: "flex",
-                        gap: "1em",
-                        alignItems: "flex-start",
-                    }}>
-                    <Controller
-                        control={form.control}
-                        name="exam_board"
-                        render={({
-                            field, // { onChange, onBlur, value, name, ref }
-                            fieldState, //{ invalid, isTouched, isDirty, error }
-                            formState,
-                        }) => (
-                            <DropdownList
-                                label="Exam Board"
-                                options={examBoards}
-                                selected={field.value}
-                                setSelected={field.onChange}
-                                required
-                                error={fieldState.invalid}
-                                helperText={
-                                    fieldState.invalid &&
-                                    fieldState.error?.message
-                                }
-                            />
-                        )}
-                    />
+                    </CenteredRow>
 
                     <Controller
                         name="caption"
@@ -473,11 +381,61 @@ function CreateLesson({ action }) {
                             />
                         )}
                     />
-                </div>
+                    <div
+                        style={{
+                            width: "100%",
+                            paddingLeft: "3px",
+                            // border: "5px solid red",
+                        }}>
+                        <Controller
+                            control={form.control}
+                            name={"education_level"}
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <div
+                                    style={{
+                                        minHeight: "64px",
+                                        // border: "2px solid red",
+                                    }}>
+                                    <RadioButtonsContainer
+                                        gap="1.5em"
+                                        style={{
+                                            height: "64px",
+                                            // border: "2px solid blue",
+                                            alignItems: "center",
+                                            // justifyContent: "center",
+                                            flex: "1 0 auto",
+                                            margin: 0,
+                                        }}>
+                                        {educationLevels.map(level => (
+                                            <RadioButton
+                                                key={level}
+                                                label={level}
+                                                checked={field.value === level}
+                                                onChange={e =>
+                                                    field.onChange(level)
+                                                }
+                                            />
+                                        ))}
+                                    </RadioButtonsContainer>
+                                    {fieldState.invalid &&
+                                        fieldState.error?.message && (
+                                            <ErrorText>
+                                                {fieldState.error?.message}
+                                            </ErrorText>
+                                        )}
+                                </div>
+                            )}
+                        />
+                    </div>
+                </CenteredColumn>
 
                 <div
                     style={{
-                        paddingTop: "5px",
+                        // paddingTop: "5px",
                         display: "flex",
                         flexDirection: "column",
                         gap: "2em",

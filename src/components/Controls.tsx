@@ -14,6 +14,8 @@ import { Send } from "@styled-icons/material/Send";
 import { BaseInputStyle } from "./BaseInput";
 import CenteredRow from "../styles/containers/CenteredRow";
 
+const MAX_PROMPT_LENGTH = 512;
+
 const Controls = ({
     prompts,
     hook: { sendMessage, streaming, loading },
@@ -27,7 +29,7 @@ const Controls = ({
     );
 
     const [chatHeight, setChatHeight] = React.useState("100%");
-    const [messageInput, setMessageInput] = React.useState("");
+    const [messageInput, setMessageInput] = React.useState(undefined);
 
     const location = useLocation();
     const messageInputRef = React.useRef(undefined);
@@ -35,6 +37,10 @@ const Controls = ({
 
     const onSubmit = e => {
         e && e.preventDefault();
+
+        if (recording) {
+            return;
+        }
 
         if (messageInput.replaceAll(" ", "") == "") return;
         if (sendMessage(messageInput, { path: location.pathname })) {
@@ -71,7 +77,7 @@ const Controls = ({
             startRecording();
         },
         onAnimationEnd: () => {
-            // console.log("ANIMATION STOPPED");
+            console.log("ANIMATION STOPPED");
             stopRecording();
         },
     });
@@ -93,7 +99,25 @@ const Controls = ({
         }
     }, [finalTranscript]);
 
+    React.useEffect(() => {
+        if (messageInput == undefined) {
+            return;
+        }
+        // console.log("MESSAGE INPUT:", messageInput);
+        // console.log(chatFormRef.current?.offsetHeight);
+        // console.log(messageInputRef.current.scrollHeight);
+        messageInputRef.current.style.height = 0;
+        messageInputRef.current.style.height =
+            Math.max(
+                chatFormRef.current?.offsetHeight,
+                messageInputRef.current.scrollHeight
+            ) + "px";
+    }, [messageInput]);
+
     // console.log(messageInput, streaming, loading);
+
+    const sendDisabled =
+        messageInput == "" || streaming || loading || recording;
 
     return (
         <Container gap="10px">
@@ -113,43 +137,44 @@ const Controls = ({
             />
             <ChatForm ref={chatFormRef} onSubmit={onSubmit}>
                 <ChatInput
-                    style={{ height: "100%" }}
-                    // as="textarea"
-                    // style={{
-                    //     position: "absolute",
-                    //     bottom: 0,
-                    //     width: "100%",
-                    //     height: chatHeight,
-                    // }}
-                    // onChange={e => {
-                    //     console.log("scroll height", e.target.scrollHeight);
-                    //     console.log(
-                    //         "form height",
-                    //         chatFormRef.current?.getBoundingClientRect().height
-                    //     );
-                    //     setChatHeight(
-                    //         Math.max(
-                    //             chatFormRef.current?.getBoundingClientRect()
-                    //                 .height,
-                    //             e.target.scrollHeight
-                    //         ) + "px"
-                    //     );
-                    // }}
-                    // onFocus={e => {
-                    //     setChatHeight(
-                    //         Math.max(
-                    //             chatFormRef.current?.getBoundingClientRect()
-                    //                 .height,
-                    //             e.target.scrollHeight
-                    //         ) + "px"
-                    //     );
-                    // }}
-                    // onBlur={e => {
-                    //     setChatHeight("100%");
-                    // }}
+                    as="textarea"
+                    style={{
+                        position: "absolute",
+                        bottom: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgb(15, 13, 27)",
+                    }}
+                    onChange={e => {
+                        if (e.target.value.length > MAX_PROMPT_LENGTH) {
+                            setMessageInput(
+                                e.target.value.slice(0, MAX_PROMPT_LENGTH)
+                            );
+                        } else {
+                            setMessageInput(e.target.value);
+                        }
+                    }}
+                    onFocus={e => {
+                        e.target.style.height = 0;
+                        e.target.style.height =
+                            Math.max(
+                                chatFormRef.current?.offsetHeight,
+                                e.target.scrollHeight
+                            ) + "px";
+                    }}
+                    onBlur={e => {
+                        e.target.style.height = "100%";
+                    }}
+                    onKeyDown={e => {
+                        if (e.key == "Enter") {
+                            e.preventDefault();
+                            if (!e.shiftKey && !sendDisabled) {
+                                onSubmit();
+                            }
+                        }
+                    }}
                     ref={messageInputRef}
                     value={messageInput}
-                    onChange={e => setMessageInput(e.target.value)}
                     placeholder={placeholder}
                 />
             </ChatForm>
@@ -161,7 +186,7 @@ const Controls = ({
                 iconSize={30}
             />
             <CustomButton
-                disabled={messageInput == "" || streaming || loading}
+                disabled={sendDisabled}
                 onClick={onSubmit}
                 style={{ padding: "10px", borderRadius: "7px" }}
                 whileHoverScale={1.1}>
@@ -182,6 +207,12 @@ const ChatInput = styled(BaseInputStyle)`
     border-radius: 15px;
     border: 1px solid #f3f3f3;
     padding: 0.5em 2em;
+
+    //hide the scrollbar
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
 `;
 
 const Container = styled(CenteredRow)`
@@ -192,8 +223,10 @@ const Container = styled(CenteredRow)`
 
     width: 100%;
     padding: 1em 2em;
+    /* height: 100%; */
 
     flex: 0 1 auto;
+    /* border-bottom: 2px solid white; */
 `;
 
 export default Controls;

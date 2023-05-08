@@ -38,6 +38,7 @@ type Image = {
 
 type LearningObjective = {
     title: string;
+    description: string;
     images: Image[];
 };
 
@@ -47,7 +48,6 @@ type Lesson = {
     subject: Subject;
     education_level: EducationLevel;
     exam_board: string;
-    description: string;
     caption: string;
     learning_objectives: LearningObjective[];
     is_published: boolean;

@@ -14,7 +14,7 @@ export function formatEducationLevel(level: string) {
         case "ks3":
             return "KS3";
         default:
-            return level;
+            return capitaliseFirstLetter(level);
     }
 }
 

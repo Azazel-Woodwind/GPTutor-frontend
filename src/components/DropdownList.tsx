@@ -8,7 +8,10 @@ import Textfield from "./Textfield";
 const Wrapper = styled.div`
     position: relative;
     z-index: 100;
-    /* width: 400px; */
+    ${props => props.width && `width: ${props.width};`};
+    ${props => props.fullwidth && `width: 100%;`};
+    ${props => props.height && `height: ${props.height};`};
+    ${props => props.fullheight && `height: 100%;`}/* width: 400px; */
 `;
 
 const DropdownListWrapper = styled.div`
@@ -223,7 +226,8 @@ function DropdownList({
                     setOpen(false);
                     return;
                 }
-            }}>
+            }}
+            {...props}>
             <Textfield
                 {...props}
                 onMouseOver={() => setMouseEntered(true)}

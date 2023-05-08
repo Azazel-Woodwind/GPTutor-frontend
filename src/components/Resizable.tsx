@@ -131,7 +131,8 @@ const Resizable = ({ number, children, min }) => {
                                 location.pathname === "/hub" ||
                                 inClassroomRegex.test(
                                     location.pathname + location.search
-                                )
+                                ) ||
+                                location.pathname === "/activate"
                             )
                         }
                     />

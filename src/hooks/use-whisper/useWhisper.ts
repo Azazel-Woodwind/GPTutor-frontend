@@ -16,6 +16,7 @@ import {
     UseWhisperTimeout,
     UseWhisperTranscript,
 } from "./types";
+import { nanoid } from "nanoid";
 
 /**
  * default useWhisper configuration
@@ -69,13 +70,20 @@ export const useWhisper: UseWhisperHook = config => {
         if (Socket) {
             Socket!.off("transcribed_audio");
             Socket!.on("transcribed_audio", data => {
+                console.log(data.id, currentTranscriptId.current);
+
+                if (data.id !== currentTranscriptId.current) {
+                    return;
+                }
                 // console.log("onInterim", { message });
                 if (data.transcription) {
                     if (data.final) {
                         console.log("FINAL TRANSCRIPT:", data.transcription);
                         setFinalTranscript(data.transcription);
+                        currentTranscriptId.current = undefined;
+                    } else if (!finalTranscript) {
+                        setTranscript(data.transcription);
                     }
-                    setTranscript(data.transcription);
                 }
             });
         }
@@ -92,6 +100,7 @@ export const useWhisper: UseWhisperHook = config => {
     const recorder = useRef<RecordRTCPromisesHandler>();
     const stream = useRef<MediaStream>();
     const timeout = useRef<UseWhisperTimeout>(defaultTimeout);
+    const currentTranscriptId = useRef(undefined);
 
     const [recording, setRecording] = useState<boolean>(false);
     const [speaking, setSpeaking] = useState<boolean>(false);
@@ -146,6 +155,7 @@ export const useWhisper: UseWhisperHook = config => {
     const startRecording = async () => {
         setFinalTranscript("");
         setTranscript("");
+        currentTranscriptId.current = nanoid();
         await onStartRecording();
     };
 
@@ -435,7 +445,11 @@ export const useWhisper: UseWhisperHook = config => {
                                 type: "audio/mpeg",
                             });
                         }
-                        Socket!.emit("transcribe_audio", { file, final: true });
+                        Socket!.emit("transcribe_audio", {
+                            file,
+                            final: true,
+                            id: currentTranscriptId.current,
+                        });
                         // const text = await onWhispered(file);
                         // console.log("onTranscribing", { text });
                         setBlob(blob);
@@ -483,7 +497,10 @@ export const useWhisper: UseWhisperHook = config => {
 
                     console.log("sending audio to server");
 
-                    Socket!.emit("transcribe_audio", { file });
+                    Socket!.emit("transcribe_audio", {
+                        file,
+                        id: currentTranscriptId.current,
+                    });
                 }
             }
         } catch (err) {

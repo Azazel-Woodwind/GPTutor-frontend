@@ -106,7 +106,8 @@ const TextfieldWrapper = styled.div.withConfig({
     /* z-index: 50; */
     height: 100%;
     width: 100%;
-    ${props => !props.multiline && `min-height: ${props.height || "64px"};`};
+    min-height: 64px;
+    ${props => props.multiline && "padding-bottom: 11px;"};
 `;
 
 const Label = styled.label.withConfig({

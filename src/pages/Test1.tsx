@@ -20,6 +20,7 @@ import DeleteLessonModal from "../components/Dashboard/DeleteLessonModal";
 import { lessonFormSchema } from "../lib/lessonFormSchema";
 import { IMAGE_LINK_REGEX, SVG_REGEX } from "../lib/regexes";
 import { formatImageSource } from "../lib/stringUtils";
+import supabase from "../api/configs/supabase";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -54,9 +55,24 @@ function Test1() {
 
     const [imageLink, setImageLink] = React.useState("");
     const [validImageLink, setValidImageLink] = React.useState(false);
+    const [firstName, setFirstName] = React.useState("");
+
+    React.useEffect(() => {
+        // supabase.auth.onAuthStateChange(async (event, session) => {
+        //     console.log(event);
+        //     if (event == "PASSWORD_RECOVERY") {
+        //         console.log("HERE");
+        //         // const newPassword = prompt("What would you like your new password to be?");
+        //         // const { data, error } = await supabase.auth
+        //         //   .updateUser({ password: "newpassword" })
+        //         // if (data) alert("Password updated successfully!")
+        //         // if (error) alert("There was an error updating your password.")
+        //     }
+        // });
+    }, []);
 
     return (
-        <CenteredColumn fillparent gap="10px">
+        <CenteredColumn fillparent gap="10px" style={{ overflow: "auto" }}>
             <CustomButton onClick={() => PublishModal.handleOpen()}>
                 Click to open publish modal
             </CustomButton>
@@ -123,6 +139,81 @@ function Test1() {
             {validImageLink && (
                 <img src={validImageLink} alt="image" width="400px" />
             )}
+
+            <CustomButton
+                onClick={async () => {
+                    try {
+                        const { data, error } = await supabase.auth.updateUser({
+                            password: "password",
+                        });
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log(data);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }}>
+                Click to change password
+            </CustomButton>
+            <CustomButton
+                onClick={async () => {
+                    const { data, error } =
+                        await supabase.auth.resetPasswordForEmail(
+                            "kaistrachan11@gmail.com",
+                            {
+                                redirectTo:
+                                    "http://localhost:5173/reset-password",
+                            }
+                        );
+
+                    console.log(data, error);
+                }}>
+                Click to send password link
+            </CustomButton>
+            <CustomButton
+                onClick={async () => {
+                    const { data, error } =
+                        await supabase.auth.resetPasswordForEmail(
+                            "kaistrachan11@gmail.com",
+                            {
+                                redirectTo:
+                                    "http://localhost:5173/reset-password",
+                            }
+                        );
+
+                    console.log(data, error);
+                }}
+                outline>
+                Click to send password link
+            </CustomButton>
+            <CustomButton
+                onClick={async () => {
+                    try {
+                        const { data, error } = await supabase.auth.updateUser({
+                            data: { first_name: firstName },
+                        });
+
+                        if (error) {
+                            throw error;
+                        }
+
+                        console.log(data);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }}
+                outline>
+                Click to change first name
+            </CustomButton>
+            <Textfield
+                label="New first name"
+                fullwidth
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+            />
         </CenteredColumn>
     );
 }

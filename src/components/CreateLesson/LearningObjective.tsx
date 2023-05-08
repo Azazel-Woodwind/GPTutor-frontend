@@ -26,8 +26,6 @@ export default function LearningObjective({
     learningObjectivesFields,
     form,
 }) {
-    const gradientID = useMemo(nanoid, []);
-
     const imagesFields = useFieldArray({
         control: form.control,
         name: `learning_objectives.${index}.images`,
@@ -72,12 +70,28 @@ export default function LearningObjective({
                 control={form.control}
                 render={({ field, fieldState, formState }) => (
                     <Textfield
-                        label="Title"
+                        label={`Title #${index + 1}`}
                         {...field}
                         error={fieldState.invalid}
                         helperText={
                             fieldState.invalid && fieldState.error?.message
                         }
+                    />
+                )}
+            />
+            <Controller
+                name={`learning_objectives.${index}.description`}
+                control={form.control}
+                render={({ field, fieldState, formState }) => (
+                    <Textfield
+                        label={`Description #${index + 1}`}
+                        {...field}
+                        error={fieldState.invalid}
+                        helperText={
+                            fieldState.invalid && fieldState.error?.message
+                        }
+                        multiline
+                        rows={2}
                     />
                 )}
             />

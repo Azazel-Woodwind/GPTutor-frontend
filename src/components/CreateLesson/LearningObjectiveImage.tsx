@@ -25,7 +25,7 @@ export default function LearningObjectiveImage({
                 render={({ field, fieldState }) => (
                     <Textfield
                         fullwidth
-                        label="Link"
+                        label="Image Link"
                         error={fieldState.invalid}
                         helperText={
                             fieldState.invalid && fieldState.error?.message
@@ -40,7 +40,7 @@ export default function LearningObjectiveImage({
                 render={({ field, fieldState }) => (
                     <Textfield
                         fullwidth
-                        label="Description"
+                        label="Image Description"
                         error={fieldState.invalid}
                         helperText={
                             fieldState.invalid && fieldState.error?.message

@@ -1,3 +1,4 @@
+export const INACTIVE_ACCESS_LEVEL = 0;
 export const STUDENT_ACCESS_LEVEL = 1;
 export const TEACHER_ACCESS_LEVEL = 2;
 export const ADMIN_ACCESS_LEVEL = 3;

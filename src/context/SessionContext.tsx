@@ -8,6 +8,7 @@ type Store = {
     setSession: React.Dispatch<React.SetStateAction<Session | null>>;
     loading: boolean;
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    event: any;
 };
 
 export const useAuth = () => React.useContext(SessionContext);
@@ -17,6 +18,7 @@ export const SessionContext = React.createContext({
     setSession: () => {},
     loading: true,
     setLoading: () => {},
+    event: null,
 } as Store);
 
 export function SessionContextProvider({ children }: any) {
@@ -25,6 +27,7 @@ export function SessionContextProvider({ children }: any) {
     );
     const [fetchedData, setFetchedData] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
+    const [event, setEvent] = React.useState<any>(null);
 
     const getAccessLevelById = async (id: string) => {
         const { data, error: userError } = await supabase
@@ -43,14 +46,26 @@ export function SessionContextProvider({ children }: any) {
 
     const initialiseSession = async () => {
         supabase.auth.onAuthStateChange(async (_event, newSession) => {
+            console.log("EVENT:", _event);
+            console.log("SESSION:", newSession);
+            setEvent(_event);
             if (!newSession || !newSession.user) {
                 console.log("HERE");
                 setSession(null);
             } else {
-                newSession.user.accessLevel = await getAccessLevelById(
-                    newSession.user.id
-                );
                 setSession(newSession);
+                getAccessLevelById(newSession.user.id).then(accessLevel => {
+                    setSession(prevSession => {
+                        if (!prevSession) return prevSession;
+                        return {
+                            ...prevSession,
+                            user: {
+                                ...prevSession.user,
+                                accessLevel,
+                            },
+                        };
+                    });
+                });
             }
 
             setLoading(false);
@@ -65,7 +80,7 @@ export function SessionContextProvider({ children }: any) {
 
     return (
         <SessionContext.Provider
-            value={{ session, setSession, loading, setLoading }}>
+            value={{ session, setSession, loading, setLoading, event }}>
             {loading && <Loading />}
             {session !== undefined && children}
         </SessionContext.Provider>

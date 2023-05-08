@@ -81,10 +81,7 @@ const Message = ({ type, message }) => {
 };
 
 const Container = styled.div`
-    /* overflow-x: clip; */
     display: flex;
-    /* align-items: center; */
-
     font-size: 18px;
     padding: 1em;
     color: ${props =>
@@ -94,9 +91,12 @@ const Container = styled.div`
     padding-right: 1em;
     span {
         white-space: pre-line;
-        flex-grow: 1;
+
+        max-width: calc(100% - 30px);
+        overflow-wrap: break-word;
     }
     ${props =>
         props.highlighted && "background-color: rgb(255, 255, 255, 0.04);"}
 `;
+
 export default Message;

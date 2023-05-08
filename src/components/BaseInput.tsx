@@ -88,8 +88,11 @@ export const BaseInputStyle = styled.input`
     padding-top: 5px;
     padding-bottom: 2px;
     ${props =>
-        props.as === "textarea" && `margin-top: 21px; margin-bottom: 0.7em;`};
-    /* border: 2px solid black; */
+        props.as === "textarea" &&
+        `margin-top: 18px;line-height: 1.5; ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }`};
     position: relative;
     color: ${props => (props.color ? props.color : "white")};
     font-size: 16px;

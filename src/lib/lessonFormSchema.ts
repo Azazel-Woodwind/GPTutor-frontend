@@ -15,7 +15,6 @@ export const lessonFormSchema = ({
     z
         .object({
             title: z.string().min(1, { message: "Title is required" }),
-            description: z.string(),
             subject: subject_schema(subjectOptions),
             education_level: education_level_schema(educationLevels),
             exam_board: exam_board_schema(examBoards),
@@ -26,6 +25,7 @@ export const lessonFormSchema = ({
                         title: z.string().min(1, {
                             message: "Learning objective title is required",
                         }),
+                        description: z.string(),
                         images: z.array(
                             z.object({
                                 link: z
@@ -58,7 +58,6 @@ export const lessonFormSchema = ({
         .or(
             z.object({
                 title: z.string(),
-                description: z.string(),
                 subject: z.string(),
                 education_level: z.string(),
                 exam_board: z.string(),
@@ -66,6 +65,7 @@ export const lessonFormSchema = ({
                 learning_objectives: z.array(
                     z.object({
                         title: z.string(),
+                        description: z.string(),
                         images: z.array(
                             z.object({
                                 link: z.string(),
