@@ -70,7 +70,7 @@ function WaitingList() {
     });
 
     const addToWaitingList = async data => {
-        if (form.formState.isSubmitting) return;
+        // if (form.formState.isSubmitting) return;
 
         console.log(data);
 
@@ -82,6 +82,7 @@ function WaitingList() {
             });
             return;
         }
+
         try {
             const response = await WaitingListAPI.addUser({
                 first_name: data.first_name,
@@ -112,7 +113,7 @@ function WaitingList() {
             {success ? (
                 <Notification
                     heading="Thanks for signing up to our waiting list!"
-                    caption="Be sure to check your email for the latest updates on XTutor!"
+                    caption="Be sure to check your email for the latest updates on XTUTOR!"
                 />
             ) : (
                 <XForm
@@ -120,7 +121,7 @@ function WaitingList() {
                     // submitButtonText={
                     //     "WARNING: Do NOT let your wife CATCH you using THIS application"
                     // }
-                    submitButtonText="Join the XTutor Waiting List!"
+                    submitButtonText="Join the XTUTOR Waiting List!"
                     title="Join the Waiting List!"
                     isValid={
                         !form.formState.isValid || form.formState.isSubmitting

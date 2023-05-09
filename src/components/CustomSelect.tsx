@@ -129,7 +129,7 @@ function CustomSelect({ options, ...props }) {
         };
     }, []);
 
-    console.log(options);
+    // console.log(options);
 
     const ids = React.useMemo(() => options.map(() => nanoid()), [options]);
 

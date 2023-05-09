@@ -16,7 +16,7 @@ export function SocketContextProvider({ children }: any) {
     React.useEffect(() => {
         if (!Socket) {
             setLoading(true);
-            const socket = io(":3001", {
+            const socket = io(":3000", {
                 auth: {
                     token: session?.access_token,
                 },

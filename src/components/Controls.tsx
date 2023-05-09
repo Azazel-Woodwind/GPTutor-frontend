@@ -114,10 +114,34 @@ const Controls = ({
             ) + "px";
     }, [messageInput]);
 
+    React.useEffect(() => {
+        const handleKeyDown = e => {
+            // console.log(e.target);
+            // console.log(messageInputRef.current);
+            if (e.target !== messageInputRef.current && e.code === "Space") {
+                toggleRecord();
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
     // console.log(messageInput, streaming, loading);
 
     const sendDisabled =
         messageInput == "" || streaming || loading || recording;
+
+    const toggleRecord = () => {
+        if (filling) {
+            stopAnimation();
+        } else {
+            startAnimation();
+        }
+    };
 
     return (
         <Container gap="10px">
@@ -127,13 +151,7 @@ const Controls = ({
                 duration={10}
                 iconSize={23}
                 recording={recording}
-                onClick={() => {
-                    if (filling) {
-                        stopAnimation();
-                    } else {
-                        startAnimation();
-                    }
-                }}
+                onClick={toggleRecord}
             />
             <ChatForm ref={chatFormRef} onSubmit={onSubmit}>
                 <ChatInput
@@ -171,6 +189,8 @@ const Controls = ({
                             if (!e.shiftKey && !sendDisabled) {
                                 onSubmit();
                             }
+                        } else if (e.key == "Space") {
+                            e.stopPropagation();
                         }
                     }}
                     ref={messageInputRef}
