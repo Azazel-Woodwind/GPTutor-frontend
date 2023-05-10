@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "start": "serve -s dist -l 80"
+        "start": "node server.js"
     },
     "dependencies": {
         "@chengsokdara/react-hooks-async": "^0.0.2",
