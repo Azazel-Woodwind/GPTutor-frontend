@@ -9,6 +9,10 @@ import CustomButton from "../../components/Button";
 import CenteredColumn from "../../styles/containers/CenteredColumn";
 import UserAPI from "../../api/UserAPI";
 import { useNotification } from "../../context/NotificationContext";
+import XForm from "../../components/XForm";
+import { useChatContext } from "../../context/ChatContext";
+import useConversationDisplay from "../../hooks/useConversationDisplay";
+import { useAuth } from "../../context/SessionContext";
 
 export const ResetPasswordSchema = z
     .object({
@@ -38,8 +42,18 @@ export const ResetPasswordSchema = z
         }
     });
 
+function Wrapper() {
+    const { event } = useAuth();
+
+    console.log(event);
+
+    return <ResetPassword />;
+}
+
 function ResetPassword() {
     const sendNotification = useNotification();
+
+    useConversationDisplay(false);
 
     const form = useForm({
         mode: "onChange",
@@ -65,7 +79,7 @@ function ResetPassword() {
         try {
             await UserAPI.updateMe({ password: data.password });
             sendNotification({
-                label: "Password Successfully Updated!",
+                label: "Password Successfully Reset!",
                 duration: 5,
                 type: "success",
             });
@@ -73,40 +87,38 @@ function ResetPassword() {
         } catch (error) {
             console.log(error);
             sendNotification({
-                label: "Error updating password",
+                label: "Error Resetting Password",
                 duration: 5,
                 type: "error",
             });
         }
     };
-
     return (
-        <Container onSubmit={form.handleSubmit(resetPassword)}>
-            <Title>Reset Password</Title>
-            <FormContainer gap="20px" fillparent>
-                <PasswordSection form={form} />
-                <CustomButton
-                    disabled={!form.formState.isValid}
-                    style={{ width: "500px" }}>
-                    Save Changes
-                </CustomButton>
-            </FormContainer>
-        </Container>
+        <XForm
+            onSubmit={form.handleSubmit(resetPassword)}
+            // submitButtonText={
+            //     "WARNING: Do NOT let your wife CATCH you using THIS application"
+            // }
+            submitButtonText={"Reset Password"}
+            title={"Reset your password"}
+            isValid={!form.formState.isValid || form.formState.isSubmitting}>
+            <PasswordSection form={form} />
+        </XForm>
     );
 }
 
-const Container = styled.form`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-`;
+// const Container = styled.form`
+//     display: flex;
+//     flex-direction: column;
+//     gap: 20px;
+// `;
 
-const Title = styled.h1``;
+// const Title = styled.h1``;
 
-const FormContainer = styled(CenteredColumn)`
-    /* align-items: flex-start; */
-    justify-content: flex-start;
-    /* padding-top: 100px; */
-`;
+// const FormContainer = styled(CenteredColumn)`
+//     /* align-items: flex-start; */
+//     justify-content: flex-start;
+//     /* padding-top: 100px; */
+// `;
 
-export default ResetPassword;
+export default Wrapper;

@@ -162,7 +162,7 @@ function Test1() {
                 onClick={async () => {
                     const { data, error } =
                         await supabase.auth.resetPasswordForEmail(
-                            "kaistrachan11@gmail.com",
+                            "azazelwoodwind11@gmail.com",
                             {
                                 redirectTo:
                                     "http://localhost:5173/reset-password",
@@ -175,45 +175,15 @@ function Test1() {
             </CustomButton>
             <CustomButton
                 onClick={async () => {
-                    const { data, error } =
-                        await supabase.auth.resetPasswordForEmail(
-                            "kaistrachan11@gmail.com",
-                            {
-                                redirectTo:
-                                    "http://localhost:5173/reset-password",
-                            }
-                        );
-
-                    console.log(data, error);
-                }}
-                outline>
-                Click to send password link
-            </CustomButton>
-            <CustomButton
-                onClick={async () => {
-                    try {
-                        const { data, error } = await supabase.auth.updateUser({
-                            data: { first_name: firstName },
-                        });
-
-                        if (error) {
-                            throw error;
-                        }
-
-                        console.log(data);
-                    } catch (error) {
-                        console.log(error);
+                    const { error } = await supabase.auth.signOut();
+                    if (error) {
+                        throw error;
                     }
-                }}
-                outline>
-                Click to change first name
+
+                    console.log("Signed out");
+                }}>
+                Click to sign out
             </CustomButton>
-            <Textfield
-                label="New first name"
-                fullwidth
-                value={firstName}
-                onChange={e => setFirstName(e.target.value)}
-            />
         </CenteredColumn>
     );
 }

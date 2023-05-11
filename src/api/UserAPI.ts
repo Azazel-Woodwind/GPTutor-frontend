@@ -9,7 +9,8 @@ const UserAPI = {
         last_name,
         education_level,
         subjects,
-    }: Omit<User, "id" | "access_level">) {
+        is_student,
+    }) {
         const {
             data: { user },
             error,
@@ -22,6 +23,7 @@ const UserAPI = {
                     last_name,
                     education_level,
                     subjects,
+                    is_student,
                 },
             },
         });

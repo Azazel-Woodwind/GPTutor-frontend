@@ -26,16 +26,15 @@ const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
 const Resizable = ({ number, children, min }) => {
     const [isDragging, setIsDragging] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
-    const [fullscreen, setFullscreen] = useState(false);
 
     const handleContainerRef = React.useRef(null);
+
+    const { draggable } = React.useContext(ChatContext);
+    // console.log(draggable);
 
     const { width } = useScreensize(
         (oldWidth, oldHeight, newWidth, newHeight) => {}
     );
-
-    const { draggable } = React.useContext(ChatContext);
-    // console.log(draggable);
 
     const onChange = React.useCallback(
         latest => {
@@ -127,13 +126,14 @@ const Resizable = ({ number, children, min }) => {
                             setIsDragging(true);
                         }}
                         visible={
-                            !(
-                                location.pathname === "/hub" ||
-                                inClassroomRegex.test(
-                                    location.pathname + location.search
-                                ) ||
-                                location.pathname === "/activate"
-                            )
+                            draggable
+                            // !(
+                            //     location.pathname === "/hub" ||
+                            //     inClassroomRegex.test(
+                            //         location.pathname + location.search
+                            //     ) ||
+                            //     location.pathname === "/activate"
+                            // )
                         }
                     />
                 </HandleContainer>

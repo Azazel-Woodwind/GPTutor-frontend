@@ -14,7 +14,7 @@ import { Send } from "@styled-icons/material/Send";
 import { BaseInputStyle } from "./BaseInput";
 import CenteredRow from "../styles/containers/CenteredRow";
 
-const MAX_PROMPT_LENGTH = 512;
+const MAX_PROMPT_LENGTH = 1024;
 
 const Controls = ({
     prompts,

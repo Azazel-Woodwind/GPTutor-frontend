@@ -36,8 +36,13 @@ import {
     subjects_schema,
 } from "../lib/userFormSchema";
 import { useAppData } from "../context/AppDataContext";
+import { useAuth } from "../context/SessionContext";
+import UserAPI from "../api/UserAPI";
+import { generatePassword } from "../lib/stringUtils";
 
 function WaitingList() {
+    const { session } = useAuth();
+
     const [success, setSuccess] = useState(false);
 
     const { subjectOptions, educationLevels } = useAppData();
@@ -70,8 +75,6 @@ function WaitingList() {
     });
 
     const addToWaitingList = async data => {
-        // if (form.formState.isSubmitting) return;
-
         console.log(data);
 
         if (!form.formState.isValid) {
@@ -84,10 +87,11 @@ function WaitingList() {
         }
 
         try {
-            const response = await WaitingListAPI.addUser({
+            const response = await UserAPI.signUp({
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
+                password: generatePassword(12),
                 education_level: data.education_level.toLowerCase(),
                 is_student: data.occupation === "Student",
                 subjects: data.subjects.map(subject =>
@@ -110,7 +114,7 @@ function WaitingList() {
 
     return (
         <>
-            {success ? (
+            {session ? (
                 <Notification
                     heading="Thanks for signing up to our waiting list!"
                     caption="Be sure to check your email for the latest updates on XTUTOR!"

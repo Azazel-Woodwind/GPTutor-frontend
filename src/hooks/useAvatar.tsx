@@ -233,7 +233,10 @@ const X = styled(motion.div)`
     border: 1px solid rgb(255, 255, 255, 0.05);
 `;
 
-const AvatarWrapper = styled(CenteredRow)`
+const AvatarWrapper = styled(CenteredRow).withConfig({
+    shouldForwardProp: (prop, defaultValidatorFn) =>
+        !["loading"].includes(prop) && defaultValidatorFn(prop),
+})`
     position: relative;
     display: flex;
     align-items: center;

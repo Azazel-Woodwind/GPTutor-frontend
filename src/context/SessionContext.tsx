@@ -2,6 +2,7 @@ import { Session } from "@supabase/supabase-js";
 import * as React from "react";
 import supabase from "../api/configs/supabase";
 import Loading from "../pages/Loading";
+import { useNavigate } from "react-router-dom";
 
 type Store = {
     session: Session | null;

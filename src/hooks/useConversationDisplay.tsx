@@ -15,12 +15,12 @@ const useConversationDisplay = value => {
     let setWidth = screen.width * value;
     const { width, setDraggable } = React.useContext(ChatContext);
 
-    React.useEffect(() => {
-        console.log("WIDTH CHANGED");
-    }, [width]);
+    // React.useEffect(() => {
+    //     console.log("WIDTH CHANGED");
+    // }, [width]);
 
     React.useEffect(() => {
-        setDraggable(!!value);
+        setDraggable(value === false ? false : true);
 
         if (value == true) animate(width, screen.width, options);
         else if (!value) animate(width, 0, options);

@@ -25,11 +25,23 @@ const Subheading = styled.div`
     font-size: 1.8em;
 `;
 
-function XForm({ children, submitButtonText, onSubmit, title, link, isValid }) {
+function XForm({
+    children,
+    submitButtonText,
+    onSubmit,
+    title,
+    link,
+    isValid,
+    ...props
+}) {
     console.log("rerender");
 
     return (
-        <CenteredRow gap="8em" fillparent style={{ overflow: "auto" }}>
+        <CenteredRow
+            gap="8em"
+            fillparent
+            style={{ overflow: "auto" }}
+            {...props}>
             <Avatar size={200} hasLogo />
             <CenteredColumn gap="1.5em">
                 <Title>{title}</Title>

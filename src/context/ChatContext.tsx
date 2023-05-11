@@ -5,7 +5,7 @@ const defaultWidth = 0;
 
 export const ChatContext = React.createContext({
     draggable: true,
-    setMax: () => {},
+    setDraggable: () => {},
     width: defaultWidth,
 });
 
@@ -18,4 +18,8 @@ export function ChatContextProvider({ children }: any) {
             {children}
         </ChatContext.Provider>
     );
+}
+
+export function useChatContext() {
+    return React.useContext(ChatContext);
 }

@@ -17,9 +17,8 @@ export default function Header() {
     const { session, setLoading } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
-    const { showHeader } = useHeader();
 
-    if (location.pathname === "/activate") {
+    if (location.pathname === "/reset-password") {
         return <></>;
     }
 
