@@ -52,6 +52,7 @@ import RecoverPassword from "./pages/RecoverPassword";
 import ActivateAccount from "./pages/ActivateAccount";
 import React from "react";
 import ResetPassword from "./pages/settings/ResetPassword";
+import RedirectToWaitingList from "./pages/RedirectToWaitingList";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -170,35 +171,7 @@ function RequireAnonymous({ children }) {
     return children || <Outlet />;
 }
 
-// const router = createBrowserRouter([
-//     {
-//         path: "/",
-//         element: (
-//             <>
-//                 <WaitingList />
-//                 <PublicFooter />
-//             </>
-//         ),
-//     },
-//     {
-//         path: "*",
-//         element: <RedirectToWaitingList />,
-//     },
-// ]);
-
 const router = createBrowserRouter([
-    {
-        path: "/test2",
-        element: <ResetPassword />,
-    },
-    {
-        path: "/loading",
-        element: <Loading />,
-    },
-    {
-        path: "/test",
-        element: <Test1 />,
-    },
     {
         path: "/",
         element: (
@@ -209,273 +182,301 @@ const router = createBrowserRouter([
         ),
     },
     {
-        path: "/",
-        element: <PublicWrapper />,
-        children: [
-            {
-                path: "/login",
-                element: <Login />,
-            },
-            {
-                path: "/register",
-                element: <Register />,
-            },
-        ],
-    },
-    {
-        path: "/activate",
-        element: (
-            <RequireUser>
-                <RouteProtector
-                    accessLevel={INACTIVE_ACCESS_LEVEL}
-                    redirect={"/hub"}
-                    lowerBound={false}>
-                    <ActivateAccount />
-                </RouteProtector>
-            </RequireUser>
-        ),
-    },
-    {
-        path: "/",
-        element: <ApplicationWrapper />,
-        // errorElement: <Error />, need to implement this
-        children: [
-            {
-                path: "/reset-password",
-                element: <RecoverPassword />,
-            },
-            {
-                path: "/hub",
-                element: <Hub />,
-            },
-            {
-                path: "/create-lesson",
-                element: <CreateLesson action="create" />,
-            },
-            {
-                path: "/edit-lesson",
-                element: <CreateLesson action="edit" />,
-            },
-            {
-                path: "/settings",
-                element: <Settings />,
-                children: [
-                    {
-                        path: "/settings/general",
-                        element: <General />,
-                    },
-                    {
-                        path: "/settings/reset-password",
-                        element: <ResetPassword />,
-                    },
-                    {
-                        path: "/settings/profile",
-                        element: <Profile />,
-                    },
-                    {
-                        path: "/settings/account",
-                        element: <Account />,
-                    },
-                    {
-                        path: "/settings/appearance",
-                        element: <Apperance />,
-                    },
-                    {
-                        path: "/settings/notifications",
-                        element: <Notifications />,
-                    },
-                    {
-                        path: "/settings/plans",
-                        element: <Plans />,
-                    },
-                ],
-            },
-            {
-                path: "/dashboard",
-                element: <Dashboard />,
-                children: [
-                    {
-                        path: "/dashboard/my-lessons",
-                        element: <MyLessons />,
-                        action: async ({ request }) => {
-                            if (!["DELETE", "PUT"].includes(request.method)) {
-                                throw new Response("Incorrect request method", {
-                                    status: 400,
-                                    statusText: "Bad Request",
-                                });
-                            }
-
-                            const data = await request.formData();
-                            const lessonID = data.get("id");
-
-                            if (!lessonID) {
-                                throw new Response("Missing lesson ID", {
-                                    status: 400,
-                                    statusText: "Bad Request",
-                                });
-                            }
-
-                            if (request.method === "DELETE") {
-                                try {
-                                    await LessonAPI.deleteOwnedByid(
-                                        lessonID as string
-                                    );
-
-                                    return {
-                                        ok: true,
-                                        message: "Lesson successfully deleted!",
-                                    };
-                                } catch (error) {
-                                    console.log(error);
-                                    return {
-                                        ok: false,
-                                        message:
-                                            "There was an error deleting the lesson.",
-                                    };
-                                }
-                            }
-
-                            if (request.method === "PUT") {
-                                try {
-                                    // console.log(lessonID);
-                                    const published =
-                                        await LessonAPI.togglePublishById(
-                                            lessonID as string
-                                        );
-                                    return {
-                                        ok: true,
-                                        message: `Lesson successfully ${
-                                            published
-                                                ? "published"
-                                                : "unpublished"
-                                        }!`,
-                                    };
-                                } catch (error) {
-                                    console.log(error);
-                                    return {
-                                        ok: false,
-                                        message: `There was an error ${
-                                            data.get("is_published")
-                                                ? "publishing"
-                                                : "unpublishing"
-                                        } the lesson.`,
-                                    };
-                                }
-                            }
-                        },
-                        loader: async (): Promise<Lesson[]> => {
-                            try {
-                                const lessons = await LessonAPI.getMyLessons();
-                                // console.log("ALL LESSONS:", lessons);
-                                return lessons;
-                            } catch (error) {
-                                console.log(error);
-                                return [];
-                            }
-                        },
-                    },
-                    {
-                        path: "/dashboard/users",
-                        element: (
-                            <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-                                <Users />
-                            </RouteProtector>
-                        ),
-                        loader: async (): Promise<User[]> => {
-                            const users = await UserAPI.getAll();
-                            // console.log("ALL USERS:", users);
-                            return users;
-                        },
-                    },
-                    {
-                        path: "/dashboard/lessons",
-                        element: (
-                            <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-                                <DLessons />
-                            </RouteProtector>
-                        ),
-                        loader: async (): Promise<Lesson[]> => {
-                            try {
-                                const lessons = await LessonAPI.getAll();
-                                console.log("ALL LESSONS:", lessons);
-                                return lessons;
-                            } catch (error) {
-                                console.log(error);
-                                return [];
-                            }
-                        },
-                    },
-                ],
-            },
-            {
-                path: "/lessons",
-                element: <Lessons />,
-                loader: async ({ request }): Promise<Lesson[]> => {
-                    try {
-                        const lessons = await LessonAPI.getPublicLessons();
-                        // console.log("ALL LESSONS:", lessons);
-                        return lessons;
-                    } catch (error) {
-                        console.log(error);
-                        return [];
-                    }
-                },
-            },
-            {
-                path: "/lessons/:lessonName", // ?id="yer28736427384yb23c78e"
-                element: <Classroom />,
-                loader: async ({ request }): Promise<Lesson> => {
-                    const url = new URL(request.url);
-                    const id = url.searchParams.get("id");
-
-                    if (!id) {
-                        throw new Response("No lesson ID provided", {
-                            status: 400,
-                            statusText: "Bad Request",
-                        });
-                    }
-                    let lesson;
-                    try {
-                        lesson = await LessonAPI.getLessonById(id);
-                    } catch (error: any) {
-                        if (
-                            error.message ===
-                            "JSON object requested, multiple (or no) rows returned"
-                        ) {
-                            throw new Response("Lesson not found", {
-                                status: 404,
-                                statusText: "Not Found",
-                            });
-                        } else {
-                            throw error;
-                        }
-                    }
-
-                    // console.log("LESSON:", lesson);
-                    return lesson;
-                },
-            },
-            {
-                path: "/learningpathways",
-                element: <Lessons />,
-                loader: async (): Promise<Lesson[]> => {
-                    try {
-                        const lessons = await LessonAPI.getPublicLessons();
-                        // console.log("ALL LESSONS:", lessons);
-                        return lessons;
-                    } catch (error) {
-                        console.log(error);
-                        return [];
-                    }
-                },
-            },
-        ],
-    },
-    {
-        path: "/unauthorised",
-        element: <Unauthorised />,
+        path: "*",
+        element: <RedirectToWaitingList />,
     },
 ]);
+
+// const router = createBrowserRouter([
+//     {
+//         path: "/test2",
+//         element: <ResetPassword />,
+//     },
+//     {
+//         path: "/loading",
+//         element: <Loading />,
+//     },
+//     {
+//         path: "/test",
+//         element: <Test1 />,
+//     },
+//     {
+//         path: "/",
+//         element: (
+//             <>
+//                 <WaitingList />
+//                 <PublicFooter />
+//             </>
+//         ),
+//     },
+//     {
+//         path: "/",
+//         element: <PublicWrapper />,
+//         children: [
+//             {
+//                 path: "/login",
+//                 element: <Login />,
+//             },
+//             {
+//                 path: "/register",
+//                 element: <Register />,
+//             },
+//         ],
+//     },
+//     {
+//         path: "/activate",
+//         element: (
+//             <RequireUser>
+//                 <RouteProtector
+//                     accessLevel={INACTIVE_ACCESS_LEVEL}
+//                     redirect={"/hub"}
+//                     lowerBound={false}>
+//                     <ActivateAccount />
+//                 </RouteProtector>
+//             </RequireUser>
+//         ),
+//     },
+//     {
+//         path: "/",
+//         element: <ApplicationWrapper />,
+//         // errorElement: <Error />, need to implement this
+//         children: [
+//             {
+//                 path: "/reset-password",
+//                 element: <RecoverPassword />,
+//             },
+//             {
+//                 path: "/hub",
+//                 element: <Hub />,
+//             },
+//             {
+//                 path: "/create-lesson",
+//                 element: <CreateLesson action="create" />,
+//             },
+//             {
+//                 path: "/edit-lesson",
+//                 element: <CreateLesson action="edit" />,
+//             },
+//             {
+//                 path: "/settings",
+//                 element: <Settings />,
+//                 children: [
+//                     {
+//                         path: "/settings/general",
+//                         element: <General />,
+//                     },
+//                     {
+//                         path: "/settings/reset-password",
+//                         element: <ResetPassword />,
+//                     },
+//                     {
+//                         path: "/settings/profile",
+//                         element: <Profile />,
+//                     },
+//                     {
+//                         path: "/settings/account",
+//                         element: <Account />,
+//                     },
+//                     {
+//                         path: "/settings/appearance",
+//                         element: <Apperance />,
+//                     },
+//                     {
+//                         path: "/settings/notifications",
+//                         element: <Notifications />,
+//                     },
+//                     {
+//                         path: "/settings/plans",
+//                         element: <Plans />,
+//                     },
+//                 ],
+//             },
+//             {
+//                 path: "/dashboard",
+//                 element: <Dashboard />,
+//                 children: [
+//                     {
+//                         path: "/dashboard/my-lessons",
+//                         element: <MyLessons />,
+//                         action: async ({ request }) => {
+//                             if (!["DELETE", "PUT"].includes(request.method)) {
+//                                 throw new Response("Incorrect request method", {
+//                                     status: 400,
+//                                     statusText: "Bad Request",
+//                                 });
+//                             }
+
+//                             const data = await request.formData();
+//                             const lessonID = data.get("id");
+
+//                             if (!lessonID) {
+//                                 throw new Response("Missing lesson ID", {
+//                                     status: 400,
+//                                     statusText: "Bad Request",
+//                                 });
+//                             }
+
+//                             if (request.method === "DELETE") {
+//                                 try {
+//                                     await LessonAPI.deleteOwnedByid(
+//                                         lessonID as string
+//                                     );
+
+//                                     return {
+//                                         ok: true,
+//                                         message: "Lesson successfully deleted!",
+//                                     };
+//                                 } catch (error) {
+//                                     console.log(error);
+//                                     return {
+//                                         ok: false,
+//                                         message:
+//                                             "There was an error deleting the lesson.",
+//                                     };
+//                                 }
+//                             }
+
+//                             if (request.method === "PUT") {
+//                                 try {
+//                                     // console.log(lessonID);
+//                                     const published =
+//                                         await LessonAPI.togglePublishById(
+//                                             lessonID as string
+//                                         );
+//                                     return {
+//                                         ok: true,
+//                                         message: `Lesson successfully ${
+//                                             published
+//                                                 ? "published"
+//                                                 : "unpublished"
+//                                         }!`,
+//                                     };
+//                                 } catch (error) {
+//                                     console.log(error);
+//                                     return {
+//                                         ok: false,
+//                                         message: `There was an error ${
+//                                             data.get("is_published")
+//                                                 ? "publishing"
+//                                                 : "unpublishing"
+//                                         } the lesson.`,
+//                                     };
+//                                 }
+//                             }
+//                         },
+//                         loader: async (): Promise<Lesson[]> => {
+//                             try {
+//                                 const lessons = await LessonAPI.getMyLessons();
+//                                 // console.log("ALL LESSONS:", lessons);
+//                                 return lessons;
+//                             } catch (error) {
+//                                 console.log(error);
+//                                 return [];
+//                             }
+//                         },
+//                     },
+//                     {
+//                         path: "/dashboard/users",
+//                         element: (
+//                             <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
+//                                 <Users />
+//                             </RouteProtector>
+//                         ),
+//                         loader: async (): Promise<User[]> => {
+//                             const users = await UserAPI.getAll();
+//                             // console.log("ALL USERS:", users);
+//                             return users;
+//                         },
+//                     },
+//                     {
+//                         path: "/dashboard/lessons",
+//                         element: (
+//                             <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
+//                                 <DLessons />
+//                             </RouteProtector>
+//                         ),
+//                         loader: async (): Promise<Lesson[]> => {
+//                             try {
+//                                 const lessons = await LessonAPI.getAll();
+//                                 console.log("ALL LESSONS:", lessons);
+//                                 return lessons;
+//                             } catch (error) {
+//                                 console.log(error);
+//                                 return [];
+//                             }
+//                         },
+//                     },
+//                 ],
+//             },
+//             {
+//                 path: "/lessons",
+//                 element: <Lessons />,
+//                 loader: async ({ request }): Promise<Lesson[]> => {
+//                     try {
+//                         const lessons = await LessonAPI.getPublicLessons();
+//                         // console.log("ALL LESSONS:", lessons);
+//                         return lessons;
+//                     } catch (error) {
+//                         console.log(error);
+//                         return [];
+//                     }
+//                 },
+//             },
+//             {
+//                 path: "/lessons/:lessonName", // ?id="yer28736427384yb23c78e"
+//                 element: <Classroom />,
+//                 loader: async ({ request }): Promise<Lesson> => {
+//                     const url = new URL(request.url);
+//                     const id = url.searchParams.get("id");
+
+//                     if (!id) {
+//                         throw new Response("No lesson ID provided", {
+//                             status: 400,
+//                             statusText: "Bad Request",
+//                         });
+//                     }
+//                     let lesson;
+//                     try {
+//                         lesson = await LessonAPI.getLessonById(id);
+//                     } catch (error: any) {
+//                         if (
+//                             error.message ===
+//                             "JSON object requested, multiple (or no) rows returned"
+//                         ) {
+//                             throw new Response("Lesson not found", {
+//                                 status: 404,
+//                                 statusText: "Not Found",
+//                             });
+//                         } else {
+//                             throw error;
+//                         }
+//                     }
+
+//                     // console.log("LESSON:", lesson);
+//                     return lesson;
+//                 },
+//             },
+//             {
+//                 path: "/learningpathways",
+//                 element: <Lessons />,
+//                 loader: async (): Promise<Lesson[]> => {
+//                     try {
+//                         const lessons = await LessonAPI.getPublicLessons();
+//                         // console.log("ALL LESSONS:", lessons);
+//                         return lessons;
+//                     } catch (error) {
+//                         console.log(error);
+//                         return [];
+//                     }
+//                 },
+//             },
+//         ],
+//     },
+//     {
+//         path: "/unauthorised",
+//         element: <Unauthorised />,
+//     },
+// ]);
 
 function Router() {
     return <RouterProvider router={router} />;
