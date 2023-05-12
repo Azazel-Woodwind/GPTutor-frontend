@@ -91,8 +91,7 @@ function WaitingList() {
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
-                // password: generatePassword(12),
-                password: "password",
+                password: generatePassword(12),
                 education_level: data.education_level.toLowerCase(),
                 is_student: data.occupation === "Student",
                 subjects: data.subjects.map(subject =>
