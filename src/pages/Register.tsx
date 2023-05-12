@@ -123,6 +123,7 @@ function Register() {
                 subjects: data.subjects.map(subject =>
                     subject.replaceAll(" ", "_").toLowerCase()
                 ),
+                is_active: true,
             });
 
             console.log(response);
@@ -163,8 +164,7 @@ function Register() {
                     }
                     isValid={
                         !form.formState.isValid || form.formState.isSubmitting
-                    }
-                    >
+                    }>
                     <MultiTextfieldRow gap="0.8em">
                         <Controller
                             name="first_name"

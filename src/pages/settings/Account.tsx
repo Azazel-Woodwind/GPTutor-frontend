@@ -45,7 +45,7 @@ const Profile = () => {
                 // style={{ width: "fit-content" }}
                 outline
                 onClick={() => navigate("/settings/reset-password")}>
-                Reset password
+                Change password
             </CustomButton>
             <p> Est et exercitation dolor cillum sint nisi nisi. </p>
             <Textfield label="Name" type="text" required />

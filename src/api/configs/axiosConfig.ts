@@ -2,7 +2,9 @@ import axios from "axios";
 import supabase from "./supabase";
 
 export const apiClient = axios.create({
-    baseURL: "https://api.xtutor.ai",
+    baseURL: import.meta.env.PROD
+        ? "https://api.xtutor.ai"
+        : "http://localhost:3000",
 });
 
 apiClient.interceptors.request.use(async function (config) {

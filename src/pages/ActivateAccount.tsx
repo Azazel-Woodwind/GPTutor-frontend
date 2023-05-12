@@ -1,7 +1,7 @@
 import React from "react";
 import XForm from "../components/XForm";
 import { useForm } from "react-hook-form";
-import { ResetPasswordSchema } from "./settings/ResetPassword";
+import { ResetPasswordSchema } from "./RecoverPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import PasswordSection from "../components/Register/PasswordSection";
 import { useNotification } from "../context/NotificationContext";
@@ -45,9 +45,7 @@ function ActivateAccount() {
                 duration: 5,
                 type: "success",
             });
-            form.reset();
             await supabase.auth.refreshSession();
-            // navigate("/hub");
         } catch (error) {
             console.log(error);
             sendNotification({

@@ -87,11 +87,12 @@ function WaitingList() {
         }
 
         try {
-            const response = await UserAPI.signUp({
+            const response = await UserAPI.signUpToWaitingList({
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
-                password: generatePassword(12),
+                // password: generatePassword(12),
+                password: "password",
                 education_level: data.education_level.toLowerCase(),
                 is_student: data.occupation === "Student",
                 subjects: data.subjects.map(subject =>
@@ -100,6 +101,7 @@ function WaitingList() {
             });
 
             console.log(response);
+            localStorage.setItem("waiting_list", "true");
             setSuccess(true);
         } catch (error) {
             console.log(error);
@@ -114,7 +116,7 @@ function WaitingList() {
 
     return (
         <>
-            {session ? (
+            {success || localStorage.getItem("waiting_list") === "true" ? (
                 <Notification
                     heading="Thanks for signing up to our waiting list!"
                     caption="Be sure to check your email for the latest updates on XTUTOR!"

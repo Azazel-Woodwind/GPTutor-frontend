@@ -18,9 +18,9 @@ export default function Header() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if (location.pathname === "/reset-password") {
-        return <></>;
-    }
+    // if (location.pathname === "/reset-password") {
+    //     return <></>;
+    // }
 
     return (
         <Container>

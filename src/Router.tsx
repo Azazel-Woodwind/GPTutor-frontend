@@ -27,13 +27,8 @@ import Chat from "./components/Chat";
 import Loading from "./pages/Loading";
 import Settings from "./pages/SettingsMenu";
 
-import Notification from "./pages/Notification";
 import { ChatContextProvider } from "./context/ChatContext";
 import PublicFooter from "./components/PublicFooter";
-import CenteredColumn from "./styles/containers/CenteredColumn";
-import SubjectsAPI from "./api/SubjectAPI";
-import { capitaliseFirstLetter, formatEducationLevel } from "./lib/stringUtils";
-import CenteredRow from "./styles/containers/CenteredRow";
 
 import Profile from "./pages/settings/Profile";
 import Account from "./pages/settings/Account";
@@ -46,22 +41,17 @@ import Dashboard from "./pages/DashboardMenu";
 import Users from "./pages/dashboard/Users";
 import DLessons from "./pages/dashboard/Lessons";
 
-import PageWrapper from "./styles/containers/PageWrapper";
-import Scroller from "./components/Scroller";
 import MyLessons from "./pages/dashboard/MyLessons";
 import {
     ADMIN_ACCESS_LEVEL,
     INACTIVE_ACCESS_LEVEL,
     STUDENT_ACCESS_LEVEL,
 } from "./lib/accessLevels";
-import EducationLevelsAPI from "./api/EducationLevelAPI";
 import UserAPI from "./api/UserAPI";
-import EndOfLessonModal from "./components/Classroom/EndOfLessonModal";
-import ResetPassword from "./pages/settings/ResetPassword";
+import RecoverPassword from "./pages/RecoverPassword";
 import ActivateAccount from "./pages/ActivateAccount";
-import { HeaderContextProvider } from "./context/HeaderContext";
-import RedirectToWaitingList from "./pages/RedirectToWaitingList";
 import React from "react";
+import ResetPassword from "./pages/settings/ResetPassword";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -85,24 +75,28 @@ function ApplicationWrapper() {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        if (event === "RESET_PASSWORD") {
+        if (event === "PASSWORD_RECOVERY") {
             navigate("/reset-password");
         }
     }, [event]);
 
     return (
         <RequireUser>
-            <SocketContextProvider>
-                <ApplicationWrapperStyle>
-                    <ChatContextProvider>
-                        <ApplicationInternalStyle>
-                            <Header />
-                            <Outlet />
-                        </ApplicationInternalStyle>
-                        <Chat />
-                    </ChatContextProvider>
-                </ApplicationWrapperStyle>
-            </SocketContextProvider>
+            <RouteProtector
+                accessLevel={STUDENT_ACCESS_LEVEL}
+                redirect={"/activate"}>
+                <SocketContextProvider>
+                    <ApplicationWrapperStyle>
+                        <ChatContextProvider>
+                            <ApplicationInternalStyle>
+                                <Header />
+                                <Outlet />
+                            </ApplicationInternalStyle>
+                            <Chat />
+                        </ChatContextProvider>
+                    </ApplicationWrapperStyle>
+                </SocketContextProvider>
+            </RouteProtector>
         </RequireUser>
     );
 }
@@ -146,9 +140,6 @@ function RouteProtector({
 }
 
 function PublicWrapper() {
-    const { session } = useAuth();
-    // console.log(session);
-
     return (
         <RequireAnonymous>
             <Outlet />
@@ -231,19 +222,19 @@ const router = createBrowserRouter([
             },
         ],
     },
-    // {
-    //     path: "/activate",
-    //     element: (
-    //         <RequireUser>
-    //             <RouteProtector
-    //                 accessLevel={INACTIVE_ACCESS_LEVEL}
-    //                 redirect={"/hub"}
-    //                 lowerBound={false}>
-    //                 <ActivateAccount />
-    //             </RouteProtector>
-    //         </RequireUser>
-    //     ),
-    // },
+    {
+        path: "/activate",
+        element: (
+            <RequireUser>
+                <RouteProtector
+                    accessLevel={INACTIVE_ACCESS_LEVEL}
+                    redirect={"/hub"}
+                    lowerBound={false}>
+                    <ActivateAccount />
+                </RouteProtector>
+            </RequireUser>
+        ),
+    },
     {
         path: "/",
         element: <ApplicationWrapper />,
@@ -251,7 +242,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/reset-password",
-                element: <ResetPassword />,
+                element: <RecoverPassword />,
             },
             {
                 path: "/hub",
@@ -273,10 +264,10 @@ const router = createBrowserRouter([
                         path: "/settings/general",
                         element: <General />,
                     },
-                    // {
-                    //     path: "/settings/reset-password",
-                    //     element: <ResetPassword />,
-                    // },
+                    {
+                        path: "/settings/reset-password",
+                        element: <ResetPassword />,
+                    },
                     {
                         path: "/settings/profile",
                         element: <Profile />,
