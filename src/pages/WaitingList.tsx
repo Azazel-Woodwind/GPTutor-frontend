@@ -75,7 +75,7 @@ function WaitingList() {
     });
 
     const addToWaitingList = async data => {
-        console.log(data);
+        // console.log(data);
 
         if (!form.formState.isValid) {
             sendNotification({
@@ -99,7 +99,7 @@ function WaitingList() {
                 ),
             });
 
-            console.log(response);
+            // console.log(response);
             localStorage.setItem("waiting_list", "true");
             setSuccess(true);
         } catch (error) {
