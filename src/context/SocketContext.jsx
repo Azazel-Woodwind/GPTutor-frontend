@@ -9,7 +9,7 @@ export const SocketContext = React.createContext({
 
 export function SocketContextProvider({ children }) {
     const navigate = useNavigate();
-    const [Socket, setSocket] = React.useState<any>(null);
+    const [Socket, setSocket] = React.useState(null);
 
     const { session, setLoading } = useAuth();
 
