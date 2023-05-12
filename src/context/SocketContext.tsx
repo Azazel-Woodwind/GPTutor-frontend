@@ -16,11 +16,14 @@ export function SocketContextProvider({ children }: any) {
     React.useEffect(() => {
         if (!Socket) {
             setLoading(true);
-            const socket = io(":3000", {
-                auth: {
-                    token: session?.access_token,
-                },
-            });
+            const socket = io(
+                import.meta.env.PROD ? "https://api.xtutor.ai" : ":3000",
+                {
+                    auth: {
+                        token: session?.access_token,
+                    },
+                }
+            );
             console.log("Connecting to socket");
             socket.on("connect_error", err => {
                 console.log("error:", err.message);
