@@ -116,9 +116,10 @@ const Controls = ({
 
     React.useEffect(() => {
         const handleKeyDown = e => {
-            // console.log(e.target);
-            // console.log(messageInputRef.current);
-            if (e.target !== messageInputRef.current && e.code === "Space") {
+            if (
+                !["INPUT", "TEXTAREA"].includes(e.target.tagName) &&
+                e.code === "Space"
+            ) {
                 toggleRecord();
             }
         };
