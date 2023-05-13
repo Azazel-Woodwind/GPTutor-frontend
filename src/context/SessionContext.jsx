@@ -36,8 +36,8 @@ export function SessionContextProvider({ children }) {
 
     const initialiseSession = async () => {
         supabase.auth.onAuthStateChange(async (_event, newSession) => {
-            console.log("EVENT:", _event);
-            console.log("SESSION:", newSession);
+            // console.log("EVENT:", _event);
+            // console.log("SESSION:", newSession);
             setEvent(_event);
             if (!newSession || !newSession.user) {
                 console.log("HERE");

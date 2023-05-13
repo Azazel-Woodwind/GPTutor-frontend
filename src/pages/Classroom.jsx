@@ -62,7 +62,7 @@ function Classroom() {
         }
     }, []);
 
-    console.log("IMAGES:", images);
+    // console.log("IMAGES:", images);
 
     const renderComponent = () => {
         if (started === undefined) {

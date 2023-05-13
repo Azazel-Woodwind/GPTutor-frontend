@@ -12,8 +12,8 @@ import { useNotification } from "../context/NotificationContext";
 function Login() {
     const sendNotification = useNotification();
 
-    const emailInput = useRef < HTMLInputElement > null;
-    const passwordInput = useRef < HTMLInputElement > null;
+    const emailInput = useRef(null);
+    const passwordInput = useRef(null);
 
     const { session } = useAuth();
     const navigate = useNavigate();

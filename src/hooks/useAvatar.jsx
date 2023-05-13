@@ -122,7 +122,10 @@ const Avatar = ({
             <ControlsContainer
                 onMouseEnter={() => setShowControls(true)}
                 onMouseLeave={() => setShowControls(false)}>
-                <AvatarWrapper size={size} as={motion.div} {...props}>
+                <AvatarWrapper
+                    size={size}
+                    as={motion.div}
+                    {...{ ...props, loading: undefined }}>
                     {rings}
                     <X
                         clickable
@@ -228,10 +231,7 @@ const X = styled(motion.div)`
     border: 1px solid rgb(255, 255, 255, 0.05);
 `;
 
-const AvatarWrapper = styled(CenteredRow).withConfig({
-    shouldForwardProp: (prop, defaultValidatorFn) =>
-        !["loading"].includes(prop) && defaultValidatorFn(prop),
-})`
+const AvatarWrapper = styled(CenteredRow)`
     position: relative;
     display: flex;
     align-items: center;

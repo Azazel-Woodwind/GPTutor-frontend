@@ -61,7 +61,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
         // Socket.emit("authenticate", true);
         if (!started) return;
 
-        console.log("starting lesson");
+        console.log("starting lesson:", currentLesson);
 
         const timer = setTimeout(() => {
             Socket.emit("start_lesson", { current_lesson: currentLesson });

@@ -170,6 +170,7 @@ function useX(config) {
 
         audio.current.onplay = () => {
             console.log("track playing");
+            // console.log(audio.current.src);
             setSpeaking(true);
         };
 

@@ -123,7 +123,7 @@ const Modal = ({
     ...props
 }) => {
     return (
-        <Backdrop onClick={cancellable && handleClose}>
+        <Backdrop onClick={cancellable ? handleClose : undefined}>
             <ModalStyle
                 onClick={e => e.stopPropagation()} // Prevent click from closing modal
                 variants={variants[type]}
