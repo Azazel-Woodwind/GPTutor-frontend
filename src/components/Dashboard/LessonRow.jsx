@@ -29,10 +29,18 @@ function LessonRow({
 
     return (
         <Row style={{ minHeight: "56px" }}>
-            <Cell> {lesson.title || "N/A"} </Cell>
-            <Cell> {formatSubject(lesson.subject) || "N/A"} </Cell>
-            <Cell>{formatEducationLevel(lesson.education_level) || "N/A"}</Cell>
-            <Cell>{new Date(lesson.created_at).toLocaleDateString()}</Cell>
+            <Cell content={lesson.title}> {lesson.title || "N/A"} </Cell>
+            <Cell content={lesson.subject}>
+                {formatSubject(lesson.subject) || "N/A"}
+            </Cell>
+            <Cell content={lesson.education_level}>
+                {lesson.education_level
+                    ? formatEducationLevel(lesson.education_level)
+                    : "N/A"}
+            </Cell>
+            <Cell content={lesson.created_at}>
+                {new Date(lesson.created_at).toLocaleDateString()}
+            </Cell>
             <Cell style={{ paddingLeft: "20px" }}>
                 <Checkbox
                     checked={lesson.is_published}
@@ -59,7 +67,7 @@ function LessonRow({
                     }}
                 />
             </Cell>
-            <Cell style={{ paddingLeft: "10px" }}>
+            <Cell style={{ paddingLeft: "10px" }} content={lesson.is_published}>
                 {lesson.is_published ? (
                     <SvgIcon
                         svgData={
@@ -73,7 +81,7 @@ function LessonRow({
                         size="40px"
                     />
                 ) : (
-                    <p>N/A</p>
+                    "N/A (not published)"
                 )}
             </Cell>
             <IconsContainer>

@@ -17,7 +17,9 @@ const Row = styled.div`
 export const Cell = styled.span`
     display: flex;
     width: 8em;
-    /* border: 2px solid red; */
+
+    ${props =>
+        props.content !== undefined && !props.content && "font-style: italic;"}
 `;
 
 export default Row;
