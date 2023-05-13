@@ -75,10 +75,14 @@ function DropdownListEndAdornment({
                     display: selected && mouseEntered ? "flex" : "none",
                 }}
                 onClick={() => setSelected("")}>
-                <CloseOutline />
+                <CloseOutline size={27} />
             </IconButton>
             <IconButton>
-                {open ? <ArrowIosUpward /> : <ArrowIosDownward />}
+                {open ? (
+                    <ArrowIosUpward size={27} />
+                ) : (
+                    <ArrowIosDownward size={27} />
+                )}
             </IconButton>
         </CenteredRow>
     );

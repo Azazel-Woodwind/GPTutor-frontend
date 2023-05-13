@@ -14,7 +14,10 @@ const Row = styled.div`
     }
 `;
 
-export const Cell = styled.span`
+export const Cell = styled.span.withConfig({
+    shouldForwardProp: (prop, defaultValidator) =>
+        !["content"].includes(prop) && defaultValidator(prop),
+})`
     display: flex;
     width: 8em;
 

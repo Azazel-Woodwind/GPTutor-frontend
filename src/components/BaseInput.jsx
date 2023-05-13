@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import IconButton from "./IconButton";
-import { EyeFill } from "@styled-icons/bootstrap/EyeFill";
-import { EyeSlashFill } from "@styled-icons/bootstrap/EyeSlashFill";
+import { EyeOutline } from "@styled-icons/evaicons-outline/EyeOutline";
+import { EyeOffOutline } from "@styled-icons/evaicons-outline/EyeOffOutline";
 
 export const BaseInput = React.forwardRef(
     ({ type, multiline, ...props }, ref) => {
@@ -48,9 +48,9 @@ export const BaseInput = React.forwardRef(
                                     setVisible(!visible);
                                 }}>
                                 {visible ? (
-                                    <EyeFill size={27} />
+                                    <EyeOutline size={27} />
                                 ) : (
-                                    <EyeSlashFill size={27} />
+                                    <EyeOffOutline size={27} />
                                 )}
                             </IconButton>
                         </span>
