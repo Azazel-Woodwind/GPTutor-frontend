@@ -64,7 +64,7 @@ function useX(config) {
     };
 
     const toggleMute = () => {
-        audio.current.muted = audio.current.muted;
+        audio.current.muted = !audio.current.muted;
     };
 
     const getSpeed = () => {

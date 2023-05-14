@@ -133,8 +133,7 @@ const Controls = ({
 
     // console.log(messageInput, streaming, loading);
 
-    const sendDisabled =
-        messageInput == "" || streaming || loading || recording;
+    const sendDisabled = !messageInput || streaming || loading || recording;
 
     const toggleRecord = () => {
         if (filling) {
