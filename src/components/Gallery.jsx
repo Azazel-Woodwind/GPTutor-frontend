@@ -170,12 +170,13 @@ const Container = styled.div`
 const Image = styled(motion.img)`
     /* width: 100%; */
     position: absolute;
+    object-fit: contain;
     /* max-width: 100vw; */
     cursor: pointer;
     /* border: 10px solid green; */
 
     /* z-index: 10; */
-    ${props => (props.selected ? `width: 70%;` : `width: 100%;`)}
+    ${props => (props.selected ? `width: 70%; height: 70%;` : `width: 100%;`)}
 `;
 
 const Button = styled.div`

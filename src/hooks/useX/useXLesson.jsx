@@ -18,7 +18,6 @@ function useXLesson({ currentLesson, delay, ...props }) {
     const [currentImageLink, setCurrentImageLink] = React.useState("");
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
-    const learningObjectiveIndicies = React.useRef(new Map());
     const currentLearningObjectiveIndex = React.useRef(0);
 
     const { Socket } = React.useContext(SocketContext);
@@ -96,34 +95,15 @@ function useXLesson({ currentLesson, delay, ...props }) {
             lesson.learning_objectives[learningObjectiveNumber - 1]
         );
 
-        if (learningObjectiveIndicies.current.has(learningObjectiveNumber)) {
-            setCurrentImageLink(
-                images[
-                    learningObjectiveIndicies.current.get(
-                        learningObjectiveNumber
-                    )
-                ]
-            );
-            return;
-        }
-
-        learningObjectiveIndicies.current.set(
-            learningObjectiveNumber,
-            images.length
-        );
-
         setImages(prev => [
             ...prev,
-            ...lesson.learning_objectives[
-                learningObjectiveNumber - 1
-            ].images.map(image => image.link),
+            lesson.learning_objectives[learningObjectiveNumber - 1].image_link,
         ]);
         currentLearningObjectiveIndex.current = images.length;
         console.log(lesson);
         // console.log(JSON.stringify(lesson));
         setCurrentImageLink(
-            lesson.learning_objectives[learningObjectiveNumber - 1].images[0]
-                .link
+            lesson.learning_objectives[learningObjectiveNumber - 1].images_link
         );
         setCurrentImageIndex(images.length);
     }, [learningObjectiveNumber, started]);

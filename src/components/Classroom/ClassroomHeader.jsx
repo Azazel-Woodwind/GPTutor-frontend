@@ -19,8 +19,6 @@ const Header = ({
                             value={learningObjectiveNumber}
                             max={currentLesson.learning_objectives.length}
                         />
-                        {currentLearningObjective?.title &&
-                            currentLearningObjective.title + " 🗿"}
                     </>
                 ) : (
                     <>{currentLesson?.title && currentLesson.title}</>
@@ -39,13 +37,14 @@ const Title = styled.div`
     top: 30px;
     transform: translateX(-50%);
 
-    font-size: 1.5em;
+    font-size: 1.8em;
     font-weight: 400;
 
     ${props =>
         props.progressBarShown &&
         `
-        @media (max-width: 1600px) {
+    top: 40px;
+    @media (max-width: 1600px) {
         font-size: 1.5em;
     }
 
