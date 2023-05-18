@@ -5,7 +5,7 @@ const LessonAPI = {
     getPublicLessons: async function () {
         const { data, error } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*, images (*))")
+            .select("*, learning_objectives (*), exam_boards (*)")
             .eq("is_published", true)
             .eq("is_verified", true);
 
@@ -32,7 +32,7 @@ const LessonAPI = {
 
         const { data, error: error2 } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*, images (*))")
+            .select("*, learning_objectives (*), exam_boards (*)")
             .eq("author_id", session.user.id);
 
         if (error2) {
@@ -45,8 +45,9 @@ const LessonAPI = {
     getLessonById: async function (lesson_id) {
         const { data, error } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*, images (*))")
-            .eq("id", lesson_id);
+            .select("*, learning_objectives (*), exam_boards (*)")
+            .eq("id", lesson_id)
+            .single();
 
         if (error) {
             console.log(error);
@@ -54,31 +55,7 @@ const LessonAPI = {
             throw error;
         }
 
-        return data[0];
-    },
-
-    create: async function (newLesson) {
-        // console.log(newLesson);
-
-        const { data, error } = await supabase.rpc("create_lesson", newLesson);
-
-        if (error) {
-            throw error;
-        }
-
         return data;
-    },
-
-    getAll: async function () {
-        const res = await apiClient.get("/lessons");
-
-        if (res.status === 401) throw new Error("Unauthorised. No user found.");
-        if (res.status === 403)
-            throw new Error("Forbidden. Insufficient access level.");
-        if (res.status !== 200)
-            throw new Error("Something went wrong. Please try again later.");
-
-        return res.data;
     },
 
     togglePublishById: async function (lesson_id) {
@@ -120,6 +97,30 @@ const LessonAPI = {
         }
 
         return data;
+    },
+
+    create: async function (newLesson) {
+        // console.log(newLesson);
+
+        const { data, error } = await supabase.rpc("create_lesson", newLesson);
+
+        if (error) {
+            throw error;
+        }
+
+        return data;
+    },
+
+    getAll: async function () {
+        const res = await apiClient.get("/lessons");
+
+        if (res.status === 401) throw new Error("Unauthorised. No user found.");
+        if (res.status === 403)
+            throw new Error("Forbidden. Insufficient access level.");
+        if (res.status !== 200)
+            throw new Error("Something went wrong. Please try again later.");
+
+        return res.data;
     },
 };
 

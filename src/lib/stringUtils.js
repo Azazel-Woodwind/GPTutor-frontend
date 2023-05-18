@@ -21,7 +21,7 @@ export function formatEducationLevel(level) {
 export function formatSubject(subject) {
     switch (subject) {
         case "mathematics":
-            return "Maths";
+            return "Mathematics";
         case "physics":
             return "Physics";
         case "chemistry":

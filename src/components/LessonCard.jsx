@@ -7,6 +7,7 @@ import {
     formatEducationLevel,
 } from "../lib/stringUtils";
 import { useNavigate } from "react-router-dom";
+import CustomButton from "./Button";
 
 function LessonCard({ lesson }) {
     const navigate = useNavigate();
@@ -16,28 +17,53 @@ function LessonCard({ lesson }) {
             as={motion.div}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() =>
+            onClick={() => {
+                console.log("HERE");
                 navigate(
                     `/lessons/${lesson.title.replaceAll(" ", "-")}?id=${
                         lesson.id
                     }`
-                )
-            }>
+                );
+            }}>
             <Title>{capitaliseFirstLetter(lesson.title)}</Title>
             <Subject>{lesson.exam_board || "Edexcel"}</Subject>
             <Description>{lesson.caption}</Description>
             <Footer>
-                <Level>{formatEducationLevel(lesson.education_level)}</Level>
-                <ExamBoard>{capitaliseFirstLetter(lesson.subject)}</ExamBoard>
+                <FooterRow>
+                    <Level>
+                        {formatEducationLevel(lesson.education_level)}
+                    </Level>
+                    <ExamBoard>
+                        {capitaliseFirstLetter(lesson.subject)}
+                    </ExamBoard>
+                </FooterRow>
+                <CustomButton
+                    style={{ width: "100%" }}
+                    outline
+                    onClick={e => {
+                        e.stopPropagation();
+                        navigate(
+                            `/quiz/${lesson.title.replaceAll(" ", "-")}?id=${
+                                lesson.id
+                            }`
+                        );
+                    }}>
+                    Quiz
+                </CustomButton>
             </Footer>
         </Container>
     );
 }
 
-const Footer = styled.div`
+const FooterRow = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    margin-bottom: 7px;
+`;
+
+const Footer = styled.div`
     width: 100%;
     /* border: 1px solid red; */
 
@@ -91,7 +117,7 @@ const Container = styled.div`
     position: relative;
     padding: 2em 1em;
     width: 15em;
-    height: 18em;
+    height: 20em;
     z-index: 10;
     border-radius: 5px;
     box-sizing: border-box;

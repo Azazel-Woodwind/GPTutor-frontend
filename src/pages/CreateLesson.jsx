@@ -26,6 +26,7 @@ import Prompt from "../components/Prompt";
 import { lessonFormSchema } from "../lib/lessonFormSchema";
 import { useAppData } from "../context/AppDataContext";
 import { zodResolver } from "@hookform/resolvers/zod";
+import CustomSelect from "../components/CustomSelect";
 
 const CreateLessonForm = styled.form`
     margin: 0 auto;
@@ -56,17 +57,12 @@ const defaultValues = {
     title: "",
     education_level: "",
     subject: "",
-    exam_board: "",
+    exam_boards: [],
     caption: "",
     learning_objectives: Array(3).fill({
-        title: "",
         description: "",
-        images: [
-            {
-                link: "",
-                description: "",
-            },
-        ],
+        image_link: "",
+        image_description: "",
     }),
     is_published: false,
 };
@@ -112,27 +108,34 @@ function CreateLesson({ action }) {
 
     const resetForm = () => {
         console.log("resetting form");
-        form.reset(defaultValues);
+        if (action === "create") {
+            form.reset(defaultValues);
+        } else {
+            setDefaultValues();
+        }
     };
 
     const setDefaultValues = lessonArg => {
         const currentLesson = lessonArg || lesson;
         if (!currentLesson) return;
+        // console.log(currentLesson);
 
         form.reset({
             title: currentLesson.title,
-            education_level: currentLesson.education_level,
+            education_level: formatEducationLevel(
+                currentLesson.education_level
+            ),
             subject: formatSubject(currentLesson.subject),
-            exam_board: currentLesson.exam_board ?? "",
+            exam_boards:
+                currentLesson.exam_boards?.map(
+                    board => board.exam_board_name
+                ) ?? [],
             caption: currentLesson.caption,
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
-                    title: objective.title,
                     description: objective.description,
-                    images: objective.images.map(image => ({
-                        link: image.link,
-                        description: image.description,
-                    })),
+                    image_link: objective.image_link,
+                    image_description: objective.image_description,
                 })
             ),
             is_published: currentLesson.is_published,
@@ -197,7 +200,7 @@ function CreateLesson({ action }) {
                 title: data.title || null,
                 subject: data.subject.toLowerCase() || null,
                 caption: data.caption || null,
-                exam_board: data.exam_board || null,
+                exam_boards: data.exam_boards,
                 education_level: data.education_level?.toLowerCase() || null,
                 learning_objectives: data.learning_objectives,
                 is_published: data.is_published,
@@ -213,6 +216,7 @@ function CreateLesson({ action }) {
                     duration: 5,
                     type: "success",
                 });
+                console.log(newLesson);
             } else {
                 newLesson = await LessonAPI.create(lessonData);
                 sendNotification({
@@ -228,7 +232,9 @@ function CreateLesson({ action }) {
 
             console.log(newLesson);
 
-            resetForm();
+            if (action === "create") {
+                resetForm();
+            }
         } catch (error) {
             console.log(JSON.stringify(error));
 
@@ -305,31 +311,31 @@ function CreateLesson({ action }) {
                                 />
                             )}
                         />
-                        <CenteredRow gap="1em" style={{ flex: 1 }}>
-                            <Controller
-                                control={form.control}
-                                name="subject"
-                                render={({
-                                    field, // { onChange, onBlur, value, name, ref }
-                                    fieldState, //{ invalid, isTouched, isDirty, error }
-                                    formState,
-                                }) => (
-                                    <DropdownList
-                                        label="Subject"
-                                        options={subjectOptions}
-                                        selected={field.value}
-                                        setSelected={field.onChange}
-                                        required
-                                        error={fieldState.invalid}
-                                        helperText={
-                                            fieldState.invalid &&
-                                            fieldState.error?.message
-                                        }
-                                        fullwidth
-                                    />
-                                )}
-                            />
-                            <Controller
+                        <Controller
+                            control={form.control}
+                            name="subject"
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <DropdownList
+                                    label="Subject"
+                                    options={subjectOptions}
+                                    selected={field.value}
+                                    setSelected={field.onChange}
+                                    required
+                                    error={fieldState.invalid}
+                                    helperText={
+                                        fieldState.invalid &&
+                                        fieldState.error?.message
+                                    }
+                                    fullwidth
+                                    style={{ width: "250px" }}
+                                />
+                            )}
+                        />
+                        {/* <Controller
                                 control={form.control}
                                 name="exam_board"
                                 render={({
@@ -351,9 +357,28 @@ function CreateLesson({ action }) {
                                         fullwidth
                                     />
                                 )}
-                            />
-                        </CenteredRow>
+                            /> */}
                     </CenteredRow>
+                    <div style={{ width: "100%", paddingLeft: "5px" }}>
+                        <Controller
+                            name="exam_boards"
+                            control={form.control}
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <CustomSelect
+                                    // {...field}
+                                    selected={field.value}
+                                    setSelected={field.onChange}
+                                    options={examBoards}
+                                    defaultValue={[]}
+                                    style={{ width: "50%" }}
+                                />
+                            )}
+                        />
+                    </div>
 
                     <Controller
                         name="caption"

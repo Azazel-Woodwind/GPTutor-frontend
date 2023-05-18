@@ -43,7 +43,12 @@ const Controls = ({
         }
 
         if (messageInput.replaceAll(" ", "") == "") return;
-        if (sendMessage(messageInput, { path: location.pathname })) {
+        if (
+            sendMessage({
+                message: messageInput,
+                context: { path: location.pathname },
+            })
+        ) {
             setMessageInput("");
         }
         messageInputRef.current.focus();
@@ -92,7 +97,12 @@ const Controls = ({
         if (finalTranscript) {
             console.log("SENDING FINAL TRANSCRIPT");
             if (finalTranscript.replaceAll(" ", "") == "") return;
-            if (sendMessage(finalTranscript, { path: location.pathname })) {
+            if (
+                sendMessage({
+                    message: finalTranscript,
+                    context: { path: location.pathname },
+                })
+            ) {
                 setMessageInput("");
             }
             messageInputRef.current.focus();

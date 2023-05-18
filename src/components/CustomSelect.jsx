@@ -7,17 +7,19 @@ const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    gap: 0.7em;
 `;
 
 const OptionContainer = styled.div`
     text-align: center;
     position: relative;
     padding: 0.8em;
-    margin: 0.3em 0.4em;
+    /* margin: 0.3em 0.4em; */
     cursor: pointer;
     box-shadow: rgba(76, 72, 72, 0.1) 0px 1px 3px 0px,
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     flex-grow: 1;
+    /* width: fit-content; */
     background-color: rgb(112, 118, 179, 0.15);
     span {
         user-select: none;
@@ -109,7 +111,7 @@ const Option = ({ option, selected, setSelected, mouseDown }) => {
     );
 };
 
-function CustomSelect({ options, ...props }) {
+function CustomSelect({ options, selected, setSelected, ...props }) {
     const [mouseDown, setMouseDown] = React.useState(false);
     React.useEffect(() => {
         const onMouseUp = () => {
@@ -134,11 +136,12 @@ function CustomSelect({ options, ...props }) {
     const ids = React.useMemo(() => options.map(() => nanoid()), [options]);
 
     return (
-        <Container>
+        <Container {...props}>
             {options.map((option, i) => (
                 <Option
                     key={ids[i]}
-                    {...props}
+                    selected={selected}
+                    setSelected={setSelected}
                     mouseDown={mouseDown}
                     option={option}
                 />

@@ -17,34 +17,24 @@ export const lessonFormSchema = ({
             title: z.string().min(1, { message: "Title is required" }),
             subject: subject_schema(subjectOptions),
             education_level: education_level_schema(educationLevels),
-            exam_board: exam_board_schema(examBoards),
+            exam_boards: z.array(exam_board_schema(examBoards)),
             caption: z.string().min(1, { message: "Caption is required" }),
             learning_objectives: z
                 .array(
                     z.object({
-                        title: z.string().min(1, {
-                            message: "Learning objective title is required",
-                        }),
                         description: z.string(),
-                        images: z.array(
-                            z.object({
-                                link: z
-                                    .string()
-                                    .min(1, {
-                                        message: "Image link is required",
-                                    })
-                                    .refine(
-                                        val =>
-                                            IMAGE_LINK_REGEX.test(val) ||
-                                            SVG_REGEX.test(val),
-                                        {
-                                            message:
-                                                "Image link must be of type JPG, JPEG, PNG, GIF, WEBP or SVG",
-                                        }
-                                    ),
-                                description: z.string(),
-                            })
-                        ),
+                        image_link: z
+                            .string()
+                            .refine(
+                                val =>
+                                    IMAGE_LINK_REGEX.test(val) ||
+                                    SVG_REGEX.test(val),
+                                {
+                                    message:
+                                        "Image link must be of type JPG, JPEG, PNG, GIF, WEBP or SVG",
+                                }
+                            ),
+                        image_description: z.string(),
                     })
                 )
                 .min(MIN_LEARNING_OBJECTIVES, {
@@ -60,18 +50,13 @@ export const lessonFormSchema = ({
                 title: z.string(),
                 subject: z.string(),
                 education_level: z.string(),
-                exam_board: z.string(),
+                exam_boards: z.array(z.string()),
                 caption: z.string(),
                 learning_objectives: z.array(
                     z.object({
-                        title: z.string(),
                         description: z.string(),
-                        images: z.array(
-                            z.object({
-                                link: z.string(),
-                                description: z.string(),
-                            })
-                        ),
+                        image_link: z.string(),
+                        image_description: z.string(),
                     })
                 ),
                 is_published: z.boolean().refine(val => !val),

@@ -41,7 +41,7 @@ function useX(config) {
         setHistory(prev => [...prev, { role: "system", content: message }]);
     };
 
-    const sendMessage = (message, context) => {
+    const sendMessage = ({ message, context, messageParams = {} }) => {
         if (message === "" || streaming || loading) return false;
         audioQueue.current = [];
         audio.current.src = "";
@@ -51,12 +51,12 @@ function useX(config) {
         setMultiplier(1);
 
         setHistory(prev => [...prev, { role: "user", content: message }]);
-        onMessage({ role: "user", content: message });
         currentResponseId.current = nanoid();
         Socket.emit(`${channel}_message_x`, {
             message,
             context,
             id: currentResponseId.current,
+            ...messageParams,
         });
         setLoading(true);
 
@@ -215,7 +215,7 @@ function useX(config) {
                 { role: "assistant", content: data.response },
             ]);
             setCurrentMessage("");
-            onMessage({ role: "assistant", content: data.response });
+            onMessage(data);
             setStreaming(false);
         });
 

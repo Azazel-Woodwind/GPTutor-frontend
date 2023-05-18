@@ -5,13 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => React.useContext(SessionContext);
 
-export const SessionContext = React.createContext({
-    session: null,
-    setSession: () => {},
-    loading: true,
-    setLoading: () => {},
-    event: null,
-});
+export const SessionContext = React.createContext();
 
 export function SessionContextProvider({ children }) {
     const [session, setSession] = React.useState(undefined);

@@ -170,7 +170,6 @@ export const Textfield = forwardRef(
                         {...props}
                         onMouseOver={e => {
                             // console.log("mouse over");
-
                             setMouseEntered(true);
                             props.onMouseOver && props.onMouseOver(e);
                         }}
@@ -231,6 +230,7 @@ export const Textfield = forwardRef(
                                 setFocused(false);
                                 onBlur && onBlur(e);
                             }}
+                            inTextfield={true}
                         />
                     </TextfieldWrapper>
                     {props.type === "password" &&

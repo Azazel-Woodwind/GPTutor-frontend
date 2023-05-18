@@ -82,7 +82,10 @@ export const EndAdornmentWrapper = styled.div`
     /* z-index: 5; */
 `;
 
-export const BaseInputStyle = styled.input`
+export const BaseInputStyle = styled.input.withConfig({
+    shouldForwardProp: (prop, defaultValidatorFn) =>
+        !["width"].includes(prop) && defaultValidatorFn(prop),
+})`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
     padding: 0 0.7em;
@@ -113,7 +116,20 @@ export const BaseInputStyle = styled.input`
     cursor: auto;
     ${props =>
         props.adornmentWidth &&
-        `width: calc(100% - ${props.adornmentWidth}px);`};
+        `width: calc(100% - ${props.adornmentWidth}px) !important;`};
 
     ${props => props.as === "textarea" && `resize: none;`}
+
+    ${props =>
+        props.inTextfield &&
+        `
+        ::placeholder {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    `}
+
+    :focus::placeholder {
+        opacity: 1;
+    }
 `;

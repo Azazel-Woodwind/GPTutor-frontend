@@ -52,6 +52,8 @@ import RecoverPassword from "./pages/RecoverPassword";
 import ActivateAccount from "./pages/ActivateAccount";
 import React from "react";
 import ResetPassword from "./pages/settings/ResetPassword";
+import { getLessonByQueryIdLoader } from "./lib/routerLoaders";
+import Quiz from "./pages/Quiz";
 
 const ApplicationWrapperStyle = styled.div`
     display: flex;
@@ -413,38 +415,14 @@ const router = createBrowserRouter([
                 },
             },
             {
+                path: "/quiz/:lessonName", // ?id="yer28736427384yb23c78e"
+                element: <Quiz />,
+                loader: getLessonByQueryIdLoader,
+            },
+            {
                 path: "/lessons/:lessonName", // ?id="yer28736427384yb23c78e"
                 element: <Classroom />,
-                loader: async ({ request }) => {
-                    const url = new URL(request.url);
-                    const id = url.searchParams.get("id");
-
-                    if (!id) {
-                        throw new Response("No lesson ID provided", {
-                            status: 400,
-                            statusText: "Bad Request",
-                        });
-                    }
-                    let lesson;
-                    try {
-                        lesson = await LessonAPI.getLessonById(id);
-                    } catch (error) {
-                        if (
-                            error.message ===
-                            "JSON object requested, multiple (or no) rows returned"
-                        ) {
-                            throw new Response("Lesson not found", {
-                                status: 404,
-                                statusText: "Not Found",
-                            });
-                        } else {
-                            throw error;
-                        }
-                    }
-
-                    // console.log("LESSON:", lesson);
-                    return lesson;
-                },
+                loader: getLessonByQueryIdLoader,
             },
             {
                 path: "/learningpathways",

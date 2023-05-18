@@ -14,7 +14,7 @@ export default function LearningObjectiveImage({
     return (
         <ObjectiveContainer>
             <Controller
-                name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.link`}
+                name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.image_link`}
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Textfield
@@ -29,11 +29,12 @@ export default function LearningObjectiveImage({
                 )}
             />
             <Controller
-                name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.description`}
+                name={`learning_objectives.${learningObjectiveIndex}.images.${imageIndex}.image_description`}
                 control={form.control}
                 render={({ field, fieldState }) => (
                     <Textfield
                         fullwidth
+                        placeholder="An image of..."
                         label="Image Description"
                         error={fieldState.invalid}
                         helperText={
@@ -43,7 +44,7 @@ export default function LearningObjectiveImage({
                     />
                 )}
             />
-            <Delete
+            {/* <Delete
                 as={motion.p}
                 {...(!(imagesFields.fields.length <= MIN_IMAGES) && {
                     whileHover: { scale: 1.05 },
@@ -55,7 +56,7 @@ export default function LearningObjectiveImage({
                 }}
                 disabled={imagesFields.fields.length <= MIN_IMAGES}>
                 Remove
-            </Delete>
+            </Delete> */}
         </ObjectiveContainer>
     );
 }

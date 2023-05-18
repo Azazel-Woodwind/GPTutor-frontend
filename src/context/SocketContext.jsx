@@ -7,6 +7,10 @@ export const SocketContext = React.createContext({
     Socket: null,
 });
 
+export function useSocket() {
+    return React.useContext(SocketContext);
+}
+
 export function SocketContextProvider({ children }) {
     const navigate = useNavigate();
     const [Socket, setSocket] = React.useState(null);

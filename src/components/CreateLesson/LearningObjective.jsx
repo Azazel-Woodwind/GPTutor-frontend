@@ -53,7 +53,7 @@ export default function LearningObjective({
             <ObjectiveTitle size="xl">
                 Learning Objective #{index + 1}
             </ObjectiveTitle>
-            <Controller
+            {/* <Controller
                 name={`learning_objectives.${index}.title`}
                 control={form.control}
                 render={({ field, fieldState, formState }) => (
@@ -66,7 +66,7 @@ export default function LearningObjective({
                         }
                     />
                 )}
-            />
+            /> */}
             <Controller
                 name={`learning_objectives.${index}.description`}
                 control={form.control}
@@ -83,7 +83,40 @@ export default function LearningObjective({
                     />
                 )}
             />
-            <div
+            <ObjectiveContainer>
+                <Controller
+                    name={`learning_objectives.${index}.image_link`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Textfield
+                            fullwidth
+                            label="Image Link"
+                            error={fieldState.invalid}
+                            helperText={
+                                fieldState.invalid && fieldState.error?.message
+                            }
+                            {...field}
+                        />
+                    )}
+                />
+                <Controller
+                    name={`learning_objectives.${index}.image_description`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                        <Textfield
+                            fullwidth
+                            placeholder="An image of..."
+                            label="Image Description"
+                            error={fieldState.invalid}
+                            helperText={
+                                fieldState.invalid && fieldState.error?.message
+                            }
+                            {...field}
+                        />
+                    )}
+                />
+            </ObjectiveContainer>
+            {/* <div
                 style={{
                     display: "flex",
                     flexDirection: "column",
@@ -98,8 +131,8 @@ export default function LearningObjective({
                         learningObjectiveIndex={index}
                     />
                 ))}
-            </div>
-            <CustomButton
+            </div> */}
+            {/* <CustomButton
                 disabled={imagesFields.fields.length >= MAX_IMAGES}
                 onClick={e => {
                     //This is very good code! Well played! Truly exemplary** Just like I expected from you ;)
@@ -113,10 +146,19 @@ export default function LearningObjective({
                 outline
                 style={{ width: "fit-content" }}>
                 Add Image
-            </CustomButton>
+            </CustomButton> */}
         </Container>
     );
 }
+
+const ObjectiveContainer = styled.div`
+    display: flex;
+    gap: 1em;
+    /* padding-top: 1em; */
+    width: 100%;
+    min-height: 64px;
+    align-items: flex-start;
+`;
 
 export const CloseIcon = styled.svg`
     width: 1.9em;
