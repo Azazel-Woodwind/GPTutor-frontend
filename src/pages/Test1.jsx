@@ -21,6 +21,10 @@ import { lessonFormSchema } from "../lib/lessonFormSchema";
 import { IMAGE_LINK_REGEX, SVG_REGEX } from "../lib/regexes";
 import { formatImageSource } from "../lib/stringUtils";
 import supabase from "../api/configs/supabase";
+import { Exit } from "@styled-icons/boxicons-regular/Exit";
+import SvgIcon from "../components/SvgIcon";
+import { ExitSvgData } from "../lib/svgIconData";
+import { TextWrapper } from "../styles/TextWrappers";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -173,16 +177,18 @@ function Test1() {
                 }}>
                 Click to send password link
             </CustomButton>
-            <CustomButton
-                onClick={async () => {
-                    const { error } = await supabase.auth.signOut();
-                    if (error) {
-                        throw error;
-                    }
-
-                    console.log("Signed out");
-                }}>
-                Click to sign out
+            <CustomButton outline>
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.2em",
+                    }}>
+                    <TextWrapper mainGradient fontWeight={600} fontSize="lg">
+                        Exit Lesson
+                    </TextWrapper>
+                    <SvgIcon svgData={ExitSvgData} fill="gradient" size="2em" />
+                </div>
             </CustomButton>
         </CenteredColumn>
     );

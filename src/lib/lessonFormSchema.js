@@ -17,7 +17,9 @@ export const lessonFormSchema = ({
             title: z.string().min(1, { message: "Title is required" }),
             subject: subject_schema(subjectOptions),
             education_level: education_level_schema(educationLevels),
-            exam_boards: z.array(exam_board_schema(examBoards)),
+            exam_boards: z.array(exam_board_schema(examBoards)).min(1, {
+                message: "Must have at least 1 exam board",
+            }),
             caption: z.string().min(1, { message: "Caption is required" }),
             learning_objectives: z
                 .array(

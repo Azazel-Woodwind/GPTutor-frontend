@@ -26,6 +26,7 @@ function Classroom() {
     const currentLesson = useLoaderData();
 
     const [classroomHeight, setClassroomHeight] = React.useState(undefined);
+    const [exit, setExit] = React.useState(false);
 
     const hook = useLesson({
         currentLesson,
@@ -54,6 +55,7 @@ function Classroom() {
         currentImageIndex,
         streaming,
         speaking,
+        isMuted,
     } = hook;
 
     const getClassroomHeight = React.useCallback(ref => {
@@ -83,7 +85,7 @@ function Classroom() {
             );
         }
 
-        if (finished && !streaming && !speaking) {
+        if (exit) {
             return <EndOfLessonModal key="endModal" lesson={currentLesson} />;
         }
 
@@ -98,7 +100,12 @@ function Classroom() {
                         <Header
                             currentLearningObjective={currentLearningObjective}
                             currentLesson={currentLesson}
-                            learningObjectiveNumber={learningObjectiveNumber}
+                            finished={
+                                finished &&
+                                !streaming &&
+                                (isMuted() || !speaking)
+                            }
+                            onExit={() => setExit(true)}
                         />
                         <DualDisplay>
                             <LayoutGroup>

@@ -13,8 +13,10 @@ export function formatEducationLevel(level) {
             return "A-Level";
         case "ks3":
             return "KS3";
+        case "other":
+            return "Other";
         default:
-            return capitaliseFirstLetter(level);
+            return level;
     }
 }
 

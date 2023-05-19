@@ -67,6 +67,8 @@ function useX(config) {
         audio.current.muted = !audio.current.muted;
     };
 
+    const isMuted = () => audio.current.muted;
+
     const getSpeed = () => {
         return audio.current.playbackRate;
     };
@@ -261,6 +263,7 @@ function useX(config) {
         pause,
         play,
         speaking,
+        isMuted,
     };
 }
 

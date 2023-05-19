@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import IconWrapperStyle from "../styles/IconWrapper";
-import { ChatContext } from "../context/ChatContext";
+import { ChatContext, useChatContext } from "../context/ChatContext";
 import { useLocation } from "react-router-dom";
 import IconButton from "../components/IconButton";
 import { CrossSvgData, MicSvgData, SendSvgData } from "../lib/svgIconData";
@@ -124,22 +124,29 @@ const Controls = ({
             ) + "px";
     }, [messageInput]);
 
-    React.useEffect(() => {
-        const handleKeyDown = e => {
+    const { width, draggable } = useChatContext();
+
+    const handleKeyDown = React.useCallback(
+        e => {
             if (
                 !["INPUT", "TEXTAREA"].includes(e.target.tagName) &&
-                e.code === "Space"
+                e.code === "Space" &&
+                draggable !== false &&
+                width !== 0
             ) {
                 toggleRecord();
             }
-        };
+        },
+        [width, draggable]
+    );
 
+    React.useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, []);
+    }, [handleKeyDown]);
 
     // console.log(messageInput, streaming, loading);
 

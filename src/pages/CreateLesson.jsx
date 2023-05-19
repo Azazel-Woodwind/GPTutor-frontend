@@ -118,23 +118,23 @@ function CreateLesson({ action }) {
     const setDefaultValues = lessonArg => {
         const currentLesson = lessonArg || lesson;
         if (!currentLesson) return;
-        // console.log(currentLesson);
+        console.log(currentLesson);
 
         form.reset({
-            title: currentLesson.title,
+            title: currentLesson.title || undefined,
             education_level: formatEducationLevel(
                 currentLesson.education_level
             ),
-            subject: formatSubject(currentLesson.subject),
+            subject: formatSubject(currentLesson.subject) ?? "",
             exam_boards:
                 currentLesson.exam_boards?.map(
                     board => board.exam_board_name
                 ) ?? [],
-            caption: currentLesson.caption,
+            caption: currentLesson.caption ?? "",
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
                     description: objective.description,
-                    image_link: objective.image_link,
+                    image_link: objective.image_link ?? "",
                     image_description: objective.image_description,
                 })
             ),
@@ -158,19 +158,12 @@ function CreateLesson({ action }) {
             LessonAPI.getLessonById(lessonID)
                 .then(lesson => {
                     console.log(lesson);
-                    if (!lesson) {
-                        sendNotification({
-                            label: "Lesson not found",
-                            duration: 5,
-                            type: "error",
-                        });
-                        return navigate("/create-lesson");
-                    }
 
                     setLesson(lesson);
                     setDefaultValues(lesson);
                 })
                 .catch(err => {
+                    console.log(err);
                     sendNotification({
                         label: "Lesson not found",
                         duration: 5,
@@ -202,7 +195,12 @@ function CreateLesson({ action }) {
                 caption: data.caption || null,
                 exam_boards: data.exam_boards,
                 education_level: data.education_level?.toLowerCase() || null,
-                learning_objectives: data.learning_objectives,
+                learning_objectives: data.learning_objectives.filter(
+                    objective =>
+                        objective.description ||
+                        objective.image_link ||
+                        objective.image_description
+                ),
                 is_published: data.is_published,
             };
             let newLesson;

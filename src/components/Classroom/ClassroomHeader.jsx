@@ -3,11 +3,16 @@ import styled from "styled-components";
 import { NavigateHome } from "../Navigation";
 import CustomButton from "../Button";
 import ProgressBar from "../ProgressBar";
+import { Exit } from "@styled-icons/boxicons-regular/Exit";
+import { TextWrapper } from "../../styles/TextWrappers";
+import SvgIcon from "../SvgIcon";
+import { ExitSvgData } from "../../lib/svgIconData";
 
 const Header = ({
     learningObjectiveNumber,
     currentLesson,
-    currentLearningObjective,
+    finished,
+    onExit,
 }) => {
     return (
         <>
@@ -25,7 +30,26 @@ const Header = ({
                 )}
             </Title>
             <ExitButton>
-                <NavigateHome size={40} />
+                <CustomButton outline={!finished} onClick={onExit}>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.2em",
+                        }}>
+                        <TextWrapper
+                            mainGradient={!finished}
+                            fontWeight={600}
+                            fontSize="20px">
+                            Exit Lesson
+                        </TextWrapper>
+                        <SvgIcon
+                            svgData={ExitSvgData}
+                            fill={finished ? "white" : "gradient"}
+                            size="2em"
+                        />
+                    </div>
+                </CustomButton>
             </ExitButton>
         </>
     );
@@ -66,7 +90,7 @@ const Title = styled.div`
 
 const ExitButton = styled.div`
     position: absolute;
-    top: 2em;
+    top: 1.6em;
     right: 4em;
     z-index: 1000;
 `;

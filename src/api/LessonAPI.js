@@ -49,9 +49,11 @@ const LessonAPI = {
             .eq("id", lesson_id)
             .single();
 
-        if (error) {
-            console.log(error);
+        data.learning_objectives = data.learning_objectives.sort(
+            (a, b) => a.number - b.number
+        );
 
+        if (error) {
             throw error;
         }
 

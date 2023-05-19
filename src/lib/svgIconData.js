@@ -43,3 +43,12 @@ export const ErrorSvgData = {
         "M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm0 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm0-8a1 1 0 0 0-1 .88v5.24a1 1 0 0 0 2 0V7.88A1 1 0 0 0 12 7Z",
     ],
 };
+
+export const ExitSvgData = {
+    viewboxWidth: 24,
+    viewboxHeight: 24,
+    paths: [
+        "M19.002 3h-14c-1.103 0-2 .897-2 2v4h2V5h14v14h-14v-4h-2v4c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V5c0-1.103-.898-2-2-2z",
+        "m11 16 5-4-5-4v3.001H3v2h8z",
+    ],
+};

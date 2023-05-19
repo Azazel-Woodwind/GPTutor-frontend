@@ -11,7 +11,6 @@ export const TextWrapper = styled.span`
                     : `font-size: ${props.fontSize}`
                 : ""
         };
-        ${props.fontWeight ? `font-weight: ${props.fontWeight}` : ""};
         ${
             props.color
                 ? `color: ${props.color}`
@@ -22,6 +21,7 @@ export const TextWrapper = styled.span`
                 ? `${props.theme.utils.gradientText}; font-weight: 500;`
                 : ""
         };
+        ${props.fontWeight ? `font-weight: ${props.fontWeight}` : ""};
         ${props.nowrap ? "white-space: nowrap;" : ""};
     `}
 `;
