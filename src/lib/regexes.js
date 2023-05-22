@@ -7,6 +7,6 @@ export const CONTAINS_NUMBER_REGEX = /[0-9]/;
 export const CONTAINS_SPECIAL_CHARACTER_REGEX = /[^A-Za-z0-9]/;
 
 export const IMAGE_LINK_REGEX =
-    /^(https?:\/\/(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(?:\/[\w\-.~!$&'()*+,;=:@%]+)*\/?)(\.(?:jpe?g|png|gif|webp))$/;
+    /^(https?:\/\/(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}(?:\/[\w\-.~!$&'()*+,;=:@%]+)*\/?)(\.(?:jpe?g|png|PNG|gif|webp))$/;
 
 export const SVG_REGEX = /^<svg\b[^>]*>((.*\n*)*?)<\/svg>$/;

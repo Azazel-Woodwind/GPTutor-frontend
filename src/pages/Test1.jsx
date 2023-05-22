@@ -25,6 +25,7 @@ import { Exit } from "@styled-icons/boxicons-regular/Exit";
 import SvgIcon from "../components/SvgIcon";
 import { ExitSvgData } from "../lib/svgIconData";
 import { TextWrapper } from "../styles/TextWrappers";
+import StatusChip from "../components/Dashboard/StatusChip";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -190,6 +191,7 @@ function Test1() {
                     <SvgIcon svgData={ExitSvgData} fill="gradient" size="2em" />
                 </div>
             </CustomButton>
+            <StatusChip status={"Verified"} />
         </CenteredColumn>
     );
 }

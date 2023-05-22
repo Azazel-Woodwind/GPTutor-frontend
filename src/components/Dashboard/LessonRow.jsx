@@ -1,7 +1,7 @@
 import React from "react";
 import Row, { Cell } from "../../styles/Dashboard/Row";
 import Checkbox from "../Checkbox";
-import { lessonFormSchema } from "../../lib/lessonFormSchema";
+import { lessonFormSchema, lessonSchema } from "../../lib/lessonFormSchema";
 import { useAppData } from "../../context/AppDataContext";
 import { formatEducationLevel, formatSubject } from "../../lib/stringUtils";
 import { CheckSvgData, CrossSvgData } from "../../lib/svgIconData";
@@ -12,7 +12,10 @@ import IconStyles from "../../styles/Dashboard/IconStyles";
 import { EditAlt } from "@styled-icons/boxicons-regular";
 import { Delete } from "@styled-icons/fluentui-system-regular";
 import { Play } from "@styled-icons/fluentui-system-regular/Play";
-import SvgIcon from "../SvgIcon";
+import StatusChip from "./StatusChip";
+import { Publish } from "@styled-icons/entypo/Publish";
+import { Unpublished } from "@styled-icons/material-outlined/Unpublished";
+import Tooltip from "../Tooltip";
 
 function LessonRow({
     lesson,
@@ -41,7 +44,10 @@ function LessonRow({
             <Cell content={lesson.created_at}>
                 {new Date(lesson.created_at).toLocaleDateString()}
             </Cell>
-            <Cell style={{ paddingLeft: "20px" }}>
+            <Cell>
+                <StatusChip status={lesson.status} />
+            </Cell>
+            {/* <Cell style={{ paddingLeft: "20px" }}>
                 <Checkbox
                     checked={lesson.is_published}
                     onChange={e => {
@@ -83,33 +89,71 @@ function LessonRow({
                 ) : (
                     "N/A (not published)"
                 )}
-            </Cell>
+            </Cell> */}
             <IconsContainer>
-                <DeleteIcon
-                    onClick={() => {
-                        setSelectedLesson(lesson);
-                        DeleteModal.handleOpen();
-                    }}
-                />
-                <EditIcon
-                    onClick={() => {
-                        if (lesson.is_published) {
+                {["Draft", "Rejected"].includes(lesson.status) ? (
+                    <Tooltip label={"Publish Lesson"}>
+                        <PublishIcon
+                            onClick={() => {
+                                const validate = lessonSchema({
+                                    subjectOptions,
+                                    educationLevels,
+                                    examBoards,
+                                }).safeParse(lesson);
+
+                                if (validate.success) {
+                                    setSelectedLesson(lesson);
+                                    PublishModal.handleOpen();
+                                } else {
+                                    console.log(lesson);
+                                    console.log(validate);
+                                    InvalidModal.handleOpen();
+                                }
+                            }}
+                        />
+                    </Tooltip>
+                ) : (
+                    <Tooltip label={"Unpublish Lesson"}>
+                        <UnpublishIcon
+                            onClick={() => {
+                                setSelectedLesson(lesson);
+                                UnpublishModal.handleOpen();
+                            }}
+                        />
+                    </Tooltip>
+                )}
+                <Tooltip label={"Delete Lesson"}>
+                    <DeleteIcon
+                        onClick={() => {
                             setSelectedLesson(lesson);
-                            EditModal.handleOpen();
-                        } else {
-                            navigate(`/edit-lesson?id=${lesson.id}`);
+                            DeleteModal.handleOpen();
+                        }}
+                    />
+                </Tooltip>
+                <Tooltip label={"Edit Lesson"}>
+                    <EditIcon
+                        onClick={() => {
+                            if (lesson.is_published) {
+                                setSelectedLesson(lesson);
+                                EditModal.handleOpen();
+                            } else {
+                                navigate(`/edit-lesson?id=${lesson.id}`);
+                            }
+                        }}
+                    />
+                </Tooltip>
+                <Tooltip label={"Sit Lesson"}>
+                    <PlayIcon
+                        onClick={() =>
+                            navigate(
+                                `/lessons/${lesson.title.replaceAll(
+                                    " ",
+                                    "-"
+                                )}?id=${lesson.id}`
+                            )
                         }
-                    }}
-                />
-                <PlayIcon
-                    onClick={() =>
-                        navigate(
-                            `/lessons/${lesson.title.replaceAll(" ", "-")}?id=${
-                                lesson.id
-                            }`
-                        )
-                    }
-                />
+                    />
+                </Tooltip>
             </IconsContainer>
         </Row>
     );
@@ -122,6 +166,12 @@ const DeleteIcon = styled(Delete)`
     ${IconStyles}
 `;
 const PlayIcon = styled(Play)`
+    ${IconStyles}
+`;
+const PublishIcon = styled(Publish)`
+    ${IconStyles}
+`;
+const UnpublishIcon = styled(Unpublished)`
     ${IconStyles}
 `;
 

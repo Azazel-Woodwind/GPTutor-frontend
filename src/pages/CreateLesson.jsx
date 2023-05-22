@@ -126,10 +126,7 @@ function CreateLesson({ action }) {
                 currentLesson.education_level
             ),
             subject: formatSubject(currentLesson.subject) ?? "",
-            exam_boards:
-                currentLesson.exam_boards?.map(
-                    board => board.exam_board_name
-                ) ?? [],
+            exam_boards: currentLesson.exam_boards ?? [],
             caption: currentLesson.caption ?? "",
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
@@ -176,7 +173,6 @@ function CreateLesson({ action }) {
 
     const onSubmit = async data => {
         console.log("FORM SUBMITTED");
-        console.log(data);
 
         if (!form.formState.isValid) {
             sendNotification({
@@ -203,6 +199,7 @@ function CreateLesson({ action }) {
                 ),
                 is_published: data.is_published,
             };
+            console.log(lessonData);
             let newLesson;
             if (action === "edit") {
                 newLesson = await LessonAPI.updateOwnedByid(
@@ -214,7 +211,6 @@ function CreateLesson({ action }) {
                     duration: 5,
                     type: "success",
                 });
-                console.log(newLesson);
             } else {
                 newLesson = await LessonAPI.create(lessonData);
                 sendNotification({
@@ -260,6 +256,8 @@ function CreateLesson({ action }) {
         });
         return () => subscription.unsubscribe();
     }, [form.watch]);
+
+    console.log(form.formState.isDirty);
 
     return (
         <Container>
@@ -409,7 +407,7 @@ function CreateLesson({ action }) {
                         }}>
                         <Controller
                             control={form.control}
-                            name={"education_level"}
+                            name="education_level"
                             render={({
                                 field, // { onChange, onBlur, value, name, ref }
                                 fieldState, //{ invalid, isTouched, isDirty, error }

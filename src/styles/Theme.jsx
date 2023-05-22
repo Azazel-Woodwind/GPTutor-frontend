@@ -72,8 +72,6 @@ const Theme = {
             prefix: false,
         });
         return `
-    
-
     background: ${gradientColour1}${opacity};
     background: -moz-linear-gradient(
         ${gradientAngle}deg,

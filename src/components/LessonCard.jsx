@@ -26,7 +26,18 @@ function LessonCard({ lesson }) {
                 );
             }}>
             <Title>{capitaliseFirstLetter(lesson.title)}</Title>
-            <Subject>{lesson.exam_board || "Edexcel"}</Subject>
+            <div
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                }}>
+                {lesson.exam_boards.map(board => (
+                    <Subject key={board}>{board}</Subject>
+                ))}
+            </div>
+
             <Description>{lesson.caption}</Description>
             <Footer>
                 <FooterRow>

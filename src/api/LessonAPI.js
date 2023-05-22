@@ -6,13 +6,18 @@ const LessonAPI = {
         const { data, error } = await supabase
             .from("lessons")
             .select("*, learning_objectives (*), exam_boards (*)")
-            .eq("is_published", true)
-            .eq("is_verified", true);
+            .eq("status", "Verified");
 
         if (error) {
             throw error;
         }
 
+        data.forEach(lesson => {
+            lesson.exam_boards = lesson.exam_boards.map(
+                exam_board => exam_board.exam_board_name
+            );
+        });
+        console.log(data);
         return data;
     },
 
@@ -39,6 +44,13 @@ const LessonAPI = {
             throw error2;
         }
 
+        data.map(lesson => {
+            lesson.exam_boards = lesson.exam_boards.map(
+                exam_board => exam_board.exam_board_name
+            );
+            return lesson;
+        });
+
         return data;
     },
 
@@ -49,13 +61,16 @@ const LessonAPI = {
             .eq("id", lesson_id)
             .single();
 
+        if (error) {
+            throw error;
+        }
         data.learning_objectives = data.learning_objectives.sort(
             (a, b) => a.number - b.number
         );
 
-        if (error) {
-            throw error;
-        }
+        data.exam_boards = data.exam_boards.map(
+            exam_board => exam_board.exam_board_name
+        );
 
         return data;
     },

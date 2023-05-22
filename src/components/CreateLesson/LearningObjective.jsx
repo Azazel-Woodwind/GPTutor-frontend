@@ -14,11 +14,6 @@ export default function LearningObjective({
     learningObjectivesFields,
     form,
 }) {
-    const imagesFields = useFieldArray({
-        control: form.control,
-        name: `learning_objectives.${index}.images`,
-    });
-
     return (
         <Container>
             <CloseIconContainer>

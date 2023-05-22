@@ -24,6 +24,8 @@ import DeleteLessonModal from "../../components/Dashboard/DeleteLessonModal";
 import CustomButton from "../../components/Button";
 import LessonRow from "../../components/Dashboard/LessonRow";
 import EditLessonModal from "../../components/Dashboard/EditLessonModal";
+import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
+import { TextWrapper } from "../../styles/TextWrappers";
 
 function MyLessons() {
     const lessons = useLoaderData();
@@ -71,22 +73,32 @@ function MyLessons() {
                     <Cell>Subject</Cell>
                     <Cell>Education Level</Cell>
                     <Cell>Created On</Cell>
-                    <Cell>Published?</Cell>
-                    <Cell>Verified?</Cell>
+                    <Cell>Status</Cell>
                 </Row>
                 {lessons
                     .sort((a, b) => a.title.localeCompare(b.title))
                     .map(lesson => (
-                        <LessonRow
-                            key={lesson.created_at}
-                            lesson={lesson}
-                            setSelectedLesson={setSelectedLesson}
-                            PublishModal={PublishModal}
-                            InvalidModal={InvalidModal}
-                            UnpublishModal={UnpublishModal}
-                            DeleteModal={DeleteModal}
-                            EditModal={EditModal}
-                        />
+                        <div style={{ width: "100%" }}>
+                            <LessonRow
+                                key={lesson.created_at}
+                                lesson={lesson}
+                                setSelectedLesson={setSelectedLesson}
+                                PublishModal={PublishModal}
+                                InvalidModal={InvalidModal}
+                                UnpublishModal={UnpublishModal}
+                                DeleteModal={DeleteModal}
+                                EditModal={EditModal}
+                            />
+                            {lesson.status === "Rejected" &&
+                                lesson.rejection_reason && (
+                                    <RejectionReasonContainer>
+                                        <ErrorOutline size="1.5em" />
+                                        <TextWrapper>
+                                            {lesson.rejection_reason}
+                                        </TextWrapper>
+                                    </RejectionReasonContainer>
+                                )}
+                        </div>
                     ))}
                 <CustomButton
                     outline
@@ -132,6 +144,17 @@ function MyLessons() {
         </Container>
     );
 }
+
+const RejectionReasonContainer = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 7px;
+
+    width: 100%;
+
+    background-color: ${props => props.theme.colours.error};
+`;
 
 const Container = styled.div`
     display: flex;

@@ -329,16 +329,17 @@ const router = createBrowserRouter([
                             }
 
                             if (request.method === "PUT") {
+                                const oldStatus = data.get("status");
                                 try {
                                     // console.log(lessonID);
-                                    const published =
-                                        await LessonAPI.togglePublishById(
-                                            lessonID
-                                        );
+                                    await LessonAPI.togglePublishById(lessonID);
+
                                     return {
                                         ok: true,
                                         message: `Lesson successfully ${
-                                            published
+                                            ["Draft", "Rejected"].includes(
+                                                oldStatus
+                                            )
                                                 ? "published"
                                                 : "unpublished"
                                         }!`,
@@ -348,7 +349,9 @@ const router = createBrowserRouter([
                                     return {
                                         ok: false,
                                         message: `There was an error ${
-                                            data.get("is_published")
+                                            ["Draft", "Rejected"].includes(
+                                                oldStatus
+                                            )
                                                 ? "publishing"
                                                 : "unpublishing"
                                         } the lesson.`,
