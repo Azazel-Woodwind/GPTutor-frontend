@@ -39,9 +39,8 @@ import General from "./pages/settings/General";
 
 import Dashboard from "./pages/DashboardMenu";
 import Users from "./pages/dashboard/Users";
-import DLessons from "./pages/dashboard/Lessons";
 
-import MyLessons from "./pages/dashboard/MyLessons";
+import LessonsDisplay from "./pages/dashboard/LessonsDisplay";
 import {
     ADMIN_ACCESS_LEVEL,
     INACTIVE_ACCESS_LEVEL,
@@ -291,7 +290,7 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "/dashboard/my-lessons",
-                        element: <MyLessons />,
+                        element: <LessonsDisplay />,
                         action: async ({ request }) => {
                             if (!["DELETE", "PUT"].includes(request.method)) {
                                 throw new Response("Incorrect request method", {
@@ -387,7 +386,8 @@ const router = createBrowserRouter([
                         path: "/dashboard/lessons",
                         element: (
                             <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-                                <DLessons />
+                                element:{" "}
+                                <LessonsDisplay onAdminDashboard={true} />
                             </RouteProtector>
                         ),
                         loader: async () => {

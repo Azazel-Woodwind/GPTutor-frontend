@@ -1,28 +1,27 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { fontSizeOptions, getFontSize } from "../components/Button";
 
 export const TextWrapper = styled.span`
-    max-width: 80ch;
-    ${props => `
-        ${
-            props.fontSize
-                ? fontSizeOptions.includes(props.fontSize)
-                    ? `font-size: ${getFontSize(props.fontSize)}`
-                    : `font-size: ${props.fontSize}`
-                : ""
-        };
-        ${
-            props.color
-                ? `color: ${props.color}`
-                : `color: ${props.theme.colours.primaryStrong}`
-        };
-        ${
-            props.mainGradient
-                ? `${props.theme.utils.gradientText}; font-weight: 500;`
-                : ""
-        };
-        ${props.fontWeight ? `font-weight: ${props.fontWeight}` : ""};
-        ${props.nowrap ? "white-space: nowrap;" : ""};
+    ${({
+        fontSize,
+        color,
+        mainGradient,
+        fontWeight,
+        noWrap,
+        noHighlight,
+        theme,
+    }) => css`
+        max-width: 80ch;
+        ${fontSize
+            ? fontSizeOptions.includes(fontSize)
+                ? `font-size: ${getFontSize(fontSize)};`
+                : `font-size: ${fontSize};`
+            : ""}
+        ${color ? `color: ${color};` : `color: ${theme.colours.primaryStrong};`}
+        ${mainGradient ? `${theme.utils.gradientText}; font-weight: 500;` : ""}
+        ${fontWeight ? `font-weight: ${fontWeight};` : ""}
+        ${noWrap ? "white-space: nowrap;" : ""}
+        ${noHighlight ? "user-select: none;" : ""}
     `}
 `;
 

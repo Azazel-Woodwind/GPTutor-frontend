@@ -32,6 +32,7 @@ const Container = styled(motion.div)`
     height: 100%;
     position: relative;
     z-index: 1000;
+
     /* border: 2px solid green; */
     /* flex: 1 1 auto; */
 `;
@@ -62,7 +63,9 @@ const ChatHandle = styled.div`
     transition: background-color 0.2s ease;
 `;
 
-const ChatHandleContainer = styled.div``;
+const ChatHandleContainer = styled.div`
+    user-select: none;
+`;
 
 function ChatHistory({
     containerHeight,
@@ -124,6 +127,9 @@ function ChatHistory({
                         key="chat-handle"
                         ref={handleRef}
                         as={motion.div}
+                        onMouseDown={e => {
+                            e.preventDefault();
+                        }}
                         drag="y"
                         dragConstraints={chatHandleContainer}
                         dragElastic={0}

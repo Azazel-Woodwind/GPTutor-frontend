@@ -28,6 +28,7 @@ const GlobalStyles = createGlobalStyle`
             margin: default;
             padding: default; 
         }
+        
         /* color: white;
         background-color: white; */
     }

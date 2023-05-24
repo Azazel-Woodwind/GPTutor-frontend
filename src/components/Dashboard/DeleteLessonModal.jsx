@@ -4,7 +4,7 @@ import { TextWrapper } from "../../styles/TextWrappers";
 import CustomButton from "../Button";
 import { useSubmit } from "react-router-dom";
 
-function DeleteLessonModal({ lesson, handleClose }) {
+function DeleteLessonModal({ lesson, handleClose, onAdminDashboard }) {
     const submit = useSubmit();
 
     return (
@@ -25,7 +25,9 @@ function DeleteLessonModal({ lesson, handleClose }) {
                     onClick={() => {
                         submit(lesson, {
                             method: "delete",
-                            action: "/dashboard/my-lessons",
+                            action: onAdminDashboard
+                                ? "/dashboard/lessons"
+                                : "/dashboard/my-lessons",
                         });
                         handleClose();
                     }}>

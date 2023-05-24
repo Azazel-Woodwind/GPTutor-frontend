@@ -22,11 +22,12 @@ import { formatEducationLevel, formatSubject } from "../lib/stringUtils";
 import RadioButton from "../components/RadioButton";
 import DropdownList from "../components/DropdownList";
 import { useNotification } from "../context/NotificationContext";
-import Prompt from "../components/Prompt";
+import { usePrompt } from "../components/Prompt";
 import { lessonFormSchema } from "../lib/lessonFormSchema";
 import { useAppData } from "../context/AppDataContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import CustomSelect from "../components/CustomSelect";
+import ExitCreateLessonModal from "../components/CreateLesson/ExitCreateLessonModal";
 
 const CreateLessonForm = styled.form`
     margin: 0 auto;
@@ -49,9 +50,6 @@ const Container = styled.div`
 
     /* border: 5px solid red; */
 `;
-
-const onLeaveMessage =
-    "Are you sure you want to leave? Your changes will be lost.";
 
 const defaultValues = {
     title: "",
@@ -88,6 +86,8 @@ function CreateLesson({ action }) {
     });
 
     const is_published = form.watch("is_published");
+
+    const { Prompt, setConfirmed, PromptProps } = usePrompt();
 
     React.useEffect(() => {
         if (action === "create") {
@@ -173,8 +173,16 @@ function CreateLesson({ action }) {
 
     const onSubmit = async data => {
         console.log("FORM SUBMITTED");
+        console.log(data);
 
-        if (!form.formState.isValid) {
+        if (
+            !lessonFormSchema({
+                subjectOptions,
+                educationLevels,
+                examBoards,
+            }).safeParse(data).success
+        ) {
+            console.log(form.formState.errors);
             sendNotification({
                 label: "Form is invalid",
                 duration: 5,
@@ -257,7 +265,7 @@ function CreateLesson({ action }) {
         return () => subscription.unsubscribe();
     }, [form.watch]);
 
-    console.log(form.formState.isDirty);
+    // console.log(form.formState.isDirty);
 
     return (
         <Container>
@@ -537,7 +545,14 @@ function CreateLesson({ action }) {
                     </CustomButton>
                 </div>
             </CreateLessonForm>
-            <Prompt when={form.formState.isDirty} message={onLeaveMessage} />
+            <Prompt when={form.formState.isDirty} {...PromptProps}>
+                <ExitCreateLessonModal
+                    setConfirmed={setConfirmed}
+                    isPublished={is_published}
+                    form={form}
+                    onSubmit={onSubmit}
+                />
+            </Prompt>
         </Container>
     );
 }

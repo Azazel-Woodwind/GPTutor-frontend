@@ -1,30 +1,54 @@
 import React from "react";
-import { ButtonRow, ModalContainer } from "../Dashboard/PublishLessonModal";
+import {
+    ButtonRow,
+    Content,
+    ModalContainer,
+} from "../Dashboard/PublishLessonModal";
 import { TextWrapper } from "../../styles/TextWrappers";
 import CustomButton from "../Button";
-import { useNavigate } from "react-router-dom";
 
-function ExitCreateLessonModal({ nextLocation, handleClose, setConfirmed }) {
+function ExitCreateLessonModal({ setConfirmed, isPublished, form, onSubmit }) {
+    const publish = isPublished && form.formState.isValid;
     return (
-        <ModalContainer fillparent gap="20px">
-            <TextWrapper fontSize="xl" fontWeight="bold">
-                Are you sure you want to leave? Your changes will be permanently
-                lost.
-            </TextWrapper>
-            <TextWrapper fontSize="lg">
-                If you choose to stay, you can save your changes as a draft.
-            </TextWrapper>
+        <ModalContainer
+            fillparent
+            gap="40px"
+            style={{ paddingBottom: "20px", paddingTop: "20px" }}>
+            <Content>
+                <TextWrapper fontSize="xl" fontWeight="bold">
+                    Are you sure you want to leave? Your changes may be
+                    permanently lost.
+                </TextWrapper>
+            </Content>
             <ButtonRow>
-                <CustomButton onClick={handleClose}>
-                    <TextWrapper fontSize="lg">Cancel</TextWrapper>
+                <CustomButton
+                    onClick={() => {
+                        setConfirmed(false);
+                    }}
+                    outline>
+                    <TextWrapper fontSize="lg" mainGradient>
+                        Cancel
+                    </TextWrapper>
+                </CustomButton>
+                <CustomButton
+                    onClick={async e => {
+                        setConfirmed(true);
+                        if (!(publish || !isPublished)) {
+                            form.setValue("is_published", false, {
+                                shouldValidate: true,
+                            });
+                        }
+
+                        form.handleSubmit(onSubmit)(e);
+                    }}>
+                    <TextWrapper fontSize="lg">
+                        {publish ? "Publish & Exit" : "Save as Draft & Exit"}
+                    </TextWrapper>
                 </CustomButton>
                 <CustomButton
                     type="error"
                     onClick={() => {
                         setConfirmed(true);
-                        console.log(nextLocation);
-
-                        handleClose();
                     }}>
                     <TextWrapper fontSize="lg">Discard changes</TextWrapper>
                 </CustomButton>

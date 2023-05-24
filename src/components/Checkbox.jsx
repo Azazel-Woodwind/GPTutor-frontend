@@ -149,7 +149,7 @@ function Checkbox(
                     <CheckboxText
                         content={label}
                         fontSize={fontSize || "1.2em"}
-                        nowrap
+                        noWrap
                         color={
                             hovering
                                 ? Theme.colours.primary

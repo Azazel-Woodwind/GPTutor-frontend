@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
 import FillParent from "../styles/containers/FillParent";
@@ -7,6 +7,7 @@ import { VolumeUp } from "@styled-icons/material-sharp/VolumeUp";
 import { VolumeOff } from "@styled-icons/material-sharp/VolumeOff";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import IconButton from "../components/IconButton";
+import Slider from "../components/Slider";
 
 const animation = {
     boxShadow: [
@@ -111,17 +112,19 @@ const Avatar = ({
     paused,
     play,
     pause,
+    setSpeed,
     ...props
 }) => {
     const [isMuted, setIsMuted] = React.useState(false);
-    const [showControls, setShowControls] = React.useState(false);
+    const [mouseEntered, setMouseEntered] = React.useState(false);
+    const [xSpeed, setXSpeed] = React.useState(1);
 
     // console.log(pulse);
     if (hasControls) {
         return (
             <ControlsContainer
-                onMouseEnter={() => setShowControls(true)}
-                onMouseLeave={() => setShowControls(false)}>
+                onMouseEnter={() => setMouseEntered(true)}
+                onMouseLeave={() => setMouseEntered(false)}>
                 <AvatarWrapper
                     size={size}
                     as={motion.div}
@@ -148,15 +151,16 @@ const Avatar = ({
                         }}
                     />
                 </AvatarWrapper>
-                <AnimatePresence>
-                    {showControls && (
-                        <XControls
-                            isMuted={isMuted}
-                            setIsMuted={setIsMuted}
-                            toggleMute={toggleMute}
-                        />
-                    )}
-                </AnimatePresence>
+                <XControls
+                    key="modal"
+                    isMuted={isMuted}
+                    setIsMuted={setIsMuted}
+                    toggleMute={toggleMute}
+                    setSpeed={setSpeed}
+                    xSpeed={xSpeed}
+                    setXSpeed={setXSpeed}
+                    mouseEntered={mouseEntered}
+                />
             </ControlsContainer>
         );
     }
@@ -174,41 +178,97 @@ const Avatar = ({
     );
 };
 
-function XControls({ isMuted, setIsMuted, toggleMute }) {
+function XControls({
+    isMuted,
+    setIsMuted,
+    toggleMute,
+    xSpeed,
+    setXSpeed,
+    setSpeed,
+    mouseEntered,
+}) {
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [isHovering, setIsHovering] = React.useState(false);
+
     return (
-        <motion.div
-            key="modal"
-            initial="hidden"
-            animate="visible"
-            variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                    opacity: 1,
-                },
-            }}
-            exit="hidden"
-            style={{
-                position: "absolute",
-                top: "5px",
-                right: "5px",
-            }}>
-            <IconButton
-                style={{
-                    width: "3em",
-                    height: "3em",
-                }}
-                onClick={() => {
-                    setIsMuted(!isMuted);
-                    toggleMute();
-                }}>
-                {isMuted ? <VolumeOff size={30} /> : <VolumeUp size={30} />}
-            </IconButton>
-        </motion.div>
+        <AnimatePresence>
+            {(mouseEntered || isDragging || isHovering) && (
+                <motion.div
+                    key="modal"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                            opacity: 1,
+                        },
+                    }}
+                    exit="hidden">
+                    <MuteButtonContainer>
+                        <IconButton
+                            style={{
+                                width: "3em",
+                                height: "3em",
+                            }}
+                            onClick={() => {
+                                setIsMuted(!isMuted);
+                                toggleMute();
+                            }}>
+                            {isMuted ? (
+                                <VolumeOff size={30} />
+                            ) : (
+                                <VolumeUp size={30} />
+                            )}
+                        </IconButton>
+                    </MuteButtonContainer>
+                    <SpeedSliderContainer>
+                        <Slider
+                            min={0.5}
+                            max={3}
+                            step={0.1}
+                            marks={[
+                                { value: 0.5, label: "0.5x" },
+                                { value: 1, label: "1x" },
+                                { value: 1.5, label: "1.5x" },
+                                { value: 2, label: "2x" },
+                                { value: 2.5, label: "2.5x" },
+                                { value: 3, label: "3x" },
+                            ]}
+                            value={xSpeed}
+                            onChange={value => {
+                                setXSpeed(value);
+                                setSpeed(value);
+                            }}
+                            onDragStart={() => setIsDragging(true)}
+                            onDragEnd={() => setIsDragging(false)}
+                            onMouseOver={() => setIsHovering(true)}
+                            onMouseLeave={() => setIsHovering(false)}
+                        />
+                    </SpeedSliderContainer>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }
 
+const SpeedSliderContainer = styled.div`
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    bottom: 20px;
+    width: 100%;
+    z-index: 3;
+`;
+
+const MuteButtonContainer = styled.div`
+    position: absolute;
+    top: 5px;
+    right: 5px;
+`;
+
 const ControlsContainer = styled.div`
     position: relative;
+    /* border: 5px solid red; */
 `;
 
 const Ring = styled(FillParent)`

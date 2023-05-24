@@ -35,6 +35,7 @@ function useX(config) {
     const audioSource = useRef(null);
     const audioQueue = useRef([]);
     const currentResponseId = useRef(undefined);
+    const currentPlaybackRate = useRef(1);
 
     const sendSystemMessage = message => {
         console.log("Received system message request: ", message);
@@ -75,6 +76,7 @@ function useX(config) {
 
     const setSpeed = speed => {
         audio.current.playbackRate = speed;
+        currentPlaybackRate.current = speed;
     };
 
     const pause = () => {
@@ -172,6 +174,7 @@ function useX(config) {
 
         audio.current.onplay = () => {
             console.log("track playing");
+            audio.current.playbackRate = currentPlaybackRate.current;
             // console.log(audio.current.src);
             setSpeaking(true);
         };

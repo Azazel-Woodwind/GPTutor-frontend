@@ -27,7 +27,7 @@ import EditLessonModal from "../../components/Dashboard/EditLessonModal";
 import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
 import { TextWrapper } from "../../styles/TextWrappers";
 
-function MyLessons() {
+function LessonsDisplay({ onAdminDashboard = false }) {
     const lessons = useLoaderData();
     const navigate = useNavigate();
     const res = useActionData();
@@ -50,6 +50,14 @@ function MyLessons() {
     });
 
     const { Modal: EditModalComponent, ...EditModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: ApproveModalComponent, ...ApproveModal } = useModal({
+        initialOpen: false,
+    });
+
+    const { Modal: RejectModalComponent, ...RejectModal } = useModal({
         initialOpen: false,
     });
 
@@ -88,6 +96,9 @@ function MyLessons() {
                                 UnpublishModal={UnpublishModal}
                                 DeleteModal={DeleteModal}
                                 EditModal={EditModal}
+                                onAdminDashboard={onAdminDashboard}
+                                ApproveModal={ApproveModal}
+                                RejectModal={RejectModal}
                             />
                             {lesson.status === "Rejected" &&
                                 lesson.rejection_reason && (
@@ -141,6 +152,27 @@ function MyLessons() {
                     handleClose={EditModal.handleClose}
                 />
             </EditModalComponent>
+            {onAdminDashboard && (
+                <>
+                    <ApproveModalComponent
+                        {...ApproveModal.ModalProps}
+                        type="dropIn">
+                        <EditLessonModal
+                            lesson={selectedLesson}
+                            handleClose={ApproveModal.handleClose}
+                        />
+                    </ApproveModalComponent>
+
+                    <RejectModalComponent
+                        {...RejectModal.ModalProps}
+                        type="dropIn">
+                        <EditLessonModal
+                            lesson={selectedLesson}
+                            handleClose={RejectModal.handleClose}
+                        />
+                    </RejectModalComponent>
+                </>
+            )}
         </Container>
     );
 }
@@ -162,4 +194,4 @@ const Container = styled.div`
     gap: 30px;
 `;
 
-export default MyLessons;
+export default LessonsDisplay;

@@ -1,4 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
+import {
+    AnimatePresence,
+    motion,
+    useDragControls,
+    useMotionValue,
+} from "framer-motion";
 import React from "react";
 import styled from "styled-components";
 import CustomButton from "../components/Button";
@@ -26,6 +31,7 @@ import SvgIcon from "../components/SvgIcon";
 import { ExitSvgData } from "../lib/svgIconData";
 import { TextWrapper } from "../styles/TextWrappers";
 import StatusChip from "../components/Dashboard/StatusChip";
+import Slider from "../components/Slider";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -39,10 +45,6 @@ const props = {
 };
 
 function Test1() {
-    const checkbox = React.useRef(null);
-    const form = useForm();
-    const sendNotification = useNotification();
-
     const { Modal: PublishModalComponent, ...PublishModal } = useModal({
         initialOpen: false,
     });
@@ -58,140 +60,28 @@ function Test1() {
         initialOpen: false,
     });
 
-    const [imageLink, setImageLink] = React.useState("");
-    const [validImageLink, setValidImageLink] = React.useState(false);
-    const [firstName, setFirstName] = React.useState("");
+    const [speed, setSpeed] = React.useState(1);
 
-    React.useEffect(() => {
-        // supabase.auth.onAuthStateChange(async (event, session) => {
-        //     console.log(event);
-        //     if (event == "PASSWORD_RECOVERY") {
-        //         console.log("HERE");
-        //         // const newPassword = prompt("What would you like your new password to be?");
-        //         // const { data, error } = await supabase.auth
-        //         //   .updateUser({ password: "newpassword" })
-        //         // if (data) alert("Password updated successfully!")
-        //         // if (error) alert("There was an error updating your password.")
-        //     }
-        // });
-    }, []);
+    // console.log(speed);
 
     return (
         <CenteredColumn fillparent gap="10px" style={{ overflow: "auto" }}>
-            <CustomButton onClick={() => PublishModal.handleOpen()}>
-                Click to open publish modal
-            </CustomButton>
-            <CustomButton onClick={() => InvalidModal.handleOpen()}>
-                Click to open invalid lesson modal
-            </CustomButton>
-            <CustomButton onClick={() => UnpublishModal.handleOpen()}>
-                Click to open unpublish modal
-            </CustomButton>
-            <CustomButton onClick={() => DeleteModal.handleOpen()}>
-                Click to open delete modal
-            </CustomButton>
-            <CustomButton
-                onClick={() =>
-                    sendNotification({
-                        label: "Lesson successfully created and published!",
-                        duration: 5,
-                        type: "success",
-                    })
-                }>
-                Click to see notification
-            </CustomButton>
-
-            <PublishModalComponent {...PublishModal.ModalProps} type="dropIn">
-                <PublishLessonModal
-                    lesson={{ title: "Fundamentals of Algebra" }}
-                    handleClose={PublishModal.handleClose}
-                />
-            </PublishModalComponent>
-
-            <InvalidModalComponent {...InvalidModal.ModalProps} type="dropIn">
-                <InvalidLessonModal handleClose={InvalidModal.handleClose} />
-            </InvalidModalComponent>
-
-            <UnpublishModalComponent
-                {...UnpublishModal.ModalProps}
-                type="dropIn">
-                <UnpublishLessonModal
-                    lesson={{ title: "Fundamentals of Algebra" }}
-                    handleClose={UnpublishModal.handleClose}
-                />
-            </UnpublishModalComponent>
-
-            <DeleteModalComponent {...DeleteModal.ModalProps} type="dropIn">
-                <DeleteLessonModal
-                    lesson={{ title: "Fundamentals of Algebra" }}
-                    handleClose={DeleteModal.handleClose}
-                />
-            </DeleteModalComponent>
-
-            <Textfield
-                label="Image Link"
-                fullwidth
-                value={imageLink}
-                onChange={e => setImageLink(e.target.value)}
+            <Slider
+                min={0.5}
+                max={3}
+                step={0.1}
+                marks={[
+                    { value: 0.5, label: "0.5x" },
+                    { value: 1, label: "1x" },
+                    { value: 1.5, label: "1.5x" },
+                    { value: 2, label: "2x" },
+                    { value: 2.5, label: "2.5x" },
+                    { value: 3, label: "3x" },
+                ]}
+                value={speed}
+                onChange={value => setSpeed(value)}
+                onMouseOver={() => console.log("mouse over")}
             />
-            <CustomButton
-                onClick={() => {
-                    setValidImageLink(formatImageSource(imageLink));
-                }}>
-                Click to validate image link
-            </CustomButton>
-
-            {validImageLink && (
-                <img src={validImageLink} alt="image" width="400px" />
-            )}
-
-            <CustomButton
-                onClick={async () => {
-                    try {
-                        const { data, error } = await supabase.auth.updateUser({
-                            password: "password",
-                        });
-
-                        if (error) {
-                            throw error;
-                        }
-
-                        console.log(data);
-                    } catch (error) {
-                        console.log(error);
-                    }
-                }}>
-                Click to change password
-            </CustomButton>
-            <CustomButton
-                onClick={async () => {
-                    const { data, error } =
-                        await supabase.auth.resetPasswordForEmail(
-                            "azazelwoodwind11@gmail.com",
-                            {
-                                redirectTo:
-                                    "http://localhost:5173/reset-password",
-                            }
-                        );
-
-                    console.log(data, error);
-                }}>
-                Click to send password link
-            </CustomButton>
-            <CustomButton outline>
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.2em",
-                    }}>
-                    <TextWrapper mainGradient fontWeight={600} fontSize="lg">
-                        Exit Lesson
-                    </TextWrapper>
-                    <SvgIcon svgData={ExitSvgData} fill="gradient" size="2em" />
-                </div>
-            </CustomButton>
-            <StatusChip status={"Verified"} />
         </CenteredColumn>
     );
 }

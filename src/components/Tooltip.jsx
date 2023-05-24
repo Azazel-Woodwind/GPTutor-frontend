@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Tooltip = ({ children, label, underneath }) => {
+const Tooltip = ({ children, label, underneath, show }) => {
     const [visible, setVisible] = React.useState(false);
 
     return (
@@ -10,7 +10,7 @@ const Tooltip = ({ children, label, underneath }) => {
             onMouseEnter={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}>
             <AnimatePresence>
-                {visible && (
+                {(visible || show) && (
                     <TooltipContainer
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
@@ -26,7 +26,8 @@ const Tooltip = ({ children, label, underneath }) => {
     );
 };
 
-const TooltipContainer = styled(motion.span)`
+export const TooltipContainer = styled(motion.span)`
+    user-select: none;
     position: absolute;
     max-width: 80ch;
     ${props => (props.underneath ? "bottom" : "top")}: -2.8em;

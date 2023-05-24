@@ -142,16 +142,12 @@ const Modal = ({
 
 const ModalStyle = styled(motion.div)`
     position: relative;
-    /* min-width: ${props => props.width || "800px"};
-    min-height: ${props => props.height || "300px"}; */
-    width: ${props => props.width || "800px"};
-    height: ${props => props.height || "300px"};
+    display: flex;
+    flex-direction: column;
+    /* max-width: 800px; */
 
-    /* border: 5px solid blue; */
-    /* background-color: ${props => props.theme.colours.primary}10; */
     background-color: ${props => props.theme.colours.highlight1};
-    padding: 30px;
-    padding: 30px 40px 30px 40px;
+    padding: 30px 40px;
     border-radius: 12px;
 `;
 

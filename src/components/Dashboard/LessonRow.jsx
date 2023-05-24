@@ -16,6 +16,8 @@ import StatusChip from "./StatusChip";
 import { Publish } from "@styled-icons/entypo/Publish";
 import { Unpublished } from "@styled-icons/material-outlined/Unpublished";
 import Tooltip from "../Tooltip";
+import { Check } from "@styled-icons/material/Check";
+import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 
 function LessonRow({
     lesson,
@@ -25,6 +27,9 @@ function LessonRow({
     UnpublishModal,
     DeleteModal,
     EditModal,
+    onAdminDashboard = false,
+    ApproveModal,
+    RejectModal,
 }) {
     const { subjectOptions, educationLevels, examBoards } = useAppData();
     const theme = useTheme();
@@ -33,6 +38,16 @@ function LessonRow({
     return (
         <Row style={{ minHeight: "56px" }}>
             <Cell content={lesson.title}> {lesson.title || "N/A"} </Cell>
+            {onAdminDashboard && (
+                <>
+                    <Cell content={lesson.author.first_name}>
+                        {lesson.author.first_name || "N/A"}
+                    </Cell>
+                    <Cell content={lesson.author.last_name}>
+                        {lesson.author.last_name || "N/A"}
+                    </Cell>
+                </>
+            )}
             <Cell content={lesson.subject}>
                 {formatSubject(lesson.subject) || "N/A"}
             </Cell>
@@ -91,6 +106,28 @@ function LessonRow({
                 )}
             </Cell> */}
             <IconsContainer>
+                {onAdminDashboard && (
+                    <>
+                        <Tooltip label={"Approve Lesson"}>
+                            <ApproveIcon
+                                disabled={lesson.status !== "Pending"}
+                                onClick={() => {
+                                    setSelectedLesson(lesson);
+                                    ApproveModal.handleOpen();
+                                }}
+                            />
+                        </Tooltip>
+                        <Tooltip label={"Reject Lesson"}>
+                            <RejectIcon
+                                disabled={lesson.status !== "Pending"}
+                                onClick={() => {
+                                    setSelectedLesson(lesson);
+                                    RejectModal.handleOpen();
+                                }}
+                            />
+                        </Tooltip>
+                    </>
+                )}
                 {["Draft", "Rejected"].includes(lesson.status) ? (
                     <Tooltip label={"Publish Lesson"}>
                         <PublishIcon
@@ -133,7 +170,7 @@ function LessonRow({
                 <Tooltip label={"Edit Lesson"}>
                     <EditIcon
                         onClick={() => {
-                            if (lesson.is_published) {
+                            if (lesson.status === "Verified") {
                                 setSelectedLesson(lesson);
                                 EditModal.handleOpen();
                             } else {
@@ -159,18 +196,30 @@ function LessonRow({
     );
 }
 
+const ApproveIcon = styled(Check)`
+    ${IconStyles}
+`;
+
+const RejectIcon = styled(CloseOutline)`
+    ${IconStyles}
+`;
+
 const EditIcon = styled(EditAlt)`
     ${IconStyles}
 `;
+
 const DeleteIcon = styled(Delete)`
     ${IconStyles}
 `;
+
 const PlayIcon = styled(Play)`
     ${IconStyles}
 `;
+
 const PublishIcon = styled(Publish)`
     ${IconStyles}
 `;
+
 const UnpublishIcon = styled(Unpublished)`
     ${IconStyles}
 `;
