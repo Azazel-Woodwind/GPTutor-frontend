@@ -11,7 +11,7 @@ import {
     motion,
     useMotionValue,
 } from "framer-motion";
-import Header from "../components/Classroom/ClassroomHeader";
+import HeaderContent from "../components/Header/HeaderContent";
 
 import { fade_exit, fade_animation } from "../styles/FramerAnimations";
 import EndOfLessonModal from "../components/Classroom/EndOfLessonModal";
@@ -21,6 +21,8 @@ import Controls from "../components/Controls";
 import React from "react";
 import { ChatSection } from "../components/Chat";
 import { SessionContext } from "../context/SessionContext";
+import ExitButton from "../components/Header/ExitButton";
+import ProgressBar from "../components/ProgressBar";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -97,15 +99,44 @@ function Classroom() {
                 key="classroom">
                 {classroomHeight && (
                     <>
-                        <Header
-                            currentLearningObjective={currentLearningObjective}
-                            currentLesson={currentLesson}
-                            finished={
-                                finished &&
-                                !streaming &&
-                                (isMuted() || !speaking)
+                        <HeaderContent
+                            centerContent={
+                                <Title
+                                    progressBarShown={
+                                        learningObjectiveNumber > 0
+                                    }>
+                                    {learningObjectiveNumber > 0 ? (
+                                        <div style={{ paddingTop: "20px" }}>
+                                            <ProgressBar
+                                                width="35em"
+                                                value={learningObjectiveNumber}
+                                                max={
+                                                    currentLesson
+                                                        .learning_objectives
+                                                        .length
+                                                }
+                                            />
+                                        </div>
+                                    ) : (
+                                        <>
+                                            {currentLesson?.title &&
+                                                currentLesson.title}
+                                        </>
+                                    )}
+                                </Title>
                             }
-                            onExit={() => setExit(true)}
+                            rightContent={
+                                <ExitButton
+                                    outline={
+                                        !(
+                                            finished &&
+                                            !streaming &&
+                                            (isMuted() || !speaking)
+                                        )
+                                    }
+                                    onClick={() => setExit(true)}
+                                />
+                            }
                         />
                         <DualDisplay>
                             <LayoutGroup>
@@ -152,6 +183,34 @@ function Classroom() {
 
     return <AnimatePresence mode="wait">{renderComponent()}</AnimatePresence>;
 }
+
+const Title = styled.div`
+    font-size: 1.8em;
+    font-weight: 400;
+
+    ${props =>
+        props.progressBarShown &&
+        `
+    top: 40px;
+    @media (max-width: 1600px) {
+        font-size: 1.5em;
+    }
+
+    @media (max-width: 1400px) {
+        font-size: 1em;
+        top: 50px;
+    }
+
+    @media (max-width: 1100px) {
+        font-size: 0.7em;
+        top: 55px;
+    }
+
+    @media (max-width: 900px) {
+        font-size: 0.5em;
+    }
+    `}
+`;
 
 const LoadingScreenWrapper = styled(motion.div)`
     height: 100%;

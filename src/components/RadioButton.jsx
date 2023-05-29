@@ -6,16 +6,20 @@ import SvgLinearGradient from "./SvgLinearGradient";
 const RadioButtonContainer = styled.label`
     display: flex;
     align-items: center;
-    cursor: pointer;
+    ${props =>
+        !props.disabled &&
+        `
+        cursor: pointer;
 
-    :hover > div {
-        color: ${props => props.theme.colours.primaryStrong};
-    }
+        :hover > div {
+            color: ${props.theme.colours.primaryStrong};
+        }
+    `}
 `;
 
 const RadioButtonContainer2 = styled.div`
     position: relative;
-    cursor: pointer;
+    /* cursor: pointer; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,11 +32,15 @@ const RadioButtonInput = styled.input`
 `;
 
 const CustomRadioButton = styled.span`
-    cursor: pointer;
+    /* cursor: pointer; */
     width: 22px;
     height: 22px;
-    box-shadow: ${props => props.theme.colours.primaryStrong} 0px -1px 3px 1px,
-        ${props => props.theme.colours.primaryStrong} 0px 1px 1px 1px;
+    box-shadow: ${props =>
+                props.disabled ? "grey" : props.theme.colours.primaryStrong}
+            0px -1px 3px 1px,
+        ${props =>
+                props.disabled ? "grey" : props.theme.colours.primaryStrong}
+            0px 1px 1px 1px;
     border-radius: 50%;
     display: inline-block;
     position: relative;
@@ -50,7 +58,10 @@ const CustomRadioButton = styled.span`
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        ${props => props.theme.gradient({ animationLength: 5 })}
+        ${props =>
+            props.disabled
+                ? "background-color: grey;"
+                : props.theme.gradient({ animationLength: 5 })}
     }
 
     /* ${props =>
@@ -83,22 +94,27 @@ const CustomRadioButton = styled.span`
         scale: 0;
         transition: scale 0.5s ease;
 
-        ${props.hovering && "scale: 1;"}
+        ${props.hovering && !props.disabled && "scale: 1;"}
     }`}
 `;
 
-const RadioButtonLabel = styled.div`
-    white-space: nowrap;
+const RadioButtonLabel = styled.div.withConfig({
+    shouldForwardProp: (prop, defaultValidator) =>
+        !["wrap"].includes(prop) && defaultValidator(prop),
+})`
+    white-space: ${props => (props.wrap ? "normal" : "nowrap")};
     font-size: 18px;
     margin-left: 0.4em;
     margin-bottom: 0.1em;
-    cursor: pointer;
+    /* cursor: pointer; */
     ${props => props.theme.gradient({ animationLength: 5 })}
     transition: background 1s;
     color: rgb(150, 150, 150);
     ${props =>
         props.checked &&
         `-webkit-text-fill-color: transparent; font-weight: bold;`}
+
+    ${props => props.disabled && `-webkit-text-fill-color: grey;`}
 
     -webkit-background-clip: text;
 
@@ -123,7 +139,7 @@ const SvgBorder = styled.svg`
     /* border: 1px solid red; */
 `;
 
-const RadioButton = (props, ref) => {
+const RadioButton = ({ wrap, ...props }, ref) => {
     const [hovering, setHovering] = React.useState(false);
     const [transitioning, setTransitioning] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
@@ -134,12 +150,15 @@ const RadioButton = (props, ref) => {
 
     return (
         <RadioButtonContainer
+            disabled={props.disabled}
             onMouseEnter={() => {
+                if (props.disabled) return;
                 setHovering(true);
                 !(props.checked !== undefined ? props.checked : checked) &&
                     setTransitioning(true);
             }}
             onMouseLeave={() => {
+                if (props.disabled) return;
                 setHovering(false);
                 transitioning && setTransitioning(false);
             }}
@@ -158,7 +177,7 @@ const RadioButton = (props, ref) => {
                         cy={50}
                         r={40}
                         fill="none"
-                        stroke={`url(#${gradientID})`}
+                        stroke={props.disabled ? "grey" : `url(#${gradientID})`}
                         strokeWidth={props.borderWidth || 8}
                     />
                 </SvgBorder>
@@ -166,6 +185,7 @@ const RadioButton = (props, ref) => {
                     {...props}
                     type="radio"
                     onChange={e => {
+                        if (props.disabled) return;
                         // console.log(props.label, "changed");
                         if (props.onChange) {
                             props.onChange(e);
@@ -176,6 +196,7 @@ const RadioButton = (props, ref) => {
                     ref={ref}
                 />
                 <CustomRadioButton
+                    disabled={props.disabled}
                     checked={
                         props.checked !== undefined ? props.checked : checked
                     }
@@ -185,9 +206,11 @@ const RadioButton = (props, ref) => {
                 />
             </RadioButtonContainer2>
             <RadioButtonLabel
+                disabled={props.disabled}
                 content={props.label}
                 checked={props.checked !== undefined ? props.checked : checked}
-                hovering={hovering}>
+                hovering={hovering}
+                wrap={wrap}>
                 {props.label}
             </RadioButtonLabel>
         </RadioButtonContainer>

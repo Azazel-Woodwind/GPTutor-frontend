@@ -1,11 +1,12 @@
 import { nanoid } from "nanoid";
 import { SocketContext } from "../../context/SocketContext";
 import { useEffect, useContext, useState, useRef, useCallback } from "react";
+import OrderMaintainer from "../../lib/OrderMaintainer";
 
 const defaultConfig = {
     channel: "",
     onMessage: ({ role, content }) => {
-        console.log(role, content);
+        // console.log(role, content);
     },
     onFinished: message => {},
     onDelta: message => {},
@@ -37,12 +38,23 @@ function useX(config) {
     const currentResponseId = useRef(undefined);
     const currentPlaybackRate = useRef(1);
 
+    const { current: orderMaintainer } = useRef(
+        new OrderMaintainer({
+            callback: data => {},
+        })
+    );
+
     const sendSystemMessage = message => {
         console.log("Received system message request: ", message);
         setHistory(prev => [...prev, { role: "system", content: message }]);
     };
 
-    const sendMessage = ({ message, context, messageParams = {} }) => {
+    const sendMessage = ({
+        message,
+        context,
+        altChannel,
+        messageParams = {},
+    }) => {
         if (message === "" || streaming || loading) return false;
         audioQueue.current = [];
         audio.current.src = "";
@@ -53,7 +65,8 @@ function useX(config) {
 
         setHistory(prev => [...prev, { role: "user", content: message }]);
         currentResponseId.current = nanoid();
-        Socket.emit(`${channel}_message_x`, {
+        orderMaintainer.reset();
+        Socket.emit(altChannel || `${channel}_message_x`, {
             message,
             context,
             id: currentResponseId.current,
@@ -62,6 +75,15 @@ function useX(config) {
         setLoading(true);
 
         return true;
+    };
+
+    const resetAudio = () => {
+        audioQueue.current = [];
+        audio.current.src = "";
+        audio.current.load();
+        setSpeaking(false);
+        animationId.current && cancelAnimationFrame(animationId.current);
+        setMultiplier(1);
     };
 
     const toggleMute = () => {
@@ -165,8 +187,12 @@ function useX(config) {
 
     useEffect(() => {
         if (!Socket) return;
+        orderMaintainer.callback = onReceiveAudioData;
         Socket.off(`${channel}_audio_data`);
-        Socket.on(`${channel}_audio_data`, onReceiveAudioData);
+        Socket.on(`${channel}_audio_data`, ({ order, ...data }) => {
+            // console.log(order, data);
+            orderMaintainer.addData(data, order);
+        });
     }, [onReceiveAudioData]);
 
     useEffect(() => {
@@ -267,6 +293,8 @@ function useX(config) {
         play,
         speaking,
         isMuted,
+        resetAudio,
+        setLoading,
     };
 }
 

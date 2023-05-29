@@ -14,7 +14,10 @@ function StartLessonModal({ setStarted, lesson }) {
 
     return (
         <motion.div {...fade_animation()}>
-            <Modal {...ModalProps} cancellable={false}>
+            <Modal
+                {...ModalProps}
+                cancellable={false}
+                style={{ padding: "60px 150px" }}>
                 <CenteredColumn fillparent gap="15px">
                     <h1>{lesson.title}</h1>
                     <CustomButton onClick={onClick}>

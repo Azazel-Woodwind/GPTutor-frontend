@@ -28,16 +28,17 @@ const CenteredColumnStyle = styled.div`
     ${props => props.fillwidth && `width: 100%;`};
     ${props => props.fillheight && `height: 100%;`};
     ${props => props.width && `width: ${props.width};`};
+    ${props => props.height && `height: ${props.height};`};
     ${props => props.flex && `flex: ${props.flex};`};
     ${props => props.border && `border: 10px solid black;`}; // debugging
 `;
 
-function CenteredColumn({ children, className, ...props }) {
+function CenteredColumn({ children, className, ...props }, ref) {
     return (
-        <CenteredColumnStyle className={className} {...props}>
+        <CenteredColumnStyle className={className} {...props} ref={ref}>
             {children}
         </CenteredColumnStyle>
     );
 }
 
-export default CenteredColumn;
+export default React.forwardRef(CenteredColumn);

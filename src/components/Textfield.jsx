@@ -58,7 +58,6 @@ export const CustomFieldset = styled.fieldset.withConfig({
     `}
 
     transition: border-color 0.15s;
-    cursor: text;
 `;
 
 export const CustomLegend = styled.legend.withConfig({
@@ -119,6 +118,7 @@ const Label = styled.label.withConfig({
     display: inline-block;
     width: 100%;
     flex: 1;
+
     /* height: 100%; */
     /* ${props => props.width && `width: ${props.width};`};
     ${props => props.fullwidth && `width: 100%;`};
@@ -134,6 +134,7 @@ export const Textfield = forwardRef(
             onClick,
             onFocus,
             onBlur,
+            onKeyDown,
             required,
             color,
             ...props
@@ -169,11 +170,13 @@ export const Textfield = forwardRef(
                     <TextfieldWrapper
                         {...props}
                         onMouseOver={e => {
+                            if (props.disabled) return;
                             // console.log("mouse over");
                             setMouseEntered(true);
                             props.onMouseOver && props.onMouseOver(e);
                         }}
                         onMouseLeave={e => {
+                            if (props.disabled) return;
                             setMouseEntered(false);
                             props.onMouseLeave && props.onMouseLeave(e);
                         }}>
@@ -229,6 +232,9 @@ export const Textfield = forwardRef(
                             onBlur={e => {
                                 setFocused(false);
                                 onBlur && onBlur(e);
+                            }}
+                            onKeyDown={e => {
+                                onKeyDown && onKeyDown(e);
                             }}
                             inTextfield={true}
                         />

@@ -15,6 +15,7 @@ export const gradientAngle = 45;
 const Theme = {
     colours: {
         background: "#0C1437",
+        // background: "#dfd9d9",
         primary: "#ffffff",
         primaryFaded: "rgba(255, 255, 255, 0.5)",
         primaryStrong: "rgba(255, 255, 255, 0.9)",

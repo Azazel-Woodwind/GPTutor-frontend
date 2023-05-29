@@ -132,4 +132,6 @@ export const BaseInputStyle = styled.input.withConfig({
     :focus::placeholder {
         opacity: 1;
     }
+
+    cursor: ${props => (props.disabled ? "not-allowed" : "auto")};
 `;

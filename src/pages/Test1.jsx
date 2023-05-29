@@ -32,6 +32,7 @@ import { ExitSvgData } from "../lib/svgIconData";
 import { TextWrapper } from "../styles/TextWrappers";
 import StatusChip from "../components/Dashboard/StatusChip";
 import Slider from "../components/Slider";
+import RadioButton from "../components/RadioButton";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -60,72 +61,24 @@ function Test1() {
         initialOpen: false,
     });
 
-    const [speed, setSpeed] = React.useState(1);
+    const [test, setTest] = React.useState([]);
+
+    React.useEffect(() => {
+        console.log(test[0]);
+    }, [test[0]]);
 
     // console.log(speed);
 
     return (
         <CenteredColumn fillparent gap="10px" style={{ overflow: "auto" }}>
-            <Slider
-                min={0.5}
-                max={3}
-                step={0.1}
-                marks={[
-                    { value: 0.5, label: "0.5x" },
-                    { value: 1, label: "1x" },
-                    { value: 1.5, label: "1.5x" },
-                    { value: 2, label: "2x" },
-                    { value: 2.5, label: "2.5x" },
-                    { value: 3, label: "3x" },
-                ]}
-                value={speed}
-                onChange={value => setSpeed(value)}
-                onMouseOver={() => console.log("mouse over")}
-            />
+            <CustomButton
+                onClick={() => {
+                    setTest([1, 2, 3]);
+                }}>
+                Click me
+            </CustomButton>
         </CenteredColumn>
     );
 }
-
-const Container = styled.div`
-    height: 100vh;
-    width: 100%;
-    background-color: blue;
-    display: flex;
-    flex-direction: column;
-`;
-
-const Header = styled.div``;
-
-const HeaderContent = styled.div`
-    height: 150px;
-    background-color: red;
-`;
-
-const Main = styled.div`
-    flex-grow: 1;
-    background-color: green;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-`;
-
-const SubContent1 = styled.div`
-    height: 400px;
-    background-color: green;
-`;
-
-const MainContent1 = styled.div`
-    width: 100%;
-    flex: 1;
-    background-color: yellow;
-    border: 5px solid blue;
-`;
-
-const MainContent2 = styled.div`
-    width: 100%;
-    height: 100vh;
-    background-color: yellow;
-    border: 5px solid blue;
-`;
 
 export default Test1;

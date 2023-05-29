@@ -50,8 +50,8 @@ function LessonCard({ lesson }) {
                 </FooterRow>
                 <CustomButton
                     style={{ width: "100%" }}
-                    outline
                     onClick={e => {
+                        e.preventDefault();
                         e.stopPropagation();
                         navigate(
                             `/quiz/${lesson.title.replaceAll(" ", "-")}?id=${
@@ -144,7 +144,6 @@ const Container = styled.div`
     cursor: pointer;
     z-index: 2;
     gap: 10px;
-
     /* border: 5px solid green; */
 `;
 

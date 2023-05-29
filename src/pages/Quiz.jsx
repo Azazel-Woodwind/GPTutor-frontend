@@ -1,5 +1,9 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom/dist/umd/react-router-dom.development";
+import {
+    useLoaderData,
+    useNavigate,
+    useOutletContext,
+} from "react-router-dom/dist/umd/react-router-dom.development";
 import useXQuiz from "../hooks/useX/useXQuiz";
 import GeneratingQuestionModal from "../components/Quiz/GeneratingQuestionModal";
 import CenteredColumn from "../styles/containers/CenteredColumn";
@@ -7,189 +11,210 @@ import Textfield from "../components/Textfield";
 import RadioButton from "../components/RadioButton";
 import CustomButton from "../components/Button";
 import useConversationDisplay from "../hooks/useConversationDisplay";
-
+import styled, { useTheme } from "styled-components";
+import { TextWrapper } from "../styles/TextWrappers";
+import HeaderContent from "../components/Header/HeaderContent";
+import ExitButton from "../components/Header/ExitButton";
+import Loading from "./Loading";
+import { fade_animation } from "../styles/FramerAnimations";
+import EndOfQuizModal from "../components/Quiz/EndOfQuizModal";
+import {
+    AnimatePresence,
+    LayoutGroup,
+    motion,
+    useMotionValue,
+} from "framer-motion";
+import GeneratingQuestion from "../components/Quiz/GeneratingQuestion";
+import WrittenQuestion from "../components/Quiz/WrittenQuestion";
+import MultipleChoiceQuestion from "../components/Quiz/MultipleChoiceQuestion";
+import CorrectFeedback from "../components/Quiz/CorrectFeedback";
+import FinishQuizButton from "../components/Quiz/FinishQuizButton";
+import NextQuestionButton from "../components/Quiz/NextQuestionButton";
+import SubmitAnswerButton from "../components/Quiz/SubmitAnswerButton";
+import QuizHeaderContent from "../components/Quiz/QuizHeaderContent";
 function Quiz() {
     useConversationDisplay(false);
 
     const lesson = useLoaderData();
 
-    const [writtenQuestionAnswer, setWrittenQuestionAnswer] =
-        React.useState("");
-    const [selectedChoice, setSelectedChoice] = React.useState(null);
-
     const [answer, setAnswer] = React.useState("");
-    const [generatingFeedback, setGeneratingFeedback] = React.useState(false);
-    const [isCorrect, setIsCorrect] = React.useState(undefined);
-    const [incorrectFeedback, setIncorrectFeedback] = React.useState([]);
-    const [correctFeedback, setCorrectFeedback] = React.useState([]);
+    const [selectedChoiceIndex, setSelectedChoiceIndex] =
+        React.useState(undefined);
+    const [exit, setExit] = React.useState(false);
 
     const {
         questions,
-        changeQuestion,
+        nextQuestion,
         currentQuestionNum,
         currentQuestion,
-        sendMessage,
-        currentMessage,
+        incorrectFeedback,
+        correctFeedback,
+        currentFeedback,
+        currentFeedbackIsCorrect,
+        answerIsCorrect,
+        generatingFeedback,
+        submitAnswer,
+        generatingHint,
     } = useXQuiz({
         lesson,
-        onMessage: ({ correct, response, questionIndex, choiceIndex }) => {
-            console.log(questionIndex);
-            if (correct) {
-                setCorrectFeedback(prev => {
-                    const newFeedback = [...prev];
-                    newFeedback[questionIndex] = response;
-                    return newFeedback;
-                });
-            } else {
-                if (questions[questionIndex].type === "written") {
-                    setIncorrectFeedback(prev => {
-                        const newFeedback = [...prev];
-                        newFeedback[questionIndex].append(response);
-                        return newFeedback;
-                    });
-                } else {
-                    setIncorrectFeedback(prev => {
-                        const newFeedback = [...prev];
-                        newFeedback[questionIndex][choiceIndex] = response;
-                        return newFeedback;
-                    });
-                }
-            }
-        },
     });
 
-    React.useEffect(() => {
-        if (questions.length === 0) return;
-        setIncorrectFeedback(prev => [...prev, []]);
-        setCorrectFeedback(prev => [...prev, []]);
-    }, [questions]);
+    const navigate = useNavigate();
 
-    React.useEffect(() => {
-        if (!currentMessage) {
-            setIsCorrect(undefined);
-            setGeneratingFeedback(false);
-            return;
-        }
-        if (isCorrect !== undefined) return;
-
-        if (currentMessage.startsWith("CORRECT")) {
-            setIsCorrect(true);
-        }
-        if (currentMessage.startsWith("INCORRECT")) {
-            setIsCorrect(false);
-        }
-    }, [currentMessage]);
-
-    const goToPrevQuestion = () => {
-        if (currentQuestionNum === 0) return;
-        changeQuestion(currentQuestionNum - 1);
-    };
-
-    const submit = e => {
-        e.preventDefault();
-
-        sendMessage({
-            message: answer,
-            messageParams: {
-                questionIndex: currentQuestionNum,
-                choiceIndex: currentQuestion.choices?.indexOf(answer),
-            },
-        });
-        setGeneratingFeedback(true);
-        setIsCorrect(undefined);
-    };
-
-    return (
-        <>
-            {currentQuestion ? (
-                <CenteredColumn>
-                    <h1>{lesson.title}</h1>
-                    <h3>Question #{currentQuestionNum + 1}</h3>
-                    {typeof currentQuestion === "string" ? (
-                        <>
-                            <p>{currentQuestion}</p>
-                            <Textfield
-                                value={writtenQuestionAnswer}
-                                onChange={e => setAnswer(e.target.value)}
-                            />
-                            {incorrectFeedback[currentQuestionNum].map(
-                                feedback => (
-                                    <p>{feedback}</p>
-                                )
-                            )}
-                            {isCorrect === false && (
-                                <p>{currentMessage.slice(10)}</p>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <p>{currentQuestion.question.title}</p>
-                            {currentQuestion.question.choices.map(
-                                (choice, i) => (
-                                    <>
-                                        <RadioButton
-                                            key={i}
-                                            label={choice}
-                                            checked={answer === choice}
-                                            onChange={e => setAnswer(choice)}
-                                        />
-                                        {answer === choice &&
-                                            isCorrect === false && (
-                                                <p>
-                                                    {currentMessage.slice(10)}
-                                                </p>
-                                            )}
-                                        {incorrectFeedback[currentQuestionNum][
-                                            i
-                                        ] && (
-                                            <p>
-                                                {
-                                                    incorrectFeedback[
-                                                        currentQuestionNum
-                                                    ][i]
-                                                }
-                                            </p>
-                                        )}
-                                    </>
-                                )
-                            )}
-                        </>
-                    )}
-                    {isCorrect === true && <p>{currentMessage.slice(8)}</p>}
-                    {correctFeedback[currentQuestionNum] && (
-                        <p>{correctFeedback[currentQuestionNum]}</p>
-                    )}
-                    <CustomButton disabled={!answer} onClick={submit}>
-                        Submit
-                    </CustomButton>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                        }}>
-                        <CustomButton
-                            outline
-                            disabled={currentQuestionNum === 0}>
-                            Previous Question
-                        </CustomButton>
-                        <CustomButton
-                            outline
-                            disabled={
-                                currentQuestionNum ===
-                                lesson.learning_objectives.length * 3 - 1
-                            }>
-                            Next Question
-                        </CustomButton>
-                    </div>
-                </CenteredColumn>
-            ) : (
-                <GeneratingQuestionModal
-                    questionNum={currentQuestionNum}
-                    goToPrevQuestion={goToPrevQuestion}
-                />
-            )}
-        </>
+    const callback = React.useCallback(
+        node => {
+            if (node !== null) {
+                node.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        },
+        [currentQuestionNum]
     );
+
+    const renderComponent = () => {
+        if (!questions[0]) {
+            return (
+                <LoadingScreenWrapper key="loading" {...fade_animation()}>
+                    <Loading
+                        message="Generating Question #1..."
+                        centered={false}
+                    />
+                </LoadingScreenWrapper>
+            );
+        }
+
+        if (exit) {
+            return <EndOfQuizModal key="endModal" />;
+        }
+
+        return (
+            <motion.div key="quiz" {...fade_animation()}>
+                <QuizHeaderContent
+                    lesson={lesson}
+                    answerIsCorrect={answerIsCorrect}
+                    currentQuestion={currentQuestion}
+                    setExit={setExit}
+                />
+                {[...Array(currentQuestionNum + 1).keys()].map(i => (
+                    <CenteredColumn
+                        gap="20px"
+                        height="100vh"
+                        style={{ padding: "20px" }}
+                        ref={callback}
+                        key={i}>
+                        {questions[i] === undefined ? (
+                            <GeneratingQuestion />
+                        ) : (
+                            <>
+                                <h1>Question #{i + 1}</h1>
+                                {questions[i].type === "written" ? (
+                                    <WrittenQuestion
+                                        question={questions[i]}
+                                        answer={answer}
+                                        setAnswer={setAnswer}
+                                        submitAnswer={submitAnswer}
+                                        currentFeedback={currentFeedback}
+                                        correctFeedback={correctFeedback?.[i]}
+                                        incorrectFeedback={
+                                            incorrectFeedback?.[i]
+                                        }
+                                        questionIndex={i}
+                                        selectedChoiceIndex={
+                                            selectedChoiceIndex
+                                        }
+                                    />
+                                ) : (
+                                    <MultipleChoiceQuestion
+                                        question={questions[i]}
+                                        answer={answer}
+                                        setAnswer={setAnswer}
+                                        currentFeedback={currentFeedback}
+                                        correctFeedback={correctFeedback?.[i]}
+                                        incorrectFeedback={incorrectFeedback[i]}
+                                        questionIndex={i}
+                                        setSelectedChoiceIndex={
+                                            setSelectedChoiceIndex
+                                        }
+                                        generatingFeedback={generatingFeedback}
+                                    />
+                                )}
+                            </>
+                        )}
+                        {correctFeedback?.[i] && (
+                            <CorrectFeedback
+                                correctFeedback={correctFeedback[i].feedback}
+                            />
+                        )}
+                        {currentFeedback?.questionIndex === i &&
+                            currentFeedback?.isCorrect && (
+                                <CorrectFeedback
+                                    correctFeedback={currentFeedback.text}
+                                />
+                            )}
+                        {currentQuestionNum === i &&
+                            questions[i] !== undefined && (
+                                <>
+                                    {answerIsCorrect ? (
+                                        <>
+                                            {currentQuestion.final ? (
+                                                <FinishQuizButton
+                                                    generatingFeedback={
+                                                        generatingFeedback
+                                                    }
+                                                    onClick={() => {
+                                                        setExit(true);
+                                                    }}
+                                                />
+                                            ) : (
+                                                <NextQuestionButton
+                                                    generatingFeedback={
+                                                        generatingFeedback
+                                                    }
+                                                    onClick={() => {
+                                                        nextQuestion();
+                                                        setAnswer("");
+                                                        setSelectedChoiceIndex(
+                                                            undefined
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                        </>
+                                    ) : (
+                                        <SubmitAnswerButton
+                                            disabled={
+                                                !answer ||
+                                                generatingFeedback ||
+                                                generatingHint
+                                            }
+                                            onClick={() => {
+                                                submitAnswer({
+                                                    answer,
+                                                    choiceIndex:
+                                                        questions[i].type ===
+                                                        "written"
+                                                            ? undefined
+                                                            : selectedChoiceIndex,
+                                                });
+                                            }}
+                                        />
+                                    )}
+                                </>
+                            )}
+                    </CenteredColumn>
+                ))}
+            </motion.div>
+        );
+    };
+
+    return <AnimatePresence mode="wait">{renderComponent()}</AnimatePresence>;
 }
+
+const LoadingScreenWrapper = styled(motion.div)`
+    height: 100%;
+    width: 100%;
+`;
 
 export default Quiz;

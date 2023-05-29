@@ -223,16 +223,15 @@ function XControls({
                     </MuteButtonContainer>
                     <SpeedSliderContainer>
                         <Slider
-                            min={0.5}
-                            max={3}
-                            step={0.1}
+                            min={1}
+                            max={2}
+                            step={0.25}
                             marks={[
-                                { value: 0.5, label: "0.5x" },
                                 { value: 1, label: "1x" },
+                                { value: 1.25, label: "1.25x" },
                                 { value: 1.5, label: "1.5x" },
+                                { value: 1.75, label: "1.75x" },
                                 { value: 2, label: "2x" },
-                                { value: 2.5, label: "2.5x" },
-                                { value: 3, label: "3x" },
                             ]}
                             value={xSpeed}
                             onChange={value => {

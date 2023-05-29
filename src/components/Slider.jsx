@@ -73,7 +73,7 @@ function Slider({
                 step +
             min;
         // console.log(newValue);
-        onChange(Math.round(clamp(newValue, min, max) * 10) / 10);
+        onChange(Math.round(clamp(newValue, min, max) * 100) / 100);
     }
 
     return (

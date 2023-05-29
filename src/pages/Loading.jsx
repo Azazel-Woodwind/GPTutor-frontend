@@ -9,7 +9,7 @@ function Loading({ message, ...props }) {
         <Wrapper centered {...props}>
             <AlternateGlobalStyle />
             <Avatar size={150} />
-            <TextWrapper fontSize="xxl">Loading...</TextWrapper>
+            <TextWrapper fontSize="xxl">{message || "Loading..."}</TextWrapper>
         </Wrapper>
     );
 }

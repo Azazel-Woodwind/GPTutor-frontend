@@ -137,7 +137,6 @@ function ChatHistory({
                         onDrag={onDrag}
                     />
                 </ChatHandleContainer>
-                {/* <DirectionReverse> */}
                 <ChatHistoryStyle
                     ref={chatHistoryRef}
                     onScroll={() => {
@@ -161,7 +160,6 @@ function ChatHistory({
                         <Message type={"assistant"} message={currentMessage} />
                     )}
                 </ChatHistoryStyle>
-                {/* </DirectionReverse> */}
             </DraggableChat>
         </Container>
     );
