@@ -195,10 +195,10 @@ function CreateLesson({ action }) {
             // console.log(JSON.stringify(data, null, 2));
             const lessonData = {
                 title: data.title || null,
-                subject: data.subject.toLowerCase() || null,
+                subject: data.subject || null,
                 caption: data.caption || null,
                 exam_boards: data.exam_boards,
-                education_level: data.education_level?.toLowerCase() || null,
+                education_level: data.education_level || null,
                 learning_objectives: data.learning_objectives.filter(
                     objective =>
                         objective.description ||

@@ -7,6 +7,7 @@ import {
 import EducationLevelsAPI from "../api/EducationLevelAPI";
 import Loading from "../pages/Loading";
 import ExamBoardAPI from "../api/ExamBoardAPI";
+import UsagePlanAPI from "../api/UsagePlansAPI";
 
 export const AppDataContext = React.createContext({
     subjectOptions: [],
@@ -19,6 +20,7 @@ export function AppDataContextProvider({ children }) {
     const [educationLevels, setEducationLevels] = React.useState([]);
     const [examBoards, setExamBoards] = React.useState([]);
     const [fetching, setFetching] = React.useState(true);
+    const [usagePlans, setUsagePlans] = React.useState({});
 
     React.useEffect(() => {
         if (!fetching) {
@@ -29,27 +31,18 @@ export function AppDataContextProvider({ children }) {
 
     React.useEffect(() => {
         Promise.all([
-            SubjectsAPI.getAll()
-                .then(res =>
-                    res.map(subject =>
-                        capitaliseFirstLetter(
-                            subject.subject
-                                .replaceAll("_", " ")
-                                .replaceAll("ict", "ICT")
-                        )
-                    )
-                )
-                .then(setSubjectOptions),
-            EducationLevelsAPI.getAll()
-                .then(res =>
-                    res.map(educationLevel =>
-                        formatEducationLevel(educationLevel.education_level)
-                    )
-                )
-                .then(setEducationLevels),
-            ExamBoardAPI.getAll()
-                .then(res => res.map(examBoard => examBoard.exam_board_name))
-                .then(setExamBoards),
+            SubjectsAPI.getAll().then(setSubjectOptions),
+            EducationLevelsAPI.getAll().then(setEducationLevels),
+            ExamBoardAPI.getAll().then(setExamBoards),
+            UsagePlanAPI.getAll()
+                .then(res => {
+                    const temp = {};
+                    res.forEach(usagePlan => {
+                        temp[usagePlan.plan] = usagePlan.max_daily_tokens;
+                    });
+                    return temp;
+                })
+                .then(setUsagePlans),
         ]).then(() => {
             setFetching(false);
         });

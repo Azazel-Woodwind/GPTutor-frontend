@@ -24,6 +24,15 @@ function useXLesson({ currentLesson, delay, ...props }) {
 
     const X = useX({
         channel: "lesson",
+        onMessage: data => {
+            const { learningObjectiveNumber } = data;
+            console.log(
+                "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+                learningObjectiveNumber
+            );
+
+            setLearningObjectiveNumber(learningObjectiveNumber);
+        },
         ...props,
     });
 
@@ -65,15 +74,15 @@ function useXLesson({ currentLesson, delay, ...props }) {
         const timer = setTimeout(() => {
             Socket.emit("start_lesson", { current_lesson: currentLesson });
             Socket.on("lesson_finished", () => setFinished(true));
-            Socket.on("lesson_response_data", data => {
-                const { learningObjectiveNumber } = data;
-                console.log(
-                    "LEARNING OBJECTIVE NUMBER CHANGED TO:",
-                    learningObjectiveNumber
-                );
+            // Socket.on("lesson_response_data", data => {
+            //     const { learningObjectiveNumber } = data;
+            //     console.log(
+            //         "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+            //         learningObjectiveNumber
+            //     );
 
-                setLearningObjectiveNumber(learningObjectiveNumber);
-            });
+            //     setLearningObjectiveNumber(learningObjectiveNumber);
+            // });
         }, delay);
 
         return () => {

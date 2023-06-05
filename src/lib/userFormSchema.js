@@ -38,56 +38,24 @@ export const email_schema = z
     .email({ message: "Enter a valid email" });
 
 export const education_level_schema = educationLevels =>
-    z
-        .string()
-        .refine(
-            val =>
-                educationLevels
-                    .map(level => level.toLowerCase())
-                    .includes(val.toLowerCase()),
-            {
-                message: `Lesson must have an education level`,
-            }
-        );
+    z.string().refine(val => educationLevels.includes(val), {
+        message: `Lesson must have an education level`,
+    });
 
 export const occupation_schema = occupations =>
-    z
-        .string()
-        .refine(
-            val =>
-                occupations
-                    .map(occupation => occupation.toLowerCase())
-                    .includes(val.toLowerCase()),
-            {
-                message: `Occupation must be one of ${occupations.join(", ")}`,
-            }
-        );
+    z.string().refine(val => occupations.includes(val), {
+        message: `Occupation must be one of ${occupations.join(", ")}`,
+    });
 
 export const subject_schema = subjectOptions =>
-    z
-        .string()
-        .refine(
-            val =>
-                subjectOptions
-                    .map(subject => subject.toLowerCase())
-                    .includes(val.toLowerCase()),
-            {
-                message: `Lesson must have a subject`,
-            }
-        );
+    z.string().refine(val => subjectOptions.includes(val), {
+        message: `Lesson must have a subject`,
+    });
 
 export const exam_board_schema = examBoards =>
-    z
-        .string()
-        .refine(
-            val =>
-                examBoards
-                    .map(examBoard => examBoard.toLowerCase())
-                    .includes(val.toLowerCase()),
-            {
-                message: `Lesson must have an exam board`,
-            }
-        );
+    z.string().refine(val => examBoards.includes(val), {
+        message: `Lesson must have an exam board`,
+    });
 
 export const subjects_schema = subjectOptions =>
     z.array(subject_schema(subjectOptions)).nonempty({

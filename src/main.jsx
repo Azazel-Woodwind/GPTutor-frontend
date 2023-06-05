@@ -16,8 +16,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <SessionContextProvider>
                 <AppDataContextProvider>
                     <Router />
-                    {/* <Ellipse1 />
-                    <Ellipse2 /> */}
+                    <Ellipse1 />
+                    <Ellipse2 />
                 </AppDataContextProvider>
             </SessionContextProvider>
         </NotificationContextProvider>

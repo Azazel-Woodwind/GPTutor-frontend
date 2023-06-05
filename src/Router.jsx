@@ -257,6 +257,10 @@ const router = createBrowserRouter([
                     {
                         path: "/settings/general",
                         element: <General />,
+                        // loader: async () => {
+                        //     const user = await UserAPI.getUser();
+                        //     return { user };
+                        // }
                     },
                     {
                         path: "/settings/reset-password",

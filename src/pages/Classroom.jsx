@@ -100,6 +100,7 @@ function Classroom() {
                 {classroomHeight && (
                     <>
                         <HeaderContent
+
                             centerContent={
                                 <Title
                                     progressBarShown={

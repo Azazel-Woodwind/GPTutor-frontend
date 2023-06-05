@@ -8,8 +8,7 @@ const EducationLevelsAPI = {
             .select("*");
 
         if (error) throw error;
-
-        return data;
+        return data.map(educationLevel => educationLevel.education_level);
     },
 };
 

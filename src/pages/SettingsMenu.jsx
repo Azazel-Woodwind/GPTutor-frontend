@@ -35,17 +35,8 @@ const Account = () => {
                     <NavElement Icon={UserAccount} subPath="account">
                         Account
                     </NavElement>
-                    <NavElement Icon={Appearance} subPath="appearance">
-                        Appearance
-                    </NavElement>
-                    <NavElement Icon={Notifications} subPath="notifications">
-                        Notifications
-                    </NavElement>
                     <NavElement Icon={UserProfile} subPath="profile">
                         Profile
-                    </NavElement>
-                    <NavElement Icon={Plans} subPath="plans">
-                        Plans and Billing
                     </NavElement>
                     {/*<NavElement icon={<MdSettings />} subPath="profile">
                         Public Profile

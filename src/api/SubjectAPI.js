@@ -7,7 +7,7 @@ const SubjectsAPI = {
 
         if (error) throw error;
 
-        return data;
+        return data.map(subject => subject.subject);
     },
 };
 

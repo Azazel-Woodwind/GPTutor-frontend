@@ -19,7 +19,7 @@ const OptionContainer = styled.div`
     box-shadow: rgba(76, 72, 72, 0.1) 0px 1px 3px 0px,
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     flex-grow: 1;
-    /* width: fit-content; */
+    /* max-width: fit-content; */
     background-color: rgb(112, 118, 179, 0.15);
     span {
         user-select: none;

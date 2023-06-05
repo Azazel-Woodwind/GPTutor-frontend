@@ -19,7 +19,6 @@ const NavElementStyle = styled.div.withConfig({
     display: flex;
     align-items: center;
     gap: 0.5em;
-    padding-left: 0.5em;
 
     color: ${props => props.theme.colours.primaryFaded};
 
@@ -31,7 +30,8 @@ const NavElementStyle = styled.div.withConfig({
         `background-color: rgb(255, 255, 255, 0.12); color: ${props.theme.colours.primary};`}
     width: 100%;
     height: 100%;
-    padding: 0.5em;
+    padding: 0.55em 2em;
+    padding-left: 0.5em;
 `;
 const NavIcon = styled.div``;
 const NavText = styled.span``;

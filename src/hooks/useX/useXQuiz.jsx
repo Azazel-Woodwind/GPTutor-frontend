@@ -17,6 +17,9 @@ function useXQuiz({ lesson, ...props }) {
     const [currentHint, setCurrentHint] = React.useState("");
     const [finished, setFinished] = React.useState(false);
     const [answerIsCorrect, setAnswerIsCorrect] = React.useState(false);
+    const [generatingAnswer, setGeneratingAnswer] = React.useState(false);
+    const [currentAnswer, setCurrentAnswer] = React.useState("");
+    const [answer, setAnswer] = React.useState("");
 
     const X = useX({
         channel: "quiz",
@@ -60,6 +63,7 @@ function useXQuiz({ lesson, ...props }) {
         Socket.emit("quiz_change_question");
         setAnswerIsCorrect(false);
         X.resetAudio();
+
         if (!questions[currentQuestionNum + 1].final) {
             Socket.emit("quiz_generate_next_question");
         }
@@ -100,6 +104,13 @@ function useXQuiz({ lesson, ...props }) {
                 setCurrentFeedbackIsCorrect(undefined);
                 setGeneratingFeedback(false);
                 setAnswerIsCorrect(isCorrect);
+                if (
+                    feedback.endsWith(
+                        "A modal answer will be provided in the answer box."
+                    )
+                ) {
+                    setGeneratingAnswer(true);
+                }
                 if (!isCorrect) {
                     setIncorrectFeedback(prev => {
                         if (!prev[questionIndex]) {
@@ -168,6 +179,35 @@ function useXQuiz({ lesson, ...props }) {
         Socket.on("quiz_new_hint", onNewHint);
     }, [onNewHint]);
 
+    const onAnswerStream = React.useCallback(
+        ({ delta, questionIndex }) => {
+            if (questionIndex === currentQuestionNum) {
+                setGeneratingAnswer(true);
+                setCurrentAnswer(prev => prev + delta);
+                setAnswerIsCorrect(true);
+            }
+        },
+        [currentQuestionNum]
+    );
+
+    React.useEffect(() => {
+        Socket.off("quiz_answer_stream");
+        Socket.on("quiz_answer_stream", onAnswerStream);
+    }, [onAnswerStream]);
+
+    const onAnswer = React.useCallback(({ answer, questionIndex }) => {
+        if (questionIndex === currentQuestionNum) {
+            setCurrentAnswer("");
+            setGeneratingAnswer(false);
+            setAnswer(answer);
+        }
+    });
+
+    React.useEffect(() => {
+        Socket.off("quiz_answer");
+        Socket.on("quiz_answer", onAnswer);
+    }, [onAnswer]);
+
     React.useEffect(() => {
         if (!Socket) return;
 
@@ -199,14 +239,6 @@ function useXQuiz({ lesson, ...props }) {
         setCurrentQuestion(questions[currentQuestionNum]);
     }, [currentQuestionNum, questions]);
 
-    // React.useEffect(() => {
-    //     console.log("ALL QUESTIONS:", questions);
-    // }, [questions]);
-
-    // React.useEffect(() => {
-    //     console.log("CURRENT FEEDBACK:", currentFeedback);
-    // }, [currentFeedback]);
-
     return {
         ...X,
         questions,
@@ -225,6 +257,9 @@ function useXQuiz({ lesson, ...props }) {
         correctFeedback,
         answerIsCorrect,
         hints,
+        generatingAnswer,
+        currentAnswer,
+        answer,
     };
 }
 

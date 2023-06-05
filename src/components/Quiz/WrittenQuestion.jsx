@@ -12,6 +12,8 @@ function WrittenQuestion({
     selectedChoiceIndex,
     submitAnswer,
     incorrectFeedback,
+    modalAnswer,
+    currentAnswer,
 }) {
     const [finalAnswer, setFinalAnswer] = React.useState(undefined);
     const theme = useTheme();
@@ -20,16 +22,28 @@ function WrittenQuestion({
         setFinalAnswer(answer);
     }
 
+    React.useEffect(() => {
+        if (modalAnswer && !finalAnswer) {
+            setFinalAnswer(modalAnswer);
+        }
+    }, [modalAnswer]);
+
     return (
         <>
             <h2>{question.question}</h2>
             <Textfield
                 multiline
-                value={finalAnswer || answer}
+                value={finalAnswer || currentAnswer || answer}
                 onChange={e => setAnswer(e.target.value)}
                 label="Answer"
-                width="400px"
-                disabled={correctFeedback || currentFeedback?.isCorrect}
+                width="600px"
+                rows={4}
+                disabled={
+                    correctFeedback ||
+                    currentFeedback?.isCorrect ||
+                    finalAnswer ||
+                    currentAnswer
+                }
                 onKeyDown={e => {
                     if (e.key === "Enter") {
                         e.preventDefault();

@@ -50,14 +50,20 @@ function Quiz() {
         incorrectFeedback,
         correctFeedback,
         currentFeedback,
-        currentFeedbackIsCorrect,
         answerIsCorrect,
         generatingFeedback,
         submitAnswer,
         generatingHint,
+        answer: modalAnswer,
+        currentAnswer,
+        generatingAnswer,
     } = useXQuiz({
         lesson,
     });
+
+    React.useEffect(() => {
+        setSelectedChoiceIndex(undefined);
+    }, [incorrectFeedback]);
 
     const navigate = useNavigate();
 
@@ -72,6 +78,8 @@ function Quiz() {
         },
         [currentQuestionNum]
     );
+
+    // console.log(generatingFeedback);
 
     const renderComponent = () => {
         if (!questions[0]) {
@@ -124,6 +132,8 @@ function Quiz() {
                                         selectedChoiceIndex={
                                             selectedChoiceIndex
                                         }
+                                        modalAnswer={modalAnswer}
+                                        currentAnswer={currentAnswer}
                                     />
                                 ) : (
                                     <MultipleChoiceQuestion
@@ -169,8 +179,9 @@ function Quiz() {
                                                 />
                                             ) : (
                                                 <NextQuestionButton
-                                                    generatingFeedback={
-                                                        generatingFeedback
+                                                    disabled={
+                                                        generatingFeedback ||
+                                                        generatingAnswer
                                                     }
                                                     onClick={() => {
                                                         nextQuestion();
@@ -187,7 +198,12 @@ function Quiz() {
                                             disabled={
                                                 !answer ||
                                                 generatingFeedback ||
-                                                generatingHint
+                                                generatingHint ||
+                                                generatingAnswer ||
+                                                (questions[i].type !==
+                                                    "written" &&
+                                                    selectedChoiceIndex ===
+                                                        undefined)
                                             }
                                             onClick={() => {
                                                 submitAnswer({

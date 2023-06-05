@@ -7,7 +7,7 @@ const ExamBoardAPI = {
 
         if (error) throw error;
 
-        return data;
+        return data.map(examBoard => examBoard.exam_board_name);
     },
 };
 

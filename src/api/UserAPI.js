@@ -76,21 +76,16 @@ const UserAPI = {
         return data;
     },
 
-    updateMe: async function ({
-        email,
-        password,
-        first_name,
-        education_level,
-        subjects,
-    }) {
+    updateMe: async function ({ email, password, ...newMetadata }) {
         const { data, error } = await supabase.auth.updateUser({
             ...(email && { email }),
             ...(password && { password }),
-            data: {
-                ...(first_name && { first_name }),
-                ...(education_level && { education_level }),
-                ...(subjects && { subjects }),
-            },
+            ...(newMetadata && {
+                data: {
+                    ...(await supabase.auth.getUser()).data.user.user_metadata,
+                    ...newMetadata,
+                },
+            }),
         });
 
         if (error) throw error;

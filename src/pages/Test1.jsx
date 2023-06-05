@@ -33,6 +33,7 @@ import { TextWrapper } from "../styles/TextWrappers";
 import StatusChip from "../components/Dashboard/StatusChip";
 import Slider from "../components/Slider";
 import RadioButton from "../components/RadioButton";
+import ProgressBar from "../components/ProgressBar";
 
 const imagesA = [
     "https://d33wubrfki0l68.cloudfront.net/dd23708ebc4053551bb33e18b7174e73b6e1710b/dea24/static/images/wallpapers/shared-colors@2x.png",
@@ -44,6 +45,9 @@ const props = {
     initial: "hidden",
     animate: "visible",
 };
+
+const max = 80000;
+const current = 49000;
 
 function Test1() {
     const { Modal: PublishModalComponent, ...PublishModal } = useModal({
@@ -71,12 +75,33 @@ function Test1() {
 
     return (
         <CenteredColumn fillparent gap="10px" style={{ overflow: "auto" }}>
-            <CustomButton
-                onClick={() => {
-                    setTest([1, 2, 3]);
-                }}>
-                Click me
-            </CustomButton>
+            <ProgressBar
+                width="500px"
+                stops={[
+                    {
+                        label: "average lesson",
+                        location: 2000,
+                    },
+                    {
+                        label: "1/4",
+                        location: (max / 4) * 1,
+                    },
+                    {
+                        label: "1/2",
+                        location: (max / 4) * 2,
+                    },
+                    {
+                        label: "3/4",
+                        location: (max / 4) * 3,
+                    },
+                    {
+                        label: "No more usage",
+                        location: max,
+                    },
+                ]}
+                value={current}
+                max={max}
+            />
         </CenteredColumn>
     );
 }

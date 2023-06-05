@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import {
     motion,
     useMotionValue,
@@ -7,6 +7,7 @@ import {
     useTransform,
     useAnimation,
 } from "framer-motion";
+import { TextWrapper } from "../styles/TextWrappers";
 
 const ProgressBar = ({
     value,
@@ -25,6 +26,7 @@ const ProgressBar = ({
     pauseOnHover = true,
     hovering = undefined,
     canStart,
+    stopSize = "20px",
 }) => {
     const paused = React.useRef(false);
     const lastStart = React.useRef(null);
@@ -92,6 +94,8 @@ const ProgressBar = ({
     }, [hovering]);
     //React.useEffect(() => animate(progress, value));
 
+    const theme = useTheme();
+
     return (
         <Container width={width} height={height}>
             {stops.map((stop, index) => {
@@ -100,10 +104,25 @@ const ProgressBar = ({
 
                 return (
                     <>
-                        <Stop location={percentage} active={active} />
-                        <Label location={percentage} active={active}>
-                            {stop.label}
-                        </Label>
+                        <Stop
+                            location={percentage}
+                            active={active}
+                            stopSize={stopSize}>
+                            <Label
+                                location={percentage}
+                                active={active}
+                                stopSize={stopSize}>
+                                <TextWrapper
+                                    noWrap
+                                    color={
+                                        !active
+                                            ? theme.colours.primaryFaded
+                                            : theme.colours.primaryStrong
+                                    }>
+                                    {stop.label}
+                                </TextWrapper>
+                            </Label>
+                        </Stop>
                     </>
                 );
             })}
@@ -148,25 +167,25 @@ const Container = styled.div`
 
 const Label = styled.p`
     position: absolute;
-    top: 50%;
+    top: ${props => props.stopSize};
+    /* top: 50%;
     font-size: 90%;
-    width: 150%;
+    width: 150%; */
     color: ${props =>
         !props.active
             ? props.theme.colours.primaryFaded
             : props.theme.colours.primaryStrong};
-    left: ${props => props.location - 1}%;
+    /* left: ${props => props.location - 1}%; */
 `;
 
 const Stop = styled.div`
     display: flex;
-    align-items: center;
     justify-content: center;
     border-radius: 50%;
     position: absolute;
     left: ${props => props.location - 1}%;
-    width: 1.2em;
-    height: 1.2em;
+    width: ${props => props.stopSize};
+    height: ${props => props.stopSize};
     z-index: 10;
 
     ::after {

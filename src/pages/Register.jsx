@@ -113,16 +113,16 @@ function Register() {
             throw new Error("Form is not valid");
         }
 
+        data = data.map(field => field.trim());
+
         try {
             const response = await UserAPI.signUp({
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
                 password: data.password,
-                education_level: data.education_level.toLowerCase(),
-                subjects: data.subjects.map(subject =>
-                    subject.replaceAll(" ", "_").toLowerCase()
-                ),
+                education_level: data.education_level,
+                subjects: data.subjects,
                 is_active: true,
             });
 

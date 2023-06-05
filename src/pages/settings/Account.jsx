@@ -6,10 +6,14 @@ import SubmitButton from "../../components/Button";
 import { Textfield } from "../../components/Textfield";
 import { useNotification } from "../../context/NotificationContext";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/SessionContext";
+import { capitaliseFirstLetter } from "../../lib/stringUtils";
 
 const Profile = () => {
     const sendNotification = useNotification();
     const navigate = useNavigate();
+    const { session } = useAuth();
+    // console.log(session);
 
     const signOut = async e => {
         e.preventDefault();
@@ -34,33 +38,33 @@ const Profile = () => {
                     gap: "1em",
                 }}>
                 <h1> Account Settings </h1>
-                <p>
-                    Change your email, phone number, name etc and sign out of or
-                    delete your XTutor account. You can also request your
-                    personal data we hold.
-                </p>
             </div>
-            <Textfield label="Email" type="text" required />
-            <CustomButton
-                // style={{ width: "fit-content" }}
-                outline
-                onClick={() => navigate("/settings/reset-password")}>
-                Change password
-            </CustomButton>
-            <p> Est et exercitation dolor cillum sint nisi nisi. </p>
-            <Textfield label="Name" type="text" required />
-            <Textfield label="Last Name" type="text" required />
-            <p> Exercitation laborum ex duis id est tempor non. </p>
-            <SubmitButton> Save your changes</SubmitButton>
-            <CustomButton
-                style={{ width: "fit-content" }}
-                outline
-                onClick={signOut}>
-                Sign out
-            </CustomButton>
+            <Textfield
+                label="Email"
+                type="text"
+                required
+                value={session.user.email}
+                disabled
+            />
+            <p>Account Type: {capitaliseFirstLetter(session.user.role)}</p>
+            <ButtonContainer>
+                <CustomButton
+                    outline
+                    onClick={() => navigate("/settings/reset-password")}>
+                    Change password
+                </CustomButton>
+                <CustomButton outline onClick={signOut}>
+                    Sign out
+                </CustomButton>
+            </ButtonContainer>
         </Container>
     );
 };
+
+const ButtonContainer = styled.div`
+    display: flex;
+    gap: 20px;
+`;
 
 const Container = styled.div`
     display: flex;

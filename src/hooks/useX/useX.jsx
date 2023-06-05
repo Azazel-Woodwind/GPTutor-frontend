@@ -37,6 +37,7 @@ function useX(config) {
     const audioQueue = useRef([]);
     const currentResponseId = useRef(undefined);
     const currentPlaybackRate = useRef(1);
+    const response = useRef("");
 
     const { current: orderMaintainer } = useRef(
         new OrderMaintainer({
@@ -62,7 +63,7 @@ function useX(config) {
         setSpeaking(false);
         animationId.current && cancelAnimationFrame(animationId.current);
         setMultiplier(1);
-
+        response.current = "";
         setHistory(prev => [...prev, { role: "user", content: message }]);
         currentResponseId.current = nanoid();
         orderMaintainer.reset();
@@ -185,6 +186,30 @@ function useX(config) {
         [userPaused]
     );
 
+    const onResponseData = useCallback(
+        data => {
+            console.log("response_data:", data);
+            if (streaming || loading) {
+                response.current = data.response;
+            } else {
+                setCurrentMessage("");
+                setHistory(prev => [
+                    ...prev,
+                    { role: "assistant", content: data.response },
+                ]);
+            }
+
+            onMessage(data);
+        },
+        [streaming, loading]
+    );
+
+    useEffect(() => {
+        if (!Socket) return;
+        Socket.off(`${channel}_response_data`);
+        Socket.on(`${channel}_response_data`, onResponseData);
+    }, [onResponseData]);
+
     useEffect(() => {
         if (!Socket) return;
         orderMaintainer.callback = onReceiveAudioData;
@@ -227,6 +252,20 @@ function useX(config) {
         };
 
         Socket.on(`${channel}_response_stream`, delta => {
+            if (delta === "[END]") {
+                console.log("response_stream end");
+                setStreaming(false);
+                const content = response.current;
+                if (response.current) {
+                    setCurrentMessage("");
+                    setHistory(prev => [
+                        ...prev,
+                        { role: "assistant", content },
+                    ]);
+                }
+                return;
+            }
+
             setStreaming(true);
             onDelta(delta);
             setLoading(false);
@@ -236,18 +275,6 @@ function useX(config) {
         Socket.on(`${channel}_error`, err => {
             sendSystemMessage(err);
             setLoading(false);
-        });
-
-        Socket.on(`${channel}_response_data`, data => {
-            console.log("response_data:", data);
-
-            setHistory(prev => [
-                ...prev,
-                { role: "assistant", content: data.response },
-            ]);
-            setCurrentMessage("");
-            onMessage(data);
-            setStreaming(false);
         });
 
         Socket.on(`${channel}_message_user`, message => {

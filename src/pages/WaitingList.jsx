@@ -86,17 +86,17 @@ function WaitingList() {
             return;
         }
 
+        data = data.map(field => field.trim());
+
         try {
             const response = await UserAPI.signUpToWaitingList({
                 first_name: data.first_name,
                 last_name: data.last_name,
                 email: data.email,
                 password: generatePassword(12),
-                education_level: data.education_level.toLowerCase(),
+                education_level: data.education_level,
                 is_student: data.occupation === "Student",
-                subjects: data.subjects.map(subject =>
-                    subject.replaceAll(" ", "_").toLowerCase()
-                ),
+                subjects: data.subjects,
             });
 
             // console.log(response);

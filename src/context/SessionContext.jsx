@@ -13,10 +13,10 @@ export function SessionContextProvider({ children }) {
     const [loading, setLoading] = React.useState(true);
     const [event, setEvent] = React.useState(null);
 
-    const getAccessLevelById = async id => {
+    const getUserData = async id => {
         const { data, error: userError } = await supabase
             .from("users")
-            .select("access_level")
+            .select("access_levels (*), req_audio_data")
             .eq("id", id)
             .single();
 
@@ -24,8 +24,9 @@ export function SessionContextProvider({ children }) {
             if (userError) console.log(userError);
             return;
         }
+        // console.log(data);
 
-        return data.access_level;
+        return { req_audio_data: data.req_audio_data, ...data.access_levels };
     };
 
     const initialiseSession = async () => {
@@ -38,14 +39,19 @@ export function SessionContextProvider({ children }) {
                 setSession(null);
             } else {
                 setSession(newSession);
-                getAccessLevelById(newSession.user.id).then(accessLevel => {
+                getUserData(newSession.user.id).then(data => {
                     setSession(prevSession => {
                         if (!prevSession) return prevSession;
+                        const { req_audio_data, ...rest } = data;
                         return {
                             ...prevSession,
                             user: {
                                 ...prevSession.user,
-                                accessLevel,
+                                ...rest,
+                                user_metadata: {
+                                    ...prevSession.user.user_metadata,
+                                    req_audio_data,
+                                },
                             },
                         };
                     });
