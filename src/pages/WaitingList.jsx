@@ -75,7 +75,7 @@ function WaitingList() {
     });
 
     const addToWaitingList = async data => {
-        // console.log(data);
+        console.log(data);
 
         if (!form.formState.isValid) {
             sendNotification({
@@ -86,7 +86,7 @@ function WaitingList() {
             return;
         }
 
-        data = data.map(field => field.trim());
+        // data = data.map(field => field.trim());
 
         try {
             const response = await UserAPI.signUpToWaitingList({
@@ -152,6 +152,9 @@ function WaitingList() {
                                         fieldState.error?.message
                                     }
                                     {...field}
+                                    onChange={e => {
+                                        field.onChange(e.target.value.trim());
+                                    }}
                                 />
                             )}
                         />
@@ -174,6 +177,9 @@ function WaitingList() {
                                         fieldState.error?.message
                                     }
                                     {...field}
+                                    onChange={e => {
+                                        field.onChange(e.target.value.trim());
+                                    }}
                                 />
                             )}
                         />
@@ -197,6 +203,9 @@ function WaitingList() {
                                     fieldState.error?.message
                                 }
                                 {...field}
+                                onChange={e => {
+                                    field.onChange(e.target.value.trim());
+                                }}
                             />
                         )}
                     />

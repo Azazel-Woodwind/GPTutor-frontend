@@ -186,6 +186,9 @@ function Register() {
                                         fieldState.error?.message
                                     }
                                     {...field}
+                                    onChange={e => {
+                                        field.onChange(e.target.value.trim());
+                                    }}
                                 />
                             )}
                         />
@@ -208,6 +211,9 @@ function Register() {
                                         fieldState.error?.message
                                     }
                                     {...field}
+                                    onChange={e => {
+                                        field.onChange(e.target.value.trim());
+                                    }}
                                 />
                             )}
                         />
@@ -231,6 +237,9 @@ function Register() {
                                     fieldState.error?.message
                                 }
                                 {...field}
+                                onChange={e => {
+                                    field.onChange(e.target.value.trim());
+                                }}
                             />
                         )}
                     />
