@@ -4,6 +4,7 @@ import CenteredColumn from "../styles/containers/CenteredColumn";
 import CenteredRow from "../styles/containers/CenteredRow";
 import Avatar from "./Avatar";
 import React from "react";
+import Scroller from "./Scroller";
 
 // Embrace the shadows ; find the truth
 
@@ -21,8 +22,18 @@ const Title = styled.h1`
     font-size: 2.2em;
 `;
 
-const Subheading = styled.div`
-    font-size: 1.8em;
+const Container = styled.div`
+    display: flex;
+
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+`;
+
+const SubContainer = styled.div`
+    display: flex;
+    margin: auto;
+    gap: 8em;
 `;
 
 function XForm({
@@ -34,28 +45,24 @@ function XForm({
     isValid,
     ...props
 }) {
-    console.log("rerender");
-
     return (
-        <CenteredRow
-            gap="8em"
-            fillparent
-            style={{ overflow: "auto" }}
-            {...props}>
-            <Avatar size={200} hasLogo />
-            <CenteredColumn gap="1.5em">
-                <Title>{title}</Title>
-                <FormContainer onSubmit={onSubmit}>
-                    {children}
-                    <SubmitButton
-                        style={{ marginTop: "0.5em" }}
-                        disabled={isValid}>
-                        {submitButtonText}
-                    </SubmitButton>
-                    {link && link}
-                </FormContainer>
-            </CenteredColumn>
-        </CenteredRow>
+        <Container {...props}>
+            <SubContainer>
+                <Avatar size={200} hasLogo />
+                <CenteredColumn gap="1.5em">
+                    <Title>{title}</Title>
+                    <FormContainer onSubmit={onSubmit}>
+                        {children}
+                        <SubmitButton
+                            style={{ marginTop: "0.5em" }}
+                            disabled={isValid}>
+                            {submitButtonText}
+                        </SubmitButton>
+                        {link && link}
+                    </FormContainer>
+                </CenteredColumn>
+            </SubContainer>
+        </Container>
     );
 }
 
