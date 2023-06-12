@@ -48,7 +48,7 @@ function XForm({
     return (
         <Container {...props}>
             <SubContainer>
-                <Avatar size={200} hasLogo />
+                <Avatar size={200} hasLogo style={{ margin: "auto" }} />
                 <CenteredColumn gap="1.5em">
                     <Title>{title}</Title>
                     <FormContainer onSubmit={onSubmit}>

@@ -3,7 +3,7 @@ import useAvatar from "../hooks/useAvatar";
 import styled from "styled-components";
 import Logo from "../styles/Logo";
 
-const Avatar = ({ size, hasLogo }) => {
+const Avatar = ({ size, hasLogo, ...props }) => {
     const { Avatar, avatarProps } = useAvatar({ size });
 
     return (
@@ -35,6 +35,7 @@ const LogoWrapper = styled.div`
 
 const Container = styled.div`
     position: relative;
+    height: fit-content;
     /* display: flex;
     align-items: center;
     justify-content: center; */
