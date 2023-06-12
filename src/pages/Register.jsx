@@ -113,8 +113,6 @@ function Register() {
             throw new Error("Form is not valid");
         }
 
-        data = data.map(field => field.trim());
-
         try {
             const response = await UserAPI.signUp({
                 first_name: data.first_name,
