@@ -7,7 +7,7 @@ const Avatar = ({ size, hasLogo, ...props }) => {
     const { Avatar, avatarProps } = useAvatar({ size });
 
     return (
-        <Container>
+        <Container {...props}>
             <Avatar {...avatarProps} />
             {hasLogo && (
                 <LogoWrapper>
