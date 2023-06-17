@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { fontSizeOptions, getFontSize } from "../components/Button";
+import { fontSizeOptions, getFontSize } from "../components/input/Button";
 
 export const TextWrapper = styled.span`
     ${({

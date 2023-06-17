@@ -10,6 +10,15 @@ const GlobalStyles = createGlobalStyle`
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
         overflow-x: clip;
         background-color: ${props => props.theme.colours.background};
+        /* background: linear-gradient(
+            125deg,
+            #18203C,
+            #00438D
+        ); */
+        /* background: radial-gradient(
+            #18203C 0%,
+            #00438D 100%
+        ); */
         overflow-y: clip;
     }
 

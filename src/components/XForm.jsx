@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import SubmitButton from "../components/Button";
 import CenteredColumn from "../styles/containers/CenteredColumn";
-import CenteredRow from "../styles/containers/CenteredRow";
-import Avatar from "./Avatar";
+import Avatar from "./XAvatar";
 import React from "react";
-import Scroller from "./Scroller";
+import Button from "./input/Button";
 
 // Embrace the shadows ; find the truth
 
@@ -53,11 +51,11 @@ function XForm({
                     <Title>{title}</Title>
                     <FormContainer onSubmit={onSubmit}>
                         {children}
-                        <SubmitButton
+                        <Button
                             style={{ marginTop: "0.5em" }}
                             disabled={isValid}>
                             {submitButtonText}
-                        </SubmitButton>
+                        </Button>
                         {link && link}
                     </FormContainer>
                 </CenteredColumn>

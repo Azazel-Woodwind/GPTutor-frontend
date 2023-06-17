@@ -1,11 +1,7 @@
 import * as React from "react";
 import SubjectsAPI from "../api/SubjectAPI";
-import {
-    capitaliseFirstLetter,
-    formatEducationLevel,
-} from "../lib/stringUtils";
 import EducationLevelsAPI from "../api/EducationLevelAPI";
-import Loading from "../pages/Loading";
+import Loading from "../pages/Loading/Loading";
 import ExamBoardAPI from "../api/ExamBoardAPI";
 import UsagePlanAPI from "../api/UsagePlansAPI";
 

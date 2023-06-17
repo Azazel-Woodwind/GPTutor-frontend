@@ -17,7 +17,7 @@ const LessonAPI = {
                 exam_board => exam_board.exam_board_name
             );
         });
-        console.log(data);
+        // console.log(data);
         return data;
     },
 

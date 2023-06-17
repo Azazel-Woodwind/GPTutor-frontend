@@ -1,6 +1,6 @@
 import * as React from "react";
 import supabase from "../api/configs/supabase";
-import Loading from "../pages/Loading";
+import Loading from "../pages/Loading/Loading";
 import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => React.useContext(SessionContext);
@@ -35,7 +35,7 @@ export function SessionContextProvider({ children }) {
             // console.log("SESSION:", newSession);
             setEvent(_event);
             if (!newSession || !newSession.user) {
-                console.log("HERE");
+                // console.log("HERE");
                 setSession(null);
             } else {
                 setSession(newSession);

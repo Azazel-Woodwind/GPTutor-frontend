@@ -56,7 +56,7 @@ function useX(config) {
         altChannel,
         messageParams = {},
     }) => {
-        if (message === "" || streaming || loading) return false;
+        if (message.trim() === "" || streaming || loading) return false;
         audioQueue.current = [];
         audio.current.src = "";
         audio.current.load();
@@ -108,11 +108,18 @@ function useX(config) {
         animationId.current && cancelAnimationFrame(animationId.current);
     };
 
-    const play = () => {
+    const play = async () => {
         setUserPaused(false);
         if (audio.current.src && audio.current.src.startsWith("data:")) {
-            audio.current.play();
-            animate();
+            try {
+                await audio.current.play();
+                animate();
+            } catch (error) {
+                console.log(error);
+                audio.current.pause();
+                animationId.current &&
+                    cancelAnimationFrame(animationId.current);
+            }
         } else {
             console.log("NO AUDIO SOURCE:", audio.current.src);
         }

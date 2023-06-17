@@ -1,12 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-import { NavigateHome } from "../Navigation";
-import CustomButton from "../Button";
-import ProgressBar from "../ProgressBar";
-import { Exit } from "@styled-icons/boxicons-regular/Exit";
-import { TextWrapper } from "../../styles/TextWrappers";
-import SvgIcon from "../SvgIcon";
-import { ExitSvgData } from "../../lib/svgIconData";
 
 const HeaderContent = ({ centerContent, rightContent }) => {
     return (
