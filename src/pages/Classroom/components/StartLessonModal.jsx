@@ -1,9 +1,8 @@
-import React from "react";
-import useModal from "../../hooks/useModal";
-import CenteredColumn from "../../styles/containers/CenteredColumn";
-import Button from "../Button";
 import { motion } from "framer-motion";
-import { fade_animation } from "../../styles/FramerAnimations";
+import Button from "../../../components/input/Button";
+import useModal from "../../../hooks/useModal";
+import { fade_animation } from "../../../styles/FramerAnimations";
+import CenteredColumn from "../../../styles/containers/CenteredColumn";
 
 function StartLessonModal({ setStarted, lesson }) {
     const { open, handleClose, handleOpen, ModalProps, Modal } = useModal({

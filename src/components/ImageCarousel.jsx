@@ -3,8 +3,8 @@ import { useState } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { wrap } from "popmotion";
 import styled from "styled-components";
-import Button from "./Button";
 import { ArrowBoldRight } from "@styled-icons/entypo/ArrowBoldRight";
+import Button from "./input/Button";
 import { formatImageSource } from "../lib/stringUtils";
 
 //From framer motion documentation
@@ -122,18 +122,20 @@ const ImageCarousel = ({ images = [], currentImageIndex }) => {
                 </AnimatePresence>
             </ImageContainer>
             <Next onClick={() => paginate(1)}>
-                <Button
+                <ArrowContainer
                     style={{ padding: "10px", borderRadius: "50%" }}
-                    whileHoverScale={1.1}>
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}>
                     <ArrowBoldRight size={22} />
-                </Button>
+                </ArrowContainer>
             </Next>
             <Prev onClick={() => paginate(-1)}>
-                <Button
+                <ArrowContainer
                     style={{ padding: "10px", borderRadius: "50%" }}
-                    whileHoverScale={1.1}>
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.9 }}>
                     <ArrowBoldRight size={22} />
-                </Button>
+                </ArrowContainer>
             </Prev>
         </Container>
     );
@@ -165,6 +167,10 @@ const Container = styled.div`
 
     height: 100%;
     width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const Image = styled(motion.img)`
@@ -179,7 +185,7 @@ const Image = styled(motion.img)`
     ${props => (props.selected ? `width: 70%; height: 70%;` : `width: 100%;`)}
 `;
 
-const Button = styled.div`
+const ArrowContainer = styled(motion.div)`
     top: calc(50% - 20px);
     position: absolute;
     ${props => props.theme.gradient({ animationLength: 5 })}
@@ -196,12 +202,12 @@ const Button = styled.div`
     z-index: 2;
 `;
 
-const Prev = styled(Button)`
+const Prev = styled(ArrowContainer)`
     left: 10px;
     transform: scale(-1);
 `;
 
-const Next = styled(Button)`
+const Next = styled(ArrowContainer)`
     right: 10px;
 `;
 

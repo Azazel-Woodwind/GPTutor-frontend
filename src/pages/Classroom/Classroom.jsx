@@ -6,6 +6,14 @@ import useXLesson from "../../hooks/useX/useXLesson";
 import useConversationDisplay from "../../hooks/useConversationDisplay";
 import Loading from "../Loading/Loading";
 import XAvatar from "../../components/XAvatar";
+import { fade_animation } from "../../styles/FramerAnimations";
+import StartLessonModal from "./components/StartLessonModal";
+import HeaderContent from "../../components/Header/HeaderContent";
+import ExitButton from "../../components/input/ExitButton";
+import ChatSection from "../../components/Chat/ChatSection";
+import ProgressBar from "../../components/ProgressBar";
+import ImageCarousel from "../../components/ImageCarousel";
+import EndOfLessonModal from "./components/EndOfLessonModal";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -18,7 +26,7 @@ function Classroom() {
         delay: 1000,
     });
 
-    const display = useConversationDisplay(false);
+    useConversationDisplay(false);
 
     const {
         lesson,
@@ -142,7 +150,7 @@ function Classroom() {
                                             {...fade_animation({
                                                 delayed: true,
                                             })}>
-                                            <Gallery
+                                            <ImageCarousel
                                                 images={images}
                                                 currentImageIndex={
                                                     currentImageIndex

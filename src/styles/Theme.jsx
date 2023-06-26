@@ -1,7 +1,3 @@
-// export const gradientColour1 = "#34b5ff";
-// export const gradientColour2 = "#24aaff";
-// export const gradientColour3 = "#0163ff";
-// export const gradientColour4 = "#34b5ff";
 import converter from "hex2dec";
 
 export const gradientColour1 = "#0163ff";

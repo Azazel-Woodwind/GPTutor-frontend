@@ -30,7 +30,6 @@ function useXLesson({ currentLesson, delay, ...props }) {
                 "LEARNING OBJECTIVE NUMBER CHANGED TO:",
                 learningObjectiveNumber
             );
-
             setLearningObjectiveNumber(learningObjectiveNumber);
         },
         ...props,
@@ -74,14 +73,25 @@ function useXLesson({ currentLesson, delay, ...props }) {
         const timer = setTimeout(() => {
             Socket.emit("start_lesson", { current_lesson: currentLesson });
             Socket.on("lesson_finished", () => setFinished(true));
+            Socket.on(
+                "lesson_learning_objective_change",
+                learningObjectiveNumber => {
+                    console.log(
+                        "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+                        learningObjectiveNumber
+                    );
+
+                    setLearningObjectiveNumber(learningObjectiveNumber);
+                }
+            );
             // Socket.on("lesson_response_data", data => {
             //     const { learningObjectiveNumber } = data;
-            //     console.log(
-            //         "LEARNING OBJECTIVE NUMBER CHANGED TO:",
-            //         learningObjectiveNumber
-            //     );
+            // console.log(
+            //     "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+            //     learningObjectiveNumber
+            // );
 
-            //     setLearningObjectiveNumber(learningObjectiveNumber);
+            // setLearningObjectiveNumber(learningObjectiveNumber);
             // });
         }, delay);
 
@@ -89,6 +99,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
             clearTimeout(timer);
             Socket.off("lesson_response_data");
             Socket.off("lesson_finished");
+            Socket.off("lesson_learning_objective_change");
         };
     }, [started]);
 

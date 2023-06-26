@@ -5,15 +5,16 @@ import React from "react";
 import CenteredRow from "../../styles/containers/CenteredRow";
 import { degreesToRadians } from "../../lib/misc";
 
+// 8 different questions related to GCSE education that a student might ask
 const examplePrompts = [
-    "Teach me algebra please",
-    "Why is the sky blue?",
-    "What is the meaning of life?",
-    "What is the airspeed velocity of an unladen swallow?",
-    "What is the best way to learn a new language?",
-    "How do I get a job at Google?",
-    "How do I get a job at Facebook?",
-    "How do I get a job at Microsoft?",
+    "Can you explain the concept of electromagnetic waves and their various properties",
+    "What are some effective study techniques for improving memory and retention of information?",
+    "What are the key principles behind Newton's laws of motion, and how are they applied in physics problems?",
+    "What strategies can I use to improve my problem-solving skills in algebraic equations?",
+    "Can you quiz me on the key dates and events of the Cold War?",
+    "Let's have a discussion about the key themes and motifs in Shakespeare's Macbeth",
+    "Can you please make me comprehensive revision notes for the topic of photosynthesis for GCSE Biology?",
+    "I don't understand how covalent bonds work. Can you please explain them to me?",
 ];
 
 const MAX_ANGLE = 40;
@@ -191,8 +192,9 @@ const PromptContainer = styled(motion.div)`
         radius,
     }) => css`
         ${promptIndex === undefined && "display: none;"}
+        width: 400px;
         position: absolute;
-        white-space: nowrap;
+        /* white-space: nowrap; */
         font-style: italic;
         font-size: 1.2rem;
         /* left: ${radius}px;

@@ -1,13 +1,11 @@
-import { motion } from "framer-motion";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import useModal from "../../hooks/useModal";
-import CenteredColumn from "../../styles/containers/CenteredColumn";
-import Button from "../Button";
-import Modal from "../Modal/Modal";
-import Textfield from "../Textfield";
 import styled from "styled-components";
-import { fade_animation } from "../../styles/FramerAnimations";
+import Button from "../../../components/input/Button";
+import Textfield from "../../../components/input/Textfield";
+import useModal from "../../../hooks/useModal";
+import { fade_animation } from "../../../styles/FramerAnimations";
+import CenteredColumn from "../../../styles/containers/CenteredColumn";
+import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
+import { motion } from "framer-motion";
 
 function EndOfLessonModal() {
     const { open, handleClose, handleOpen, ModalProps, Modal } = useModal({
