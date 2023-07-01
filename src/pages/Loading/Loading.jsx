@@ -23,7 +23,7 @@ const Wrapper = styled.div`
     ${props => (props.centered ? "justify-content: center;" : "")}
     /* border: 3px solid green; */
 
-    gap: 2em;
+    gap: 2rem;
 `;
 
 export default Loading;

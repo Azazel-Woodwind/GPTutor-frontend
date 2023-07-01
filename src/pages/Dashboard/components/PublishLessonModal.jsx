@@ -61,11 +61,11 @@ export const ModalContainer = styled(CenteredColumn)`
 
 export const Content = styled(CenteredColumn)`
     flex: 1;
-    gap: 20px;
+    gap: 1.25rem;
 `;
 
 export const ButtonRow = styled(CenteredRow)`
-    gap: 40px;
+    gap: 2.5rem;
 `;
 
 export default PublishLessonModal;

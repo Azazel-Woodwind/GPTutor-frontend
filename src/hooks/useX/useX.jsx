@@ -25,7 +25,7 @@ function useX(config) {
     const [streaming, setStreaming] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [speaking, setSpeaking] = useState(false);
-    const [multiplier, setMultiplier] = useState(1);
+    const [multiplier, setMultiplier] = useState(undefined);
     const [userPaused, setUserPaused] = useState(false);
     const [responseData, setResponseData] = useState("");
 
@@ -209,10 +209,10 @@ function useX(config) {
         data => {
             // console.log("response_data:", data);
             if (streaming || loading) {
-                // console.log("NO HERE");
+                console.log("NO HERE");
                 setResponseData(data.response);
             } else {
-                // console.log("HERE");
+                console.log("HERE");
                 setCurrentMessage("");
                 setHistory(prev => [
                     ...prev,
@@ -253,7 +253,7 @@ function useX(config) {
                 console.log("response_stream end");
                 setStreaming(false);
                 if (responseData) {
-                    // console.log("here");
+                    console.log("here");
                     setCurrentMessage("");
                     setHistory(prev => [
                         ...prev,
@@ -273,13 +273,14 @@ function useX(config) {
     );
 
     useEffect(() => {
-        if (responseData) {
-            // console.log("here");
+        if (responseData && !streaming) {
+            console.log("herio");
             setCurrentMessage("");
             setHistory(prev => [
                 ...prev,
                 { role: "assistant", content: responseData },
             ]);
+            setResponseData("");
         }
     }, [streaming]);
 

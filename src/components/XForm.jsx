@@ -10,14 +10,14 @@ export const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 0.8em;
+    gap: 0.8rem;
     z-index: 10;
-    width: 35em;
+    width: 35rem;
 `;
 
 const Title = styled.h1`
-    margin-right: 0.2em;
-    font-size: 2.2em;
+    margin-right: 0.8rem;
+    font-size: 2.8rem;
 `;
 
 const Container = styled.div`
@@ -31,7 +31,7 @@ const Container = styled.div`
 const SubContainer = styled.div`
     display: flex;
     margin: auto;
-    gap: 8em;
+    gap: 8rem;
 `;
 
 function XForm({
@@ -47,12 +47,12 @@ function XForm({
         <Container {...props}>
             <SubContainer>
                 <Avatar size={200} hasLogo style={{ margin: "auto" }} />
-                <CenteredColumn gap="1.5em">
+                <CenteredColumn gap="1.5rem">
                     <Title>{title}</Title>
                     <FormContainer onSubmit={onSubmit}>
                         {children}
                         <Button
-                            style={{ marginTop: "0.5em" }}
+                            style={{ marginTop: "0.5rem" }}
                             disabled={isValid}>
                             {submitButtonText}
                         </Button>

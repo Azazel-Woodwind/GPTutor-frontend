@@ -143,7 +143,7 @@ function Register() {
                     isValid={
                         !form.formState.isValid || form.formState.isSubmitting
                     }>
-                    <MultiTextfieldRow gap="0.8em">
+                    <MultiTextfieldRow gap="0.8rem">
                         <Controller
                             name="first_name"
                             control={form.control}
@@ -230,7 +230,7 @@ function Register() {
                             fieldState, //{ invalid, isTouched, isDirty, error }
                             formState,
                         }) => (
-                            <RadioButtonsContainer gap="1.5em">
+                            <RadioButtonsContainer gap="1.5rem">
                                 {educationLevels.map(level => (
                                     <RadioButton
                                         key={level}

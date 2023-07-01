@@ -44,7 +44,7 @@ const GlobalStyles = createGlobalStyle`
 
     *::-webkit-scrollbar {
         width: 8px;
-        height: 10px;
+        height: 0.625rem;
         cursor: pointer;
     }
     
@@ -57,7 +57,7 @@ const GlobalStyles = createGlobalStyle`
         /* background-color: ${props => props.theme.colours.contrast}; */
         ${props => props.theme.gradient()}
 
-        border-radius: 10px;
+        border-radius: 0.625rem;
     }
 
     *::-webkit-scrollbar-thumb:hover {

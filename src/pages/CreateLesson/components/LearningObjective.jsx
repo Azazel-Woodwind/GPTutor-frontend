@@ -30,7 +30,7 @@ export default function LearningObjective({
                         MIN_LEARNING_OBJECTIVES
                     }>
                     <SvgIcon
-                        size="1.9em"
+                        size="1.9rem"
                         svgData={CrossSvgData}
                         fill={
                             !(
@@ -101,16 +101,16 @@ export default function LearningObjective({
 
 const ObjectiveContainer = styled.div`
     display: flex;
-    gap: 1em;
-    /* padding-top: 1em; */
+    gap: 1rem;
+    /* padding-top: 1rem; */
     width: 100%;
     min-height: 64px;
     align-items: flex-start;
 `;
 
 export const CloseIcon = styled.svg`
-    width: 1.9em;
-    height: 1.9em;
+    width: 1.9rem;
+    height: 1.9rem;
 `;
 
 export const CloseIconContainer = styled.div`
@@ -129,6 +129,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    gap: 1em;
-    padding: 1em 0;
+    gap: 1rem;
+    padding: 1rem 0;
 `;

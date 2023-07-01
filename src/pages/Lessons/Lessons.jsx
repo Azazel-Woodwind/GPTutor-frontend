@@ -55,12 +55,12 @@ const SearchBar = styled.div`
 `;
 const Controls = styled.div`
     width: 100%;
-    margin: 2em;
+    margin: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1.5em;
+    gap: 1.5rem;
     z-index: 5;
 `;
 
@@ -73,14 +73,14 @@ const Container = styled.div`
     overflow-x: clip;
 `;
 const LessonContainer = styled.div`
-    margin-left: 4em;
-    padding: 2em;
+    margin-left: 4rem;
+    padding: 2rem;
     display: flex;
     flex-wrap: wrap;
-    gap: 1em;
+    gap: 1rem;
     width: 70%;
     height: fit-content;
-    margin-bottom: 2em;
+    margin-bottom: 2rem;
     align-content: space-evenly;
     /* border: 2px solid red; */
 `;

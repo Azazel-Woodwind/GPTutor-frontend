@@ -7,7 +7,10 @@ function Test1() {
     const controls = useAnimationControls();
 
     return (
-        <CenteredColumn fillparent gap="10px" style={{ overflow: "hidden" }}>
+        <CenteredColumn
+            fillparent
+            gap="0.625rem"
+            style={{ overflow: "hidden" }}>
             {/* <ProgressBar
                 width="500px"
                 stops={[

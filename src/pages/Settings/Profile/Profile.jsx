@@ -68,7 +68,7 @@ const Profile = () => {
                 <Button outline>Reset Defaults</Button>
             </div>
             <FormContainer onSubmit={form.handleSubmit(onSubmit)}>
-                <MultiTextfieldRow gap="0.8em">
+                <MultiTextfieldRow gap="0.8rem">
                     <Controller
                         name="first_name"
                         control={form.control}
@@ -123,7 +123,7 @@ const Profile = () => {
                         fieldState, //{ invalid, isTouched, isDirty, error }
                         formState,
                     }) => (
-                        <RadioButtonsContainer gap="1.5em">
+                        <RadioButtonsContainer gap="1.5rem">
                             {educationLevels.map(level => (
                                 <RadioButton
                                     key={level}
@@ -148,7 +148,7 @@ const Profile = () => {
                     }) => (
                         <Select
                             // {...field}
-                            style={{ maxWidth: "600px" }}
+                            style={{ maxWidth: "37.5rem" }}
                             selected={field.value.map(subject =>
                                 capitaliseFirstLetter(
                                     subject
@@ -174,13 +174,13 @@ const Profile = () => {
 const FormContainer = styled.form`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.25rem;
     width: 100%;
 `;
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1rem;
 `;
 export default Profile;

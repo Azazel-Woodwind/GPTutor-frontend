@@ -36,7 +36,7 @@ function WrittenQuestion({
                 value={finalAnswer || currentAnswer || answer}
                 onChange={e => setAnswer(e.target.value)}
                 label="Answer"
-                width="600px"
+                width="37.5rem"
                 rows={4}
                 disabled={
                     correctFeedback ||
@@ -63,10 +63,10 @@ function WrittenQuestion({
             />
             <div
                 style={{
-                    maxWidth: "700px",
+                    maxWidth: "43.8rem",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "10px",
+                    gap: "0.625rem",
                 }}>
                 {incorrectFeedback?.map(feedback => (
                     <p

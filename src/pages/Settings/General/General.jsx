@@ -119,7 +119,7 @@ const General = () => {
             <Checkbox
                 checkboxSize={31}
                 borderWidth={2}
-                fontSize="1.1em"
+                fontSize="1.1rem"
                 label="You will hear X's voice"
                 checked={session.user.user_metadata.req_audio_data}
                 onChange={e => {
@@ -133,12 +133,12 @@ const General = () => {
 };
 
 const Usage = styled.div`
-    margin-bottom: 2em;
+    margin-bottom: 2rem;
     width: 100%;
 `;
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1rem;
 `;
 export default General;

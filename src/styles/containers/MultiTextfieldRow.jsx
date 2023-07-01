@@ -8,5 +8,5 @@ export const MultiTextfieldRow = styled.div`
     /* border: 2px solid black; */
     ${props => props.gap && `gap: ${props.gap};`}
     ${props => props.wrap && `flex-wrap: wrap;`};
-    ${props => props.border && `border: 10px solid black;`}; // debugging
+    ${props => props.border && `border: 0.625rem solid black;`}; // debugging
 `;

@@ -29,17 +29,17 @@ const CreateLessonForm = styled.form`
     width: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 1em;
-    padding: 0 1em;
-    padding-bottom: 2em;
+    gap: 1rem;
+    padding: 0 1rem;
+    padding-bottom: 2rem;
     width: 970px;
 `;
 
 const Container = styled.div`
-    margin-left: 2em;
-    margin-right: 2em;
+    margin-left: 2rem;
+    margin-right: 2rem;
 
-    /* padding-bottom: 2em; */
+    /* padding-bottom: 2rem; */
     /* width: 100%; */
     height: 100%;
 
@@ -267,7 +267,7 @@ function CreateLesson({ action }) {
                     style={{
                         display: "flex",
                         justifyContent: "space-between",
-                        marginBottom: "1em",
+                        marginBottom: "1rem",
                     }}>
                     <h1 style={{ margin: 0 }}> Create Lesson </h1>
                     <Button
@@ -284,8 +284,8 @@ function CreateLesson({ action }) {
                         {action === "edit" ? "Reset defaults" : "Clear"}
                     </Button>
                 </div>
-                <CenteredColumn gap="1em">
-                    <CenteredRow gap="1em" fillwidth>
+                <CenteredColumn gap="1rem">
+                    <CenteredRow gap="1rem" fillwidth>
                         <Controller
                             name="title"
                             control={form.control}
@@ -328,7 +328,7 @@ function CreateLesson({ action }) {
                                         fieldState.error?.message
                                     }
                                     fullwidth
-                                    style={{ width: "250px" }}
+                                    style={{ width: "15.6rem" }}
                                 />
                             )}
                         />
@@ -397,7 +397,7 @@ function CreateLesson({ action }) {
                                         // border: "2px solid red",
                                     }}>
                                     <RadioButtonsContainer
-                                        gap="1.5em"
+                                        gap="1.5rem"
                                         style={{
                                             height: "64px",
                                             // border: "2px solid blue",
@@ -434,7 +434,7 @@ function CreateLesson({ action }) {
                         // paddingTop: "5px",
                         display: "flex",
                         flexDirection: "column",
-                        gap: "2em",
+                        gap: "2rem",
                     }}>
                     {learningObjectivesFields.fields.map((objective, index) => (
                         <LearningObjective
@@ -449,7 +449,7 @@ function CreateLesson({ action }) {
                     style={{
                         width: "100%",
                         textAlign: "center",
-                        marginBottom: "1em",
+                        marginBottom: "1rem",
                     }}>
                     <Button
                         disabled={
@@ -477,7 +477,7 @@ function CreateLesson({ action }) {
                     style={{
                         display: "flex",
                         alignItems: "center",
-                        gap: "1em",
+                        gap: "1rem",
                     }}>
                     <div style={{ marginTop: "8px" }}>
                         <Controller
@@ -487,7 +487,7 @@ function CreateLesson({ action }) {
                                 <Checkbox
                                     checkboxSize={31}
                                     borderWidth={2}
-                                    fontSize="1.1em"
+                                    fontSize="1.1rem"
                                     label="Publish this lesson"
                                     checked={field.value}
                                     onChange={e =>
@@ -499,7 +499,7 @@ function CreateLesson({ action }) {
                     </div>
 
                     <Button
-                        style={{ marginTop: "0.6em", width: "100%" }}
+                        style={{ marginTop: "0.6rem", width: "100%" }}
                         disabled={
                             form.formState.isSubmitting ||
                             !(

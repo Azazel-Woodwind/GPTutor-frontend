@@ -28,9 +28,9 @@ const LogoSvgAlt = styled(Logo)`
 
     cursor: pointer;
     width: 175px;
-    height: 100px;
+    height: 6.25rem;
 
-    /* border: 4px solid black; */
+    /* border: 0.25rem solid black; */
 `;
 
 const XChat = props => {
@@ -49,6 +49,7 @@ const XChat = props => {
                 <Navigation />
                 <AvatarContainer>
                     <XAvatar
+                        appear
                         size={120}
                         {...hook}
                         hasControls
@@ -89,15 +90,15 @@ const ActivityButton = styled(Button)`
 
 const AvatarContainer = styled.div`
     flex-grow: 1;
-    margin: 10px;
-    margin-top: 40px;
+    margin: 0.625rem;
+    margin-top: 2.5rem;
 `;
 
 const Window = styled.div`
     display: flex;
     width: 100%;
     background-color: ${props => props.theme.colours.tertiary}50;
-    box-shadow: #3523a940 0px 8px 30px;
+    box-shadow: #3523a940 0px 8px 1.875rem;
     ${props => props.width === true && "width: 100vw;"}
     align-items: center;
     box-sizing: border-box;

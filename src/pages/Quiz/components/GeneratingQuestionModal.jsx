@@ -16,7 +16,7 @@ function GeneratingQuestionModal({ questionNum, goToPrevQuestion }) {
     return (
         <motion.div {...fade_animation()}>
             <Modal {...ModalProps} cancellable={false}>
-                <CenteredColumn fillparent gap="15px">
+                <CenteredColumn fillparent gap="0.94rem">
                     <h1>Generating Question {questionNum}...</h1>
                     <div
                         style={{

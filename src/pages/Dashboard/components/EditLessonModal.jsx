@@ -10,13 +10,13 @@ function EditLessonModal({ lesson, handleClose }) {
     const navigate = useNavigate();
 
     return (
-        <ModalContainer fillparent gap="30px">
+        <ModalContainer fillparent gap="1.875rem">
             <Content>
                 <TextWrapper fontSize="xl" fontWeight="bold">
                     Are you sure you would like to edit the lesson titled '
                     {lesson.title}'?
                 </TextWrapper>
-                <TextWrapper fontSize="lg" style={{ padding: "0 30px" }}>
+                <TextWrapper fontSize="lg" style={{ padding: "0 1.875rem" }}>
                     If you do, this lesson will be automatically unpublished and
                     will need to be verified by an administrator before it
                     becomes publicly available again.

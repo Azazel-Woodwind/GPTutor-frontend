@@ -7,7 +7,7 @@ function UnpublishLessonModal({ lesson, handleClose }) {
     const submit = useSubmit();
 
     return (
-        <ModalContainer fillparent gap="30px">
+        <ModalContainer fillparent gap="1.875rem">
             <Content>
                 <TextWrapper fontSize="xl" fontWeight="bold">
                     Are you sure you would like to unpublish the lesson titled '

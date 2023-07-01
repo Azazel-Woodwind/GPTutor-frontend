@@ -147,8 +147,8 @@ const ModalStyle = styled(motion.div)`
     /* max-width: 800px; */
 
     background-color: ${props => props.theme.colours.highlight1};
-    padding: 30px 40px;
-    border-radius: 12px;
+    padding: 1.875rem 2.5rem;
+    border-radius: 0.75rem;
 `;
 
 export default Modal;

@@ -7,8 +7,8 @@ const handleHeight = 7;
 
 const ChatHistoryStyle = styled.div`
     width: 100%;
-    padding: 1em 1em;
-    padding-top: 0.8em;
+    padding: 1rem 1rem;
+    padding-top: 0.8rem;
     overflow-x: clip;
     overflow-y: auto;
     flex: 1 1 auto;
@@ -27,7 +27,7 @@ const DraggableChat = styled(motion.div)`
     z-index: 100;
     bottom: 0;
     width: 100%;
-    box-shadow: #3523a940 0px 0px 900px;
+    box-shadow: #3523a940 0px 0px 50rem;
     background-color: #13133a;
     display: flex;
     flex-direction: column;

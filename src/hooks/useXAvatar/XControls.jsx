@@ -35,8 +35,8 @@ function XControls({
                     <MuteButtonContainer>
                         <IconButton
                             style={{
-                                width: "3em",
-                                height: "3em",
+                                width: "3rem",
+                                height: "3rem",
                             }}
                             onClick={() => {
                                 setIsMuted(!isMuted);
@@ -82,7 +82,7 @@ const SpeedSliderContainer = styled.div`
     position: absolute;
     display: flex;
     justify-content: center;
-    bottom: 20px;
+    bottom: 1.25rem;
     width: 100%;
     z-index: 3;
 `;

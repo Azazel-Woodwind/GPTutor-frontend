@@ -18,8 +18,8 @@ const Center = styled.div`
 
 const Right = styled.div`
     position: absolute;
-    top: 1.6em;
-    right: 4em;
+    top: 1.6rem;
+    right: 4rem;
     z-index: 1000;
 `;
 

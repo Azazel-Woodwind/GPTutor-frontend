@@ -9,19 +9,19 @@ export const fontSizeOptions = ["sm", "md", "lg", "xl", "xxl", "xxxl"];
 export const getFontSize = size => {
     switch (size) {
         case "sm":
-            return "12px";
+            return "0.75rem";
         case "md":
-            return "16px";
+            return "1rem";
         case "lg":
-            return "20px";
+            return "1.25rem";
         case "xl":
             return "24px";
         case "xxl":
-            return "30px";
+            return "1.875rem";
         case "xxxl":
             return "45px";
         default:
-            return "16px";
+            return "1rem";
     }
 };
 
@@ -77,7 +77,7 @@ const FilledButtonStyle = styled(motion.button)`
     color: white;
     z-index: 10;
 
-    border-radius: 10px;
+    border-radius: 0.625rem;
     ${props =>
         props.disabled
             ? "background-color: rgb(0, 0, 0, 0.1); color: gray;"

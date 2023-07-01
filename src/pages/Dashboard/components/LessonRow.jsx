@@ -60,7 +60,7 @@ function LessonRow({
             <Cell>
                 <StatusChip status={lesson.status} />
             </Cell>
-            {/* <Cell style={{ paddingLeft: "20px" }}>
+            {/* <Cell style={{ paddingLeft: "1.25rem" }}>
                 <Checkbox
                     checked={lesson.is_published}
                     onChange={e => {
@@ -86,7 +86,7 @@ function LessonRow({
                     }}
                 />
             </Cell>
-            <Cell style={{ paddingLeft: "10px" }} content={lesson.is_published}>
+            <Cell style={{ paddingLeft: "0.625rem" }} content={lesson.is_published}>
                 {lesson.is_published ? (
                     <SvgIcon
                         svgData={
@@ -97,7 +97,7 @@ function LessonRow({
                                 ? "gradient"
                                 : `${theme.colours.error}`
                         }
-                        size="40px"
+                        size="2.5rem"
                     />
                 ) : (
                     "N/A (not published)"

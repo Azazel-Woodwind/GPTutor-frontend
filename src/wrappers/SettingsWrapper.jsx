@@ -67,15 +67,15 @@ const Container = styled(FillParent)`
     width: 100%;
     display: flex;
     justify-content: left;
-    padding-left: 3em;
+    padding-left: 3rem;
 `;
 
 const UsedSpace = styled.div`
-    max-width: 1000px;
+    max-width: 62.5rem;
     width: 100%;
     display: flex;
-    gap: 4em;
-    padding-right: 50px;
+    gap: 4rem;
+    padding-right: 3.125rem;
 `;
 const Page = styled.div`
     flex-grow: 1;

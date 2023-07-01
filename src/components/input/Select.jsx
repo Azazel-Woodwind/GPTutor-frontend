@@ -7,14 +7,14 @@ const Container = styled.div`
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    gap: 0.7em;
+    gap: 0.7rem;
 `;
 
 const OptionContainer = styled.div`
     text-align: center;
     position: relative;
-    padding: 0.8em;
-    /* margin: 0.3em 0.4em; */
+    padding: 0.8rem;
+    /* margin: 0.3rem 0.4rem; */
     cursor: pointer;
     box-shadow: rgba(76, 72, 72, 0.1) 0px 1px 3px 0px,
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;

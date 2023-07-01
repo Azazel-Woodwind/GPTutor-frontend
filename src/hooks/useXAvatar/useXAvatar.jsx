@@ -1,12 +1,12 @@
 import React from "react";
-import { useAnimation } from "framer-motion";
+import { useAnimation, useAnimationControls } from "framer-motion";
 import XAvatar from "./XAvatar";
 import Pulse from "./Pulse";
 
-const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, hasLogo }) => {
+const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, appear }) => {
     const [rings, setRings] = React.useState([]);
     const [isPulsing, setIsPulsing] = React.useState(true);
-    const controls = useAnimation();
+    const controls = useAnimationControls();
 
     const pulse = () => {
         setRings(prev => {
@@ -30,15 +30,20 @@ const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, hasLogo }) => {
 
     React.useEffect(() => {
         // console.log("mounting");
+        let interval;
         const intervalDuration = (duration / ringCount) * 1000;
-        const interval = setInterval(() => {
-            if (isPulsing) pulse();
-        }, intervalDuration);
+        const timeout = setTimeout(() => {
+            interval = setInterval(() => {
+                if (isPulsing) pulse();
+            }, intervalDuration);
 
-        pulse();
+            pulse();
+        }, !!appear * 1500);
+
         return () => {
             // console.log("unmounting");
             clearInterval(interval);
+            clearTimeout(timeout);
         };
     }, []);
 

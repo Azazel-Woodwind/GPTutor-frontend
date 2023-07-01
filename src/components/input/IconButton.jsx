@@ -6,12 +6,12 @@ import SvgLinearGradient from "../SvgLinearGradient";
 
 const IconButtonStyle = styled(motion.div)`
     position: relative;
-    width: 2.4em;
-    height: 2.4em;
+    width: 2.4rem;
+    height: 2.4rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* margin-right: 0.7em; */
+    /* margin-right: 0.7rem; */
 
     /* border: 1px solid black; */
     border-radius: 50%;
@@ -67,8 +67,8 @@ const IconButtonStyle = styled(motion.div)`
 export const IconSvg = styled.svg`
     width: ${props => props.iconSize - 2 * props.borderWidth}px;
     height: ${props => props.iconSize - 2 * props.borderWidth}px;
-    /* width: 80px;
-    height: 80px; */
+    /* width: 5rem;
+    height: 5rem; */
     position: absolute;
     top: 50%;
     left: 50%;

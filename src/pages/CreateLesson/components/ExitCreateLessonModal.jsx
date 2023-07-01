@@ -11,8 +11,8 @@ function ExitCreateLessonModal({ setConfirmed, isPublished, form, onSubmit }) {
     return (
         <ModalContainer
             fillparent
-            gap="40px"
-            style={{ paddingBottom: "20px", paddingTop: "20px" }}>
+            gap="2.5rem"
+            style={{ paddingBottom: "1.25rem", paddingTop: "1.25rem" }}>
             <Content>
                 <TextWrapper fontSize="xl" fontWeight="bold">
                     Are you sure you want to leave? Your changes may be

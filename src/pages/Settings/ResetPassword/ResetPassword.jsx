@@ -54,7 +54,7 @@ function ResetPassword() {
     return (
         <Container onSubmit={form.handleSubmit(resetPassword)}>
             <Title> Change Password </Title>
-            <CenteredColumn gap="10px">
+            <CenteredColumn gap="0.625rem">
                 <PasswordSection form={form} />
             </CenteredColumn>
             <Button
@@ -70,7 +70,7 @@ function ResetPassword() {
 const Container = styled.form`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.25rem;
 `;
 
 const Title = styled.h1``;

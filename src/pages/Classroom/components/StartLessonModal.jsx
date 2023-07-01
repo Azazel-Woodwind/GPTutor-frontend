@@ -16,8 +16,8 @@ function StartLessonModal({ setStarted, lesson }) {
             <Modal
                 {...ModalProps}
                 cancellable={false}
-                style={{ padding: "60px 150px" }}>
-                <CenteredColumn fillparent gap="15px">
+                style={{ padding: "3.75rem 9.38rem" }}>
+                <CenteredColumn fillparent gap="0.94rem">
                     <h1>{lesson.title}</h1>
                     <Button onClick={onClick}>
                         Click here to start the lesson!

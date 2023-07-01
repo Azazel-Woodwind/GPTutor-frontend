@@ -8,8 +8,8 @@ import Logo from "../../styles/Logo";
 const LogoSvg = styled(Logo)`
     cursor: pointer;
     width: 175px;
-    height: 100px;
-    /* border: 4px solid black; */
+    height: 6.25rem;
+    /* border: 0.25rem solid black; */
 `;
 
 // const LogoSvgAlt = styled(Logo)`
@@ -19,11 +19,11 @@ const LogoSvg = styled(Logo)`
 
 //     cursor: pointer;
 //     width: 175px;
-//     height: 100px;
+//     height: 6.25rem;
 
 //     z-index: 10000;
 
-//     /* border: 4px solid black; */
+//     /* border: 0.25rem solid black; */
 // `;
 
 const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
@@ -54,8 +54,8 @@ export default function Header() {
 
 const ExitLessonButtonContainer = styled.div`
     position: absolute;
-    top: 1.5em;
-    right: 1em;
+    top: 1.5rem;
+    right: 1rem;
     z-index: 100;
 `;
 
@@ -66,9 +66,9 @@ const Container = styled.div`
     color: white;
     z-index: 100;
     /* border: 2px solid red; */
-    padding: 0px 50px;
-    min-height: 120px;
-    height: 120px;
+    padding: 0px 3.125rem;
+    min-height: 7.5rem;
+    height: 7.5rem;
 
     display: flex;
     align-items: center;

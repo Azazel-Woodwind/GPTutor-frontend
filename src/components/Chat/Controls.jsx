@@ -160,7 +160,7 @@ const Controls = ({
     };
 
     return (
-        <Container gap="10px">
+        <Container gap="0.625rem">
             <FillingButton
                 {...MicSvgData}
                 scale={1.2}
@@ -226,7 +226,7 @@ const Controls = ({
             <Button
                 disabled={sendDisabled}
                 onClick={onSubmit}
-                style={{ padding: "10px", borderRadius: "7px" }}
+                style={{ padding: "0.625rem", borderRadius: "7px" }}
                 whileHoverScale={1.1}>
                 <Send size={22} />
             </Button>
@@ -242,9 +242,9 @@ const ChatForm = styled.form`
 `;
 
 const ChatInput = styled(TextInputStyle)`
-    border-radius: 15px;
+    border-radius: 0.94rem;
     border: 1px solid #f3f3f3;
-    padding: 0.5em 2em;
+    padding: 0.5rem 2rem;
 
     //hide the scrollbar
     ::-webkit-scrollbar {
@@ -260,7 +260,7 @@ const Container = styled(CenteredRow)`
     border-top: 1px solid ${props => props.theme.colours.primary}30;
 
     width: 100%;
-    padding: 1em 2em;
+    padding: 1rem 2rem;
     /* height: 100%; */
 
     flex: 0 1 auto;

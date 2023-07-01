@@ -95,9 +95,9 @@ function Quiz() {
                 />
                 {[...Array(currentQuestionNum + 1).keys()].map(i => (
                     <CenteredColumn
-                        gap="20px"
+                        gap="1.25rem"
                         height="100vh"
-                        style={{ padding: "20px" }}
+                        style={{ padding: "1.25rem" }}
                         ref={callback}
                         key={i}>
                         {questions[i] === undefined ? (

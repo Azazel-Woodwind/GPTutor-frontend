@@ -12,7 +12,7 @@ const Wrapper = styled.div`
     ${props => props.width && `width: ${props.width};`};
     ${props => props.fullwidth && `width: 100%;`};
     ${props => props.height && `height: ${props.height};`};
-    ${props => props.fullheight && `height: 100%;`}/* width: 400px; */
+    ${props => props.fullheight && `height: 100%;`}/* width: 25rem; */
 `;
 
 const DropdownListWrapper = styled.div`
@@ -28,7 +28,7 @@ const DropdownListWrapper = styled.div`
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     overflow: hidden;
     overflow-y: auto;
-    max-height: ${props => (props.open ? "200px" : "0")};
+    max-height: ${props => (props.open ? "12.5rem" : "0")};
     background-color: ${props => props.theme.colours.secondary};
 `;
 
@@ -37,7 +37,7 @@ const DropdownListOption = styled.div`
         props.disabled
             ? props.theme.colours.priamryFaded
             : props.theme.colours.primary};
-    padding: 0.7em;
+    padding: 0.7rem;
     background-color: rgb(39, 46, 95);
     ${props =>
         props.selected
@@ -67,7 +67,7 @@ function DropdownListEndAdornment({
     open,
 }) {
     return (
-        <CenteredRow style={{ paddingRight: "0.7em" }}>
+        <CenteredRow style={{ paddingRight: "0.7rem" }}>
             <IconButton
                 style={{
                     display: selected && mouseEntered ? "flex" : "none",

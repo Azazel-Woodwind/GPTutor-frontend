@@ -37,7 +37,7 @@ export const TextInput = React.forwardRef(
 
                 {type === "password" ? (
                     <EndAdornmentWrapper>
-                        <span style={{ paddingRight: "0.7em" }} ref={callback}>
+                        <span style={{ paddingRight: "0.7rem" }} ref={callback}>
                             <IconButton
                                 onKeyUp={e => {
                                     if (e.key === "Enter") {
@@ -88,7 +88,7 @@ export const TextInputStyle = styled.input.withConfig({
 })`
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
-    padding: 0 0.7em;
+    padding: 0 0.7rem;
     padding-top: 5px;
     padding-bottom: 2px;
     ${props =>
@@ -99,7 +99,7 @@ export const TextInputStyle = styled.input.withConfig({
     }`};
     position: relative;
     color: ${props => (props.color ? props.color : "white")};
-    font-size: 16px;
+    font-size: 1rem;
     background: rgba(0, 0, 0, 0);
     outline: none;
     border: none;

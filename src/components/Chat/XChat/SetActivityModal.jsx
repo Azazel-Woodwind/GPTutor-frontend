@@ -73,7 +73,7 @@ function SetActivityModal({ handleClose, X }) {
     };
 
     return (
-        <ModalContainer fillparent gap="20px">
+        <ModalContainer fillparent gap="1.25rem">
             <TextWrapper fontSize="xl" fontWeight="bold">
                 Set an activity with X!
             </TextWrapper>
@@ -86,7 +86,7 @@ function SetActivityModal({ handleClose, X }) {
                         fieldState, //{ invalid, isTouched, isDirty, error }
                         formState,
                     }) => (
-                        <RadioButtonsContainer gap="1.5em">
+                        <RadioButtonsContainer gap="1.5rem">
                             {educationLevels.map(level => (
                                 <RadioButton
                                     key={level}
@@ -117,7 +117,7 @@ function SetActivityModal({ handleClose, X }) {
                                 fieldState.invalid && fieldState.error?.message
                             }
                             fullwidth
-                            style={{ width: "250px" }}
+                            style={{ width: "15.6rem" }}
                         />
                     )}
                 />
@@ -140,7 +140,7 @@ function SetActivityModal({ handleClose, X }) {
                                 fieldState.invalid && fieldState.error?.message
                             }
                             fullwidth
-                            style={{ width: "250px" }}
+                            style={{ width: "15.6rem" }}
                         />
                     )}
                 />
@@ -163,7 +163,7 @@ function SetActivityModal({ handleClose, X }) {
                                 fieldState.invalid && fieldState.error?.message
                             }
                             fullwidth
-                            style={{ width: "250px" }}
+                            style={{ width: "15.6rem" }}
                         />
                     )}
                 /> */}
@@ -175,7 +175,7 @@ function SetActivityModal({ handleClose, X }) {
                         fieldState, //{ invalid, isTouched, isDirty, error }
                         formState,
                     }) => (
-                        <RadioButtonsContainer gap="1.5em">
+                        <RadioButtonsContainer gap="1.5rem">
                             {[
                                 "Discussion",
                                 "Quiz",
@@ -224,11 +224,11 @@ const Content = styled.form`
     justify-content: center;
     align-items: center;
     flex: 1;
-    gap: 20px;
+    gap: 1.25rem;
 `;
 
 const ButtonRow = styled(CenteredRow)`
-    gap: 40px;
+    gap: 2.5rem;
 `;
 
 export default SetActivityModal;

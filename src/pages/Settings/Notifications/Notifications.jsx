@@ -18,6 +18,6 @@ const Profile = () => {
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 0.7em;
+    gap: 0.7rem;
 `;
 export default Profile;

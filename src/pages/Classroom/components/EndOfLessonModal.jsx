@@ -17,14 +17,14 @@ function EndOfLessonModal() {
     return (
         <motion.div {...fade_animation()}>
             <Modal {...ModalProps} height="370px">
-                <CenteredColumn fillparent gap="1em">
+                <CenteredColumn fillparent gap="1rem">
                     <Title> Lesson has been completed </Title>
                     <p>
                         Thanks for participating in XTutor's alpha. We would
                         appreciate feedback on the lesson you just completed.
                     </p>
                     <Textfield
-                        width="30em"
+                        width="30rem"
                         label="Feedback"
                         type="text"
                         multiline
@@ -45,6 +45,6 @@ const Title = styled.h1``;
 
 // const ExitButton = styled(Button)`
 //     position: absolute;
-//     bottom: 2em;
+//     bottom: 2rem;
 // `;
 export default EndOfLessonModal;

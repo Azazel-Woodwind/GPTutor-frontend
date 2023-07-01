@@ -27,7 +27,7 @@ function Choice({
             style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: "4px",
+                gap: "0.25rem",
             }}>
             <RadioButton
                 wrap

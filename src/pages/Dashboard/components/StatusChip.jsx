@@ -6,10 +6,10 @@ import { Check } from "@styled-icons/material/Check";
 import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
 
 const statusIcons = {
-    Draft: <Draft size="1.5em" />,
-    Pending: <Pending size="1.5em" />,
-    Verified: <Check size="1.5em" />,
-    Rejected: <ErrorOutline size="1.5em" />,
+    Draft: <Draft size="1.5rem" />,
+    Pending: <Pending size="1.5rem" />,
+    Verified: <Check size="1.5rem" />,
+    Rejected: <ErrorOutline size="1.5rem" />,
 };
 
 function StatusChip({ status, ...props }) {
@@ -25,11 +25,11 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
+    gap: 0.3rem;
 
-    border-radius: 20px;
-    padding: 0.4em 1em;
-    padding-left: 0.8em;
+    border-radius: 1.25rem;
+    padding: 0.4rem 1rem;
+    padding-left: 0.8rem;
 
     width: 100%;
 

@@ -121,21 +121,19 @@ const ImageCarousel = ({ images = [], currentImageIndex }) => {
                     />
                 </AnimatePresence>
             </ImageContainer>
-            <Next onClick={() => paginate(1)}>
-                <ArrowContainer
-                    style={{ padding: "10px", borderRadius: "50%" }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.9 }}>
-                    <ArrowBoldRight size={22} />
-                </ArrowContainer>
+            <Next
+                onClick={() => paginate(1)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}>
+                <ArrowBoldRight size={22} />
             </Next>
-            <Prev onClick={() => paginate(-1)}>
-                <ArrowContainer
-                    style={{ padding: "10px", borderRadius: "50%" }}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.9 }}>
-                    <ArrowBoldRight size={22} />
-                </ArrowContainer>
+            <Prev
+                onClick={() => paginate(-1)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                initial={false}
+                animate={{ rotate: 180 }}>
+                <ArrowBoldRight size={22} />
             </Prev>
         </Container>
     );
@@ -179,36 +177,36 @@ const Image = styled(motion.img)`
     object-fit: contain;
     /* max-width: 100vw; */
     cursor: pointer;
-    /* border: 10px solid green; */
+    /* border: 0.625rem solid green; */
 
     /* z-index: 10; */
     ${props => (props.selected ? `width: 70%; height: 70%;` : `width: 100%;`)}
 `;
 
 const ArrowContainer = styled(motion.div)`
-    top: calc(50% - 20px);
+    top: calc(50% - 1.5rem);
     position: absolute;
     ${props => props.theme.gradient({ animationLength: 5 })}
-    border-radius: 30px;
-    width: 40px;
-    height: 40px;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
     user-select: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 2.5rem;
     z-index: 2;
 `;
 
 const Prev = styled(ArrowContainer)`
-    left: 10px;
+    left: 0.625rem;
     transform: scale(-1);
 `;
 
 const Next = styled(ArrowContainer)`
-    right: 10px;
+    right: 0.625rem;
 `;
 
 export default ImageCarousel;

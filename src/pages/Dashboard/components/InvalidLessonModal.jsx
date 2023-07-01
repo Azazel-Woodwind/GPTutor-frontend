@@ -5,7 +5,7 @@ import Button from "../../../components/input/Button";
 
 function InvalidLessonModal({ handleClose }) {
     return (
-        <ModalContainer fillparent gap="20px">
+        <ModalContainer fillparent gap="1.25rem">
             <TextWrapper fontSize="xl" fontWeight="bold">
                 This lesson cannot be published as it is either incomplete or
                 invalid.
@@ -14,7 +14,7 @@ function InvalidLessonModal({ handleClose }) {
                 You must edit the lesson to publish it
             </TextWrapper>
             <ButtonRow>
-                <Button onClick={handleClose} style={{ width: "200px" }}>
+                <Button onClick={handleClose} style={{ width: "12.5rem" }}>
                     <TextWrapper fontSize="lg">OK</TextWrapper>
                 </Button>
             </ButtonRow>

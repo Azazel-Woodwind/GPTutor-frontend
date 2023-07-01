@@ -71,8 +71,8 @@ const Delete = styled.p`
 
 const ObjectiveContainer = styled.div`
     display: flex;
-    gap: 1em;
-    /* padding-top: 1em; */
+    gap: 1rem;
+    /* padding-top: 1rem; */
     width: 100%;
     min-height: 64px;
     align-items: flex-start;

@@ -31,8 +31,8 @@ function Slider({
     widthInPx = 300,
     heightInPx = 10,
     knobSizeInPx = 20,
-    tooltipFontSize = "14px",
-    markLabelFontSize = "14px",
+    tooltipFontSize = "0.875rem",
+    markLabelFontSize = "0.875rem",
     value,
     onChange,
     onDragStart,
@@ -211,9 +211,9 @@ const TooltipContainer = styled(motion.div)`
         transform: translateY(-120%);
         user-select: none;
         color: ${props => props.theme.colours.primary};
-        padding: 0.2em 0.5em;
+        padding: 0.2rem 0.5rem;
         background-color: #21273f;
-        border-radius: 0.5em;
+        border-radius: 0.5rem;
         font-size: ${tooltipFontSize};
     `}
 `;
@@ -246,7 +246,7 @@ const Track = styled(motion.div)`
 
         width: ${width}px;
         height: ${height}px;
-        border-radius: 10px;
+        border-radius: 0.625rem;
         z-index: 0;
         ${theme.gradient()}
 
@@ -259,7 +259,7 @@ const Track = styled(motion.div)`
             height: 100%;
             width: ${width - fillWidth}px;
             background-color: rgb(150, 150, 150);
-            border-radius: 10px;
+            border-radius: 0.625rem;
         }
     `}
 `;

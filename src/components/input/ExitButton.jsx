@@ -11,18 +11,18 @@ function ExitButton({ outline, onClick }) {
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.2em",
+                    gap: "0.2rem",
                 }}>
                 <TextWrapper
                     mainGradient={outline}
                     fontWeight={600}
-                    fontSize="20px">
+                    fontSize="1.25rem">
                     Exit
                 </TextWrapper>
                 <SvgIcon
                     svgData={ExitSvgData}
                     fill={!outline ? "white" : "gradient"}
-                    size="2em"
+                    size="2rem"
                 />
             </div>
         </Button>

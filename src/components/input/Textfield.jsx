@@ -17,11 +17,11 @@ import Collapse from "../Collapse";
 
 export const ErrorText = styled.div`
     color: ${props => props.theme.colours.error};
-    font-size: 15px;
+    font-size: 0.94rem;
     font-weight: 620;
     /* border: 2px solid blue; */
     /* height: 100%; */
-    margin-left: 0.5em;
+    margin-left: 0.5rem;
 `;
 
 export const CustomFieldset = styled.fieldset.withConfig({
@@ -34,10 +34,10 @@ export const CustomFieldset = styled.fieldset.withConfig({
     width: 100%;
     height: 100%;
     margin: 0;
-    padding-top: 0.35em;
-    padding-bottom: 0.625em;
-    padding-left: 0.75em;
-    padding-right: 0.75em;
+    padding-top: 0.35rem;
+    padding-bottom: 0.625rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
 
     box-sizing: border-box;
     border-radius: 8px;
@@ -75,8 +75,8 @@ export const CustomLegend = styled.legend.withConfig({
     `};
 
     width: auto;
-    height: 11px;
-    font-size: 14.4px;
+    height: 0.69rem;
+    font-size: 14.25rem;
     -webkit-transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     white-space: nowrap;
@@ -86,11 +86,11 @@ const InputLabel = styled(motion.div)`
     position: absolute;
     transform-origin: left;
     color: gray;
-    left: 12px;
+    left: 0.75rem;
     top: 22px;
-    font-size: 16px;
+    font-size: 1rem;
     /* ${props =>
-        props.focused && `top: -5px; left: 20px; font-size: 14.4px;`}; */
+        props.focused && `top: -5px; left: 1.25rem; font-size: 14.0.25rem;`}; */
     /* transition: font-size 0.15s; */
     z-index: 0;
 `;
@@ -105,7 +105,7 @@ const TextfieldWrapper = styled.div.withConfig({
     height: 100%;
     width: 100%;
     min-height: 64px;
-    ${props => props.multiline && "padding-bottom: 11px;"};
+    ${props => props.multiline && "padding-bottom: 0.69rem;"};
 `;
 
 const Label = styled.label.withConfig({
@@ -149,7 +149,7 @@ export const Textfield = forwardRef(
             focused: {
                 x: 9,
                 y: -26,
-                fontSize: "14.4px",
+                fontSize: "14.0.25rem",
                 color: props.error
                     ? Theme.colours.error
                     : focused
@@ -273,8 +273,8 @@ const PasswordInfoEntryContainer = styled.div`
 `;
 
 const PasswordInfoEntryIcon = styled.div`
-    width: 30px;
-    height: 30px;
+    width: 1.875rem;
+    height: 1.875rem;
     /* border: 2px solid black; */
 `;
 
@@ -329,10 +329,10 @@ function PasswordInfo({ password }) {
 const PasswordInfoContainer = styled.div`
     box-shadow: rgba(76, 72, 72, 0.5) 0px 1px 3px 0px,
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0.625rem;
 `;
 
 export default Textfield;

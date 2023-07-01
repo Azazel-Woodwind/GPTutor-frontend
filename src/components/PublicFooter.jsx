@@ -8,7 +8,7 @@ const FooterWrapper = styled.div`
     justify-content: center;
     width: 100%;
     z-index: 10;
-    bottom: 1em;
+    bottom: 1rem;
     align-items: center;
     /* border: 1px solid black; */
 `;

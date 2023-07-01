@@ -25,9 +25,9 @@ const Theme = {
         error: "#ff5252",
     },
     font: {
-        small: "12px",
-        medium: "16px",
-        large: "20px",
+        small: "0.75rem",
+        medium: "1rem",
+        large: "1.25rem",
         xlarge: "24px",
     },
     utils: {

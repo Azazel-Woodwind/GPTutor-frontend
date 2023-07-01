@@ -7,7 +7,7 @@ const CollapseContainer = styled.div`
     z-index: 10000;
     background-color: ${props => props.theme.colours.highlight1};
     overflow: hidden;
-    border-radius: 8px;
+    border-radius: 0.5rem;
 `;
 
 export default function Collapse({ children, open }) {

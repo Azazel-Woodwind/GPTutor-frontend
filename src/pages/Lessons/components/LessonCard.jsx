@@ -29,7 +29,7 @@ function LessonCard({ lesson }) {
                     width: "100%",
                     display: "flex",
                     alignItems: "center",
-                    gap: "10px",
+                    gap: "0.625rem",
                 }}>
                 {lesson.exam_boards.map(board => (
                     <Subject key={board}>{board}</Subject>
@@ -78,9 +78,9 @@ const Footer = styled.div`
 
     position: absolute;
     left: 0;
-    bottom: 1em;
+    bottom: 1rem;
 
-    padding: 0 20px;
+    padding: 0 1.25rem;
 
     h3 {
         font-size: 18px;
@@ -89,14 +89,14 @@ const Footer = styled.div`
 
 const ExamBoard = styled.h3`
     margin: 0;
-    font-size: 16px;
+    font-size: 1rem;
     z-index: 4;
 `;
 
 const Title = styled.h1`
     margin: 0;
     color: ${props => props.theme.colours.primary};
-    font-size: 20px;
+    font-size: 1.25rem;
     font-weight: 400;
     z-index: 4;
 `;
@@ -106,27 +106,27 @@ const Description = styled.p`
 `;
 const Subject = styled.h3`
     font-weight: 400;
-    font-size: 16px;
+    font-size: 1rem;
     color: ${props => props.theme.colours.primaryFaded};
     z-index: 4;
 `;
 
 const Level = styled.h3`
     margin: 0;
-    font-size: 16px;
+    font-size: 1rem;
     z-index: 4;
 `;
 const AvatarContainer = styled.div`
     position: absolute;
-    right: 3em;
-    bottom: 3em;
+    right: 3rem;
+    bottom: 3rem;
 `;
 
 const Container = styled.div`
     position: relative;
-    padding: 2em 1em;
-    width: 15em;
-    height: 20em;
+    padding: 2rem 1rem;
+    width: 15rem;
+    height: 20rem;
     z-index: 10;
     border-radius: 5px;
     box-sizing: border-box;
@@ -141,7 +141,7 @@ const Container = styled.div`
     border-bottom-right-radius: 0px;
     cursor: pointer;
     z-index: 2;
-    gap: 10px;
+    gap: 0.625rem;
     /* border: 5px solid green; */
 `;
 

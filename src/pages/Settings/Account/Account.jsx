@@ -32,7 +32,7 @@ const Profile = () => {
                 style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: "1em",
+                    gap: "1rem",
                 }}>
                 <h1> Account Settings </h1>
             </div>
@@ -60,12 +60,12 @@ const Profile = () => {
 
 const ButtonContainer = styled.div`
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
 `;
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 1em;
+    gap: 1rem;
 `;
 export default Profile;

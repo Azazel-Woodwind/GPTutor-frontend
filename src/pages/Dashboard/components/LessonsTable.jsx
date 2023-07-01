@@ -92,7 +92,7 @@ function LessonsTable({ onAdminDashboard = false }) {
                             {lesson.status === "Rejected" &&
                                 lesson.rejection_reason && (
                                     <RejectionReasonContainer>
-                                        <ErrorOutline size="1.5em" />
+                                        <ErrorOutline size="1.5rem" />
                                         <TextWrapper>
                                             {lesson.rejection_reason}
                                         </TextWrapper>
@@ -102,7 +102,7 @@ function LessonsTable({ onAdminDashboard = false }) {
                     ))}
                 <Button
                     outline
-                    style={{ width: "fit-content", marginTop: "13px" }}
+                    style={{ width: "fit-content", marginTop: "0.81rem" }}
                     onClick={() => navigate("/create-lesson")}>
                     Create New Lesson
                 </Button>
@@ -169,7 +169,7 @@ function LessonsTable({ onAdminDashboard = false }) {
 const RejectionReasonContainer = styled.div`
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 0.25rem;
     padding: 6px 7px;
 
     width: 100%;
@@ -180,7 +180,7 @@ const RejectionReasonContainer = styled.div`
 const Container = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 1.875rem;
 `;
 
 export default LessonsTable;

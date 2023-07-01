@@ -44,7 +44,7 @@ const Dashboard = () => {
 };
 
 const Container = styled(FillParent)`
-    padding-left: 3em;
+    padding-left: 3rem;
     /* border: 3px solid green; */
 `;
 
@@ -52,7 +52,7 @@ const UsedSpace = styled.div`
     max-width: 1080px;
     width: 100%;
     display: flex;
-    gap: 4em;
+    gap: 4rem;
 `;
 const Page = styled.div`
     flex-grow: 1;

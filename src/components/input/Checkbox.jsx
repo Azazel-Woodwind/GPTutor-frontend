@@ -17,7 +17,7 @@ const Container = styled(motion.div)`
     ${props => props.theme.utils.centeredRow}
     position: relative;
     cursor: pointer;
-    gap: 0.4em;
+    gap: 0.4rem;
     /* border: 1px solid black; */
     width: fit-content;
 `;
@@ -51,8 +51,8 @@ const CheckIconWrapper = styled.div`
 const SvgCheckIcon = styled.svg`
     width: ${props => props.checkboxSize - 2 * props.borderWidth}px;
     height: ${props => props.checkboxSize - 2 * props.borderWidth}px;
-    /* width: 80px;
-    height: 80px; */
+    /* width: 5rem;
+    height: 5rem; */
     position: absolute;
     top: 50%;
     left: 50%;
@@ -148,7 +148,7 @@ function Checkbox(
                 {label && (
                     <CheckboxText
                         content={label}
-                        fontSize={fontSize || "1.2em"}
+                        fontSize={fontSize || "1.2rem"}
                         noWrap
                         color={
                             hovering

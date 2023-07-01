@@ -4,14 +4,14 @@ import styled from "styled-components";
 
 const NotificationsContainer = styled.div`
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 1.25rem;
+    right: 1.25rem;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     height: fit-content;
     width: fit-content;
-    gap: 0.5em;
+    gap: 0.5rem;
     z-index: 1000;
 
     /* border: 3px solid red; */

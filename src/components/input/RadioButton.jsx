@@ -55,8 +55,8 @@ const CustomRadioButton = styled.span`
                 ? "visible"
                 : "hidden"};
         content: "";
-        width: 10px;
-        height: 10px;
+        width: 0.625rem;
+        height: 0.625rem;
         border-radius: 50%;
         ${props =>
             props.disabled
@@ -68,8 +68,8 @@ const CustomRadioButton = styled.span`
         (!props.checked || (props.transitioning && props.hovering)) &&
         `:before {
         content: "";
-        width: 11px;
-        height: 11px;
+        width: 0.69rem;
+        height: 0.69rem;
         border-radius: 50%;
         ${props.theme.utils.absoluteCentered}
         ${props.theme.gradient({ animationLength: 5 })}
@@ -86,8 +86,8 @@ const CustomRadioButton = styled.span`
         (!props.checked || (props.transitioning && props.hovering)) &&
         `:before {
         content: "";
-        width: 10px;
-        height: 10px;
+        width: 0.625rem;
+        height: 0.625rem;
         border-radius: 50%;
         position: absolute;
         ${props.theme.gradient({ animationLength: 5 })}
@@ -104,8 +104,8 @@ const RadioButtonLabel = styled.div.withConfig({
 })`
     white-space: ${props => (props.wrap ? "normal" : "nowrap")};
     font-size: 18px;
-    margin-left: 0.4em;
-    margin-bottom: 0.1em;
+    margin-left: 0.4rem;
+    margin-bottom: 0.1rem;
     /* cursor: pointer; */
     ${props => props.theme.gradient({ animationLength: 5 })}
     transition: background 1s;
@@ -130,8 +130,8 @@ const RadioButtonLabel = styled.div.withConfig({
 
 const SvgBorder = styled.svg`
     position: absolute;
-    width: 30px;
-    height: 30px;
+    width: 1.875rem;
+    height: 1.875rem;
     pointer-events: none;
     z-index: 100;
     ${props => (props.checked ? `opacity: 1;` : `opacity: 0;`)}

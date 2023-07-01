@@ -8,7 +8,7 @@ function DeleteLessonModal({ lesson, handleClose, onAdminDashboard }) {
     const submit = useSubmit();
 
     return (
-        <ModalContainer fillparent gap="20px">
+        <ModalContainer fillparent gap="1.25rem">
             <TextWrapper fontSize="xl" fontWeight="bold">
                 Are you sure you would like to delete the lesson titled '
                 {lesson.title}'?

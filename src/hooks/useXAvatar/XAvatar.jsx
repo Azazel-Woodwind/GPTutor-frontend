@@ -19,6 +19,20 @@ const examplePrompts = [
 
 const MAX_ANGLE = 40;
 
+const appearAnimation = {
+    initial: {
+        scale: 0,
+    },
+    animate: {
+        scale: 1,
+        transition: {
+            type: "spring",
+            ease: "easeIn",
+            duration: 2,
+        },
+    },
+};
+
 const XAvatar = ({
     size,
     rings,
@@ -32,6 +46,7 @@ const XAvatar = ({
     pause,
     setSpeed,
     showExamplePrompts,
+    appear,
     ...props
 }) => {
     const animationControls = useAnimationControls();
@@ -48,6 +63,7 @@ const XAvatar = ({
         examplePromptVerticalDisplacement,
         setExamplePromptVerticalDisplacement,
     ] = React.useState(0);
+    const [scale, setScale] = React.useState(0);
 
     React.useEffect(() => {
         if (!showExamplePrompts) {
@@ -120,6 +136,25 @@ const XAvatar = ({
         };
     }, [promptIndex]);
 
+    React.useEffect(() => {
+        async function animate() {
+            if (appear) {
+                // console.log("here");
+                await controls.start({
+                    scale: 1,
+                    transition: {
+                        type: "spring",
+                        ease: "easeIn",
+                        duration: 2,
+                    },
+                });
+                setScale(1);
+            }
+        }
+
+        animate();
+    }, []);
+
     // console.log(pulse);
     if (hasControls) {
         return (
@@ -137,12 +172,9 @@ const XAvatar = ({
                         whileTap={{ scale: 0.95 }}
                         size={size}
                         transition={{ duration: 0.3 }}
-                        initial={{ scale: 1 }}
                         onTap={() => {
-                            // console.log("ok");
                             pulse();
                         }}
-                        animate={controls}
                         onClick={() => {
                             if (paused()) {
                                 play();
@@ -150,6 +182,12 @@ const XAvatar = ({
                                 pause();
                             }
                         }}
+                        animate={controls}
+                        style={{
+                            scale: appear ? 1 : scale,
+                        }}
+
+                        // {...(appear && appearAnimation)}
                     />
                     {showExamplePrompts && (
                         <PromptContainer
@@ -202,7 +240,7 @@ const PromptContainer = styled(motion.div)`
         radius,
     }) => css`
         ${promptIndex === undefined && "display: none;"}
-        width: 400px;
+        width: 25rem;
         position: absolute;
         /* white-space: nowrap; */
         font-style: italic;
@@ -236,7 +274,7 @@ const X = styled(motion.div)`
     ${props => props.clickable && `cursor: pointer;`}
     border-radius: 50%;
     ${props => props.theme.gradient({ animationLength: 5, opacity: 0.75 })}
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(0.625rem);
     width: ${props => props.size}px;
     height: ${props => props.size}px;
     z-index: 1;

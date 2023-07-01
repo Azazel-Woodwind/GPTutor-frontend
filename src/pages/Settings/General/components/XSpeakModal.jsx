@@ -8,7 +8,7 @@ import {
 
 function XSpeakModal({ reqAudioData, handleClose, onConfirm }) {
     return (
-        <ModalContainer fillparent gap="20px">
+        <ModalContainer fillparent gap="1.25rem">
             <TextWrapper fontSize="xl" fontWeight="bold">
                 Are you sure you would like to turn{" "}
                 {reqAudioData ? "on" : "off"} X Speech?

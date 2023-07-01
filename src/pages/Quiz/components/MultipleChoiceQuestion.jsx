@@ -17,10 +17,10 @@ function MultipleChoiceQuestion({
             <h2>{question.question.title}</h2>
             <div
                 style={{
-                    maxWidth: "700px",
+                    maxWidth: "43.8rem",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "15px",
+                    gap: "0.94rem",
                 }}>
                 {question.question.choices.map((choice, choiceIndex) => (
                     <Choice

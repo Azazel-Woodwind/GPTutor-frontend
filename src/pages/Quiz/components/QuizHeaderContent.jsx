@@ -24,7 +24,7 @@ function QuizHeaderContent({
 }
 
 const Title = styled.div`
-    font-size: 1.8em;
+    font-size: 1.8rem;
     font-weight: 400;
 `;
 

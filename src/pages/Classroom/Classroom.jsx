@@ -97,9 +97,9 @@ function Classroom() {
                                         learningObjectiveNumber > 0
                                     }>
                                     {learningObjectiveNumber > 0 ? (
-                                        <div style={{ paddingTop: "20px" }}>
+                                        <div style={{ paddingTop: "1.25rem" }}>
                                             <ProgressBar
-                                                width="35em"
+                                                width="35rem"
                                                 value={learningObjectiveNumber}
                                                 max={
                                                     currentLesson
@@ -176,29 +176,29 @@ function Classroom() {
 }
 
 const Title = styled.div`
-    font-size: 1.8em;
+    font-size: 1.8rem;
     font-weight: 400;
 
     ${props =>
         props.progressBarShown &&
         `
-    top: 40px;
+    top: 2.5rem;
     @media (max-width: 1600px) {
-        font-size: 1.5em;
+        font-size: 1.5rem;
     }
 
     @media (max-width: 1400px) {
-        font-size: 1em;
-        top: 50px;
+        font-size: 1rem;
+        top: 3.125rem;
     }
 
     @media (max-width: 1100px) {
-        font-size: 0.7em;
+        font-size: 0.7rem;
         top: 55px;
     }
 
     @media (max-width: 900px) {
-        font-size: 0.5em;
+        font-size: 0.5rem;
     }
     `}
 `;
@@ -225,7 +225,7 @@ const DualDisplay = styled.div`
     align-items: center;
     width: 100%;
     justify-content: center;
-    gap: 150px;
+    gap: 9.38rem;
     flex: 1;
 `;
 
@@ -234,7 +234,7 @@ const Container = styled(motion.div)`
 
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 2rem;
     align-items: center;
     /* border: 3px solid red; */
     flex-grow: 1;
