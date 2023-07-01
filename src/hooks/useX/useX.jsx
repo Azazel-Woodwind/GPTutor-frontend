@@ -27,6 +27,7 @@ function useX(config) {
     const [speaking, setSpeaking] = useState(false);
     const [multiplier, setMultiplier] = useState(1);
     const [userPaused, setUserPaused] = useState(false);
+    const [responseData, setResponseData] = useState("");
 
     const audio = useRef(new Audio());
     const audioContext = useRef();
@@ -63,7 +64,17 @@ function useX(config) {
         setSpeaking(false);
         animationId.current && cancelAnimationFrame(animationId.current);
         setMultiplier(1);
-        response.current = "";
+
+        if (responseData) {
+            // console.log("here");
+            setCurrentMessage("");
+            setHistory(prev => [
+                ...prev,
+                { role: "assistant", content: responseData },
+            ]);
+        }
+
+        setResponseData("");
         setHistory(prev => [...prev, { role: "user", content: message }]);
         currentResponseId.current = nanoid();
         orderMaintainer.reset();
@@ -104,6 +115,7 @@ function useX(config) {
 
     const pause = () => {
         setUserPaused(true);
+        setSpeaking(false);
         audio.current.pause();
         animationId.current && cancelAnimationFrame(animationId.current);
     };
@@ -195,10 +207,12 @@ function useX(config) {
 
     const onResponseData = useCallback(
         data => {
-            console.log("response_data:", data);
+            // console.log("response_data:", data);
             if (streaming || loading) {
-                response.current = data.response;
+                // console.log("NO HERE");
+                setResponseData(data.response);
             } else {
+                // console.log("HERE");
                 setCurrentMessage("");
                 setHistory(prev => [
                     ...prev,
@@ -223,9 +237,57 @@ function useX(config) {
         Socket.off(`${channel}_audio_data`);
         Socket.on(`${channel}_audio_data`, ({ order, ...data }) => {
             // console.log(order, data);
+            if (order === 0) {
+                orderMaintainer.reset();
+            }
+
             orderMaintainer.addData(data, order);
         });
     }, [onReceiveAudioData]);
+
+    const onReceiveResponseStream = useCallback(
+        delta => {
+            setLoading(false);
+
+            if (delta === "[END]") {
+                console.log("response_stream end");
+                setStreaming(false);
+                if (responseData) {
+                    // console.log("here");
+                    setCurrentMessage("");
+                    setHistory(prev => [
+                        ...prev,
+                        { role: "assistant", content: responseData },
+                    ]);
+                    setResponseData("");
+                }
+                return;
+            }
+
+            setStreaming(true);
+            onDelta(delta);
+
+            setCurrentMessage(prevMessage => prevMessage + delta);
+        },
+        [responseData]
+    );
+
+    useEffect(() => {
+        if (responseData) {
+            // console.log("here");
+            setCurrentMessage("");
+            setHistory(prev => [
+                ...prev,
+                { role: "assistant", content: responseData },
+            ]);
+        }
+    }, [streaming]);
+
+    useEffect(() => {
+        if (!Socket) return;
+        Socket.off(`${channel}_response_stream`);
+        Socket.on(`${channel}_response_stream`, onReceiveResponseStream);
+    }, [onReceiveResponseStream]);
 
     useEffect(() => {
         if (!Socket) return;
@@ -253,31 +315,10 @@ function useX(config) {
 
         audio.current.onpause = () => {
             console.log("track paused");
-            setSpeaking(false);
+            // setSpeaking(false);
             // cancelAnimationFrame(animationId.current!);
             // setMultiplier(1);
         };
-
-        Socket.on(`${channel}_response_stream`, delta => {
-            if (delta === "[END]") {
-                console.log("response_stream end");
-                setStreaming(false);
-                const content = response.current;
-                if (response.current) {
-                    setCurrentMessage("");
-                    setHistory(prev => [
-                        ...prev,
-                        { role: "assistant", content },
-                    ]);
-                }
-                return;
-            }
-
-            setStreaming(true);
-            onDelta(delta);
-            setLoading(false);
-            setCurrentMessage(prevMessage => prevMessage + delta);
-        });
 
         Socket.on(`${channel}_error`, err => {
             sendSystemMessage(err);

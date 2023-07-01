@@ -12,8 +12,12 @@ import { ChatContextProvider } from "../context/ChatContext";
 import Header from "../components/Header/Header";
 import { STUDENT_ACCESS_LEVEL } from "../lib/accessLevels";
 import XChat from "../components/Chat/XChat/XChat";
+import Logo from "../styles/Logo";
+import RedirectNewToHub from "./RedirectNewToHub";
 
 const ApplicationWrapperStyle = styled.div`
+    position: relative;
+
     display: flex;
     justify-content: center;
     height: 100%;
@@ -45,17 +49,20 @@ function ApplicationWrapper() {
             <RouteProtector
                 accessLevel={STUDENT_ACCESS_LEVEL}
                 redirect={"/activate"}>
-                <SocketContextProvider>
-                    <ApplicationWrapperStyle>
-                        <ChatContextProvider>
-                            <ApplicationInternalStyle>
-                                <Header />
-                                <Outlet />
-                            </ApplicationInternalStyle>
-                            <XChat />
-                        </ChatContextProvider>
-                    </ApplicationWrapperStyle>
-                </SocketContextProvider>
+                <RedirectNewToHub>
+                    <SocketContextProvider>
+                        <ApplicationWrapperStyle>
+                            <ChatContextProvider>
+                                {/* <LogoSvgAlt /> */}
+                                <ApplicationInternalStyle>
+                                    <Header />
+                                    <Outlet />
+                                </ApplicationInternalStyle>
+                                <XChat />
+                            </ChatContextProvider>
+                        </ApplicationWrapperStyle>
+                    </SocketContextProvider>
+                </RedirectNewToHub>
             </RouteProtector>
         </RequireUser>
     );

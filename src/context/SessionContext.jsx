@@ -16,7 +16,7 @@ export function SessionContextProvider({ children }) {
     const getUserData = async id => {
         const { data, error: userError } = await supabase
             .from("users")
-            .select("access_levels (*), req_audio_data")
+            .select("access_levels (*), new")
             .eq("id", id)
             .single();
 
@@ -26,7 +26,7 @@ export function SessionContextProvider({ children }) {
         }
         // console.log(data);
 
-        return { req_audio_data: data.req_audio_data, ...data.access_levels };
+        return { ...data.access_levels, new: data.new };
     };
 
     const initialiseSession = async () => {
@@ -42,15 +42,15 @@ export function SessionContextProvider({ children }) {
                 getUserData(newSession.user.id).then(data => {
                     setSession(prevSession => {
                         if (!prevSession) return prevSession;
-                        const { req_audio_data, ...rest } = data;
+                        // const { req_audio_data, ...rest } = data;
                         return {
                             ...prevSession,
                             user: {
                                 ...prevSession.user,
-                                ...rest,
+                                ...data,
                                 user_metadata: {
                                     ...prevSession.user.user_metadata,
-                                    req_audio_data,
+                                    // req_audio_data,
                                 },
                             },
                         };

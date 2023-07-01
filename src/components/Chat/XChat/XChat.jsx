@@ -10,6 +10,8 @@ import { useLocation } from "react-router-dom/dist/umd/react-router-dom.developm
 import Button from "../../input/Button";
 import useModal from "../../../hooks/useModal";
 import SetActivityModal from "./SetActivityModal";
+import Logo from "../../../styles/Logo";
+import { useAuth } from "../../../context/SessionContext";
 
 const prompts = [
     "Hi X. Can you show me the available lessons?",
@@ -18,6 +20,18 @@ const prompts = [
     "What subjects can you teach?",
     "Explain basic algebra",
 ];
+
+const LogoSvgAlt = styled(Logo)`
+    position: fixed;
+    top: 0.6rem;
+    left: 3.125rem;
+
+    cursor: pointer;
+    width: 175px;
+    height: 100px;
+
+    /* border: 4px solid black; */
+`;
 
 const XChat = props => {
     const { width } = React.useContext(ChatContext);
@@ -38,7 +52,7 @@ const XChat = props => {
                         size={120}
                         {...hook}
                         hasControls
-                        showExamplePrompts
+                        showExamplePrompts={hook.history < 2}
                     />
                 </AvatarContainer>
                 <ChatSection
@@ -47,12 +61,16 @@ const XChat = props => {
                     prompts={prompts}
                 />
                 {location.pathname === "/hub" && (
-                    <ActivityButton
-                        onClick={() => {
-                            Modal.handleOpen();
-                        }}>
-                        Set Activity
-                    </ActivityButton>
+                    <>
+                        <LogoSvgAlt />
+                        <ActivityButton
+                            onClick={() => {
+                                Modal.handleOpen();
+                            }}
+                            size="lg">
+                            Set Activity
+                        </ActivityButton>
+                    </>
                 )}
             </Window>
 
@@ -65,8 +83,8 @@ const XChat = props => {
 
 const ActivityButton = styled(Button)`
     position: absolute;
-    top: 20px;
-    left: 50px;
+    top: 1.8rem;
+    right: 3.125rem;
 `;
 
 const AvatarContainer = styled.div`

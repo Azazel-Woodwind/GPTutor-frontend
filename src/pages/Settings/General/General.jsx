@@ -7,6 +7,7 @@ import Checkbox from "../../../components/input/Checkbox";
 import useModal from "../../../hooks/useModal";
 import UserAPI from "../../../api/UserAPI";
 import XSpeakModal from "./components/XSpeakModal";
+import { nanoid } from "nanoid";
 
 const max = 200000;
 
@@ -14,7 +15,7 @@ const General = () => {
     const { session } = useAuth();
     const [tokenUsage, setTokenUsage] = React.useState(0);
 
-    // console.log(session);
+    console.log(session);
 
     React.useEffect(() => {
         const getTokenUsage = async () => {
@@ -32,7 +33,7 @@ const General = () => {
         getTokenUsage();
         // setTokenUsage(daily_token_usage);
         const channel = supabase
-            .channel("any")
+            .channel(`user-changes-${nanoid()}`)
             .on(
                 "postgres_changes",
                 {

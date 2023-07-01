@@ -76,6 +76,14 @@ const UserAPI = {
         return data;
     },
 
+    setUsed: async function () {
+        const { data, error } = await supabase.rpc("set_used_user");
+
+        if (error) throw error;
+
+        return data;
+    },
+
     updateMe: async function ({ email, password, ...newMetadata }) {
         const { data, error } = await supabase.auth.updateUser({
             ...(email && { email }),

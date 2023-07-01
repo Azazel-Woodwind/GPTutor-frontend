@@ -50,42 +50,44 @@ const XAvatar = ({
     ] = React.useState(0);
 
     React.useEffect(() => {
-        let interval;
-        if (showExamplePrompts) {
-            interval = setInterval(() => {
-                // console.log(promptIndex);
-
-                setPromptIndex(prev => {
-                    const indices = examplePrompts
-                        .map((_, i) => i)
-                        .filter(i => i !== prev);
-                    const randomIndex =
-                        indices[Math.floor(Math.random() * indices.length)];
-
-                    return randomIndex;
-                });
-                const radius = (size * 3) / 2;
-                const angle = Math.random() * MAX_ANGLE;
-                let horizontalDisplacement =
-                    radius * Math.cos(degreesToRadians(angle));
-                let verticalDisplacement =
-                    radius * Math.sin(degreesToRadians(angle));
-                horizontalDisplacement =
-                    Math.random() > 0.5
-                        ? horizontalDisplacement
-                        : -horizontalDisplacement;
-                verticalDisplacement =
-                    Math.random() > 0.5
-                        ? verticalDisplacement
-                        : -verticalDisplacement;
-                setExamplePromptHorizontalDisplacement(horizontalDisplacement);
-                setExamplePromptVerticalDisplacement(verticalDisplacement);
-
-                // console.log(size);
-                // console.log(horizontalDisplacement);
-                // console.log(verticalDisplacement);
-            }, 5000);
+        if (!showExamplePrompts) {
+            return;
         }
+
+        let interval;
+        interval = setInterval(() => {
+            // console.log(promptIndex);
+
+            setPromptIndex(prev => {
+                const indices = examplePrompts
+                    .map((_, i) => i)
+                    .filter(i => i !== prev);
+                const randomIndex =
+                    indices[Math.floor(Math.random() * indices.length)];
+
+                return randomIndex;
+            });
+            const radius = (size * 3) / 2;
+            const angle = Math.random() * MAX_ANGLE;
+            let horizontalDisplacement =
+                radius * Math.cos(degreesToRadians(angle));
+            let verticalDisplacement =
+                radius * Math.sin(degreesToRadians(angle));
+            horizontalDisplacement =
+                Math.random() > 0.5
+                    ? horizontalDisplacement
+                    : -horizontalDisplacement;
+            verticalDisplacement =
+                Math.random() > 0.5
+                    ? verticalDisplacement
+                    : -verticalDisplacement;
+            setExamplePromptHorizontalDisplacement(horizontalDisplacement);
+            setExamplePromptVerticalDisplacement(verticalDisplacement);
+
+            // console.log(size);
+            // console.log(horizontalDisplacement);
+            // console.log(verticalDisplacement);
+        }, 5000);
 
         return () => {
             if (interval) {
@@ -95,6 +97,10 @@ const XAvatar = ({
     }, []);
 
     React.useEffect(() => {
+        if (!showExamplePrompts) {
+            return;
+        }
+
         let timeout;
         if (promptIndex !== undefined) {
             animationControls.start({
@@ -145,17 +151,21 @@ const XAvatar = ({
                             }
                         }}
                     />
-                    <PromptContainer
-                        promptIndex={promptIndex}
-                        initial={{ opacity: 0 }}
-                        animate={animationControls}
-                        horizontalDisplacement={
-                            examplePromptHorizontalDisplacement
-                        }
-                        verticalDisplacement={examplePromptVerticalDisplacement}
-                        radius={(size * 3) / 2}>
-                        {examplePrompts[promptIndex]}
-                    </PromptContainer>
+                    {showExamplePrompts && (
+                        <PromptContainer
+                            promptIndex={promptIndex}
+                            initial={{ opacity: 0 }}
+                            animate={animationControls}
+                            horizontalDisplacement={
+                                examplePromptHorizontalDisplacement
+                            }
+                            verticalDisplacement={
+                                examplePromptVerticalDisplacement
+                            }
+                            radius={(size * 3) / 2}>
+                            {examplePrompts[promptIndex]}
+                        </PromptContainer>
+                    )}
                 </AvatarWrapper>
                 <XControls
                     key="modal"
