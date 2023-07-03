@@ -184,7 +184,7 @@ const XAvatar = ({
                         }}
                         animate={controls}
                         style={{
-                            scale: appear ? 1 : scale,
+                            scale: appear ? scale : 1,
                         }}
 
                         // {...(appear && appearAnimation)}

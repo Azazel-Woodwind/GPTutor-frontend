@@ -76,7 +76,7 @@ export const CustomLegend = styled.legend.withConfig({
 
     width: auto;
     height: 0.69rem;
-    font-size: 14.25rem;
+    font-size: 0.9rem;
     -webkit-transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     white-space: nowrap;
@@ -88,7 +88,7 @@ const InputLabel = styled(motion.div)`
     color: gray;
     left: 0.75rem;
     top: 22px;
-    font-size: 1rem;
+    /* font-size: 1rem; */
     /* ${props =>
         props.focused && `top: -5px; left: 1.25rem; font-size: 14.0.25rem;`}; */
     /* transition: font-size 0.15s; */
@@ -149,7 +149,7 @@ export const Textfield = forwardRef(
             focused: {
                 x: 9,
                 y: -26,
-                fontSize: "14.0.25rem",
+                fontSize: "14.4px",
                 color: props.error
                     ? Theme.colours.error
                     : focused

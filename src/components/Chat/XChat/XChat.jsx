@@ -75,7 +75,10 @@ const XChat = props => {
                 )}
             </Window>
 
-            <SetActivityModalComponent {...Modal.ModalProps} type="dropIn">
+            <SetActivityModalComponent
+                {...Modal.ModalProps}
+                type="dropIn"
+                defaultModal={false}>
                 <SetActivityModal handleClose={Modal.handleClose} X={hook} />
             </SetActivityModalComponent>
         </Resizable>

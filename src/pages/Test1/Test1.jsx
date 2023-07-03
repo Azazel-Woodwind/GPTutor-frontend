@@ -2,15 +2,21 @@ import CenteredColumn from "../../styles/containers/CenteredColumn";
 import React from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import Button from "../../components/input/Button";
+import DropdownList from "../../components/input/DropdownList";
+import { useAppData } from "../../context/AppDataContext";
+import DropdownListNew from "../../components/input/DropdownListNew";
+
+const options = ["OPTION 1", "OPTION 2", "OPTION 3"];
 
 function Test1() {
+    const { subjectOptions, educationLevels, examBoards } = useAppData();
     const controls = useAnimationControls();
+    const [selected, setSelected] = React.useState("");
+
+    // console.log(subjectOptions);
 
     return (
-        <CenteredColumn
-            fillparent
-            gap="0.625rem"
-            style={{ overflow: "hidden" }}>
+        <CenteredColumn fillparent gap="0.625rem">
             {/* <ProgressBar
                 width="500px"
                 stops={[
@@ -38,23 +44,36 @@ function Test1() {
                 value={current}
                 max={max}
             /> */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={controls}
+            <div
+                style={{
+                    display: "flex",
+                }}>
+                {/* <DropdownList
+                    label="Dropdown"
+                    options={subjectOptions}
+                    selected={selected}
+                    setSelected={setSelected}
+                /> */}
+                <DropdownListNew
+                    label="Dropdown"
+                    options={subjectOptions}
+                    // options={options}
+                    selected={selected}
+                    setSelected={setSelected}
+                    required
+                />
+            </div>
+            {/* <motion.div
+                style={{
+                    width: 200,
+                    height: 200,
+                    backgroundColor: "red",
+                }}
+                animate={{ rotate: 90, scale: 1.5 }}
                 transition={{
-                    repeat: 1,
-                    repeatType: "reverse",
-                    duration: 1,
-                    // repeatDelay: 1,
-                }}>
-                HELLO THERE
-            </motion.div>
-            <Button
-                onClick={() => {
-                    controls.start({ opacity: 1 });
-                }}>
-                Click me
-            </Button>
+                    duration: 2,
+                    from: 5,
+                }}></motion.div> */}
         </CenteredColumn>
     );
 }

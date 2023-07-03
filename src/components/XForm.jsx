@@ -12,7 +12,7 @@ export const FormContainer = styled.form`
     justify-content: center;
     gap: 0.8rem;
     z-index: 10;
-    width: 35rem;
+    width: 40rem;
 `;
 
 const Title = styled.h1`
@@ -24,14 +24,16 @@ const Container = styled.div`
     display: flex;
 
     height: 100%;
-    width: 100%;
+    /* width: 100%; */
     overflow: auto;
+    /* border: 10px solid black; */
 `;
 
 const SubContainer = styled.div`
     display: flex;
     margin: auto;
     gap: 8rem;
+    /* border: 10px solid blue; */
 `;
 
 function XForm({

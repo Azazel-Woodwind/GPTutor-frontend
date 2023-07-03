@@ -20,7 +20,6 @@ import { MultiTextfieldRow } from "../../styles/containers/MultiTextfieldRow";
 import Textfield from "../../components/input/Textfield";
 import RadioButton from "../../components/input/RadioButton";
 import RadioButtonsContainer from "../../styles/containers/RadioButtonContainer";
-import Select from "../../components/input/Select";
 import { occupations } from "../../lib/FormData";
 
 function WaitingList() {
@@ -33,11 +32,11 @@ function WaitingList() {
         () =>
             z.object({
                 first_name: first_name_schema,
-                last_name: last_name_schema,
+                // last_name: last_name_schema,
                 email: email_schema,
-                education_level: education_level_schema(educationLevels),
+                // education_level: education_level_schema(educationLevels),
                 occupation: occupation_schema(occupations),
-                subjects: subjects_schema(subjectOptions),
+                // subjects: subjects_schema(subjectOptions),
             }),
         []
     );
@@ -47,11 +46,11 @@ function WaitingList() {
         resolver: zodResolver(WaitingListSchema),
         defaultValues: {
             first_name: "",
-            last_name: "",
+            // last_name: "",
             email: "",
-            education_level: "",
+            // education_level: "",
             occupation: "",
-            subjects: [],
+            // subjects: [],
         },
     });
 
@@ -70,14 +69,14 @@ function WaitingList() {
         // data = data.map(field => field.trim());
 
         try {
-            const response = await UserAPI.signUpToWaitingList({
+            const user = await UserAPI.signUpToWaitingList({
                 first_name: data.first_name,
-                last_name: data.last_name,
+                // last_name: data.last_name,
                 email: data.email,
-                password: generatePassword(12),
-                education_level: data.education_level,
+                // password: generatePassword(12),
+                // education_level: data.education_level,
                 is_student: data.occupation === "Student",
-                subjects: data.subjects,
+                // subjects: data.subjects,
             });
 
             // console.log(response);
@@ -122,7 +121,7 @@ function WaitingList() {
                                 formState,
                             }) => (
                                 <Textfield
-                                    fullwidth
+                                    // fullwidth
                                     label="First Name"
                                     type="text"
                                     required
@@ -139,7 +138,7 @@ function WaitingList() {
                                 />
                             )}
                         />
-                        <Controller
+                        {/* <Controller
                             name="last_name"
                             control={form.control}
                             render={({
@@ -148,7 +147,7 @@ function WaitingList() {
                                 formState,
                             }) => (
                                 <Textfield
-                                    fullwidth
+                                    // fullwidth
                                     label="Last Name"
                                     type="text"
                                     required
@@ -161,36 +160,42 @@ function WaitingList() {
                                     onChange={e => {
                                         field.onChange(e.target.value.trim());
                                     }}
+                                    style={{
+                                        flex: 1,
+                                    }}
+                                />
+                            )}
+                        /> */}
+                        <Controller
+                            name="email"
+                            control={form.control}
+                            render={({
+                                field, // { onChange, onBlur, value, name, ref }
+                                fieldState, //{ invalid, isTouched, isDirty, error }
+                                formState,
+                            }) => (
+                                <Textfield
+                                    fullwidth
+                                    label="Email"
+                                    type="text"
+                                    required
+                                    error={fieldState.invalid}
+                                    helperText={
+                                        fieldState.invalid &&
+                                        fieldState.error?.message
+                                    }
+                                    {...field}
+                                    onChange={e => {
+                                        field.onChange(e.target.value.trim());
+                                    }}
+                                    style={{
+                                        flex: 1,
+                                    }}
                                 />
                             )}
                         />
                     </MultiTextfieldRow>
-                    <Controller
-                        name="email"
-                        control={form.control}
-                        render={({
-                            field, // { onChange, onBlur, value, name, ref }
-                            fieldState, //{ invalid, isTouched, isDirty, error }
-                            formState,
-                        }) => (
-                            <Textfield
-                                fullwidth
-                                label="Email"
-                                type="text"
-                                required
-                                error={fieldState.invalid}
-                                helperText={
-                                    fieldState.invalid &&
-                                    fieldState.error?.message
-                                }
-                                {...field}
-                                onChange={e => {
-                                    field.onChange(e.target.value.trim());
-                                }}
-                            />
-                        )}
-                    />
-                    <Controller
+                    {/* <Controller
                         control={form.control}
                         name="education_level"
                         render={({
@@ -209,8 +214,8 @@ function WaitingList() {
                                 ))}
                             </RadioButtonsContainer>
                         )}
-                    />
-                    <Controller
+                    /> */}
+                    {/* <Controller
                         name="subjects"
                         control={form.control}
                         render={({
@@ -226,7 +231,7 @@ function WaitingList() {
                                 defaultValue={[]}
                             />
                         )}
-                    />
+                    /> */}
                     <Controller
                         control={form.control}
                         name="occupation"
