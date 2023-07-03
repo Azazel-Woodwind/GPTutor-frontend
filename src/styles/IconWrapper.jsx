@@ -15,8 +15,8 @@ const IconWrapper = ({ children }) => {
 };
 
 const IconWrapperStyle = styled.div`
-    width: 3em;
-    height: 2.5em;
+    width: 3rem;
+    height: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: center;

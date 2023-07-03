@@ -54,7 +54,7 @@ const Notification = ({
     };
 
     const variants = {
-        initial: { x: "calc(100% + 40px)" },
+        initial: { x: "calc(100% + 2.5rem)" },
         visible: {
             x: 0,
             transition: {
@@ -64,7 +64,7 @@ const Notification = ({
                 stiffness: 500,
             },
         },
-        exit: { x: "calc(100% + 40px)", transition: { duration: 0.2 } },
+        exit: { x: "calc(100% + 2.5rem)", transition: { duration: 0.2 } },
     };
 
     return (
@@ -100,7 +100,7 @@ const Notification = ({
                     onEnd={destroy}
                     filledColour={TYPES_TO_COLOUR[type]}
                     unfilledColour="white"
-                    height="3px"
+                    height="0.2rem"
                     pauseOnHover
                     hovering={hovering}
                     canStart={canStart}
@@ -115,14 +115,14 @@ const Notification = ({
 const IconContainer = styled.div`
     max-width: fit-content;
     max-height: fit-content;
-    /* width: 20px;
-    height: 20px; */
+    /* width: 1.25rem;
+    height: 1.25rem; */
 `;
 
 const CrossSvg = styled(SvgIcon)`
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 0.31rem;
+    right: 0.31rem;
     cursor: pointer;
 `;
 
@@ -131,8 +131,8 @@ const LabelContainer = styled.div`
     flex-direction: column;
     justify-content: center; */
     /* border: 2px solid green; */
-    padding-bottom: 2.3px;
-    font-size: 20px;
+    padding-bottom: 0.15rem;
+    font-size: 1.25rem;
     color: white;
     font-weight: 600;
 `;
@@ -141,11 +141,11 @@ const InnerContentContainer = styled.div`
     /* border: 2px solid red; */
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 0.5rem;
 `;
 
 const ContentContainer = styled.div`
-    margin: 1em 2em 0.8em 0.7em;
+    margin: 1rem 2rem 0.8rem 0.7rem;
 `;
 
 const ProgressContainer = styled.div`
@@ -155,10 +155,10 @@ const ProgressContainer = styled.div`
 
 const Container = styled(motion.div)`
     position: relative;
-    min-width: 350px;
-    /* max-width: 20em; */
-    /* top: 40px;
-    right: 40px; */
+    min-width: 21.9rem;
+    /* max-width: 20rem; */
+    /* top: 2.5rem;
+    right: 2.5rem; */
     cursor: pointer;
     background-color: ${props => TYPES_TO_COLOUR[props.type]};
     ${props => props.type === "success" && props.theme.gradient()};

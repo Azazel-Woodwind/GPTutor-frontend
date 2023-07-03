@@ -4,7 +4,7 @@ import { useMotionValue } from "framer-motion";
 const defaultWidth = 0;
 
 export const ChatContext = React.createContext({
-    draggable: true,
+    draggable: false,
     setDraggable: () => {},
     width: defaultWidth,
 });

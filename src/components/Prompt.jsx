@@ -4,7 +4,6 @@ import {
     useNavigate,
 } from "react-router-dom";
 import useModal from "../hooks/useModal";
-import ExitCreateLessonModal from "./CreateLesson/ExitCreateLessonModal";
 
 function Prompt({ when, confirmed, setConfirmed, children }) {
     const [nextLocation, setNextLocation] = React.useState(null);

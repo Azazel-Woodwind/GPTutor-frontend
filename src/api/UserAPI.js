@@ -33,13 +33,20 @@ const UserAPI = {
         return user;
     },
 
-    signUpToWaitingList: async function (data) {
-        const res = await apiClient.post("/users", data);
+    signUpToWaitingList: async function (userInput) {
+        // const res = await apiClient.post("/users", data);
 
-        if (res.status !== 201)
-            throw new Error("Something went wrong. Please try again later.");
+        // if (res.status !== 201)
+        //     throw new Error("Something went wrong. Please try again later.");
 
-        return res.data;
+        // return res.data;
+        const { error } = await supabase
+            .from("waiting_list_users")
+            .insert(userInput);
+
+        if (error) throw error;
+
+        return true;
     },
 
     signIn: async function (email, password) {
@@ -70,6 +77,14 @@ const UserAPI = {
         const { data, error } = await supabase.rpc("activate_user", {
             is_student,
         });
+
+        if (error) throw error;
+
+        return data;
+    },
+
+    setUsed: async function () {
+        const { data, error } = await supabase.rpc("set_used_user");
 
         if (error) throw error;
 

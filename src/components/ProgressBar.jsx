@@ -13,7 +13,7 @@ const ProgressBar = ({
     value,
     max,
     stops = [],
-    width = "10em",
+    width = "10rem",
     onClick = () => {},
     destroyOnClick = true,
     reverse = false,
@@ -22,11 +22,11 @@ const ProgressBar = ({
     colour,
     unfilledColour = "transparent",
     filledColour = "gradient",
-    height = "6px",
+    height = "0.38rem",
     pauseOnHover = true,
     hovering = undefined,
     canStart,
-    stopSize = "20px",
+    stopSize = "1.25rem",
 }) => {
     const paused = React.useRef(false);
     const lastStart = React.useRef(null);
@@ -192,7 +192,7 @@ const Stop = styled.div`
         content: "";
         position: absolute;
         width: 100%;
-        padding: 1px;
+        padding: 0.15rem;
         height: 100%;
         border-radius: 50%;
         background-color: ${props => (!props.active ? "#1E2335;" : "unset")};

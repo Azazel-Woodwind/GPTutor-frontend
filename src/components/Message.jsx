@@ -4,28 +4,29 @@ import { useAuth } from "../context/SessionContext";
 import GradientOutline from "../styles/GradientOutline";
 import { InfoCircle } from "@styled-icons/bootstrap/InfoCircle";
 
+const AVATAR_SIZE = "2rem";
+
 const AvatarStyle = styled.div`
     /* margin-top: 5px; */
     position: relative;
     flex-shrink: 0;
-    width: 30px;
-    height: 30px;
+    width: ${AVATAR_SIZE};
+    height: ${AVATAR_SIZE};
     /* padding: 5px; */
     background-color: ${props => props.theme.colours.secondary};
     ${props =>
         props.type == "system" && props.theme.gradient({ animationLength: 5 })}
     ${props => !props.highlighted && `background-color: white; color: black;`};
 
-    margin-right: 16px;
+    margin-right: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    /* font-size: 1.25rem; */
     font-weight: 600;
     box-sizing: border-box;
     border-radius: 20%;
-    ${props => props.type === "user" && `padding-bottom: 1px;`}/* ${props =>
-        props.type === "assistant" && `padding-top: 1px; padding-left: 2px;`} */
+    ${props => props.type === "user" && `padding-bottom: 0.15rem;`}
 `;
 
 const Avatar = ({ type, highlighted }) => {
@@ -38,7 +39,7 @@ const Avatar = ({ type, highlighted }) => {
                 <svg
                     width="17"
                     height="17"
-                    style={{ marginLeft: "1px" }}
+                    style={{ marginLeft: "0.15rem" }}
                     viewBox="0 0 12 12"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -82,17 +83,17 @@ const Message = ({ type, message }) => {
 
 const Container = styled.div`
     display: flex;
-    font-size: 18px;
-    padding: 1em;
+    font-size: 1.3rem;
+    padding: 1rem;
     color: ${props =>
         props.highlighted
             ? props.theme.colours.primary
             : props.theme.colours.primaryStrong};
-    padding-right: 1em;
+    padding-right: 1rem;
     span {
         white-space: pre-line;
 
-        max-width: calc(100% - 30px);
+        max-width: calc(100% - ${AVATAR_SIZE});
         overflow-wrap: break-word;
     }
     ${props =>

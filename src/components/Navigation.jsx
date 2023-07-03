@@ -15,12 +15,12 @@ const StyledSettings = Icon(Settings2Outline);
 const StyledBookAdd = Icon(BookAdd);
 
 const Boxshadow = styled.div`
-    width: 15px;
-    height: 15px;
-    top: 3px;
-    right: 4px;
+    width: 1rem;
+    height: 1rem;
+    top: 0.2rem;
+    right: 0.25rem;
     background-color: ${props => props.theme.colours.secondary}30;
-    box-shadow: -3px 12px 35px 3px ${props => props.theme.colours.secondary};
+    box-shadow: -3px 0.75rem 35px 3px ${props => props.theme.colours.secondary};
     position: absolute;
 `;
 
@@ -95,10 +95,10 @@ const Navigation = styled.div`
     align-items: center;
     box-sizing: border-box;
     max-width: 100%;
-    border-radius: 5px;
+    border-radius: 0.25rem;
     z-index: 10;
-    padding: 1em 0.5em;
-    gap: 2.5em;
+    padding: 1rem 0.5rem;
+    gap: 2.5rem;
 `;
 
 export default () => {

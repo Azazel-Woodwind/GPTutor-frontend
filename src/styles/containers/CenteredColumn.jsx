@@ -13,12 +13,12 @@ const CenteredColumnStyle = styled.div`
     h5,
     h6,
     p {
-        margin: 0.3em;
+        margin: 0.3rem;
         max-width: 80ch;
     }
 
     p {
-        margin-bottom: 0.5em;
+        margin-bottom: 0.5rem;
     }
 
     ${props => props.gap && `gap: ${props.gap}`};
@@ -30,7 +30,7 @@ const CenteredColumnStyle = styled.div`
     ${props => props.width && `width: ${props.width};`};
     ${props => props.height && `height: ${props.height};`};
     ${props => props.flex && `flex: ${props.flex};`};
-    ${props => props.border && `border: 10px solid black;`}; // debugging
+    ${props => props.border && `border: 0.625rem solid black;`}; // debugging
 `;
 
 function CenteredColumn({ children, className, ...props }, ref) {

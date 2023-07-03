@@ -1,7 +1,3 @@
-// export const gradientColour1 = "#34b5ff";
-// export const gradientColour2 = "#24aaff";
-// export const gradientColour3 = "#0163ff";
-// export const gradientColour4 = "#34b5ff";
 import converter from "hex2dec";
 
 export const gradientColour1 = "#0163ff";
@@ -15,6 +11,7 @@ export const gradientAngle = 45;
 const Theme = {
     colours: {
         background: "#0C1437",
+        // background: "#131f55",
         // background: "#dfd9d9",
         primary: "#ffffff",
         primaryFaded: "rgba(255, 255, 255, 0.5)",
@@ -28,9 +25,9 @@ const Theme = {
         error: "#ff5252",
     },
     font: {
-        small: "12px",
-        medium: "16px",
-        large: "20px",
+        small: "0.75rem",
+        medium: "1rem",
+        large: "1.25rem",
         xlarge: "24px",
     },
     utils: {

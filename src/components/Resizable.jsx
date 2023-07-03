@@ -145,11 +145,11 @@ const Resizable = ({ number, children, min }) => {
 };
 
 const HandleContainer = styled.div`
-    width: 20px;
-    height: 100px;
+    width: 1.25rem;
+    height: 6.25rem;
     position: absolute;
-    top: calc(50% - 50px);
-    left: -20px;
+    top: calc(50% - 3.125rem);
+    left: -1.25rem;
     z-index: 100;
 `;
 

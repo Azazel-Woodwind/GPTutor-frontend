@@ -14,7 +14,7 @@ const CenteredRowStyle = styled.div`
     ${props => props.fillheight && `height: 100%;`};
     ${props => props.width && `width: ${props.width};`};
     ${props => props.flex && `flex: ${props.flex};`};
-    ${props => props.border && `border: 10px solid black;`}; // debugging
+    ${props => props.border && `border: 0.625rem solid black;`}; // debugging
 `;
 
 function CenteredRow({ children, className, ...props }) {

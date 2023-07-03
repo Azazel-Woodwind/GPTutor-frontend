@@ -49,12 +49,12 @@ export const occupation_schema = occupations =>
 
 export const subject_schema = subjectOptions =>
     z.string().refine(val => subjectOptions.includes(val), {
-        message: `Lesson must have a subject`,
+        message: `Must have a valid subject`,
     });
 
 export const exam_board_schema = examBoards =>
     z.string().refine(val => examBoards.includes(val), {
-        message: `Lesson must have an exam board`,
+        message: `Must have a calid exam board`,
     });
 
 export const subjects_schema = subjectOptions =>

@@ -30,11 +30,11 @@ export const TooltipContainer = styled(motion.span)`
     user-select: none;
     position: absolute;
     max-width: 80ch;
-    ${props => (props.underneath ? "bottom" : "top")}: -2.8em;
+    ${props => (props.underneath ? "bottom" : "top")}: -2.8rem;
     color: ${props => props.theme.colours.primary};
-    max-height: 1em;
+    max-height: 1rem;
     height: fit-content;
-    padding: 0.5em;
+    padding: 0.5rem;
     box-sizing: content-box;
     border-radius: 5px;
     font-size: 90%;

@@ -10,6 +10,15 @@ const GlobalStyles = createGlobalStyle`
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
         overflow-x: clip;
         background-color: ${props => props.theme.colours.background};
+        /* background: linear-gradient(
+            125deg,
+            #18203C,
+            #00438D
+        ); */
+        /* background: radial-gradient(
+            #18203C 0%,
+            #00438D 100%
+        ); */
         overflow-y: clip;
     }
 
@@ -35,7 +44,7 @@ const GlobalStyles = createGlobalStyle`
 
     *::-webkit-scrollbar {
         width: 8px;
-        height: 10px;
+        height: 0.625rem;
         cursor: pointer;
     }
     
@@ -48,7 +57,7 @@ const GlobalStyles = createGlobalStyle`
         /* background-color: ${props => props.theme.colours.contrast}; */
         ${props => props.theme.gradient()}
 
-        border-radius: 10px;
+        border-radius: 0.625rem;
     }
 
     *::-webkit-scrollbar-thumb:hover {

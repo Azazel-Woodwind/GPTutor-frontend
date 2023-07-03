@@ -38,7 +38,7 @@ export function SocketContextProvider({ children }) {
                 if (!bool) return;
                 setSocket(socket);
                 setLoading(false);
-                console.log(socket);
+                // console.log(socket);
                 console.log("Authenticated ", bool);
             });
 

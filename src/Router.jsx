@@ -1,176 +1,42 @@
+import * as MyLessons from "./pages/Dashboard/MyLessons";
+import * as Users from "./pages/Dashboard/Users";
+import * as LessonsDashboard from "./pages/Dashboard/LessonsDashboard";
+import * as WaitingList from "./pages/WaitingList";
+import * as Test1 from "./pages/Test1";
+import * as Login from "./pages/Login";
+import * as Register from "./pages/Register";
+import * as ActivateAccount from "./pages/ActivateAccount";
+import * as RecoverPassword from "./pages/RecoverPassword";
+import * as Hub from "./pages/Hub";
+import * as CreateLesson from "./pages/CreateLesson";
+import * as ResetPassword from "./pages/Settings/ResetPassword";
+import * as Profile from "./pages/Settings/Profile";
+import * as Account from "./pages/Settings/Account";
+import * as Appearance from "./pages/Settings/Appearance";
+import * as Notifications from "./pages/Settings/Notifications";
+import * as General from "./pages/Settings/General";
+import * as Plans from "./pages/Settings/Plans";
+import * as Quiz from "./pages/Quiz";
+import * as Lessons from "./pages/Lessons";
+import * as Classroom from "./pages/Classroom";
+import * as Unauthorised from "./pages/Unauthorised";
 import {
-    createBrowserRouter,
-    Outlet,
-    RouterProvider,
     Navigate,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
-import CreateLesson from "./pages/CreateLesson";
-import Classroom from "./pages/Classroom";
-import Register from "./pages/Register";
-import { SocketContextProvider } from "./context/SocketContext";
-import { useAuth } from "./context/SessionContext";
-import TeacherDashboard from "./pages/TeacherDashboard";
-import Unauthorised from "./pages/Unauthorised";
-import LessonAPI from "./api/LessonAPI";
-import Test1 from "./pages/Test1";
-import styled from "styled-components";
-
-import WaitingList from "./pages/WaitingList";
-import Lessons from "./pages/Lessons";
-
-import Login from "./pages/Login";
-import Hub from "./pages/Hub";
-import Header from "./components/Header/Header";
-import Chat from "./components/Chat";
-import Loading from "./pages/Loading";
-import Settings from "./pages/SettingsMenu";
-
-import { ChatContextProvider } from "./context/ChatContext";
+    RouterProvider,
+    createBrowserRouter,
+} from "react-router-dom/dist/umd/react-router-dom.development";
 import PublicFooter from "./components/PublicFooter";
-
-import Profile from "./pages/settings/Profile";
-import Account from "./pages/settings/Account";
-import Apperance from "./pages/settings/Appearance";
-import Plans from "./pages/settings/Plans";
-import Notifications from "./pages/settings/Notifications";
-import General from "./pages/settings/General";
-
-import Dashboard from "./pages/DashboardMenu";
-import Users from "./pages/dashboard/Users";
-
-import LessonsDisplay from "./pages/dashboard/LessonsDisplay";
-import {
-    ADMIN_ACCESS_LEVEL,
-    INACTIVE_ACCESS_LEVEL,
-    STUDENT_ACCESS_LEVEL,
-} from "./lib/accessLevels";
-import UserAPI from "./api/UserAPI";
-import RecoverPassword from "./pages/RecoverPassword";
-import ActivateAccount from "./pages/ActivateAccount";
-import React from "react";
-import ResetPassword from "./pages/settings/ResetPassword";
-import RedirectToWaitingList from "./pages/RedirectToWaitingList";
-import { getLessonByQueryIdLoader } from "./lib/routerLoaders";
-import Quiz from "./pages/Quiz";
-
-const ApplicationWrapperStyle = styled.div`
-    display: flex;
-    justify-content: center;
-    height: 100%;
-`;
-
-const ApplicationInternalStyle = styled.div`
-    height: 100vh;
-    position: relative;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-`;
-
-function ApplicationWrapper() {
-    const { event } = useAuth();
-    const navigate = useNavigate();
-
-    React.useEffect(() => {
-        if (event === "PASSWORD_RECOVERY") {
-            navigate("/reset-password");
-        }
-    }, [event]);
-
-    return (
-        <RequireUser>
-            <RouteProtector
-                accessLevel={STUDENT_ACCESS_LEVEL}
-                redirect={"/activate"}>
-                <SocketContextProvider>
-                    <ApplicationWrapperStyle>
-                        <ChatContextProvider>
-                            <ApplicationInternalStyle>
-                                <Header />
-                                <Outlet />
-                            </ApplicationInternalStyle>
-                            <Chat />
-                        </ChatContextProvider>
-                    </ApplicationWrapperStyle>
-                </SocketContextProvider>
-            </RouteProtector>
-        </RequireUser>
-    );
-}
-
-function RouteProtector({
-    accessLevel,
-    redirect,
-    lowerBound = true,
-    children,
-}) {
-    const { session } = useAuth();
-
-    // console.log("SESSION IN ROUTER PROTECTOR: ", session);
-    // console.log("ACCESS LEVEL: ", accessLevel);
-    // console.log("USER: ", session.user);
-    // console.log("USER ACCESS LEVEL: ", session?.user.accessLevel);
-
-    const location = useLocation();
-    const navigateAway = lowerBound
-        ? session.user.accessLevel < accessLevel
-        : session.user.accessLevel > accessLevel;
-
-    if (navigateAway) {
-        return (
-            <Navigate
-                to={redirect || "/hub"}
-                state={{ from: location }}
-                replace
-            />
-        );
-    }
-
-    return children || <Outlet />;
-}
-
-function PublicWrapper() {
-    return (
-        <RequireAnonymous>
-            <Outlet />
-            <PublicFooter />
-        </RequireAnonymous>
-    );
-}
-
-function RequireUser({ children }) {
-    const { session } = useAuth();
-
-    if (!session) {
-        console.log("NO SESSION FOUND, NAVIGATING TO LOGIN");
-        return <Navigate to={"/login"} replace />;
-    }
-
-    return children || <Outlet />;
-}
-
-function RequireAnonymous({ children }) {
-    const { session } = useAuth();
-
-    if (session) {
-        console.log("SESSION FOUND, NAVIGATING TO HUB");
-        return <Navigate to={"/hub"} replace />;
-    }
-
-    return children || <Outlet />;
-}
+import PublicWrapper from "./wrappers/PublicWrapper";
+import ApplicationWrapper from "./wrappers/ApplicationWrapper";
+import SettingsWrapper from "./wrappers/SettingsWrapper";
+import DashboardWrapper from "./wrappers/DashboardWrapper";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: (
             <>
-                <WaitingList />
+                <WaitingList.Element />
                 <PublicFooter />
             </>
         ),
@@ -181,31 +47,27 @@ const router = createBrowserRouter([
     },
 
     // {
+    //     path: "/test",
+    //     element: <Test1.Element />,
+    // },
+
+    // {
     //     path: "/",
     //     element: <PublicWrapper />,
     //     children: [
     //         {
     //             path: "/login",
-    //             element: <Login />,
+    //             element: <Login.Element />,
     //         },
     //         {
     //             path: "/register",
-    //             element: <Register />,
+    //             element: <Register.Element />,
     //         },
     //     ],
     // },
     // {
     //     path: "/activate",
-    //     element: (
-    //         <RequireUser>
-    //             <RouteProtector
-    //                 accessLevel={INACTIVE_ACCESS_LEVEL}
-    //                 redirect={"/hub"}
-    //                 lowerBound={false}>
-    //                 <ActivateAccount />
-    //             </RouteProtector>
-    //         </RequireUser>
-    //     ),
+    //     element: <ActivateAccount.Element />,
     // },
     // {
     //     path: "/",
@@ -214,220 +76,104 @@ const router = createBrowserRouter([
     //     children: [
     //         {
     //             path: "/reset-password",
-    //             element: <RecoverPassword />,
+    //             element: <RecoverPassword.Element />,
     //         },
     //         {
     //             path: "/hub",
-    //             element: <Hub />,
+    //             element: <Hub.Element />,
     //         },
     //         {
     //             path: "/create-lesson",
-    //             element: <CreateLesson action="create" />,
+    //             element: <CreateLesson.Element action="create" />,
     //         },
     //         {
     //             path: "/edit-lesson",
-    //             element: <CreateLesson action="edit" />,
+    //             element: <CreateLesson.Element action="edit" />,
     //         },
     //         {
     //             path: "/settings",
-    //             element: <Settings />,
+    //             element: <SettingsWrapper />,
     //             children: [
     //                 {
+    //                     index: true,
+    //                     element: <Navigate to="/settings/general" replace />,
+    //                 },
+    //                 {
     //                     path: "/settings/general",
-    //                     element: <General />,
-    //                     // loader: async () => {
-    //                     //     const user = await UserAPI.getUser();
-    //                     //     return { user };
-    //                     // }
+    //                     element: <General.Element />,
     //                 },
     //                 {
     //                     path: "/settings/reset-password",
-    //                     element: <ResetPassword />,
+    //                     element: <ResetPassword.Element />,
     //                 },
     //                 {
     //                     path: "/settings/profile",
-    //                     element: <Profile />,
+    //                     element: <Profile.Element />,
     //                 },
     //                 {
     //                     path: "/settings/account",
-    //                     element: <Account />,
+    //                     element: <Account.Element />,
     //                 },
     //                 {
     //                     path: "/settings/appearance",
-    //                     element: <Apperance />,
+    //                     element: <Appearance.Element />,
     //                 },
     //                 {
     //                     path: "/settings/notifications",
-    //                     element: <Notifications />,
+    //                     element: <Notifications.Element />,
     //                 },
     //                 {
     //                     path: "/settings/plans",
-    //                     element: <Plans />,
+    //                     element: <Plans.Element />,
+    //                 },
+    //                 {
+    //                     path: "*",
+    //                     element: <Navigate to="/settings/general" replace />,
     //                 },
     //             ],
     //         },
     //         {
     //             path: "/dashboard",
-    //             element: <Dashboard />,
+    //             element: <DashboardWrapper />,
     //             children: [
     //                 {
     //                     path: "/dashboard/my-lessons",
-    //                     element: <LessonsDisplay />,
-    //                     action: async ({ request }) => {
-    //                         if (!["DELETE", "PUT"].includes(request.method)) {
-    //                             throw new Response("Incorrect request method", {
-    //                                 status: 400,
-    //                                 statusText: "Bad Request",
-    //                             });
-    //                         }
-
-    //                         const data = await request.formData();
-    //                         const lessonID = data.get("id");
-
-    //                         if (!lessonID) {
-    //                             throw new Response("Missing lesson ID", {
-    //                                 status: 400,
-    //                                 statusText: "Bad Request",
-    //                             });
-    //                         }
-
-    //                         if (request.method === "DELETE") {
-    //                             try {
-    //                                 await LessonAPI.deleteOwnedByid(lessonID);
-
-    //                                 return {
-    //                                     ok: true,
-    //                                     message: "Lesson successfully deleted!",
-    //                                 };
-    //                             } catch (error) {
-    //                                 console.log(error);
-    //                                 return {
-    //                                     ok: false,
-    //                                     message:
-    //                                         "There was an error deleting the lesson.",
-    //                                 };
-    //                             }
-    //                         }
-
-    //                         if (request.method === "PUT") {
-    //                             const oldStatus = data.get("status");
-    //                             try {
-    //                                 // console.log(lessonID);
-    //                                 await LessonAPI.togglePublishById(lessonID);
-
-    //                                 return {
-    //                                     ok: true,
-    //                                     message: `Lesson successfully ${
-    //                                         ["Draft", "Rejected"].includes(
-    //                                             oldStatus
-    //                                         )
-    //                                             ? "published"
-    //                                             : "unpublished"
-    //                                     }!`,
-    //                                 };
-    //                             } catch (error) {
-    //                                 console.log(error);
-    //                                 return {
-    //                                     ok: false,
-    //                                     message: `There was an error ${
-    //                                         ["Draft", "Rejected"].includes(
-    //                                             oldStatus
-    //                                         )
-    //                                             ? "publishing"
-    //                                             : "unpublishing"
-    //                                     } the lesson.`,
-    //                                 };
-    //                             }
-    //                         }
-    //                     },
-    //                     loader: async () => {
-    //                         try {
-    //                             const lessons = await LessonAPI.getMyLessons();
-    //                             // console.log("ALL LESSONS:", lessons);
-    //                             return lessons;
-    //                         } catch (error) {
-    //                             console.log(error);
-    //                             return [];
-    //                         }
-    //                     },
+    //                     element: <MyLessons.Element />,
+    //                     action: MyLessons.action,
+    //                     loader: MyLessons.loader,
     //                 },
     //                 {
     //                     path: "/dashboard/users",
-    //                     element: (
-    //                         <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-    //                             <Users />
-    //                         </RouteProtector>
-    //                     ),
-    //                     loader: async () => {
-    //                         const users = await UserAPI.getAll();
-    //                         // console.log("ALL USERS:", users);
-    //                         return users;
-    //                     },
+    //                     element: <Users.Element />,
+    //                     loader: Users.loader,
     //                 },
     //                 {
     //                     path: "/dashboard/lessons",
-    //                     element: (
-    //                         <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
-    //                             element:{" "}
-    //                             <LessonsDisplay onAdminDashboard={true} />
-    //                         </RouteProtector>
-    //                     ),
-    //                     loader: async () => {
-    //                         try {
-    //                             const lessons = await LessonAPI.getAll();
-    //                             console.log("ALL LESSONS:", lessons);
-    //                             return lessons;
-    //                         } catch (error) {
-    //                             console.log(error);
-    //                             return [];
-    //                         }
-    //                     },
+    //                     element: <LessonsDashboard.Element />,
+    //                     loader: LessonsDashboard.loader,
     //                 },
     //             ],
     //         },
     //         {
     //             path: "/lessons",
-    //             element: <Lessons />,
-    //             loader: async ({ request }) => {
-    //                 try {
-    //                     const lessons = await LessonAPI.getPublicLessons();
-    //                     // console.log("ALL LESSONS:", lessons);
-    //                     return lessons;
-    //                 } catch (error) {
-    //                     console.log(error);
-    //                     return [];
-    //                 }
-    //             },
+    //             element: <Lessons.Element />,
+    //             loader: Lessons.loader,
     //         },
     //         {
     //             path: "/quiz/:lessonName", // ?id="yer28736427384yb23c78e"
-    //             element: <Quiz />,
-    //             loader: getLessonByQueryIdLoader,
+    //             element: <Quiz.Element />,
+    //             loader: Quiz.loader,
     //         },
     //         {
     //             path: "/lessons/:lessonName", // ?id="yer28736427384yb23c78e"
-    //             element: <Classroom />,
-    //             loader: getLessonByQueryIdLoader,
-    //         },
-    //         {
-    //             path: "/learningpathways",
-    //             element: <Lessons />,
-    //             loader: async () => {
-    //                 try {
-    //                     const lessons = await LessonAPI.getPublicLessons();
-    //                     // console.log("ALL LESSONS:", lessons);
-    //                     return lessons;
-    //                 } catch (error) {
-    //                     console.log(error);
-    //                     return [];
-    //                 }
-    //             },
+    //             element: <Classroom.Element />,
+    //             loader: Classroom.loader,
     //         },
     //     ],
     // },
     // {
     //     path: "/unauthorised",
-    //     element: <Unauthorised />,
+    //     element: <Unauthorised.Element />,
     // },
 ]);
 

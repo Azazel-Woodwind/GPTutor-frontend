@@ -19,11 +19,11 @@ function SvgIcon({ children, className, svgData, fill, size, ...props }) {
             viewBox={`0 0 ${svgData.viewboxWidth} ${svgData.viewboxHeight}`}
             focusable="false"
             xmlns="http://www.w3.org/2000/svg"
-            width={size || "30px"}
-            height={size || "30px"}
+            width={size || "1.875rem"}
+            height={size || "1.875rem"}
             style={{
-                minWidth: size || "30px",
-                minHeight: size || "30px",
+                minWidth: size || "1.875rem",
+                minHeight: size || "1.875rem",
             }}
             {...props}>
             <defs>
