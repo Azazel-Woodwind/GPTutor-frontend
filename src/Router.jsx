@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     },
     {
         path: "*",
-        element: <RedirectToWaitingList />,
+        element: <Navigate to="/" replace />,
     },
 
     // {
