@@ -4,6 +4,8 @@ import { motion, useAnimationControls } from "framer-motion";
 import React from "react";
 import CenteredRow from "../../styles/containers/CenteredRow";
 import { degreesToRadians } from "../../lib/misc";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
 
 // 8 different questions related to GCSE education that a student might ask
 const examplePrompts = [
@@ -50,6 +52,7 @@ const XAvatar = ({
     ...props
 }) => {
     const animationControls = useAnimationControls();
+    // const location = useLocation();
 
     const [isMuted, setIsMuted] = React.useState(false);
     const [mouseEntered, setMouseEntered] = React.useState(false);
@@ -189,7 +192,7 @@ const XAvatar = ({
 
                         // {...(appear && appearAnimation)}
                     />
-                    {showExamplePrompts && (
+                    {showExamplePrompts && location.pathname === "/hub" && (
                         <PromptContainer
                             promptIndex={promptIndex}
                             initial={{ opacity: 0 }}
