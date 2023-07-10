@@ -31,8 +31,12 @@ const Container = styled.div`
 
 const SubContainer = styled.div`
     display: flex;
+    justify-content: center;
     margin: auto;
-    gap: 8rem;
+    gap: 5rem;
+
+    flex-wrap: wrap;
+    padding: 2rem 6rem;
     /* border: 10px solid blue; */
 `;
 
