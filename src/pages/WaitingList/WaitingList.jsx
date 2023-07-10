@@ -95,7 +95,7 @@ function WaitingList() {
 
     return (
         <>
-            {success || localStorage.getItem("waiting_list") === "true" ? (
+            {success ? (
                 <SuccessScreen
                     heading="Thanks for signing up to our waiting list!"
                     caption="Be sure to check your email for the latest updates on XTUTOR!"
