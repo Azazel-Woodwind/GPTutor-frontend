@@ -11,7 +11,12 @@ const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, appear }) => {
     const pulse = () => {
         setRings(prev => {
             prev.push(
-                <Pulse key={Date.now()} size={size} setRings={setRings} />
+                <Pulse
+                    key={Date.now()}
+                    size={size}
+                    setRings={setRings}
+                    duration={duration}
+                />
             );
             return [...prev];
         });

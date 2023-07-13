@@ -86,7 +86,7 @@ function WaitingList() {
             console.log(error);
 
             sendNotification({
-                label: "Something went wrong?",
+                label: error.message,
                 duration: 5,
                 type: "error",
             });

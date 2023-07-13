@@ -34,19 +34,18 @@ const UserAPI = {
     },
 
     signUpToWaitingList: async function (userInput) {
-        // const res = await apiClient.post("/users", data);
+        try {
+            const res = await apiClient.post("/waiting-list", userInput);
 
-        // if (res.status !== 201)
-        //     throw new Error("Something went wrong. Please try again later.");
-
-        // return res.data;
-        const { error } = await supabase
-            .from("waiting_list_users")
-            .insert(userInput);
-
-        if (error) throw error;
-
-        return true;
+            return true;
+        } catch (error) {
+            if (error.response.status === 409)
+                throw new Error("This email is already in use.");
+            if (error.response.status !== 201)
+                throw new Error(
+                    "Something went wrong. Please try again later."
+                );
+        }
     },
 
     signIn: async function (email, password) {

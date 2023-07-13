@@ -25,12 +25,12 @@ function useXLesson({ currentLesson, delay, ...props }) {
     const X = useX({
         channel: "lesson",
         onMessage: data => {
-            const { learningObjectiveNumber } = data;
-            console.log(
-                "LEARNING OBJECTIVE NUMBER CHANGED TO:",
-                learningObjectiveNumber
-            );
-            setLearningObjectiveNumber(learningObjectiveNumber);
+            // const { learningObjectiveNumber } = data;
+            // console.log(
+            //     "LEARNING OBJECTIVE NUMBER CHANGED TO:",
+            //     learningObjectiveNumber
+            // );
+            // setLearningObjectiveNumber(learningObjectiveNumber);
         },
         ...props,
     });
