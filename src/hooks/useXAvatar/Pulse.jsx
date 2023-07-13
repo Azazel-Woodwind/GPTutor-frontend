@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import styled from "styled-components";
 import FillParent from "../../styles/containers/FillParent";
+import React from "react";
 
 const animation = {
     boxShadow: [
