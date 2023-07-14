@@ -33,24 +33,39 @@ const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, appear }) => {
         });
     };
 
-    React.useEffect(() => {
-        // console.log("mounting");
-        let interval;
-        const intervalDuration = (duration / ringCount) * 1000;
-        const timeout = setTimeout(() => {
-            interval = setInterval(() => {
-                if (isPulsing) pulse();
-            }, intervalDuration);
+    // const renderRings = async () => {
+    //     for (let i = 0; i < ringCount; i++) {
+    //         setRings(prev => {
+    //             prev.push(<Pulse key={i} size={size} setRings={setRings} />);
+    //             return [...prev];
+    //         });
 
-            pulse();
-        }, !!appear * 1500);
+    //         const intervalDuration = (duration / ringCount) * 1000;
+    //         await new Promise(resolve => setTimeout(resolve, intervalDuration));
+    //     }
+    // };
 
-        return () => {
-            // console.log("unmounting");
-            clearInterval(interval);
-            clearTimeout(timeout);
-        };
-    }, []);
+    // React.useEffect(() => {
+    //     // console.log("mounting");
+    //     let interval;
+
+    //     const timeout = setTimeout(() => {
+    //         // interval = setInterval(() => {
+    //         //     if (isPulsing) pulse();
+    //         // }, intervalDuration);
+
+    //         // pulse();
+    //         if (rings.length < ringCount) {
+    //             renderRings();
+    //         }
+    //     }, !!appear * 1500);
+
+    //     return () => {
+    //         // console.log("unmounting");
+    //         clearInterval(interval);
+    //         clearTimeout(timeout);
+    //     };
+    // }, []);
 
     return {
         XAvatar,

@@ -6,6 +6,7 @@ import CenteredRow from "../../styles/containers/CenteredRow";
 import { degreesToRadians } from "../../lib/misc";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
+import Pulse from "./Pulse";
 
 // 8 different questions related to GCSE education that a student might ask
 const examplePrompts = [
@@ -34,6 +35,9 @@ const appearAnimation = {
         },
     },
 };
+
+const ringPropagateDuration = 4;
+const numRings = 3;
 
 const XAvatar = ({
     size,
@@ -168,7 +172,17 @@ const XAvatar = ({
                     size={size}
                     as={motion.div}
                     {...{ ...props, loading: undefined }}>
-                    {rings}
+                    {/* {rings} */}
+                    {[...Array(numRings)].map((_, i) => (
+                        <Pulse
+                            key={i}
+                            size={size}
+                            delay={
+                                !!appear * 1.5 +
+                                (ringPropagateDuration / numRings) * i
+                            }
+                        />
+                    ))}
                     <X
                         clickable
                         whileHover={{ scale: 1.1 }}
@@ -176,7 +190,7 @@ const XAvatar = ({
                         size={size}
                         transition={{ duration: 0.3 }}
                         onTap={() => {
-                            pulse();
+                            // pulse();
                         }}
                         onClick={() => {
                             if (paused()) {
@@ -224,7 +238,16 @@ const XAvatar = ({
 
     return (
         <AvatarWrapper size={size} as={motion.div} {...props}>
-            {rings}
+            {/* {rings} */}
+            {[...Array(numRings)].map((_, i) => (
+                <Pulse
+                    key={i}
+                    size={size}
+                    delay={
+                        !!appear * 1.5 + (ringPropagateDuration / numRings) * i
+                    }
+                />
+            ))}
             <X
                 size={size}
                 transition={{ duration: 0.3 }}

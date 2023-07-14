@@ -16,6 +16,8 @@ function WrittenQuestion({
     currentAnswer,
 }) {
     const [finalAnswer, setFinalAnswer] = React.useState(undefined);
+    const answerTextfieldRef = React.useRef(null);
+
     const theme = useTheme();
 
     if (!finalAnswer && currentFeedback?.isCorrect) {
@@ -23,15 +25,27 @@ function WrittenQuestion({
     }
 
     React.useEffect(() => {
-        if (modalAnswer && !finalAnswer) {
-            setFinalAnswer(modalAnswer);
+        if (
+            modalAnswer?.answer &&
+            modalAnswer?.questionIndex === questionIndex &&
+            !finalAnswer
+        ) {
+            setFinalAnswer(modalAnswer.answer);
         }
     }, [modalAnswer]);
+
+    React.useEffect(() => {
+        if (answerTextfieldRef.current && currentAnswer && !finalAnswer) {
+            answerTextfieldRef.current.scrollTop =
+                answerTextfieldRef.current.scrollHeight;
+        }
+    }, [currentAnswer]);
 
     return (
         <>
             <h2>{question.question}</h2>
             <Textfield
+                ref={answerTextfieldRef}
                 multiline
                 value={finalAnswer || currentAnswer || answer}
                 onChange={e => setAnswer(e.target.value)}

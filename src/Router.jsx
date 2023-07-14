@@ -50,7 +50,6 @@ const router = createBrowserRouter([
         path: "/test",
         element: <Test1.Element />,
     },
-
     {
         path: "/",
         element: <PublicWrapper />,

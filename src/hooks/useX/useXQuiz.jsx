@@ -96,7 +96,7 @@ function useXQuiz({ lesson, ...props }) {
     }, [onFeedbackStream]);
 
     const onNewFeedback = React.useCallback(
-        ({ feedback, isCorrect, questionIndex, choiceIndex }) => {
+        ({ feedback, isCorrect, questionIndex, choiceIndex, final }) => {
             // console.log("RECEIVED FEEDBACK", feedback);
             // console.log(questionIndex, currentQuestionNum);
             if (questionIndex === currentQuestionNum) {
@@ -104,11 +104,7 @@ function useXQuiz({ lesson, ...props }) {
                 setCurrentFeedbackIsCorrect(undefined);
                 setGeneratingFeedback(false);
                 setAnswerIsCorrect(isCorrect);
-                if (
-                    feedback.endsWith(
-                        "A modal answer will be provided in the answer box."
-                    )
-                ) {
+                if (final) {
                     setGeneratingAnswer(true);
                 }
                 if (!isCorrect) {
@@ -199,7 +195,7 @@ function useXQuiz({ lesson, ...props }) {
         if (questionIndex === currentQuestionNum) {
             setCurrentAnswer("");
             setGeneratingAnswer(false);
-            setAnswer(answer);
+            setAnswer({ answer, questionIndex });
         }
     });
 
