@@ -67,7 +67,7 @@ function CreateLesson({ action }) {
     const [searchParams] = useSearchParams();
     const [lesson, setLesson] = React.useState(null);
 
-    useConversationDisplay(0.3);
+    // useConversationDisplay(0.3);
 
     const sendNotification = useNotification();
 

@@ -8,6 +8,7 @@ import GlobalStyles from "./styles/GlobalStyles";
 import PageWrapper from "./styles/containers/PageWrapper";
 import { NotificationContextProvider } from "./context/NotificationContext";
 import { AppDataContextProvider } from "./context/AppDataContext";
+import { HeaderContextProvider } from "./context/HeaderContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <ThemeProvider theme={Theme}>
@@ -15,7 +16,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <NotificationContextProvider>
             <SessionContextProvider>
                 <AppDataContextProvider>
-                    <Router />
+                    <HeaderContextProvider>
+                        <Router />
+                    </HeaderContextProvider>
                     <Ellipse1 />
                     <Ellipse2 />
                 </AppDataContextProvider>

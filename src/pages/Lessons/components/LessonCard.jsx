@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
 import {
     capitaliseFirstLetter,
@@ -6,6 +6,7 @@ import {
 } from "../../../lib/stringUtils";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/input/Button";
+import { percentageToColour } from "../../../lib/misc";
 
 function LessonCard({ lesson }) {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ function LessonCard({ lesson }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
-                console.log("HERE");
+                console.log("LESSON");
                 navigate(
                     `/lessons/${lesson.title.replaceAll(" ", "-")}?id=${
                         lesson.id
@@ -51,6 +52,7 @@ function LessonCard({ lesson }) {
                     onClick={e => {
                         e.preventDefault();
                         e.stopPropagation();
+                        console.log("QUIZ");
                         navigate(
                             `/quiz/${lesson.title.replaceAll(" ", "-")}?id=${
                                 lesson.id
@@ -59,10 +61,47 @@ function LessonCard({ lesson }) {
                     }}>
                     Quiz
                 </Button>
+                <QuizSection>
+                    <div>Last score:</div>
+                    <QuizScore
+                        percentage={
+                            lesson.quiz_scores[0]?.score /
+                            lesson.quiz_scores[0]?.max_score
+                        }>
+                        {lesson.quiz_scores[0]?.score ?? "?"} /{" "}
+                        {lesson.quiz_scores[0]?.max_score ?? "?"}
+                    </QuizScore>
+                </QuizSection>
             </Footer>
         </Container>
     );
 }
+
+const QuizScore = styled.div`
+    /* border: 3px solid red; */
+    ${props =>
+        props.percentage !== NaN &&
+        css`
+            color: ${percentageToColour(props.percentage * 100)};
+            font-weight: 700;
+            font-size: 1.3rem;
+            /* border: 2px solid
+                ${props => percentageToColour(props.percentage * 100)};
+            border-radius: 2rem;
+            padding: 0.5rem; */
+            white-space: nowrap;
+        `}
+`;
+
+const QuizSection = styled.div`
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
 
 const FooterRow = styled.div`
     display: flex;

@@ -5,6 +5,9 @@ import Button from "../../components/input/Button";
 import DropdownList from "../../components/input/DropdownList";
 import { useAppData } from "../../context/AppDataContext";
 import DropdownListNew from "../../components/input/DropdownListNew";
+import XAvatar from "../../components/XAvatar";
+import styled from "styled-components";
+import CollapsableText from "../../components/CollapsableText";
 
 const options = ["OPTION 1", "OPTION 2", "OPTION 3"];
 
@@ -14,68 +17,73 @@ function Test1() {
     const [selected, setSelected] = React.useState("");
 
     // console.log(subjectOptions);
+    const [open, setOpen] = React.useState(true);
+    const [closed, setClosed] = React.useState(false);
 
     return (
-        <CenteredColumn fillparent gap="0.625rem">
-            {/* <ProgressBar
-                width="500px"
-                stops={[
-                    {
-                        label: "average lesson",
-                        location: 2000,
+        <CenteredColumn border fillparent gap="0.625rem">
+            <Container>
+                <CollapsableText>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    euismod, nisl quis aliquam ultricies, nunc nisl ultrices
+                    odio, quis ultricies nisl nunc eget nunc. Sed euismod, nisl
+                    quis aliquam ultricies, nunc nisl ultrices odio, quis
+                    ultricies nisl nunc eget nunc. Sed euismod, nisl quis
+                    aliquam ultricies, nunc nisl ultrices odio, quis ultricies
+                    nisl nunc eget nunc. Sed euismod, nisl quis aliquam
+                    ultricies, nunc nisl ultrices odio, quis ultricies nisl nunc
+                    eget nunc. Sed euismod, nisl quis aliquam ultricies, nunc
+                    nisl ultrices odio, quis ultricies nisl nunc eget nunc.
+                </CollapsableText>
+            </Container>
+            {/* <TestContainer
+                animate={open ? "open" : "closed"}
+                initial={false}
+                variants={{
+                    open: { maxHeight: "20rem" },
+                    closed: {
+                        maxHeight: "3.25rem",
+                        // whiteSpace: "nowrap",
+                        // textOverflow: "ellipsis",
                     },
-                    {
-                        label: "1/4",
-                        location: (max / 4) * 1,
-                    },
-                    {
-                        label: "1/2",
-                        location: (max / 4) * 2,
-                    },
-                    {
-                        label: "3/4",
-                        location: (max / 4) * 3,
-                    },
-                    {
-                        label: "No more usage",
-                        location: max,
-                    },
-                ]}
-                value={current}
-                max={max}
-            /> */}
-            <div
-                style={{
-                    display: "flex",
-                }}>
-                {/* <DropdownList
-                    label="Dropdown"
-                    options={subjectOptions}
-                    selected={selected}
-                    setSelected={setSelected}
-                /> */}
-                <DropdownListNew
-                    label="Dropdown"
-                    options={subjectOptions}
-                    // options={options}
-                    selected={selected}
-                    setSelected={setSelected}
-                    required
-                />
-            </div>
-            {/* <motion.div
-                style={{
-                    width: 200,
-                    height: 200,
-                    backgroundColor: "red",
                 }}
-                animate={{ rotate: 90, scale: 1.5 }}
-                transition={{
-                    duration: 2,
-                    from: 5,
-                }}></motion.div> */}
+                onAnimationComplete={() => setClosed(!closed)}
+                closed={closed}
+                open={open}
+                onClick={() => setOpen(!open)}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                euismod, nisl quis aliquam ultricies, nunc nisl ultrices odio,
+                quis ultricies nisl nunc eget nunc. Sed euismod, nisl quis
+                aliquam ultricies, nunc nisl ultrices odio, quis ultricies nisl
+                nunc eget nunc. Sed euismod, nisl quis aliquam ultricies, nunc
+                nisl ultrices odio, quis ultricies nisl nunc eget nunc. Sed
+                euismod, nisl quis aliquam ultricies, nunc nisl ultrices odio,
+                quis ultricies nisl nunc eget nunc. Sed euismod, nisl quis
+                aliquam ultricies, nunc nisl ultrices odio, quis ultricies nisl
+                nunc eget nunc.
+            </TestContainer> */}
         </CenteredColumn>
     );
 }
+
+const TestContainer = styled(motion.div)`
+    width: 600px;
+    padding: 1rem;
+    line-height: 1.25rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+
+    ${props =>
+        props.closed &&
+        !props.open &&
+        `
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    `}
+`;
+
+const Container = styled.div`
+    width: 600px;
+`;
 
 export default Test1;

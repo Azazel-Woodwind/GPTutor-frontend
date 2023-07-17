@@ -12,12 +12,13 @@ import useScreensize from "../hooks/useScreensize";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { ChatContext } from "../context/ChatContext";
+import HandleIcon from "./HandleIcon";
 
 const options = {
     duration: 0.5,
 };
 
-const threshold = 0.8;
+const threshold = 0.4;
 
 let resizableProportion;
 
@@ -107,7 +108,7 @@ const Resizable = ({ number, children, min }) => {
                 style={{
                     width: number,
                 }}>
-                <HandleContainer ref={handleContainerRef}>
+                <HandleContainer ref={handleContainerRef} visible={draggable}>
                     <Handle
                         as={motion.div}
                         drag="x"
@@ -124,18 +125,9 @@ const Resizable = ({ number, children, min }) => {
                         }}
                         onDragStart={() => {
                             setIsDragging(true);
-                        }}
-                        visible={
-                            draggable
-                            // !(
-                            //     location.pathname === "/hub" ||
-                            //     inClassroomRegex.test(
-                            //         location.pathname + location.search
-                            //     ) ||
-                            //     location.pathname === "/activate"
-                            // )
-                        }
-                    />
+                        }}>
+                        <HandleIcon />
+                    </Handle>
                 </HandleContainer>
 
                 {children}
@@ -145,22 +137,21 @@ const Resizable = ({ number, children, min }) => {
 };
 
 const HandleContainer = styled.div`
-    width: 1.25rem;
-    height: 6.25rem;
+    width: 1.1rem;
+    height: 5rem;
     position: absolute;
     top: calc(50% - 3.125rem);
-    left: -1.25rem;
+    right: 100%;
     z-index: 100;
+    ${props => !props.visible && `display: none;`}
 `;
 
 const Handle = styled.div`
-    display: ${props => (props.hidden ? "none" : "block")};
-    background-color: ${props => props.theme.colours.secondary};
+    /* background-color: ${props => props.theme.colours.secondary}; */
     width: 100%;
     height: 100%;
 
     cursor: e-resize;
-    visibility: ${props => (props.visible ? "visible" : "hidden")};
 `;
 
 const Container = styled.div`

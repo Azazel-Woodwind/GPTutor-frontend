@@ -4,7 +4,7 @@ import { TextWrapper } from "../../../styles/TextWrappers";
 function CorrectFeedback({ correctFeedback }) {
     return (
         <p>
-            <TextWrapper mainGradient>{correctFeedback}</TextWrapper>
+            <TextWrapper color="rgb(0, 255, 0)">{correctFeedback}</TextWrapper>
         </p>
     );
 }

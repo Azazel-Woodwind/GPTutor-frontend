@@ -1,6 +1,7 @@
 import React from "react";
 import useX from "./useX";
 import { SocketContext, useSocket } from "../../context/SocketContext";
+import { QUESTIONS_PER_LEARNING_OBJECTIVE } from "../../lib/constants";
 
 function useXQuiz({ lesson, ...props }) {
     const [questions, setQuestions] = React.useState([]);
@@ -69,6 +70,22 @@ function useXQuiz({ lesson, ...props }) {
         }
     };
 
+    function getScore() {
+        let correctAnswers = 0;
+        correctFeedback.forEach((_, i) => {
+            if (!incorrectFeedback[i]) {
+                correctAnswers++;
+            }
+        });
+
+        return {
+            correctAnswers,
+            total:
+                lesson.learning_objectives.length *
+                QUESTIONS_PER_LEARNING_OBJECTIVE,
+        };
+    }
+
     const onFeedbackStream = React.useCallback(
         ({ delta, questionIndex, choiceIndex, isCorrect }) => {
             X.setLoading(false);
@@ -96,7 +113,7 @@ function useXQuiz({ lesson, ...props }) {
     }, [onFeedbackStream]);
 
     const onNewFeedback = React.useCallback(
-        ({ feedback, isCorrect, questionIndex, choiceIndex }) => {
+        ({ feedback, isCorrect, questionIndex, choiceIndex, final }) => {
             // console.log("RECEIVED FEEDBACK", feedback);
             // console.log(questionIndex, currentQuestionNum);
             if (questionIndex === currentQuestionNum) {
@@ -104,11 +121,7 @@ function useXQuiz({ lesson, ...props }) {
                 setCurrentFeedbackIsCorrect(undefined);
                 setGeneratingFeedback(false);
                 setAnswerIsCorrect(isCorrect);
-                if (
-                    feedback.endsWith(
-                        "A modal answer will be provided in the answer box."
-                    )
-                ) {
+                if (final) {
                     setGeneratingAnswer(true);
                 }
                 if (!isCorrect) {
@@ -199,7 +212,7 @@ function useXQuiz({ lesson, ...props }) {
         if (questionIndex === currentQuestionNum) {
             setCurrentAnswer("");
             setGeneratingAnswer(false);
-            setAnswer(answer);
+            setAnswer({ answer, questionIndex });
         }
     });
 
@@ -260,6 +273,7 @@ function useXQuiz({ lesson, ...props }) {
         generatingAnswer,
         currentAnswer,
         answer,
+        getScore,
     };
 }
 

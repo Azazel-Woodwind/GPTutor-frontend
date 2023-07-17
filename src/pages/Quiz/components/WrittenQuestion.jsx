@@ -1,6 +1,7 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import Textfield from "../../../components/input/Textfield";
+import CollapsableText from "../../../components/CollapsableText";
 
 function WrittenQuestion({
     question,
@@ -16,6 +17,8 @@ function WrittenQuestion({
     currentAnswer,
 }) {
     const [finalAnswer, setFinalAnswer] = React.useState(undefined);
+    const answerTextfieldRef = React.useRef(null);
+
     const theme = useTheme();
 
     if (!finalAnswer && currentFeedback?.isCorrect) {
@@ -23,15 +26,27 @@ function WrittenQuestion({
     }
 
     React.useEffect(() => {
-        if (modalAnswer && !finalAnswer) {
-            setFinalAnswer(modalAnswer);
+        if (
+            modalAnswer?.answer &&
+            modalAnswer?.questionIndex === questionIndex &&
+            !finalAnswer
+        ) {
+            setFinalAnswer(modalAnswer.answer);
         }
     }, [modalAnswer]);
+
+    React.useEffect(() => {
+        if (answerTextfieldRef.current && currentAnswer && !finalAnswer) {
+            answerTextfieldRef.current.scrollTop =
+                answerTextfieldRef.current.scrollHeight;
+        }
+    }, [currentAnswer]);
 
     return (
         <>
             <h2>{question.question}</h2>
             <Textfield
+                ref={answerTextfieldRef}
                 multiline
                 value={finalAnswer || currentAnswer || answer}
                 onChange={e => setAnswer(e.target.value)}
@@ -44,6 +59,7 @@ function WrittenQuestion({
                     finalAnswer ||
                     currentAnswer
                 }
+                style={{ fontSize: "1.2rem" }}
                 onKeyDown={e => {
                     if (e.key === "Enter") {
                         e.preventDefault();
@@ -63,28 +79,29 @@ function WrittenQuestion({
             />
             <div
                 style={{
-                    maxWidth: "43.8rem",
+                    maxWidth: "100%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.625rem",
                 }}>
                 {incorrectFeedback?.map(feedback => (
-                    <p
+                    <CollapsableText
                         key={feedback}
                         style={{
                             color: theme.colours.error,
                         }}>
                         {feedback}
-                    </p>
+                    </CollapsableText>
                 ))}
                 {currentFeedback?.questionIndex === questionIndex &&
                     currentFeedback?.isCorrect === false && (
-                        <p
+                        <CollapsableText
                             style={{
                                 color: theme.colours.error,
-                            }}>
+                            }}
+                            collapsable={false}>
                             {currentFeedback.text}
-                        </p>
+                        </CollapsableText>
                     )}
             </div>
         </>

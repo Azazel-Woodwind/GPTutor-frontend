@@ -22,7 +22,7 @@ const Notifications = Icon(NotificationsCircle);
 const UserProfile = Icon(Profile);
 
 const SettingsWrapper = () => {
-    useConversationDisplay(0.3);
+    // useConversationDisplay(0.3);
 
     return (
         <Container>
@@ -68,6 +68,7 @@ const Container = styled(FillParent)`
     display: flex;
     justify-content: left;
     padding-left: 3rem;
+    padding-top: 1rem;
 `;
 
 const UsedSpace = styled.div`

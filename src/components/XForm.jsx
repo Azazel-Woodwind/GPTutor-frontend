@@ -11,7 +11,6 @@ export const FormContainer = styled.form`
     flex-direction: column;
     justify-content: center;
     gap: 0.8rem;
-    z-index: 10;
     width: 40rem;
 `;
 
@@ -22,9 +21,10 @@ const Title = styled.h1`
 
 const Container = styled.div`
     display: flex;
+    justify-content: center;
+    align-items: center;
 
     height: 100%;
-    /* width: 100%; */
     overflow: auto;
     /* border: 10px solid black; */
 `;
@@ -32,12 +32,17 @@ const Container = styled.div`
 const SubContainer = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
     margin: auto;
-    gap: 5rem;
+    gap: 3rem;
+    height: fit-content;
+    width: fit-content;
 
-    flex-wrap: wrap;
-    padding: 2rem 6rem;
-    /* border: 10px solid blue; */
+    @media (max-width: 1300px) {
+        flex-direction: column-reverse;
+        padding: 8rem 0 4rem 0;
+        gap: 1.5rem;
+    }
 `;
 
 function XForm({
@@ -71,10 +76,6 @@ function XForm({
 }
 
 function formPropsAreEqual(prevProps, nextProps) {
-    // console.log(
-    //     prevProps.form.control === nextProps.form.control &&
-    //         prevProps.form.formState === nextProps.form.formState
-    // );
     return prevProps.isValid === nextProps.isValid;
 }
 

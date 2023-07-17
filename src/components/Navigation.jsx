@@ -49,7 +49,7 @@ const LinkWrapper = ({ path, Icon, label, size, ...props }) => {
     return (
         <Tooltip label={label} underneath>
             <LinkStyle focused={focused} onClick={onClick}>
-                <Icon focused={focused} size={size || 25} />
+                <Icon focused={focused} size={size || 27} />
                 {focused && <Boxshadow />}
             </LinkStyle>
         </Tooltip>

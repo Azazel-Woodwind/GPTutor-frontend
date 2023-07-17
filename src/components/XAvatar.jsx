@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Logo from "../styles/Logo";
 import useXAvatar from "../hooks/useXAvatar/useXAvatar";
 
-const XAvatar = ({ size, hasLogo, multiplier, ...props }) => {
+const XAvatar = ({ size = 200, hasLogo, multiplier, ...props }) => {
     const { XAvatar, XAvatarProps, pulseX } = useXAvatar({ size, ...props });
 
     React.useEffect(() => {
@@ -33,8 +33,8 @@ const Slogan = styled.div`
 
 const LogoWrapper = styled.div`
     position: absolute;
-    top: 43%;
-    left: 44.5%;
+    top: 43.1%;
+    left: 45%;
     z-index: 100;
 `;
 
@@ -42,5 +42,6 @@ const Container = styled.div`
     position: relative;
     height: fit-content;
     width: fit-content;
+    /* border: 10px solid black; */
 `;
 export default React.memo(XAvatar);
