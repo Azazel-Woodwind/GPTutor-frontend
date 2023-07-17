@@ -1,6 +1,7 @@
 import React from "react";
 import useX from "./useX";
 import { SocketContext, useSocket } from "../../context/SocketContext";
+import { QUESTIONS_PER_LEARNING_OBJECTIVE } from "../../lib/constants";
 
 function useXQuiz({ lesson, ...props }) {
     const [questions, setQuestions] = React.useState([]);
@@ -68,6 +69,22 @@ function useXQuiz({ lesson, ...props }) {
             Socket.emit("quiz_generate_next_question");
         }
     };
+
+    function getScore() {
+        let correctAnswers = 0;
+        correctFeedback.forEach((_, i) => {
+            if (!incorrectFeedback[i]) {
+                correctAnswers++;
+            }
+        });
+
+        return {
+            correctAnswers,
+            total:
+                lesson.learning_objectives.length *
+                QUESTIONS_PER_LEARNING_OBJECTIVE,
+        };
+    }
 
     const onFeedbackStream = React.useCallback(
         ({ delta, questionIndex, choiceIndex, isCorrect }) => {
@@ -256,6 +273,7 @@ function useXQuiz({ lesson, ...props }) {
         generatingAnswer,
         currentAnswer,
         answer,
+        getScore,
     };
 }
 

@@ -5,7 +5,9 @@ const LessonAPI = {
     getPublicLessons: async function () {
         const { data, error } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*), exam_boards (*)")
+            .select(
+                "*, learning_objectives (*), exam_boards (*), quiz_scores (*)"
+            )
             .eq("status", "Verified");
 
         if (error) {

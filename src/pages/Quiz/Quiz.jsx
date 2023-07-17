@@ -20,6 +20,7 @@ import Loading from "../Loading/Loading";
 import { useHeader } from "../../context/HeaderContext";
 import QuizHeader from "./components/QuizHeader";
 import CollapsableText from "../../components/CollapsableText";
+import QuizAPI from "../../api/QuizAPI";
 
 function Quiz() {
     useConversationDisplay(false);
@@ -30,6 +31,8 @@ function Quiz() {
     const [selectedChoiceIndex, setSelectedChoiceIndex] =
         React.useState(undefined);
     const [exit, setExit] = React.useState(false);
+
+    const navigate = useNavigate();
 
     const {
         questions,
@@ -46,6 +49,7 @@ function Quiz() {
         answer: modalAnswer,
         currentAnswer,
         generatingAnswer,
+        getScore,
     } = useXQuiz({
         lesson,
     });
@@ -92,7 +96,19 @@ function Quiz() {
         }
 
         if (exit) {
-            return <EndOfQuizModal key="endModal" />;
+            return (
+                <EndOfQuizModal
+                    key="endModal"
+                    score={getScore()}
+                    onExit={async () => {
+                        await QuizAPI.saveScore({
+                            lesson,
+                            score: getScore().correctAnswers,
+                        });
+                        navigate("/hub");
+                    }}
+                />
+            );
         }
 
         return (
