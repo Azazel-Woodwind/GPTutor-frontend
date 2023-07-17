@@ -9,7 +9,7 @@ import LessonCard from "./components/LessonCard";
 function Lessons() {
     const lessons = useLoaderData();
 
-    useConversationDisplay(0.3);
+    // useConversationDisplay(0.3);
     const { width } = React.useContext(ChatContext);
     // console.log(width.get());
 

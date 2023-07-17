@@ -16,7 +16,7 @@ function LessonCard({ lesson }) {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => {
-                // console.log("LESSON");
+                console.log("LESSON");
                 navigate(
                     `/lessons/${lesson.title.replaceAll(" ", "-")}?id=${
                         lesson.id

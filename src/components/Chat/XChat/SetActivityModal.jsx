@@ -236,8 +236,8 @@ const ButtonRow = styled(CenteredRow)`
 const activityOptions = ["Discussion", "Quiz", "Revision Notes", "Debate"];
 
 const Window = styled.div`
-    width: 50rem;
-    height: 35rem;
+    width: 70rem;
+    height: 30rem;
 
     border-radius: 1rem;
     background: white;

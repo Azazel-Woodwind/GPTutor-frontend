@@ -14,6 +14,8 @@ import ChatSection from "../../components/Chat/ChatSection";
 import ProgressBar from "../../components/ProgressBar";
 import ImageCarousel from "../../components/ImageCarousel";
 import EndOfLessonModal from "./components/EndOfLessonModal";
+import ClassroomHeader from "./components/ClassroomHeader";
+import { useHeader } from "../../context/HeaderContext";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -57,7 +59,14 @@ function Classroom() {
         }
     }, []);
 
-    // console.log("IMAGES:", images);
+    const { setShowMainHeader } = useHeader();
+
+    React.useEffect(() => {
+        setShowMainHeader(false);
+        return () => {
+            setShowMainHeader(true);
+        };
+    }, []);
 
     const renderComponent = () => {
         if (started === undefined) {
@@ -88,47 +97,17 @@ function Classroom() {
                 classroomHeight={classroomHeight}
                 {...fade_animation()}
                 key="classroom">
+                <ClassroomHeader
+                    learningObjectiveNumber={learningObjectiveNumber}
+                    currentLesson={currentLesson}
+                    finished={finished}
+                    streaming={streaming}
+                    speaking={speaking}
+                    isMuted={isMuted}
+                    setExit={setExit}
+                />
                 {classroomHeight && (
                     <>
-                        <HeaderContent
-                            centerContent={
-                                <Title
-                                    progressBarShown={
-                                        learningObjectiveNumber > 0
-                                    }>
-                                    {learningObjectiveNumber > 0 ? (
-                                        <div style={{ paddingTop: "1.25rem" }}>
-                                            <ProgressBar
-                                                width="35rem"
-                                                value={learningObjectiveNumber}
-                                                max={
-                                                    currentLesson
-                                                        .learning_objectives
-                                                        .length
-                                                }
-                                            />
-                                        </div>
-                                    ) : (
-                                        <>
-                                            {currentLesson?.title &&
-                                                currentLesson.title}
-                                        </>
-                                    )}
-                                </Title>
-                            }
-                            rightContent={
-                                <ExitButton
-                                    outline={
-                                        !(
-                                            finished &&
-                                            !streaming &&
-                                            (isMuted() || !speaking)
-                                        )
-                                    }
-                                    onClick={() => setExit(true)}
-                                />
-                            }
-                        />
                         <DualDisplay>
                             <LayoutGroup>
                                 <XAvatar
@@ -175,38 +154,7 @@ function Classroom() {
     return <AnimatePresence mode="wait">{renderComponent()}</AnimatePresence>;
 }
 
-const Title = styled.div`
-    font-size: 1.8rem;
-    font-weight: 400;
-
-    ${props =>
-        props.progressBarShown &&
-        `
-    top: 2.5rem;
-    @media (max-width: 1600px) {
-        font-size: 1.5rem;
-    }
-
-    @media (max-width: 1400px) {
-        font-size: 1rem;
-        top: 3.125rem;
-    }
-
-    @media (max-width: 1100px) {
-        font-size: 0.7rem;
-        top: 55px;
-    }
-
-    @media (max-width: 900px) {
-        font-size: 0.5rem;
-    }
-    `}
-`;
-
-const LoadingScreenWrapper = styled(motion.div)`
-    height: 100%;
-    width: 100%;
-`;
+const LoadingScreenWrapper = styled(motion.div)``;
 
 const GalleryContainer = styled.div`
     position: relative;

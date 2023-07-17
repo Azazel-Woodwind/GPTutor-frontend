@@ -9,11 +9,15 @@ import RequireUser from "./RequireUser";
 import RouteProtector from "./RouteProtector";
 import { SocketContextProvider } from "../context/SocketContext";
 import { ChatContextProvider } from "../context/ChatContext";
-import Header from "../components/Header/Header";
 import { STUDENT_ACCESS_LEVEL } from "../lib/accessLevels";
 import XChat from "../components/Chat/XChat/XChat";
-import Logo from "../styles/Logo";
 import RedirectNewToHub from "./RedirectNewToHub";
+import {
+    HEADER_HEIGHT_IN_REM,
+    HTML_FONT_SIZE_IN_PX,
+} from "../lib/measurements";
+import { useHeader } from "../context/HeaderContext";
+import MainHeader from "../components/Header/MainHeader";
 
 const ApplicationWrapperStyle = styled.div`
     position: relative;
@@ -29,14 +33,24 @@ const ApplicationInternalStyle = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
 
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
+
+    /* padding-top: ${HEADER_HEIGHT_IN_REM}rem; */
+`;
+
+const FillerDiv = styled.div`
+    height: ${HEADER_HEIGHT_IN_REM}rem;
+    flex-shrink: 0;
 `;
 
 function ApplicationWrapper() {
     const { event } = useAuth();
     const navigate = useNavigate();
+
+    const { handleScroll, showMainHeader, setShowHeader, setHovering } =
+        useHeader();
 
     React.useEffect(() => {
         if (event === "PASSWORD_RECOVERY") {
@@ -44,18 +58,54 @@ function ApplicationWrapper() {
         }
     }, [event]);
 
+    React.useEffect(() => {
+        const onMouseMove = e => {
+            if (e.clientY <= HEADER_HEIGHT_IN_REM * HTML_FONT_SIZE_IN_PX) {
+                setShowHeader(true);
+                setHovering(true);
+            } else {
+                setHovering(false);
+            }
+        };
+
+        window.onmousemove = onMouseMove;
+
+        return () => {
+            window.onmousemove = null;
+        };
+    }, []);
+
     return (
         <RequireUser>
             <RouteProtector
                 accessLevel={STUDENT_ACCESS_LEVEL}
                 redirect={"/activate"}>
                 <RedirectNewToHub>
+                    {showMainHeader && <MainHeader />}
                     <SocketContextProvider>
                         <ApplicationWrapperStyle>
                             <ChatContextProvider>
-                                {/* <LogoSvgAlt /> */}
-                                <ApplicationInternalStyle>
-                                    <Header />
+                                <ApplicationInternalStyle
+                                    onScroll={handleScroll}
+                                    // onMouseMove={e => {
+                                    //     // console.log(
+                                    //     //     e.clientY,
+                                    //     //     HEADER_HEIGHT_IN_REM *
+                                    //     //         HTML_FONT_SIZE_IN_PX
+                                    //     // );
+                                    //     if (
+                                    //         e.clientY <=
+                                    //         HEADER_HEIGHT_IN_REM *
+                                    //             HTML_FONT_SIZE_IN_PX
+                                    //     ) {
+                                    //         setShowHeader(true);
+                                    //         setHovering(true);
+                                    //     } else {
+                                    //         setHovering(false);
+                                    //     }
+                                    // }}
+                                >
+                                    <FillerDiv />
                                     <Outlet />
                                 </ApplicationInternalStyle>
                                 <XChat />

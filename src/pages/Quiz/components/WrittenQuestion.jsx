@@ -1,6 +1,7 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import Textfield from "../../../components/input/Textfield";
+import CollapsableText from "../../../components/CollapsableText";
 
 function WrittenQuestion({
     question,
@@ -58,6 +59,7 @@ function WrittenQuestion({
                     finalAnswer ||
                     currentAnswer
                 }
+                style={{ fontSize: "1.2rem" }}
                 onKeyDown={e => {
                     if (e.key === "Enter") {
                         e.preventDefault();
@@ -77,28 +79,29 @@ function WrittenQuestion({
             />
             <div
                 style={{
-                    maxWidth: "43.8rem",
+                    maxWidth: "100%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.625rem",
                 }}>
                 {incorrectFeedback?.map(feedback => (
-                    <p
+                    <CollapsableText
                         key={feedback}
                         style={{
                             color: theme.colours.error,
                         }}>
                         {feedback}
-                    </p>
+                    </CollapsableText>
                 ))}
                 {currentFeedback?.questionIndex === questionIndex &&
                     currentFeedback?.isCorrect === false && (
-                        <p
+                        <CollapsableText
                             style={{
                                 color: theme.colours.error,
-                            }}>
+                            }}
+                            collapsable={false}>
                             {currentFeedback.text}
-                        </p>
+                        </CollapsableText>
                     )}
             </div>
         </>

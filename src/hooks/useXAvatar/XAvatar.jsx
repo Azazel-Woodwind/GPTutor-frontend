@@ -173,16 +173,17 @@ const XAvatar = ({
                     as={motion.div}
                     {...{ ...props, loading: undefined }}>
                     {/* {rings} */}
-                    {[...Array(numRings)].map((_, i) => (
-                        <Pulse
-                            key={i}
-                            size={size}
-                            delay={
-                                !!appear * 1.5 +
-                                (ringPropagateDuration / numRings) * i
-                            }
-                        />
-                    ))}
+                    {(!appear || scale === 1) &&
+                        [...Array(numRings)].map((_, i) => (
+                            <Pulse
+                                key={i}
+                                size={size}
+                                delay={
+                                    // !!appear * 1.5 +
+                                    (ringPropagateDuration / numRings) * i
+                                }
+                            />
+                        ))}
                     <X
                         clickable
                         whileHover={{ scale: 1.1 }}

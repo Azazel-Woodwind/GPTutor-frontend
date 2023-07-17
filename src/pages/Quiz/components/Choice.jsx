@@ -1,6 +1,7 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import RadioButton from "../../../components/input/RadioButton";
+import CollapsableText from "../../../components/CollapsableText";
 
 function Choice({
     questionIndex,
@@ -25,6 +26,7 @@ function Choice({
     return (
         <div
             style={{
+                maxWidth: "100%",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.25rem",
@@ -49,24 +51,28 @@ function Choice({
                     (generatingFeedback && !selected) ||
                     (correctFeedback && !isCorrect)
                 }
+                fontSize="1.5rem"
+                radioButtonSize="1.5rem"
+                borderWidth="0.65rem"
             />
             {incorrectFeedback && (
-                <p
+                <CollapsableText
                     style={{
                         color: theme.colours.error,
                     }}>
                     {incorrectFeedback}
-                </p>
+                </CollapsableText>
             )}
             {currentFeedback?.questionIndex === questionIndex &&
                 currentFeedback?.isCorrect === false &&
                 currentFeedback?.choiceIndex === choiceIndex && (
-                    <p
+                    <CollapsableText
                         style={{
                             color: theme.colours.error,
-                        }}>
+                        }}
+                        collapsable={false}>
                         {currentFeedback.text}
-                    </p>
+                    </CollapsableText>
                 )}
         </div>
     );

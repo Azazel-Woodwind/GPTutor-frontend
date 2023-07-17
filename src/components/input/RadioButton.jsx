@@ -6,6 +6,7 @@ import SvgLinearGradient from "../SvgLinearGradient";
 const RadioButtonContainer = styled.label`
     display: flex;
     align-items: center;
+    gap: 0.2rem;
     ${props =>
         !props.disabled &&
         `
@@ -33,8 +34,8 @@ const RadioButtonInput = styled.input`
 
 const CustomRadioButton = styled.span`
     /* cursor: pointer; */
-    width: 22px;
-    height: 22px;
+    width: ${props => props.size || "1.375rem"};
+    height: ${props => props.size || "1.375rem"};
     box-shadow: ${props =>
                 props.disabled ? "grey" : props.theme.colours.primaryStrong}
             0px -1px 3px 1px,
@@ -103,7 +104,7 @@ const RadioButtonLabel = styled.div.withConfig({
         !["wrap"].includes(prop) && defaultValidator(prop),
 })`
     white-space: ${props => (props.wrap ? "normal" : "nowrap")};
-    font-size: 18px;
+    font-size: ${props => props.fontSize || "1.125rem"};
     margin-left: 0.4rem;
     margin-bottom: 0.1rem;
     /* cursor: pointer; */
@@ -133,13 +134,13 @@ const SvgBorder = styled.svg`
     width: 1.875rem;
     height: 1.875rem;
     pointer-events: none;
-    z-index: 100;
+    z-index: 2;
     ${props => (props.checked ? `opacity: 1;` : `opacity: 0;`)}
     transition: opacity 0.5s;
     /* border: 1px solid red; */
 `;
 
-const RadioButton = ({ wrap, ...props }, ref) => {
+const RadioButton = ({ wrap, fontSize, radioButtonSize, ...props }, ref) => {
     const [hovering, setHovering] = React.useState(false);
     const [transitioning, setTransitioning] = React.useState(false);
     const [checked, setChecked] = React.useState(false);
@@ -196,6 +197,7 @@ const RadioButton = ({ wrap, ...props }, ref) => {
                     ref={ref}
                 />
                 <CustomRadioButton
+                    size={radioButtonSize}
                     disabled={props.disabled}
                     checked={
                         props.checked !== undefined ? props.checked : checked
@@ -210,7 +212,8 @@ const RadioButton = ({ wrap, ...props }, ref) => {
                 content={props.label}
                 checked={props.checked !== undefined ? props.checked : checked}
                 hovering={hovering}
-                wrap={wrap}>
+                wrap={wrap}
+                fontSize={fontSize}>
                 {props.label}
             </RadioButtonLabel>
         </RadioButtonContainer>

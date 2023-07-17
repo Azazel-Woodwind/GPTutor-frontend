@@ -12,6 +12,7 @@ import useModal from "../../../hooks/useModal";
 import SetActivityModal from "./SetActivityModal";
 import Logo from "../../../styles/Logo";
 import { useAuth } from "../../../context/SessionContext";
+import { HEADER_HEIGHT_IN_REM } from "../../../lib/measurements";
 
 const prompts = [
     "Hi X. Can you show me the available lessons?",
@@ -46,7 +47,6 @@ const XChat = props => {
     return (
         <Resizable number={width} min={400}>
             <Window>
-                <Navigation />
                 <AvatarContainer>
                     <XAvatar
                         appear
@@ -63,7 +63,7 @@ const XChat = props => {
                 />
                 {location.pathname === "/hub" && (
                     <>
-                        <LogoSvgAlt />
+                        {/* <LogoSvgAlt /> */}
                         <ActivityButton
                             onClick={() => {
                                 Modal.handleOpen();
@@ -89,12 +89,13 @@ const ActivityButton = styled(Button)`
     position: absolute;
     top: 1.8rem;
     right: 3.125rem;
+    /* z-index: 100; */
 `;
 
 const AvatarContainer = styled.div`
     flex-grow: 1;
     margin: 0.625rem;
-    margin-top: 2.5rem;
+    /* margin-top: 2.5rem; */
 `;
 
 const Window = styled.div`
@@ -107,11 +108,13 @@ const Window = styled.div`
     box-sizing: border-box;
     flex-direction: column;
     position: relative;
-    z-index: 2;
+    /* z-index: 2; */
     height: 100vh;
     overflow-x: clip;
     overflow-y: auto;
     position: relative;
+
+    padding-top: ${HEADER_HEIGHT_IN_REM}rem;
 `;
 
 export default XChat;

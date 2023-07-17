@@ -1,8 +1,11 @@
 import { createGlobalStyle } from "styled-components";
+import { gradientColour1 } from "./Theme";
+import { HTML_FONT_SIZE_IN_PX } from "../lib/measurements";
 
 const GlobalStyles = createGlobalStyle`
 
     body, html {
+        font-size: ${HTML_FONT_SIZE_IN_PX}px;
         position: relative;
         z-index: -3;
         height: 100%;
@@ -37,6 +40,9 @@ const GlobalStyles = createGlobalStyle`
             margin: default;
             padding: default; 
         }
+        scrollbar-width: thin;
+        scrollbar-color: ${gradientColour1} ${props =>
+    props.theme.colours.tertiary};
         
         /* color: white;
         background-color: white; */

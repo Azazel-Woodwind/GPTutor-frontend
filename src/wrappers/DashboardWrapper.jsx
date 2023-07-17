@@ -13,7 +13,7 @@ import { AlternateGlobalStyle } from "../styles/GlobalStyles";
 const Users = Icon(UserBadge);
 
 const Dashboard = () => {
-    useConversationDisplay(0.25);
+    // useConversationDisplay(0.25);
     const { session } = useAuth();
 
     return (
@@ -45,6 +45,7 @@ const Dashboard = () => {
 
 const Container = styled(FillParent)`
     padding-left: 3rem;
+    padding-top: 1rem;
     /* border: 3px solid green; */
 `;
 
