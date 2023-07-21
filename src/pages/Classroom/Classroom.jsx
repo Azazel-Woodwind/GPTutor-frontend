@@ -130,6 +130,7 @@ function Classroom() {
                                                 currentImageIndex={
                                                     currentImageIndex
                                                 }
+                                                animationType="fade"
                                             />
                                         </GalleryContainer>
                                     )}
@@ -158,6 +159,7 @@ const GalleryContainer = styled.div`
     max-width: 920px;
     display: flex;
     height: 100%;
+    max-height: 520px;
     flex-direction: column;
     font-weight: 600;
     text-align: center;

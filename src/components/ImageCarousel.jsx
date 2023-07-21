@@ -10,26 +10,55 @@ import { formatImageSource } from "../lib/stringUtils";
 //From framer motion documentation
 
 const variants = {
-    enter: direction => {
-        return {
-            x: direction > 0 ? 1000 : -1000,
-            opacity: 0,
-        };
+    slide: {
+        enter: direction => {
+            return {
+                x: direction > 0 ? 1000 : -1000,
+                opacity: 0,
+            };
+        },
+        center: {
+            zIndex: 1,
+            x: 0,
+            opacity: 1,
+            // transition: {
+            //     bounce: 0,
+            // },
+        },
+        exit: direction => {
+            return {
+                zIndex: 0,
+                x: direction < 0 ? 1000 : -1000,
+                opacity: 0,
+            };
+        },
     },
-    center: {
-        zIndex: 1,
-        x: 0,
-        opacity: 1,
-        // transition: {
-        //     bounce: 0,
-        // },
+    fade: {
+        enter: direction => {
+            return {
+                opacity: 0,
+            };
+        },
+        center: {
+            zIndex: 1,
+            opacity: 1,
+        },
+        exit: direction => {
+            return {
+                zIndex: 0,
+                opacity: 0,
+            };
+        },
     },
-    exit: direction => {
-        return {
-            zIndex: 0,
-            x: direction < 0 ? 1000 : -1000,
-            opacity: 0,
-        };
+};
+
+const transitions = {
+    slide: {
+        x: { type: "spring", stiffness: 300, damping: 30 },
+        opacity: { duration: 0.2 },
+    },
+    fade: {
+        opacity: { duration: 0.5 },
     },
 };
 
@@ -45,7 +74,11 @@ const swipePower = (offset, velocity) => {
     return Math.abs(offset) * velocity;
 };
 
-const ImageCarousel = ({ images = [], currentImageIndex }) => {
+const ImageCarousel = ({
+    images = [],
+    currentImageIndex,
+    animationType = "slide",
+}) => {
     const [[page, direction], setPage] = useState([0, 0]);
 
     // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
@@ -83,7 +116,7 @@ const ImageCarousel = ({ images = [], currentImageIndex }) => {
                         key={page}
                         src={formatImageSource(images[imageIndex])}
                         custom={direction}
-                        variants={variants}
+                        variants={variants[animationType]}
                         initial="enter"
                         animate="center"
                         layout
@@ -96,14 +129,7 @@ const ImageCarousel = ({ images = [], currentImageIndex }) => {
                             );
                         }}
                         exit="exit"
-                        transition={{
-                            x: {
-                                type: "spring",
-                                stiffness: 300,
-                                damping: 30,
-                            },
-                            opacity: { duration: 0.2 },
-                        }}
+                        transition={transitions[animationType]}
                         drag="x"
                         onDragStart={() => setDragging(true)}
                         dragConstraints={{ left: 0, right: 0 }}

@@ -85,13 +85,12 @@ function WrittenQuestion({
                     gap: "0.625rem",
                 }}>
                 {incorrectFeedback?.map(feedback => (
-                    <CollapsableText
+                    <IncorrectFeedback
                         key={feedback}
-                        style={{
-                            color: theme.colours.error,
-                        }}>
-                        {feedback}
-                    </CollapsableText>
+                        feedback={feedback}
+                        currentFeedback={currentFeedback}
+                        questionIndex={questionIndex}
+                    />
                 ))}
                 {currentFeedback?.questionIndex === questionIndex &&
                     currentFeedback?.isCorrect === false && (
@@ -105,6 +104,34 @@ function WrittenQuestion({
                     )}
             </div>
         </>
+    );
+}
+
+function IncorrectFeedback({ feedback, currentFeedback, questionIndex }) {
+    const [collapsed, setCollapsed] = React.useState(false);
+
+    React.useEffect(() => {
+        if (
+            currentFeedback.questionIndex === questionIndex &&
+            currentFeedback.text.length === 1
+        ) {
+            setCollapsed(true);
+        }
+    }, [currentFeedback]);
+
+    const theme = useTheme();
+
+    return (
+        <CollapsableText
+            style={{
+                color: theme.colours.error,
+            }}
+            {...{
+                collapsed,
+                setCollapsed,
+            }}>
+            {feedback}
+        </CollapsableText>
     );
 }
 

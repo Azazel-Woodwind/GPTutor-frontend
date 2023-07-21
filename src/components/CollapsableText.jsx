@@ -4,8 +4,16 @@ import styled, { css } from "styled-components";
 
 const lineHeight = 1.25;
 
-function CollapsableText({ children, collapsable = true, ...props }) {
-    const [collapsed, setCollapsed] = React.useState(false);
+function CollapsableText({
+    children,
+    collapsable = true,
+    collapsed,
+    setCollapsed,
+    ...props
+}) {
+    const [state, setState] = React.useState(false);
+    collapsed = collapsed ?? state;
+    setCollapsed = setCollapsed ?? setState;
     const [fullyCollapsed, setFullyCollapsed] = React.useState(false);
 
     // console.log(collapsed, fullyCollapsed);

@@ -8,8 +8,15 @@ import DropdownListNew from "../../components/input/DropdownListNew";
 import XAvatar from "../../components/XAvatar";
 import styled from "styled-components";
 import CollapsableText from "../../components/CollapsableText";
+import ImageCarousel from "../../components/ImageCarousel";
 
 const options = ["OPTION 1", "OPTION 2", "OPTION 3"];
+
+const images = [
+    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723943473066104/1.1.png",
+    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723943779242135/1.2.png",
+    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723944043491358/1.3.png",
+];
 
 function Test1() {
     const { subjectOptions, educationLevels, examBoards } = useAppData();
@@ -22,46 +29,9 @@ function Test1() {
 
     return (
         <CenteredColumn border fillparent gap="0.625rem">
-            <Container>
-                <CollapsableText>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    euismod, nisl quis aliquam ultricies, nunc nisl ultrices
-                    odio, quis ultricies nisl nunc eget nunc. Sed euismod, nisl
-                    quis aliquam ultricies, nunc nisl ultrices odio, quis
-                    ultricies nisl nunc eget nunc. Sed euismod, nisl quis
-                    aliquam ultricies, nunc nisl ultrices odio, quis ultricies
-                    nisl nunc eget nunc. Sed euismod, nisl quis aliquam
-                    ultricies, nunc nisl ultrices odio, quis ultricies nisl nunc
-                    eget nunc. Sed euismod, nisl quis aliquam ultricies, nunc
-                    nisl ultrices odio, quis ultricies nisl nunc eget nunc.
-                </CollapsableText>
-            </Container>
-            {/* <TestContainer
-                animate={open ? "open" : "closed"}
-                initial={false}
-                variants={{
-                    open: { maxHeight: "20rem" },
-                    closed: {
-                        maxHeight: "3.25rem",
-                        // whiteSpace: "nowrap",
-                        // textOverflow: "ellipsis",
-                    },
-                }}
-                onAnimationComplete={() => setClosed(!closed)}
-                closed={closed}
-                open={open}
-                onClick={() => setOpen(!open)}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                euismod, nisl quis aliquam ultricies, nunc nisl ultrices odio,
-                quis ultricies nisl nunc eget nunc. Sed euismod, nisl quis
-                aliquam ultricies, nunc nisl ultrices odio, quis ultricies nisl
-                nunc eget nunc. Sed euismod, nisl quis aliquam ultricies, nunc
-                nisl ultrices odio, quis ultricies nisl nunc eget nunc. Sed
-                euismod, nisl quis aliquam ultricies, nunc nisl ultrices odio,
-                quis ultricies nisl nunc eget nunc. Sed euismod, nisl quis
-                aliquam ultricies, nunc nisl ultrices odio, quis ultricies nisl
-                nunc eget nunc.
-            </TestContainer> */}
+            <div style={{ height: "500px", width: "600px" }}>
+                <ImageCarousel {...{ images }} animationType="fade" />
+            </div>
         </CenteredColumn>
     );
 }

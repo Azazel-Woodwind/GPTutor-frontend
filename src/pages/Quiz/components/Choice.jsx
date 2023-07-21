@@ -15,6 +15,8 @@ function Choice({
     choice,
     choiceIndex,
 }) {
+    const [collapsed, setCollapsed] = React.useState(false);
+
     const theme = useTheme();
 
     const selected = answer === choice;
@@ -22,6 +24,15 @@ function Choice({
         currentFeedback?.choiceIndex === choiceIndex &&
         currentFeedback?.questionIndex === questionIndex;
     const isCorrect = correctFeedback?.choiceIndex === choiceIndex;
+
+    React.useEffect(() => {
+        if (
+            currentFeedback.questionIndex === questionIndex &&
+            currentFeedback.text.length === 1
+        ) {
+            setCollapsed(true);
+        }
+    }, [currentFeedback]);
 
     return (
         <div
@@ -59,6 +70,10 @@ function Choice({
                 <CollapsableText
                     style={{
                         color: theme.colours.error,
+                    }}
+                    {...{
+                        collapsed,
+                        setCollapsed,
                     }}>
                     {incorrectFeedback}
                 </CollapsableText>
