@@ -13,9 +13,8 @@ import ImageCarousel from "../../components/ImageCarousel";
 const options = ["OPTION 1", "OPTION 2", "OPTION 3"];
 
 const images = [
-    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723943473066104/1.1.png",
-    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723943779242135/1.2.png",
-    "https://cdn.discordapp.com/attachments/1131722665330221058/1131723944043491358/1.3.png",
+    "https://cdn.discordapp.com/attachments/1084532696732139790/1132026121169424515/5.png",
+    "https://cdn.discordapp.com/attachments/1084532696732139790/1132026121425268756/6.png",
 ];
 
 function Test1() {

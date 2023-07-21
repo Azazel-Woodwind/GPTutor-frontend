@@ -42,11 +42,18 @@ const variants = {
         center: {
             zIndex: 1,
             opacity: 1,
+            transition: {
+                duration: 0.5,
+            },
         },
         exit: direction => {
             return {
                 zIndex: 0,
                 opacity: 0,
+                transition: {
+                    duration: 0,
+                    delay: 0.5,
+                },
             };
         },
     },
