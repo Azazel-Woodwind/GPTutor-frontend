@@ -29,7 +29,7 @@ function useXQuiz({ lesson, ...props }) {
 
     const { Socket } = useSocket();
 
-    const submitAnswer = ({ answer, choiceIndex }) => {
+    const submitAnswer = ({ answer, choiceIndex, questionIndex }) => {
         // console.log("SUBMITTING ANSWER: ", answer);
         // console.log("CHOICE INDEX: ", choiceIndex);
         X.sendMessage({

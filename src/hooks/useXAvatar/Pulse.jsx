@@ -42,11 +42,7 @@ const transition = delay => ({
     // repeatDelay: 0,
 });
 
-function Pulse({ size, setRings, delay }) {
-    const unmount = () => {
-        setRings(prev => prev.slice(1));
-    };
-
+function Pulse({ size, delay }) {
     // console.log(delay);
     return (
         <Ring

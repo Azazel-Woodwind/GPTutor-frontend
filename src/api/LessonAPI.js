@@ -6,7 +6,7 @@ const LessonAPI = {
         const { data, error } = await supabase
             .from("lessons")
             .select(
-                "*, learning_objectives (*), exam_boards (*), quiz_scores (*)"
+                "*, learning_objectives (*, instructions:learning_objective_instructions (*)), exam_boards (*), quiz_scores (*)"
             )
             .eq("status", "Verified");
 
@@ -39,7 +39,9 @@ const LessonAPI = {
 
         const { data, error: error2 } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*), exam_boards (*)")
+            .select(
+                "*, learning_objectives (*, instructions:learning_objective_instructions (*)), exam_boards (*), quiz_scores (*)"
+            )
             .eq("author_id", session.user.id);
 
         if (error2) {
@@ -59,7 +61,9 @@ const LessonAPI = {
     getLessonById: async function (lesson_id) {
         const { data, error } = await supabase
             .from("lessons")
-            .select("*, learning_objectives (*), exam_boards (*)")
+            .select(
+                "*, learning_objectives (*, instructions:learning_objective_instructions (*)), exam_boards (*), quiz_scores (*)"
+            )
             .eq("id", lesson_id)
             .single();
 

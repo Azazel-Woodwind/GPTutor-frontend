@@ -1,4 +1,4 @@
-import { Controller } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
 import SvgIcon from "../../../components/SvgIcon";
 import IconButton from "../../../components/input/IconButton";
 import { MIN_LEARNING_OBJECTIVES } from "../../../lib/FormData";
@@ -6,29 +6,37 @@ import Textfield from "../../../components/input/Textfield";
 import styled from "styled-components";
 import { TextWrapper } from "../../../styles/TextWrappers";
 import { CrossSvgData } from "../../../lib/svgIconData";
+import LearningObjectiveInstruction from "./LearningObjectiveInstruction";
+import Button from "../../../components/input/Button";
 
 export default function LearningObjective({
     index,
     learningObjectivesFields,
     form,
 }) {
+    const instructionFields = useFieldArray({
+        control: form.control,
+        name: `learning_objectives.${index}.instructions`,
+    });
+
     return (
         <Container>
             <CloseIconContainer>
                 <IconButton
                     onClick={() => {
-                        if (
-                            !(
-                                learningObjectivesFields.fields.length <=
-                                MIN_LEARNING_OBJECTIVES
-                            )
-                        )
-                            learningObjectivesFields.remove(index);
+                        // if (
+                        //     !(
+                        //         learningObjectivesFields.fields.length <=
+                        //         MIN_LEARNING_OBJECTIVES
+                        //     )
+                        // )
+                        learningObjectivesFields.remove(index);
                     }}
-                    disabled={
-                        learningObjectivesFields.fields.length <=
-                        MIN_LEARNING_OBJECTIVES
-                    }>
+                    // disabled={
+                    //     learningObjectivesFields.fields.length <=
+                    //     MIN_LEARNING_OBJECTIVES
+                    // }
+                >
                     <SvgIcon
                         size="1.9rem"
                         svgData={CrossSvgData}
@@ -38,7 +46,8 @@ export default function LearningObjective({
                                 MIN_LEARNING_OBJECTIVES
                             )
                                 ? `gradient`
-                                : "gray"
+                                : "gradient"
+                            // "gray"
                         }
                     />
                 </IconButton>
@@ -62,51 +71,29 @@ export default function LearningObjective({
                     />
                 )}
             />
-            <ObjectiveContainer>
-                <Controller
-                    name={`learning_objectives.${index}.image_link`}
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Textfield
-                            fullwidth
-                            label="Image Link"
-                            error={fieldState.invalid}
-                            helperText={
-                                fieldState.invalid && fieldState.error?.message
-                            }
-                            {...field}
-                        />
-                    )}
+            {instructionFields.fields.map((objective, instructionIndex) => (
+                <LearningObjectiveInstruction
+                    form={form}
+                    key={objective.id}
+                    instructionIndex={instructionIndex}
+                    instructionFields={instructionFields}
+                    learningObjectiveIndex={index}
                 />
-                <Controller
-                    name={`learning_objectives.${index}.image_description`}
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                        <Textfield
-                            fullwidth
-                            placeholder="An image of..."
-                            label="Image Description"
-                            error={fieldState.invalid}
-                            helperText={
-                                fieldState.invalid && fieldState.error?.message
-                            }
-                            {...field}
-                        />
-                    )}
-                />
-            </ObjectiveContainer>
+            ))}
+            <Button
+                onClick={e => {
+                    e.preventDefault();
+                    instructionFields.append({
+                        instruction: "",
+                        media_link: "",
+                    });
+                }}
+                outline>
+                Add Instruction
+            </Button>
         </Container>
     );
 }
-
-const ObjectiveContainer = styled.div`
-    display: flex;
-    gap: 1rem;
-    /* padding-top: 1rem; */
-    width: 100%;
-    min-height: 64px;
-    align-items: flex-start;
-`;
 
 export const CloseIcon = styled.svg`
     width: 1.9rem;

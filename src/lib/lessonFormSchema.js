@@ -60,26 +60,42 @@ export const lessonFormSchema = ({
                 .array(
                     z.object({
                         description: z.string(),
-                        image_link: z
-                            .string()
-                            .refine(
-                                val =>
-                                    IMAGE_LINK_REGEX.test(val) ||
-                                    SVG_REGEX.test(val),
-                                {
-                                    message:
-                                        "Image link must be of type JPG, JPEG, PNG, GIF, WEBP or SVG",
-                                }
-                            ),
-                        image_description: z.string(),
+                        instructions: z.array(
+                            z.object({
+                                instruction: z.string(),
+                                media_link: z
+                                    .string()
+                                    .refine(
+                                        val =>
+                                            IMAGE_LINK_REGEX.test(val) ||
+                                            SVG_REGEX.test(val),
+                                        {
+                                            message:
+                                                "Image link must be of type JPG, JPEG, PNG, GIF, WEBP or SVG",
+                                        }
+                                    ),
+                            })
+                        ),
+                        // image_link: z
+                        //     .string()
+                        //     .refine(
+                        //         val =>
+                        //             IMAGE_LINK_REGEX.test(val) ||
+                        //             SVG_REGEX.test(val),
+                        //         {
+                        //             message:
+                        //                 "Image link must be of type JPG, JPEG, PNG, GIF, WEBP or SVG",
+                        //         }
+                        //     ),
+                        // image_description: z.string(),
                     })
                 )
-                .min(MIN_LEARNING_OBJECTIVES, {
-                    message: `Must have at least ${MIN_LEARNING_OBJECTIVES} learning objectives`,
-                })
-                .max(MAX_LEARNING_OBJECTIVES, {
-                    message: `Must have at most ${MAX_LEARNING_OBJECTIVES} learning objectives`,
+                .min(1, {
+                    message: `Must have at least 1 learning objective`,
                 }),
+            // .max(MAX_LEARNING_OBJECTIVES, {
+            //     message: `Must have at most ${MAX_LEARNING_OBJECTIVES} learning objectives`,
+            // }),
             is_published: z.boolean().refine(val => val),
         })
         .or(
@@ -92,8 +108,12 @@ export const lessonFormSchema = ({
                 learning_objectives: z.array(
                     z.object({
                         description: z.string(),
-                        image_link: z.string(),
-                        image_description: z.string(),
+                        instructions: z.array(
+                            z.object({
+                                instruction: z.string(),
+                                media_link: z.string(),
+                            })
+                        ),
                     })
                 ),
                 is_published: z.boolean().refine(val => !val),

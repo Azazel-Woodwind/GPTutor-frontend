@@ -17,7 +17,7 @@ function EndOfQuizModal({ score, onExit }) {
 
     const navigate = useNavigate();
 
-    console.log(score);
+    // console.log(score);
 
     return (
         <motion.div {...fade_animation()}>

@@ -54,8 +54,12 @@ const defaultValues = {
     caption: "",
     learning_objectives: Array(3).fill({
         description: "",
-        image_link: "",
-        image_description: "",
+        instructions: [
+            {
+                instruction: "",
+                media_link: "",
+            },
+        ],
     }),
     is_published: false,
 };
@@ -125,8 +129,10 @@ function CreateLesson({ action }) {
             learning_objectives: currentLesson.learning_objectives.map(
                 objective => ({
                     description: objective.description,
-                    image_link: objective.image_link ?? "",
-                    image_description: objective.image_description,
+                    instructions: objective.instructions.map(instruction => ({
+                        instruction: instruction.instruction,
+                        media_link: instruction.media_link,
+                    })),
                 })
             ),
             is_published: currentLesson.is_published,
@@ -196,8 +202,11 @@ function CreateLesson({ action }) {
                 learning_objectives: data.learning_objectives.filter(
                     objective =>
                         objective.description ||
-                        objective.image_link ||
-                        objective.image_description
+                        objective.instructions.some(
+                            instruction =>
+                                instruction.instruction ||
+                                instruction.media_link
+                        )
                 ),
                 is_published: data.is_published,
             };
@@ -269,7 +278,7 @@ function CreateLesson({ action }) {
                         justifyContent: "space-between",
                         marginBottom: "1rem",
                     }}>
-                    <h1 style={{ margin: 0 }}> Create Lesson </h1>
+                    <h1 style={{ margin: 0 }}>Create Lesson</h1>
                     <Button
                         onClick={e => {
                             e.preventDefault();
@@ -452,10 +461,6 @@ function CreateLesson({ action }) {
                         marginBottom: "1rem",
                     }}>
                     <Button
-                        disabled={
-                            learningObjectivesFields.fields.length >=
-                            MAX_LEARNING_OBJECTIVES
-                        }
                         onClick={e => {
                             e.preventDefault();
                             learningObjectivesFields.append({

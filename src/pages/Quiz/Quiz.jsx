@@ -50,6 +50,7 @@ function Quiz() {
         currentAnswer,
         generatingAnswer,
         getScore,
+        loading,
     } = useXQuiz({
         lesson,
     });
@@ -101,7 +102,7 @@ function Quiz() {
                     key="endModal"
                     score={getScore()}
                     onExit={async () => {
-                        await QuizAPI.saveScore({
+                        QuizAPI.saveScore({
                             lesson,
                             score: getScore().correctAnswers,
                         });
@@ -194,6 +195,9 @@ function Quiz() {
                                         {currentFeedback.text}
                                     </CollapsableText>
                                 )}
+                            {loading && currentQuestionNum === i && (
+                                <h2>Thinking...</h2>
+                            )}
                             {currentQuestionNum === i &&
                                 questions[i] !== undefined && (
                                     <>
@@ -245,6 +249,7 @@ function Quiz() {
                                                             "written"
                                                                 ? undefined
                                                                 : selectedChoiceIndex,
+                                                        questionIndex: i,
                                                     });
                                                 }}
                                             />

@@ -42,7 +42,7 @@ export function HeaderContextProvider({ children }) {
     };
 
     React.useEffect(() => {
-        console.log(showHeader, showBoxShadow, hovering);
+        // console.log(showHeader, showBoxShadow, hovering);
         clearTimeout(showHeaderTimer.current);
         if (showHeader && showBoxShadow && !hovering) {
             showHeaderTimer.current = setTimeout(() => {
