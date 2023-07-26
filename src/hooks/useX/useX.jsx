@@ -10,10 +10,11 @@ const defaultConfig = {
     },
     onFinished: message => {},
     onDelta: message => {},
+    onData: data => {},
 };
 
 function useX(config) {
-    const { channel, onMessage, onFinished, onDelta } = {
+    const { channel, onMessage, onFinished, onDelta, onData } = {
         ...defaultConfig,
         ...config,
     };
@@ -28,6 +29,7 @@ function useX(config) {
     const [multiplier, setMultiplier] = useState(undefined);
     const [userPaused, setUserPaused] = useState(false);
     const [responseData, setResponseData] = useState("");
+    // const [streamingInstruction, setStreamingInstruction] = useState(false);
 
     const audio = useRef(new Audio());
     const audioContext = useRef();
@@ -35,10 +37,10 @@ function useX(config) {
     const dataArray = useRef(null);
     const animationId = useRef(null);
     const audioSource = useRef(null);
-    const audioQueue = useRef([]);
+    const instructionQueue = useRef([]);
     const currentResponseId = useRef(undefined);
     const currentPlaybackRate = useRef(1);
-    const response = useRef("");
+    const streamingInstruction = useRef(false);
 
     const { current: orderMaintainer } = useRef(
         new OrderMaintainer({
@@ -58,7 +60,7 @@ function useX(config) {
         messageParams = {},
     }) => {
         if (message.trim() === "" || streaming || loading) return false;
-        audioQueue.current = [];
+        instructionQueue.current = [];
         audio.current.src = "";
         audio.current.load();
         setSpeaking(false);
@@ -90,7 +92,7 @@ function useX(config) {
     };
 
     const resetAudio = () => {
-        audioQueue.current = [];
+        instructionQueue.current = [];
         audio.current.src = "";
         audio.current.load();
         setSpeaking(false);
@@ -182,25 +184,6 @@ function useX(config) {
                 );
                 return;
             }
-
-            if (audio.current.paused) {
-                if (!userPaused) {
-                    audio.current.src = `data:audio/x-wav;base64,${data.audio}`;
-                    play();
-                } else {
-                    if (audio.current.src.startsWith("data:")) {
-                        console.log(
-                            "queueing audio_data because track is paused by user"
-                        );
-                        audioQueue.current.push(data.audio);
-                    } else {
-                        audio.current.src = `data:audio/x-wav;base64,${data.audio}`;
-                    }
-                }
-            } else {
-                console.log("queueing audio_data because track is playing");
-                audioQueue.current.push(data.audio);
-            }
         },
         [userPaused]
     );
@@ -250,17 +233,6 @@ function useX(config) {
             setLoading(false);
 
             if (delta === "[END]") {
-                console.log("response_stream end");
-                setStreaming(false);
-                if (responseData) {
-                    console.log("here");
-                    setCurrentMessage("");
-                    setHistory(prev => [
-                        ...prev,
-                        { role: "assistant", content: responseData },
-                    ]);
-                    setResponseData("");
-                }
                 return;
             }
 
@@ -290,28 +262,131 @@ function useX(config) {
         Socket.on(`${channel}_response_stream`, onReceiveResponseStream);
     }, [onReceiveResponseStream]);
 
+    const streamText = async (text, duration) => {
+        // add text to currentMessage character by character over duration
+        duration *= 0.5;
+        const charDuration = duration / text.length;
+        // console.log("character duration:", charDuration);
+        // console.log("length:", text.length);
+
+        let i = 0;
+        streamingInstruction.current = true;
+        for (const char of text) {
+            setCurrentMessage(prevMessage => prevMessage + char);
+            if (i !== text.length - 1) {
+                await new Promise(resolve =>
+                    setTimeout(
+                        resolve,
+                        charDuration / audio.current.playbackRate
+                    )
+                );
+            }
+            i++;
+        }
+        streamingInstruction.current = false;
+        console.log(audio.current.paused, instructionQueue.current.length);
+
+        if (audio.current.paused) {
+            instructionQueue.current.shift();
+            if (instructionQueue.current.length > 0) {
+                await new Promise(resolve => setTimeout(resolve, 250));
+                handleNextInstruction();
+            }
+        }
+    };
+
+    const streamDelta = async delta => {
+        for (const char of delta) {
+            setCurrentMessage(prevMessage => prevMessage + char);
+            await new Promise(resolve => setTimeout(resolve, 20));
+        }
+
+        return Promise.resolve();
+    };
+
+    const handleNextInstruction = async () => {
+        const instruction = instructionQueue.current[0];
+        if (!instruction) return;
+        setStreaming(true);
+        setLoading(false);
+
+        if (instruction.type === "sentence") {
+            audio.current.src = `data:audio/x-wav;base64,${instruction.audioContent}`;
+            streamText(instruction.text, instruction.duration * 1000);
+            play();
+        } else if (instruction.type === "data") {
+            console.log("AAAAAAAAAAAAAAAAAA");
+            onData(instruction);
+            console.log("BBBBBBBBBBBBBBBBBBBB");
+            instructionQueue.current.shift();
+            if (instructionQueue.current.length > 0) {
+                handleNextInstruction();
+            }
+        } else if (instruction.type === "delta") {
+            await streamDelta(instruction.delta);
+            instructionQueue.current.shift();
+            if (instructionQueue.current.length > 0) {
+                handleNextInstruction();
+            }
+        } else if (instruction.type === "end") {
+            console.log("response_stream end");
+            setStreaming(false);
+            if (responseData) {
+                console.log("here");
+                setCurrentMessage("");
+                setHistory(prev => [
+                    ...prev,
+                    { role: "assistant", content: responseData },
+                ]);
+                setResponseData("");
+            }
+
+            instructionQueue.current.shift();
+        }
+    };
+
+    const onAudioEnd = useCallback(async () => {
+        console.log("track ended");
+        // end = performance.now();
+        //     const duration = end - start;
+        //     console.log("track ended");
+        //     console.log("duration of speech", duration);
+
+        // console.log(instructionQueue.current.length);
+        audio.current.src = "";
+        setSpeaking(false);
+        cancelAnimationFrame(animationId.current);
+        setMultiplier(1);
+
+        console.log(
+            streamingInstruction.current,
+            instructionQueue.current.length
+        );
+        if (!streamingInstruction.current) {
+            instructionQueue.current.shift();
+
+            if (instructionQueue.current.length > 0) {
+                await new Promise(resolve => setTimeout(resolve, 250));
+                handleNextInstruction();
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        audio.current.onended = onAudioEnd;
+    }, [onAudioEnd]);
+
     useEffect(() => {
         if (!Socket) return;
 
+        let start, end;
+
         audio.current.onplay = () => {
+            // start = performance.now();
             console.log("track playing");
             audio.current.playbackRate = currentPlaybackRate.current;
             // console.log(audio.current.src);
             setSpeaking(true);
-        };
-
-        audio.current.onended = () => {
-            console.log("track ended");
-            console.log(audioQueue.current.length);
-            if (audioQueue.current.length > 0) {
-                audio.current.src = `data:audio/x-wav;base64,${audioQueue.current.shift()}`;
-                play();
-            } else {
-                audio.current.src = "";
-                setSpeaking(false);
-                cancelAnimationFrame(animationId.current);
-                setMultiplier(1);
-            }
         };
 
         audio.current.onpause = () => {
@@ -320,6 +395,21 @@ function useX(config) {
             // cancelAnimationFrame(animationId.current!);
             // setMultiplier(1);
         };
+
+        Socket.on(`${channel}_instruction`, data => {
+            console.log("instruction", data);
+            if (!data.first && data.id !== currentResponseId.current) {
+                console.log(
+                    "ignoring instruction because it's not the current response"
+                );
+                return;
+            }
+
+            instructionQueue.current.push(data);
+            if (instructionQueue.current.length === 1) {
+                handleNextInstruction();
+            }
+        });
 
         Socket.on(`${channel}_error`, err => {
             sendSystemMessage(err);
@@ -339,7 +429,7 @@ function useX(config) {
 
             Socket.off(`${channel}_audio_data`);
             Socket.emit(`${channel}_exit`);
-            audioQueue.current = [];
+            instructionQueue.current = [];
             audio.current.src = "";
             audio.current.load();
             Socket.off(`${channel}_response_stream`);
@@ -347,6 +437,7 @@ function useX(config) {
 
             Socket.off(`${channel}_response_data`);
             Socket.off(`${channel}_message_user`);
+            Socket.off(`${channel}_instruction`);
         };
     }, []);
 

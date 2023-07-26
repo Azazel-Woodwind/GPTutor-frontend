@@ -36,6 +36,7 @@ const variants = {
     fade: {
         enter: direction => {
             return {
+                zIndex: 0,
                 opacity: 0,
             };
         },
@@ -64,9 +65,6 @@ const transitions = {
         x: { type: "spring", stiffness: 300, damping: 30 },
         opacity: { duration: 0.2 },
     },
-    fade: {
-        opacity: { duration: 0.5 },
-    },
 };
 
 /**
@@ -87,26 +85,29 @@ const ImageCarousel = ({
     animationType = "slide",
 }) => {
     const [[page, direction], setPage] = useState([0, 0]);
-
-    // We only have 3 images, but we paginate them absolutely (ie 1, 2, 3, 4, 5...) and
-    // then wrap that within 0-2 to find our image ID in the array below. By passing an
-    // absolute page index as the `motion` component's `key` prop, `AnimatePresence` will
-    // detect it as an entirely new image. So you can infinitely paginate as few as 1 images.
-    const imageIndex = wrap(0, images.length, page);
-
-    const paginate = newDirection => {
-        setPage([page + newDirection, newDirection]);
-    };
-
     const [dragging, setDragging] = useState(false);
     const [selected, setSelected] = useState(-1);
 
+    const paginate = newDirection => {
+        let newPage = page + newDirection;
+        if (newPage < 0) {
+            newPage += images.length;
+        } else if (newPage > images.length - 1) {
+            newPage -= images.length;
+        }
+        setPage([newPage, newDirection]);
+    };
+
+    // console.log("IMAGE INDEX", imageIndex);
+    // console.log("PAGE", page);
+
     React.useEffect(() => {
         setSelected(-1);
-        if (currentImageIndex - imageIndex > 0) {
-            paginate(currentImageIndex - imageIndex);
+        console.log(images.length, currentImageIndex, page);
+        if (currentImageIndex - page > 0) {
+            paginate(currentImageIndex - page);
         }
-    }, [currentImageIndex]);
+    }, [currentImageIndex, images]);
 
     // console.log(images);
     return (
@@ -118,22 +119,20 @@ const ImageCarousel = ({
                     setSelected(-1);
                 }}
                 imageClicked={selected !== -1}>
-                <AnimatePresence initial={false} custom={direction}>
+                <AnimatePresence custom={direction}>
                     <Image
                         key={page}
-                        src={formatImageSource(images[imageIndex])}
+                        src={formatImageSource(images[page])}
                         custom={direction}
                         variants={variants[animationType]}
                         initial="enter"
                         animate="center"
                         layout
-                        selected={selected === imageIndex}
+                        selected={selected === page}
                         onClick={e => {
                             e.stopPropagation();
                             if (dragging) return;
-                            setSelected(
-                                selected === imageIndex ? -1 : imageIndex
-                            );
+                            setSelected(selected === page ? -1 : page);
                         }}
                         exit="exit"
                         transition={transitions[animationType]}
@@ -242,4 +241,12 @@ const Next = styled(ArrowContainer)`
     right: 0.625rem;
 `;
 
-export default ImageCarousel;
+function formPropsAreEqual(prevProps, nextProps) {
+    return (
+        prevProps.images === nextProps.images &&
+        prevProps.currentImageIndex === nextProps.currentImageIndex &&
+        prevProps.animationType === nextProps.animationType
+    );
+}
+
+export default React.memo(ImageCarousel, formPropsAreEqual);

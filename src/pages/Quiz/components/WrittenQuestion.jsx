@@ -112,8 +112,8 @@ function IncorrectFeedback({ feedback, currentFeedback, questionIndex }) {
 
     React.useEffect(() => {
         if (
-            currentFeedback.questionIndex === questionIndex &&
-            currentFeedback.text.length === 1
+            currentFeedback?.questionIndex === questionIndex &&
+            currentFeedback?.text.length === 1
         ) {
             setCollapsed(true);
         }

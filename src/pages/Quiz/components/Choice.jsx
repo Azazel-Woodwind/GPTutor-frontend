@@ -27,8 +27,10 @@ function Choice({
 
     React.useEffect(() => {
         if (
-            currentFeedback.questionIndex === questionIndex &&
-            currentFeedback.text.length === 1
+            incorrectFeedback &&
+            currentFeedback?.questionIndex === questionIndex &&
+            currentFeedback?.choiceIndex !== choiceIndex &&
+            currentFeedback?.text?.length === 1
         ) {
             setCollapsed(true);
         }

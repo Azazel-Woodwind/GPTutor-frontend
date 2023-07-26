@@ -28,6 +28,32 @@ function useXLesson({ currentLesson, delay, ...props }) {
             // );
             // setLearningObjectiveNumber(learningObjectiveNumber);
         },
+        onData: data => {
+            console.log("ONDATA");
+            if (data.finished) {
+                setFinished(true);
+                return;
+            }
+
+            let [learningObjectiveIndex, instructionIndex] = data.instruction
+                .toString()
+                .split(".");
+            learningObjectiveIndex = parseInt(learningObjectiveIndex);
+            instructionIndex = parseInt(instructionIndex);
+            learningObjectiveIndex--;
+            instructionIndex--;
+            console.log(
+                `NEW INSTRUCTION: ${learningObjectiveIndex + 1}.${
+                    instructionIndex + 1
+                }`
+            );
+
+            setLearningObjectiveNumber(learningObjectiveIndex + 1);
+            setInstruction({
+                learningObjectiveIndex,
+                instructionIndex,
+            });
+        },
         ...props,
     });
 
@@ -56,23 +82,13 @@ function useXLesson({ currentLesson, delay, ...props }) {
 
         const timer = setTimeout(() => {
             Socket.emit("start_lesson", { current_lesson: currentLesson });
-            Socket.on("lesson_finished", () => setFinished(true));
-            Socket.on(
-                "instruction_change",
-                ({ learningObjectiveIndex, instructionIndex }) => {
-                    console.log(
-                        `NEW INSTRUCTION: ${learningObjectiveIndex + 1}.${
-                            instructionIndex + 1
-                        }`
-                    );
+            // Socket.on("lesson_finished", () => setFinished(true));
+            // Socket.on(
+            //     "instruction_change",
+            //     ({ learningObjectiveIndex, instructionIndex }) => {
 
-                    setLearningObjectiveNumber(learningObjectiveIndex + 1);
-                    setInstruction({
-                        learningObjectiveIndex,
-                        instructionIndex,
-                    });
-                }
-            );
+            //     }
+            // );
             // Socket.on("lesson_response_data", data => {
             //     const { learningObjectiveNumber } = data;
             // console.log(
