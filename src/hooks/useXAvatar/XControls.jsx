@@ -5,18 +5,22 @@ import IconButton from "../../components/input/IconButton";
 import styled from "styled-components";
 import React from "react";
 import Slider from "../../components/input/Slider";
+import SpeedChangerButton from "../../components/input/SpeedChangerButton";
 
 function XControls({
     isMuted,
     setIsMuted,
     toggleMute,
-    xSpeed,
-    setXSpeed,
     setSpeed,
     mouseEntered,
 }) {
     const [isDragging, setIsDragging] = React.useState(false);
     const [isHovering, setIsHovering] = React.useState(false);
+    const [xSpeed, setXSpeed] = React.useState(1);
+
+    React.useEffect(() => {
+        setSpeed(xSpeed);
+    }, [xSpeed]);
 
     return (
         <AnimatePresence>
@@ -49,8 +53,12 @@ function XControls({
                             )}
                         </IconButton>
                     </MuteButtonContainer>
-                    <SpeedSliderContainer>
-                        <Slider
+                    <SpeedButtonContainer>
+                        <SpeedChangerButton
+                            speed={xSpeed}
+                            setSpeed={setXSpeed}
+                        />
+                        {/* <Slider
                             min={1}
                             max={2}
                             step={0.25}
@@ -70,13 +78,22 @@ function XControls({
                             onDragEnd={() => setIsDragging(false)}
                             onMouseOver={() => setIsHovering(true)}
                             onMouseLeave={() => setIsHovering(false)}
-                        />
-                    </SpeedSliderContainer>
+                        /> */}
+                    </SpeedButtonContainer>
                 </motion.div>
             )}
         </AnimatePresence>
     );
 }
+
+const SpeedButtonContainer = styled.div`
+    position: absolute;
+    width: fit-content;
+    height: fit-content;
+    top: 5px;
+    left: 5px;
+    z-index: 2;
+`;
 
 const SpeedSliderContainer = styled.div`
     position: absolute;

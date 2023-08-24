@@ -8,7 +8,7 @@ import LessonCard from "./components/LessonCard";
 
 function Lessons() {
     const lessons = useLoaderData();
-    console.log(lessons);
+    // console.log(lessons);
 
     // useConversationDisplay(0.3);
     const { width } = React.useContext(ChatContext);

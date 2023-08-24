@@ -153,24 +153,43 @@ const IconSvg = styled.svg`
 
 function OutlinedButton(props) {
     const [hovering, setHovering] = useState(false);
-    const [buttonRef, setButtonRef] = useState(null);
+    const [buttonWidth, setButtonWidth] = React.useState(undefined);
+    const [buttonHeight, setButtonHeight] = React.useState(undefined);
+
+    const containerRef = React.useRef(null);
 
     const borderGradientID = useMemo(nanoid, []);
     const iconGradientID = useMemo(nanoid, []);
 
     const borderWidth = props.borderWidth || 3;
 
-    // console.log(buttonRef?.offsetWidth);
-    // console.log(buttonRef?.offsetHeight);
+    React.useEffect(() => {
+        const resizeObserver = new ResizeObserver((entries, observer) => {
+            setButtonHeight(containerRef?.current?.offsetHeight);
+            setButtonWidth(containerRef?.current?.offsetWidth);
+            // console.log("entries:", entries);
+            // console.log("observer:", observer);
+        });
+
+        if (containerRef.current) {
+            resizeObserver.observe(containerRef.current);
+        }
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, []);
 
     return (
         <OutlinedButtonStyle
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
-            ref={setButtonRef}
+            ref={containerRef}
             {...props}
             style={{
-                padding: `0.8em 1.5em`,
+                padding: `${props.paddingY || 0.8}rem ${
+                    props.paddingX || 1.5
+                }rem`,
                 margin: `${borderWidth}px`,
             }}>
             <SvgBorder>
@@ -180,8 +199,8 @@ function OutlinedButton(props) {
                 <rect
                     x={0}
                     y={0}
-                    width={buttonRef?.offsetWidth || 0}
-                    height={buttonRef?.offsetHeight || 0}
+                    width={buttonWidth || 0}
+                    height={buttonHeight || 0}
                     rx="10"
                     fill={
                         props.disabled

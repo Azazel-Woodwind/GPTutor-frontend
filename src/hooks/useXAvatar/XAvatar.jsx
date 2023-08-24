@@ -60,7 +60,7 @@ const XAvatar = ({
 
     const [isMuted, setIsMuted] = React.useState(false);
     const [mouseEntered, setMouseEntered] = React.useState(false);
-    const [xSpeed, setXSpeed] = React.useState(1);
+
     const [promptIndex, setPromptIndex] = React.useState(undefined);
     const [
         examplePromptHorizontalDisplacement,
@@ -229,8 +229,6 @@ const XAvatar = ({
                     setIsMuted={setIsMuted}
                     toggleMute={toggleMute}
                     setSpeed={setSpeed}
-                    xSpeed={xSpeed}
-                    setXSpeed={setXSpeed}
                     mouseEntered={mouseEntered}
                 />
             </ControlsContainer>

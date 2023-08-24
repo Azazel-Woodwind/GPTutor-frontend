@@ -87,7 +87,7 @@ export const Container = styled.div`
     height: ${props => props.height || 20}px;
     min-width: ${props => props.width || 20}px;
     min-height: ${props => props.height || 20}px;
-    cursor: pointer;
+    ${props => !props.disabled && "cursor: pointer;"};
     /* border: 1px solid black; */
 `;
 

@@ -51,7 +51,7 @@ function WrittenQuestion({
                 value={finalAnswer || currentAnswer || answer}
                 onChange={e => setAnswer(e.target.value)}
                 label="Answer"
-                width="37.5rem"
+                width="37.5em"
                 rows={4}
                 disabled={
                     correctFeedback ||
@@ -59,7 +59,7 @@ function WrittenQuestion({
                     finalAnswer ||
                     currentAnswer
                 }
-                style={{ fontSize: "1.2rem" }}
+                style={{ fontSize: "1.2em" }}
                 onKeyDown={e => {
                     if (e.key === "Enter") {
                         e.preventDefault();
@@ -82,7 +82,7 @@ function WrittenQuestion({
                     maxWidth: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.625rem",
+                    gap: "0.625em",
                 }}>
                 {incorrectFeedback?.map(feedback => (
                     <IncorrectFeedback

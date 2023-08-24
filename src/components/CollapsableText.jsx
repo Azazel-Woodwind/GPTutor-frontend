@@ -25,7 +25,7 @@ function CollapsableText({
             animate={collapsed ? "collapsed" : "open"}
             initial={false}
             variants={{
-                open: { maxHeight: "15rem" },
+                open: { maxHeight: "15em" },
                 collapsed: {
                     maxHeight: `${lineHeight + 2}em`,
                 },
@@ -44,8 +44,8 @@ function CollapsableText({
                 style={{
                     originY: 0.55,
                     position: "absolute",
-                    left: "1rem",
-                    top: "1rem",
+                    left: "1em",
+                    top: "1em",
                     cursor: collapsable ? "pointer" : "auto",
                 }}>
                 <svg width="15" height="15" viewBox="0 0 20 20">
@@ -63,10 +63,10 @@ function CollapsableText({
 const Container = styled(motion.div)`
     position: relative;
 
-    padding: 1rem;
-    padding-left: 3rem;
+    padding: 1em;
+    padding-left: 3em;
     background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 0.5rem;
+    border-radius: 0.5em;
 
     line-height: ${lineHeight}em;
 

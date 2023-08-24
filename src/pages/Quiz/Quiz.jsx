@@ -21,6 +21,8 @@ import { useHeader } from "../../context/HeaderContext";
 import QuizHeader from "./components/QuizHeader";
 import CollapsableText from "../../components/CollapsableText";
 import QuizAPI from "../../api/QuizAPI";
+import CenteredRow from "../../styles/containers/CenteredRow";
+import Question from "./components/Question";
 
 function Quiz() {
     useConversationDisplay(false);
@@ -58,18 +60,6 @@ function Quiz() {
     React.useEffect(() => {
         setSelectedChoiceIndex(undefined);
     }, [incorrectFeedback]);
-
-    const callback = React.useCallback(
-        node => {
-            if (node !== null) {
-                node.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start",
-                });
-            }
-        },
-        [currentQuestionNum]
-    );
 
     const { setShowMainHeader } = useHeader();
 
@@ -121,143 +111,29 @@ function Quiz() {
                     setExit={setExit}
                 />
                 {[...Array(currentQuestionNum + 1).keys()].map(i => (
-                    <CenteredColumn
-                        width="100vw"
-                        style={{ padding: "1.25rem", minHeight: "100vh" }}
-                        ref={callback}
-                        key={i}>
-                        <QuestionContainer
-                            gap="1.25rem"
-                            style={{ maxWidth: "60rem" }}>
-                            {questions[i] === undefined ? (
-                                <GeneratingQuestion />
-                            ) : (
-                                <>
-                                    <h1>Question #{i + 1}</h1>
-                                    {questions[i].type === "written" ? (
-                                        <WrittenQuestion
-                                            question={questions[i]}
-                                            answer={answer}
-                                            setAnswer={setAnswer}
-                                            submitAnswer={submitAnswer}
-                                            currentFeedback={currentFeedback}
-                                            correctFeedback={
-                                                correctFeedback?.[i]
-                                            }
-                                            incorrectFeedback={
-                                                incorrectFeedback?.[i]
-                                            }
-                                            questionIndex={i}
-                                            selectedChoiceIndex={
-                                                selectedChoiceIndex
-                                            }
-                                            modalAnswer={modalAnswer}
-                                            currentAnswer={currentAnswer}
-                                        />
-                                    ) : (
-                                        <MultipleChoiceQuestion
-                                            question={questions[i]}
-                                            answer={answer}
-                                            setAnswer={setAnswer}
-                                            currentFeedback={currentFeedback}
-                                            correctFeedback={
-                                                correctFeedback?.[i]
-                                            }
-                                            incorrectFeedback={
-                                                incorrectFeedback[i]
-                                            }
-                                            questionIndex={i}
-                                            setSelectedChoiceIndex={
-                                                setSelectedChoiceIndex
-                                            }
-                                            generatingFeedback={
-                                                generatingFeedback
-                                            }
-                                        />
-                                    )}
-                                </>
-                            )}
-                            {correctFeedback?.[i] && (
-                                <CollapsableText
-                                    style={{
-                                        color: "rgb(0, 255, 0)",
-                                    }}>
-                                    {correctFeedback[i].feedback}
-                                </CollapsableText>
-                            )}
-                            {currentFeedback?.questionIndex === i &&
-                                currentFeedback?.isCorrect && (
-                                    <CollapsableText
-                                        style={{
-                                            color: "rgb(0, 255, 0)",
-                                        }}
-                                        collapsable={false}>
-                                        {currentFeedback.text}
-                                    </CollapsableText>
-                                )}
-                            {loading && currentQuestionNum === i && (
-                                <h2>Thinking...</h2>
-                            )}
-                            {currentQuestionNum === i &&
-                                questions[i] !== undefined && (
-                                    <>
-                                        {answerIsCorrect ? (
-                                            <>
-                                                {currentQuestion.final ? (
-                                                    <FinishQuizButton
-                                                        generatingFeedback={
-                                                            generatingFeedback
-                                                        }
-                                                        onClick={() => {
-                                                            setExit(true);
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <NextQuestionButton
-                                                        disabled={
-                                                            generatingFeedback ||
-                                                            generatingAnswer
-                                                        }
-                                                        onClick={() => {
-                                                            nextQuestion();
-                                                            setAnswer("");
-                                                            setSelectedChoiceIndex(
-                                                                undefined
-                                                            );
-                                                        }}
-                                                    />
-                                                )}
-                                            </>
-                                        ) : (
-                                            <SubmitAnswerButton
-                                                disabled={
-                                                    !answer ||
-                                                    generatingFeedback ||
-                                                    generatingHint ||
-                                                    generatingAnswer ||
-                                                    (questions[i].type !==
-                                                        "written" &&
-                                                        selectedChoiceIndex ===
-                                                            undefined)
-                                                }
-                                                onClick={() => {
-                                                    submitAnswer({
-                                                        answer,
-                                                        choiceIndex:
-                                                            questions[i]
-                                                                .type ===
-                                                            "written"
-                                                                ? undefined
-                                                                : selectedChoiceIndex,
-                                                        questionIndex: i,
-                                                    });
-                                                }}
-                                            />
-                                        )}
-                                    </>
-                                )}
-                        </QuestionContainer>
-                    </CenteredColumn>
+                    <Question
+                        key={i}
+                        i={i}
+                        questions={questions}
+                        answer={answer}
+                        setAnswer={setAnswer}
+                        submitAnswer={submitAnswer}
+                        currentFeedback={currentFeedback}
+                        correctFeedback={correctFeedback}
+                        incorrectFeedback={incorrectFeedback}
+                        currentQuestionNum={currentQuestionNum}
+                        selectedChoiceIndex={selectedChoiceIndex}
+                        setSelectedChoiceIndex={setSelectedChoiceIndex}
+                        generatingFeedback={generatingFeedback}
+                        generatingHint={generatingHint}
+                        generatingAnswer={generatingAnswer}
+                        answerIsCorrect={answerIsCorrect}
+                        nextQuestion={nextQuestion}
+                        loading={loading}
+                        modalAnswer={modalAnswer}
+                        currentAnswer={currentAnswer}
+                        currentQuestion={currentQuestion}
+                    />
                 ))}
             </Container>
         );
@@ -266,10 +142,8 @@ function Quiz() {
     return <AnimatePresence mode="wait">{renderComponent()}</AnimatePresence>;
 }
 
-const QuestionContainer = styled(CenteredColumn)``;
-
 const Container = styled(motion.div)`
-    font-size: 1.3rem;
+    font-size: 0.9rem;
 
     h1 {
         font-size: 3rem;

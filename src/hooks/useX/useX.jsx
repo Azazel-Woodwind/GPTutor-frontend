@@ -176,7 +176,7 @@ function useX(config) {
 
     const onReceiveAudioData = useCallback(
         data => {
-            console.log("received audio_data");
+            // console.log("received audio_data");
 
             if (!data.first && data.id !== currentResponseId.current) {
                 console.log(
@@ -192,10 +192,10 @@ function useX(config) {
         data => {
             // console.log("response_data:", data);
             if (streaming || loading) {
-                console.log("NO HERE");
+                // console.log("NO HERE");
                 setResponseData(data.response);
             } else {
-                console.log("HERE");
+                // console.log("HERE");
                 setCurrentMessage("");
                 setHistory(prev => [
                     ...prev,
@@ -246,7 +246,7 @@ function useX(config) {
 
     useEffect(() => {
         if (responseData && !streaming) {
-            console.log("herio");
+            // console.log("herio");
             setCurrentMessage("");
             setHistory(prev => [
                 ...prev,
@@ -284,7 +284,7 @@ function useX(config) {
             i++;
         }
         streamingInstruction.current = false;
-        console.log(audio.current.paused, instructionQueue.current.length);
+        // console.log(audio.current.paused, instructionQueue.current.length);
 
         if (audio.current.paused) {
             instructionQueue.current.shift();
@@ -315,9 +315,7 @@ function useX(config) {
             streamText(instruction.text, instruction.duration * 1000);
             play();
         } else if (instruction.type === "data") {
-            console.log("AAAAAAAAAAAAAAAAAA");
             onData(instruction);
-            console.log("BBBBBBBBBBBBBBBBBBBB");
             instructionQueue.current.shift();
             if (instructionQueue.current.length > 0) {
                 handleNextInstruction();
@@ -332,7 +330,7 @@ function useX(config) {
             console.log("response_stream end");
             setStreaming(false);
             if (responseData) {
-                console.log("here");
+                // console.log("here");
                 setCurrentMessage("");
                 setHistory(prev => [
                     ...prev,
@@ -358,10 +356,10 @@ function useX(config) {
         cancelAnimationFrame(animationId.current);
         setMultiplier(1);
 
-        console.log(
-            streamingInstruction.current,
-            instructionQueue.current.length
-        );
+        // console.log(
+        //     streamingInstruction.current,
+        //     instructionQueue.current.length
+        // );
         if (!streamingInstruction.current) {
             instructionQueue.current.shift();
 
@@ -397,7 +395,7 @@ function useX(config) {
         };
 
         Socket.on(`${channel}_instruction`, data => {
-            console.log("instruction", data);
+            // console.log("instruction", data);
             if (!data.first && data.id !== currentResponseId.current) {
                 console.log(
                     "ignoring instruction because it's not the current response"
@@ -441,7 +439,7 @@ function useX(config) {
         };
     }, []);
 
-    // console.log("MULTIPLIER", multiplier);
+    // `console.log`("MULTIPLIER", multiplier);
 
     return {
         sendMessage,

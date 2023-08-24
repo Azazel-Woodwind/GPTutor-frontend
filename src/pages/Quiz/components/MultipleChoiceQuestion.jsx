@@ -20,7 +20,7 @@ function MultipleChoiceQuestion({
                     maxWidth: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "0.94rem",
+                    gap: "0.94em",
                 }}>
                 {question.question.choices.map((choice, choiceIndex) => (
                     <Choice

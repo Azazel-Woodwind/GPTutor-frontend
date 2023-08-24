@@ -222,7 +222,7 @@ function useXQuiz({ lesson, ...props }) {
     }, [onAnswer]);
 
     React.useEffect(() => {
-        if (!Socket) return;
+        if (!Socket || questions.length > 0) return;
 
         Socket.emit("start_quiz", { lesson });
 

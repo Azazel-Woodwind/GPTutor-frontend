@@ -14,12 +14,12 @@ import IconButton from "../input/IconButton";
 
 const MAX_PROMPT_LENGTH = 1024;
 
-const Controls = ({
+function Controls({
     prompts,
     hook: { sendMessage, streaming, loading },
     height,
     prompt,
-}) => {
+}) {
     const [placeholder] = React.useState(
         prompts
             ? prompts[Math.floor(Math.random() * prompts.length)]
@@ -68,6 +68,7 @@ const Controls = ({
 
     const {
         Component: FillingButton,
+        ComponentProps,
         startAnimation,
         pauseAnimation,
         resumeAnimation,
@@ -150,6 +151,7 @@ const Controls = ({
 
     const sendDisabled =
         !messageInput?.trim() || streaming || loading || recording;
+    const micDisabled = streaming || loading || recording;
 
     const toggleRecord = () => {
         if (filling) {
@@ -163,11 +165,13 @@ const Controls = ({
         <Container gap="0.625rem">
             <FillingButton
                 {...MicSvgData}
+                {...ComponentProps}
                 scale={1.2}
                 duration={10}
                 iconSize={23}
                 recording={recording}
                 onClick={toggleRecord}
+                disabled={micDisabled}
             />
             <ChatForm ref={chatFormRef} onSubmit={onSubmit}>
                 <ChatInput
@@ -232,7 +236,7 @@ const Controls = ({
             </Button>
         </Container>
     );
-};
+}
 
 const ChatForm = styled.form`
     position: relative;
