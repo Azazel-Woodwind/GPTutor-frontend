@@ -15,13 +15,15 @@ import {
 import { TextInput } from "./TextInput";
 import Collapse from "../Collapse";
 
+const LEGEND_FONT_SIZE = "0.9em";
+
 export const ErrorText = styled.div`
     color: ${props => props.theme.colours.error};
-    font-size: 0.94rem;
+    font-size: 0.94em;
     font-weight: 620;
     /* border: 2px solid blue; */
     /* height: 100%; */
-    margin-left: 0.5rem;
+    margin-left: 0.5em;
 `;
 
 export const CustomFieldset = styled.fieldset.withConfig({
@@ -34,10 +36,10 @@ export const CustomFieldset = styled.fieldset.withConfig({
     width: 100%;
     height: 100%;
     margin: 0;
-    padding-top: 0.35rem;
-    padding-bottom: 0.625rem;
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
+    padding-top: 0.35em;
+    padding-bottom: 0.625em;
+    padding-left: 0.75em;
+    padding-right: 0.75em;
 
     box-sizing: border-box;
     border-radius: 8px;
@@ -63,8 +65,7 @@ export const CustomLegend = styled.legend.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
-    padding: 0 7px;
-    margin: 0;
+    padding: 0 0.4em;
     visibility: hidden;
     max-width: 100%;
     ${props =>
@@ -75,8 +76,8 @@ export const CustomLegend = styled.legend.withConfig({
     `};
 
     width: auto;
-    height: 0.69rem;
-    font-size: 0.9rem;
+    height: 0.69em;
+    font-size: ${LEGEND_FONT_SIZE};
     -webkit-transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     transition: max-width 50ms cubic-bezier(0, 0, 0.2, 1) 0ms;
     white-space: nowrap;
@@ -86,12 +87,8 @@ const InputLabel = styled(motion.div)`
     position: absolute;
     transform-origin: left;
     color: gray;
-    left: 0.75rem;
-    top: 22px;
-    /* font-size: 1rem; */
-    /* ${props =>
-        props.focused && `top: -5px; left: 1.25rem; font-size: 14.0.25rem;`}; */
-    /* transition: font-size 0.15s; */
+    left: 0.75em;
+    top: 1.375em;
     z-index: 0;
 `;
 
@@ -99,30 +96,24 @@ const TextfieldWrapper = styled.div.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
+    font-size: 1em;
     display: flex;
     position: relative;
     /* z-index: 50; */
     height: 100%;
     width: 100%;
-    min-height: 64px;
-    ${props => props.multiline && "padding-bottom: 0.69rem;"};
+    min-height: 4em;
+    ${props => props.multiline && "padding-bottom: 0.69em;"};
 `;
 
 const Label = styled.label.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
-    /* border: 1px solid green; */
     position: relative;
     display: inline-block;
     width: 100%;
     flex: 1;
-
-    /* height: 100%; */
-    /* ${props => props.width && `width: ${props.width};`};
-    ${props => props.fullwidth && `width: 100%;`};
-    ${props => props.height && `height: ${props.height};`};
-    ${props => props.fullheight && `height: 100%;`} */
 `;
 
 export const Textfield = forwardRef(
@@ -147,9 +138,10 @@ export const Textfield = forwardRef(
 
         const LabelVariants = {
             focused: {
-                x: 9,
-                y: -26,
-                fontSize: "14.4px",
+                x: "0.69em",
+                y: "-1.625em",
+                // fontSize: `${0.9 * HTML_FONT_SIZE_IN_PX}px`,
+                fontSize: LEGEND_FONT_SIZE,
                 color: props.error
                     ? Theme.colours.error
                     : focused
@@ -158,6 +150,12 @@ export const Textfield = forwardRef(
                 transition: {
                     duration: 0.15,
                 },
+            },
+            unfocused: {
+                x: "0em",
+                y: "0em",
+                fontSize: `1em`,
+                color: "gray",
             },
         };
 
@@ -209,7 +207,7 @@ export const Textfield = forwardRef(
                                         inputRef.current?.value?.length > 0)
                                 )
                                     ? "focused"
-                                    : undefined
+                                    : "unfocused"
                             }>
                             {required ? `${label} *` : label}
                         </InputLabel>
@@ -258,6 +256,7 @@ export const Textfield = forwardRef(
 );
 
 const TextfieldContainer = styled.div`
+    font-size: 1rem;
     display: flex;
     flex-direction: column;
     ${props => props.width && `width: ${props.width};`};
@@ -273,8 +272,8 @@ const PasswordInfoEntryContainer = styled.div`
 `;
 
 const PasswordInfoEntryIcon = styled.div`
-    width: 1.875rem;
-    height: 1.875rem;
+    width: 1.875em;
+    height: 1.875em;
     /* border: 2px solid black; */
 `;
 
@@ -329,10 +328,10 @@ function PasswordInfo({ password }) {
 const PasswordInfoContainer = styled.div`
     box-shadow: rgba(76, 72, 72, 0.5) 0px 1px 3px 0px,
         rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-    padding: 0.625rem;
+    padding: 0.625em;
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: 0.625em;
 `;
 
 export default Textfield;

@@ -66,15 +66,17 @@ function Question({
     modalAnswer,
     currentAnswer,
     currentQuestion,
+    setExit,
 }) {
     const imageRef = React.useRef(null);
 
     React.useEffect(() => {
-        if (imageRef.current.shadowRoot) return;
+        // console.log("QUESTION HTML:", questions[i]?.imageHTML);
+        if (!questions[i]?.imageHTML || imageRef.current.shadowRoot) return;
 
         const shadowRoot = imageRef.current.attachShadow({ mode: "open" });
         shadowRoot.innerHTML = questions[i]?.imageHTML;
-    }, [htmlContent]);
+    }, [questions[i]?.imageHTML]);
 
     const callback = React.useCallback(
         node => {
@@ -92,7 +94,8 @@ function Question({
         <CenteredColumn
             width="100vw"
             style={{
-                height: "100vh",
+                minHeight: "100vh",
+                padding: "1.25em 0",
                 // minHeight?
             }}
             ref={callback}
@@ -219,7 +222,22 @@ function Question({
                         </>
                     )}
                 </CenteredColumn>
-                <div ref={imageRef} />
+                {!questions[i]?.imageHTML ? (
+                    <div
+                        style={{
+                            height: "350px",
+                            width: "550px",
+                            backgroundColor: "white",
+                            color: "black",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                        }}>
+                        <h2>Generating image...</h2>
+                    </div>
+                ) : (
+                    <div ref={imageRef} />
+                )}
             </CenteredRow>
         </CenteredColumn>
     );

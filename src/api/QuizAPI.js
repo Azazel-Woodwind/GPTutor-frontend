@@ -7,9 +7,10 @@ const QuizAPI = {
         const user_id = (await supabase.auth.getSession()).data.session?.user
             .id;
 
-        const { error } = await supabase.from("quiz_scores").delete().eq({
-            lesson_id: lesson.id,
-        });
+        const { error } = await supabase
+            .from("quiz_scores")
+            .delete()
+            .eq("lesson_id", lesson.id);
 
         if (error) throw error;
 

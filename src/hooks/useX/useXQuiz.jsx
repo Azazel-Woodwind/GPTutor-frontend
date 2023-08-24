@@ -227,13 +227,22 @@ function useXQuiz({ lesson, ...props }) {
         Socket.emit("start_quiz", { lesson });
 
         Socket.on("quiz_next_question", question => {
-            console.log("RECEIVED QUESTION", question);
+            console.log("RECEIVED QUESTION", question.questionNumber);
             setQuestions(prev => {
                 const newQuestions = [...prev];
                 newQuestions[question.questionNumber] = question;
                 return newQuestions;
             });
             setFinished(question.final);
+        });
+
+        Socket.on("quiz_question_image", ({ imageHTML, questionNumber }) => {
+            console.log("RECEIVED IMAGE FOR QUESTION", questionNumber);
+            setQuestions(prev => {
+                const newQuestions = [...prev];
+                newQuestions[questionNumber].imageHTML = imageHTML;
+                return newQuestions;
+            });
         });
 
         Socket.emit("quiz_generate_next_question");

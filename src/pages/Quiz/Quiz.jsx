@@ -4,24 +4,15 @@ import {
     useNavigate,
 } from "react-router-dom/dist/umd/react-router-dom.development";
 import useXQuiz from "../../hooks/useX/useXQuiz";
-import CenteredColumn from "../../styles/containers/CenteredColumn";
 import useConversationDisplay from "../../hooks/useConversationDisplay";
 import styled from "styled-components";
 import { fade_animation } from "../../styles/FramerAnimations";
 import EndOfQuizModal from "./components/EndOfQuizModal";
 import { AnimatePresence, motion } from "framer-motion";
-import GeneratingQuestion from "./components/GeneratingQuestion";
-import WrittenQuestion from "./components/WrittenQuestion";
-import MultipleChoiceQuestion from "./components/MultipleChoiceQuestion";
-import FinishQuizButton from "./components/FinishQuizButton";
-import NextQuestionButton from "./components/NextQuestionButton";
-import SubmitAnswerButton from "./components/SubmitAnswerButton";
 import Loading from "../Loading/Loading";
 import { useHeader } from "../../context/HeaderContext";
 import QuizHeader from "./components/QuizHeader";
-import CollapsableText from "../../components/CollapsableText";
 import QuizAPI from "../../api/QuizAPI";
-import CenteredRow from "../../styles/containers/CenteredRow";
 import Question from "./components/Question";
 
 function Quiz() {
@@ -133,6 +124,7 @@ function Quiz() {
                         modalAnswer={modalAnswer}
                         currentAnswer={currentAnswer}
                         currentQuestion={currentQuestion}
+                        setExit={setExit}
                     />
                 ))}
             </Container>

@@ -52,14 +52,14 @@ function WrittenQuestion({
                 onChange={e => setAnswer(e.target.value)}
                 label="Answer"
                 width="37.5em"
-                rows={4}
+                rows={2}
                 disabled={
                     correctFeedback ||
                     currentFeedback?.isCorrect ||
                     finalAnswer ||
                     currentAnswer
                 }
-                style={{ fontSize: "1.2em" }}
+                // style={{ fontSize: "1.1em" }}
                 onKeyDown={e => {
                     if (e.key === "Enter") {
                         e.preventDefault();

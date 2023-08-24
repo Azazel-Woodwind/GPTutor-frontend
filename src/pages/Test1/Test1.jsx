@@ -18,19 +18,23 @@ const images = [
 ];
 
 function Test1() {
-    const { subjectOptions, educationLevels, examBoards } = useAppData();
-    const controls = useAnimationControls();
-    const [selected, setSelected] = React.useState("");
-
-    // console.log(subjectOptions);
-    const [open, setOpen] = React.useState(true);
-    const [closed, setClosed] = React.useState(false);
+    const [clicked, setClicked] = React.useState(false);
 
     return (
         <CenteredColumn border fillparent gap="0.625rem">
-            <div style={{ height: "500px", width: "600px" }}>
-                <ImageCarousel {...{ images }} animationType="fade" />
-            </div>
+            <motion.div
+                variants={{
+                    clicked: {
+                        fontSize: "2rem",
+                    },
+                    unclicked: {
+                        fontSize: "1rem",
+                    },
+                }}
+                animate={clicked ? "clicked" : "unclicked"}>
+                Hello
+            </motion.div>
+            <Button onClick={() => setClicked(prev => !prev)}>Click me</Button>
         </CenteredColumn>
     );
 }
