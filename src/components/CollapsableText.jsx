@@ -62,6 +62,7 @@ function CollapsableText({
 
 const Container = styled(motion.div)`
     position: relative;
+    font-size: 1.2em;
 
     padding: 1em;
     padding-left: 3em;

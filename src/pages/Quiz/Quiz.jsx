@@ -20,9 +20,6 @@ function Quiz() {
 
     const lesson = useLoaderData();
 
-    const [answer, setAnswer] = React.useState("");
-    const [selectedChoiceIndex, setSelectedChoiceIndex] =
-        React.useState(undefined);
     const [exit, setExit] = React.useState(false);
 
     const navigate = useNavigate();
@@ -31,26 +28,26 @@ function Quiz() {
         questions,
         nextQuestion,
         currentQuestionNum,
-        currentQuestion,
-        incorrectFeedback,
-        correctFeedback,
-        currentFeedback,
-        answerIsCorrect,
+        // incorrectFeedback,
+        // correctFeedback,
+        // currentFeedback,
+        // answerIsCorrect,
         generatingFeedback,
         submitAnswer,
-        generatingHint,
-        answer: modalAnswer,
-        currentAnswer,
-        generatingAnswer,
+        // generatingHint,
+        // answer: modalAnswer,
+        // currentAnswer,
+        // generatingAnswer,
         getScore,
         loading,
+        streamingAnswer,
     } = useXQuiz({
         lesson,
     });
 
-    React.useEffect(() => {
-        setSelectedChoiceIndex(undefined);
-    }, [incorrectFeedback]);
+    // React.useEffect(() => {
+    //     setSelectedChoiceIndex(undefined);
+    // }, [incorrectFeedback]);
 
     const { setShowMainHeader } = useHeader();
 
@@ -85,7 +82,7 @@ function Quiz() {
                     onExit={async () => {
                         QuizAPI.saveScore({
                             lesson,
-                            score: getScore().correctAnswers,
+                            score: getScore(),
                         });
                         navigate("/hub");
                     }}
@@ -98,7 +95,6 @@ function Quiz() {
                 <QuizHeader
                     lesson={lesson}
                     answerIsCorrect={answerIsCorrect}
-                    currentQuestion={currentQuestion}
                     setExit={setExit}
                 />
                 {[...Array(currentQuestionNum + 1).keys()].map(i => (
@@ -106,25 +102,25 @@ function Quiz() {
                         key={i}
                         i={i}
                         questions={questions}
-                        answer={answer}
-                        setAnswer={setAnswer}
+                        // answer={answer}
+                        // setAnswer={setAnswer}
                         submitAnswer={submitAnswer}
-                        currentFeedback={currentFeedback}
-                        correctFeedback={correctFeedback}
-                        incorrectFeedback={incorrectFeedback}
+                        // currentFeedback={currentFeedback}
+                        // correctFeedback={correctFeedback}
+                        // incorrectFeedback={incorrectFeedback}
                         currentQuestionNum={currentQuestionNum}
-                        selectedChoiceIndex={selectedChoiceIndex}
-                        setSelectedChoiceIndex={setSelectedChoiceIndex}
+                        // selectedChoiceIndex={selectedChoiceIndex}
+                        // setSelectedChoiceIndex={setSelectedChoiceIndex}
                         generatingFeedback={generatingFeedback}
-                        generatingHint={generatingHint}
-                        generatingAnswer={generatingAnswer}
-                        answerIsCorrect={answerIsCorrect}
+                        // generatingHint={generatingHint}
+                        // generatingAnswer={generatingAnswer}
+                        // answerIsCorrect={answerIsCorrect}
                         nextQuestion={nextQuestion}
                         loading={loading}
-                        modalAnswer={modalAnswer}
-                        currentAnswer={currentAnswer}
-                        currentQuestion={currentQuestion}
+                        // modalAnswer={modalAnswer}
+                        // currentAnswer={currentAnswer}
                         setExit={setExit}
+                        streamingAnswer={streamingAnswer}
                     />
                 ))}
             </Container>
@@ -138,12 +134,13 @@ const Container = styled(motion.div)`
     font-size: 0.9rem;
 
     h1 {
-        font-size: 3rem;
+        font-size: 2.3em;
     }
 
     h2 {
-        font-size: 2rem;
-        text-align: center;
+        font-size: 2em;
+        font-weight: normal;
+        /* text-align: center; */
     }
 `;
 

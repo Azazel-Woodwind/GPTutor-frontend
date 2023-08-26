@@ -25,9 +25,8 @@ function EndOfQuizModal({ score, onExit }) {
                 <CenteredColumn fillparent gap="1rem">
                     <Title> Quiz has been completed </Title>
                     <ScoreSection>
-                        <QuizScore
-                            percentage={score.correctAnswers / score.total}>
-                            {score.correctAnswers} / {score.total}
+                        <QuizScore percentage={score.score / score.maxScore}>
+                            {score.score} / {score.maxScore}
                         </QuizScore>
                     </ScoreSection>
                     <p>

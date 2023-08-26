@@ -86,9 +86,10 @@ export const TextInputStyle = styled.input.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["width"].includes(prop) && defaultValidatorFn(prop),
 })`
+    font-size: 1em;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
-    padding: 0 0.7rem;
+    padding: 0 0.7em;
     padding-top: 5px;
     padding-bottom: 2px;
     ${props =>

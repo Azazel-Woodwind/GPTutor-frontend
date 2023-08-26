@@ -4,37 +4,42 @@ import Choice from "./Choice";
 function MultipleChoiceQuestion({
     question,
     questionIndex,
-    answer,
-    setAnswer,
     setSelectedChoiceIndex,
-    correctFeedback,
-    currentFeedback,
-    incorrectFeedback,
     generatingFeedback,
+    selectedChoiceIndex,
+    currentQuestionNum,
 }) {
+    // const [correctChoiceIndex, setCorrectChoiceIndex] = React.useState(undefined);
+
+    // React.useEffect(() => {
+    //     if (question.correctFeedback) {
+    //         setCorrectChoiceIndex(selectedChoiceIndex);
+    //     }
+    // }, [question?.correctFeedback])
+
     return (
         <>
-            <h2>{question.question.title}</h2>
+            <h2>{question.title}</h2>
             <div
                 style={{
                     maxWidth: "100%",
                     display: "flex",
                     flexDirection: "column",
                     gap: "0.94em",
+                    marginTop: "0.5em",
                 }}>
-                {question.question.choices.map((choice, choiceIndex) => (
+                {question.choices.map((choice, choiceIndex) => (
                     <Choice
-                        key={choiceIndex}
+                        key={`${questionIndex}-${choiceIndex}`}
                         questionIndex={questionIndex}
-                        answer={answer}
-                        setAnswer={setAnswer}
+                        selectedChoiceIndex={selectedChoiceIndex}
                         setSelectedChoiceIndex={setSelectedChoiceIndex}
-                        correctFeedback={correctFeedback}
-                        currentFeedback={currentFeedback}
-                        incorrectFeedback={incorrectFeedback?.[choiceIndex]}
                         generatingFeedback={generatingFeedback}
                         choice={choice}
                         choiceIndex={choiceIndex}
+                        question={question}
+                        currentQuestionNum={currentQuestionNum}
+                        // correctChoiceIndex={correctChoiceIndex}
                     />
                 ))}
             </div>

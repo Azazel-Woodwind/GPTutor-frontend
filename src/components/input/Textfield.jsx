@@ -96,7 +96,6 @@ const TextfieldWrapper = styled.div.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),
 })`
-    font-size: 1em;
     display: flex;
     position: relative;
     /* z-index: 50; */
@@ -127,6 +126,7 @@ export const Textfield = forwardRef(
             onKeyDown,
             required,
             color,
+            fontSize,
             ...props
         },
         ref
@@ -162,7 +162,7 @@ export const Textfield = forwardRef(
         // console.log(props.value, ref?.current?.value);
 
         return (
-            <TextfieldContainer {...props}>
+            <TextfieldContainer fontSize={fontSize} {...props}>
                 <Label {...props}>
                     <TextfieldWrapper
                         {...props}
@@ -256,7 +256,7 @@ export const Textfield = forwardRef(
 );
 
 const TextfieldContainer = styled.div`
-    font-size: 1rem;
+    font-size: ${props => props.fontSize || "1em"};
     display: flex;
     flex-direction: column;
     ${props => props.width && `width: ${props.width};`};

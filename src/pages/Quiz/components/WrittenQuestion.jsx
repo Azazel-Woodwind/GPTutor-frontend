@@ -5,79 +5,76 @@ import CollapsableText from "../../../components/CollapsableText";
 
 function WrittenQuestion({
     question,
-    correctFeedback,
-    currentFeedback,
     questionIndex,
     answer,
     setAnswer,
-    selectedChoiceIndex,
     submitAnswer,
-    incorrectFeedback,
-    modalAnswer,
-    currentAnswer,
+    loading,
 }) {
-    const [finalAnswer, setFinalAnswer] = React.useState(undefined);
+    // const [finalAnswer, setFinalAnswer] = React.useState(undefined);
     const answerTextfieldRef = React.useRef(null);
 
-    const theme = useTheme();
+    // const theme = useTheme();
 
-    if (!finalAnswer && currentFeedback?.isCorrect) {
-        setFinalAnswer(answer);
-    }
+    // if (!finalAnswer && currentFeedback?.isCorrect) {
+    //     setFinalAnswer(answer);
+    // }
 
-    React.useEffect(() => {
-        if (
-            modalAnswer?.answer &&
-            modalAnswer?.questionIndex === questionIndex &&
-            !finalAnswer
-        ) {
-            setFinalAnswer(modalAnswer.answer);
-        }
-    }, [modalAnswer]);
+    // React.useEffect(() => {
+    //     if (
+    //         question.finished
+    //     ) {
+    //         setFinalAnswer(question.modalAnswer || answer);
+    //     }
+    // }, [question.finished]);
 
     React.useEffect(() => {
-        if (answerTextfieldRef.current && currentAnswer && !finalAnswer) {
+        // setFinalAnswer(question.modalAnswer)
+        if (answerTextfieldRef.current && question.modalAnswer) {
             answerTextfieldRef.current.scrollTop =
                 answerTextfieldRef.current.scrollHeight;
         }
-    }, [currentAnswer]);
+    }, [question.modalAnswer]);
 
     return (
         <>
-            <h2>{question.question}</h2>
-            <Textfield
-                ref={answerTextfieldRef}
-                multiline
-                value={finalAnswer || currentAnswer || answer}
-                onChange={e => setAnswer(e.target.value)}
-                label="Answer"
-                width="37.5em"
-                rows={2}
-                disabled={
-                    correctFeedback ||
-                    currentFeedback?.isCorrect ||
-                    finalAnswer ||
-                    currentAnswer
-                }
-                // style={{ fontSize: "1.1em" }}
-                onKeyDown={e => {
-                    if (e.key === "Enter") {
-                        e.preventDefault();
-                        if (!e.shiftKey) {
-                            submitAnswer({
-                                answer,
-                                choiceIndex:
-                                    question.type === "written"
-                                        ? undefined
-                                        : selectedChoiceIndex,
-                            });
-                        }
-                    } else if (e.key === "Space") {
-                        e.stopPropagation();
-                    }
-                }}
-            />
+            <h2>{question.questionString}</h2>
             <div
+                style={{
+                    width: "100%",
+                    // padding: "0 1em",
+                }}>
+                <Textfield
+                    ref={answerTextfieldRef}
+                    multiline
+                    fullwidth
+                    value={question.modalAnswer || answer}
+                    onChange={e => setAnswer(e.target.value)}
+                    label="Your Answer"
+                    rows={2}
+                    disabled={
+                        question.modalAnswer ||
+                        loading ||
+                        question.finished ||
+                        question.marksScored === question.marks
+                    }
+                    fontSize="1.35em"
+                    onKeyDown={e => {
+                        if (e.key === "Enter") {
+                            e.preventDefault();
+                            if (!e.shiftKey) {
+                                submitAnswer({
+                                    answer,
+                                    choiceIndex: undefined,
+                                });
+                            }
+                        } else if (e.key === "Space") {
+                            e.stopPropagation();
+                        }
+                    }}
+                />
+            </div>
+            {/* <div
                 style={{
                     maxWidth: "100%",
                     display: "flex",
@@ -102,7 +99,7 @@ function WrittenQuestion({
                             {currentFeedback.text}
                         </CollapsableText>
                     )}
-            </div>
+            </div> */}
         </>
     );
 }

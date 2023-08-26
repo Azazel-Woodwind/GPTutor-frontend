@@ -5,36 +5,29 @@ import CollapsableText from "../../../components/CollapsableText";
 
 function Choice({
     questionIndex,
-    answer,
-    setAnswer,
+    selectedChoiceIndex,
     setSelectedChoiceIndex,
-    correctFeedback,
-    currentFeedback,
-    incorrectFeedback,
     generatingFeedback,
+    currentQuestionNum,
     choice,
     choiceIndex,
+    question,
 }) {
     const [collapsed, setCollapsed] = React.useState(false);
 
     const theme = useTheme();
 
-    const selected = answer === choice;
-    const hasCurrentFeedback =
-        currentFeedback?.choiceIndex === choiceIndex &&
-        currentFeedback?.questionIndex === questionIndex;
-    const isCorrect = correctFeedback?.choiceIndex === choiceIndex;
+    const selected = selectedChoiceIndex === choiceIndex;
 
     React.useEffect(() => {
         if (
-            incorrectFeedback &&
-            currentFeedback?.questionIndex === questionIndex &&
-            currentFeedback?.choiceIndex !== choiceIndex &&
-            currentFeedback?.text?.length === 1
+            generatingFeedback &&
+            currentQuestionNum === questionIndex &&
+            !selected
         ) {
             setCollapsed(true);
         }
-    }, [currentFeedback]);
+    }, [generatingFeedback, currentQuestionNum]);
 
     return (
         <div
@@ -42,33 +35,25 @@ function Choice({
                 maxWidth: "100%",
                 display: "flex",
                 flexDirection: "column",
-                gap: "0.25rem",
+                gap: "0.25em",
             }}>
             <RadioButton
                 wrap
-                key={`${questionIndex}-${choiceIndex}`}
-                label={choice}
-                checked={
-                    selected ||
-                    hasCurrentFeedback ||
-                    incorrectFeedback ||
-                    isCorrect
-                }
+                label={choice.text}
+                checked={selected || choice.incorrectFeedback}
                 onChange={e => {
-                    setAnswer(choice);
                     setSelectedChoiceIndex(choiceIndex);
                 }}
                 disabled={
-                    (hasCurrentFeedback && !currentFeedback?.isCorrect) ||
-                    incorrectFeedback ||
-                    (generatingFeedback && !selected) ||
-                    (correctFeedback && !isCorrect)
+                    choice.incorrectFeedback ||
+                    ((question.correctFeedback || generatingFeedback) &&
+                        !selected)
                 }
-                fontSize="1.5rem"
-                radioButtonSize="1.5rem"
-                borderWidth="0.65rem"
+                fontSize="1.35em"
+                // radioButtonSize="1.5em"
+                borderWidth="0.65em"
             />
-            {incorrectFeedback && (
+            {choice.incorrectFeedback && (
                 <CollapsableText
                     style={{
                         color: theme.colours.error,
@@ -77,10 +62,10 @@ function Choice({
                         collapsed,
                         setCollapsed,
                     }}>
-                    {incorrectFeedback}
+                    {choice.incorrectFeedback}
                 </CollapsableText>
             )}
-            {currentFeedback?.questionIndex === questionIndex &&
+            {/* {currentFeedback?.questionIndex === questionIndex &&
                 currentFeedback?.isCorrect === false &&
                 currentFeedback?.choiceIndex === choiceIndex && (
                     <CollapsableText
@@ -90,7 +75,7 @@ function Choice({
                         collapsable={false}>
                         {currentFeedback.text}
                     </CollapsableText>
-                )}
+                )} */}
         </div>
     );
 }

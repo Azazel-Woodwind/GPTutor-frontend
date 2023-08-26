@@ -8,6 +8,7 @@ import CollapsableText from "../../../components/CollapsableText";
 import FinishQuizButton from "./FinishQuizButton";
 import NextQuestionButton from "./NextQuestionButton";
 import SubmitAnswerButton from "./SubmitAnswerButton";
+import { percentageToColour } from "../../../lib/misc";
 
 const htmlContent = `
 <!DOCTYPE html>
@@ -48,26 +49,30 @@ const htmlContent = `
 function Question({
     i,
     questions,
-    answer,
-    setAnswer,
+    // answer,
+    // setAnswer,
     submitAnswer,
-    currentFeedback,
-    correctFeedback,
-    incorrectFeedback,
+    // currentFeedback,
+    // correctFeedback,
+    // incorrectFeedback,
     currentQuestionNum,
-    selectedChoiceIndex,
-    setSelectedChoiceIndex,
+    // selectedChoiceIndex,
+    // setSelectedChoiceIndex,
     generatingFeedback,
-    generatingHint,
-    generatingAnswer,
-    answerIsCorrect,
+    // generatingHint,
+    // generatingAnswer,
+    // answerIsCorrect,
     nextQuestion,
     loading,
-    modalAnswer,
-    currentAnswer,
-    currentQuestion,
+    // modalAnswer,
+    // currentAnswer,
     setExit,
+    streamingAnswer,
 }) {
+    const [selectedChoiceIndex, setSelectedChoiceIndex] =
+        React.useState(undefined);
+    const [answer, setAnswer] = React.useState("");
+
     const imageRef = React.useRef(null);
 
     React.useEffect(() => {
@@ -103,51 +108,82 @@ function Question({
             <CenteredRow
                 wrap
                 fillparent
-                gap="1.25em"
+                gap="1.3em"
                 style={
                     {
                         // padding: "1.25em",
                         // paddingLeft: "2em",
                     }
                 }>
-                <CenteredColumn gap="1.25em" style={{ maxWidth: "60em" }}>
+                <CenteredColumn
+                    gap="0.5em"
+                    style={{ maxWidth: "60em", alignItems: "start" }}>
                     {questions[i] === undefined ? (
                         <GeneratingQuestion />
                     ) : (
                         <>
-                            <h1>Question #{i + 1}</h1>
+                            <h1>
+                                Question #{i + 1} (
+                                {questions[i]?.marksScored !== undefined
+                                    ? `${questions[i].marksScored}/${questions[i].marks}`
+                                    : `${questions[i].marks} marks`}
+                                )
+                            </h1>
                             {questions[i].type === "written" ? (
                                 <WrittenQuestion
                                     question={questions[i]}
                                     answer={answer}
                                     setAnswer={setAnswer}
                                     submitAnswer={submitAnswer}
-                                    currentFeedback={currentFeedback}
-                                    correctFeedback={correctFeedback?.[i]}
-                                    incorrectFeedback={incorrectFeedback?.[i]}
+                                    loading={loading}
+                                    // currentFeedback={currentFeedback}
+                                    // correctFeedback={correctFeedback?.[i]}
+                                    // incorrectFeedback={incorrectFeedback?.[i]}
                                     questionIndex={i}
-                                    selectedChoiceIndex={selectedChoiceIndex}
-                                    modalAnswer={modalAnswer}
-                                    currentAnswer={currentAnswer}
+                                    // selectedChoiceIndex={selectedChoiceIndex}
+                                    // modalAnswer={modalAnswer}
+                                    // currentAnswer={currentAnswer}
                                 />
                             ) : (
                                 <MultipleChoiceQuestion
                                     question={questions[i]}
-                                    answer={answer}
-                                    setAnswer={setAnswer}
-                                    currentFeedback={currentFeedback}
-                                    correctFeedback={correctFeedback?.[i]}
-                                    incorrectFeedback={incorrectFeedback[i]}
+                                    // answer={answer}
+                                    // setAnswer={setAnswer}
+                                    // currentFeedback={currentFeedback}
+                                    // correctFeedback={correctFeedback?.[i]}
+                                    // incorrectFeedback={incorrectFeedback[i]}
                                     questionIndex={i}
                                     setSelectedChoiceIndex={
                                         setSelectedChoiceIndex
                                     }
                                     generatingFeedback={generatingFeedback}
+                                    selectedChoiceIndex={selectedChoiceIndex}
+                                    currentQuestionNum={currentQuestionNum}
                                 />
                             )}
                         </>
                     )}
-                    {correctFeedback?.[i] && (
+                    {questions[i]?.correctFeedback && (
+                        <CollapsableText
+                            style={{
+                                color: "rgb(0, 255, 0)",
+                            }}>
+                            {questions[i]?.correctFeedback}
+                        </CollapsableText>
+                    )}
+                    {questions[i]?.feedback && (
+                        <CollapsableText
+                            style={{
+                                color: percentageToColour(
+                                    (questions[i].feedback.marksScored /
+                                        questions[i].marks) *
+                                        100
+                                ),
+                            }}>
+                            {questions[i]?.feedback.text}
+                        </CollapsableText>
+                    )}
+                    {/* {correctFeedback?.[i] && (
                         <CollapsableText
                             style={{
                                 color: "rgb(0, 255, 0)",
@@ -164,15 +200,17 @@ function Question({
                                 collapsable={false}>
                                 {currentFeedback.text}
                             </CollapsableText>
-                        )}
+                        )} */}
                     {loading && currentQuestionNum === i && (
-                        <h2>Thinking...</h2>
+                        <div style={{ margin: "auto" }}>
+                            <h2>Thinking...</h2>
+                        </div>
                     )}
-                    {currentQuestionNum === i && questions[i] !== undefined && (
+                    {currentQuestionNum === i && questions[i] && (
                         <>
-                            {answerIsCorrect ? (
+                            {questions[i].finished ? (
                                 <>
-                                    {currentQuestion.final ? (
+                                    {questions[i] ? (
                                         <FinishQuizButton
                                             generatingFeedback={
                                                 generatingFeedback
@@ -185,11 +223,11 @@ function Question({
                                         <NextQuestionButton
                                             disabled={
                                                 generatingFeedback ||
-                                                generatingAnswer
+                                                streamingAnswer
                                             }
                                             onClick={() => {
                                                 nextQuestion();
-                                                setAnswer("");
+                                                // setAnswer("");
                                                 setSelectedChoiceIndex(
                                                     undefined
                                                 );
@@ -200,11 +238,9 @@ function Question({
                             ) : (
                                 <SubmitAnswerButton
                                     disabled={
-                                        !answer ||
                                         generatingFeedback ||
-                                        generatingHint ||
-                                        generatingAnswer ||
-                                        (questions[i].type !== "written" &&
+                                        streamingAnswer ||
+                                        (questions[i].type === "multiple" &&
                                             selectedChoiceIndex === undefined)
                                     }
                                     onClick={() => {
@@ -214,7 +250,6 @@ function Question({
                                                 questions[i].type === "written"
                                                     ? undefined
                                                     : selectedChoiceIndex,
-                                            questionIndex: i,
                                         });
                                     }}
                                 />
@@ -236,7 +271,7 @@ function Question({
                         <h2>Generating image...</h2>
                     </div>
                 ) : (
-                    <div ref={imageRef} />
+                    <div style={{ backgroundColor: "white" }} ref={imageRef} />
                 )}
             </CenteredRow>
         </CenteredColumn>

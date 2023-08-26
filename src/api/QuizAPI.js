@@ -3,7 +3,7 @@ import { apiClient } from "./configs/axiosConfig";
 import supabase from "./configs/supabase";
 
 const QuizAPI = {
-    saveScore: async function ({ lesson, score }) {
+    saveScore: async function ({ lesson, score: { score, maxScore } }) {
         const user_id = (await supabase.auth.getSession()).data.session?.user
             .id;
 
@@ -20,9 +20,7 @@ const QuizAPI = {
                 user_id,
                 lesson_id: lesson.id,
                 score,
-                max_score:
-                    lesson.learning_objectives.length *
-                    QUESTIONS_PER_LEARNING_OBJECTIVE,
+                max_score: maxScore,
             });
 
         if (error2) throw error2;

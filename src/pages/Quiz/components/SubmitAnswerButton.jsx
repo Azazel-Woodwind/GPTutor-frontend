@@ -3,7 +3,10 @@ import Button from "../../../components/input/Button";
 
 function SubmitAnswerButton({ onClick, disabled }) {
     return (
-        <Button disabled={disabled} onClick={onClick} size="lg">
+        <Button
+            disabled={disabled}
+            onClick={onClick}
+            style={{ margin: "auto", fontSize: "1.2em" }}>
             Submit
         </Button>
     );
