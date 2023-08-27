@@ -23,7 +23,8 @@ function Choice({
         if (
             generatingFeedback &&
             currentQuestionNum === questionIndex &&
-            !selected
+            !selected &&
+            choice.incorrectFeedback
         ) {
             setCollapsed(true);
         }

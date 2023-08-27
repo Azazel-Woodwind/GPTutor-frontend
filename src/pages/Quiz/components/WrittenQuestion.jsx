@@ -51,7 +51,7 @@ function WrittenQuestion({
                     value={question.modalAnswer || answer}
                     onChange={e => setAnswer(e.target.value)}
                     label="Your Answer"
-                    rows={2}
+                    rows={4}
                     disabled={
                         question.modalAnswer ||
                         loading ||

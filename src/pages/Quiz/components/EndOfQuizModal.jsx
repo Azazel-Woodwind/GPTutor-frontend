@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { fade_animation } from "../../../styles/FramerAnimations";
 import Textfield from "../../../components/input/Textfield";
 import Button from "../../../components/input/Button";
-import { percentageToColour } from "../../../lib/misc";
+import { interpolateColor } from "../../../lib/misc";
 import QuizAPI from "../../../api/QuizAPI";
 
 function EndOfQuizModal({ score, onExit }) {
@@ -58,9 +58,20 @@ const ScoreSection = styled.div`
 
 const QuizScore = styled.div`
     /* border: 3px solid red; */
-    color: ${props => percentageToColour(props.percentage * 100)};
+    color: ${props =>
+        interpolateColor(
+            props.percentage,
+            props.theme.colours.error,
+            props.theme.colours.correct
+        )};
     font-weight: 700;
-    border: 5px solid ${props => percentageToColour(props.percentage * 100)};
+    border: 5px solid
+        ${props =>
+            interpolateColor(
+                props.percentage,
+                props.theme.colours.error,
+                props.theme.colours.correct
+            )};
     border-radius: 2rem;
     padding: 1rem;
 `;

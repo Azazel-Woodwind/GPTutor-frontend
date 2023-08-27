@@ -86,7 +86,7 @@ export const CustomLegend = styled.legend.withConfig({
 const InputLabel = styled(motion.div)`
     position: absolute;
     transform-origin: left;
-    color: gray;
+    color: rgb(128, 128, 128);
     left: 0.75em;
     top: 1.375em;
     z-index: 0;
@@ -155,7 +155,7 @@ export const Textfield = forwardRef(
                 x: "0em",
                 y: "0em",
                 fontSize: `1em`,
-                color: "gray",
+                color: "rgb(128, 128, 128)",
             },
         };
 

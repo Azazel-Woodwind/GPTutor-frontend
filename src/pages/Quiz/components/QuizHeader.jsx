@@ -4,13 +4,13 @@ import { LogoSvg } from "../../../components/Header/MainHeader";
 import ExitButton from "../../../components/input/ExitButton";
 import styled from "styled-components";
 
-function QuizHeader({ lesson, answerIsCorrect, currentQuestion, setExit }) {
+function QuizHeader({ lesson, currentQuestion, setExit }) {
     return (
         <HeaderContainer>
             <LogoSvg />
             <Title>{lesson.title}</Title>
             <ExitButton
-                outline={!(answerIsCorrect && currentQuestion?.final)}
+                outline={!(currentQuestion?.finished && currentQuestion?.final)}
                 onClick={() => {
                     setExit(true);
                 }}

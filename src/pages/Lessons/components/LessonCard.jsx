@@ -6,7 +6,7 @@ import {
 } from "../../../lib/stringUtils";
 import { useNavigate } from "react-router-dom";
 import Button from "../../../components/input/Button";
-import { percentageToColour } from "../../../lib/misc";
+import { interpolateColor } from "../../../lib/misc";
 
 function LessonCard({ lesson }) {
     const navigate = useNavigate();
@@ -82,13 +82,13 @@ const QuizScore = styled.div`
     ${props =>
         props.percentage !== NaN &&
         css`
-            color: ${percentageToColour(props.percentage * 100)};
+            color: ${interpolateColor(
+                props.percentage,
+                props.theme.colours.error,
+                props.theme.colours.correct
+            )};
             font-weight: 700;
             font-size: 1.3rem;
-            /* border: 2px solid
-                ${props => percentageToColour(props.percentage * 100)};
-            border-radius: 2rem;
-            padding: 0.5rem; */
             white-space: nowrap;
         `}
 `;

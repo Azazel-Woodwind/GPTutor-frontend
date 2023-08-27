@@ -8,7 +8,8 @@ import CollapsableText from "../../../components/CollapsableText";
 import FinishQuizButton from "./FinishQuizButton";
 import NextQuestionButton from "./NextQuestionButton";
 import SubmitAnswerButton from "./SubmitAnswerButton";
-import { percentageToColour } from "../../../lib/misc";
+import { interpolateColor } from "../../../lib/misc";
+import { useTheme } from "styled-components";
 
 const htmlContent = `
 <!DOCTYPE html>
@@ -75,6 +76,8 @@ function Question({
 
     const imageRef = React.useRef(null);
 
+    const theme = useTheme();
+
     React.useEffect(() => {
         // console.log("QUESTION HTML:", questions[i]?.imageHTML);
         if (!questions[i]?.imageHTML || imageRef.current.shadowRoot) return;
@@ -94,6 +97,8 @@ function Question({
         },
         [currentQuestionNum]
     );
+
+    // console.log(questions[i]);
 
     return (
         <CenteredColumn
@@ -117,17 +122,36 @@ function Question({
                 }>
                 <CenteredColumn
                     gap="0.5em"
-                    style={{ maxWidth: "60em", alignItems: "start" }}>
+                    style={{ width: "60em", alignItems: "start" }}>
                     {questions[i] === undefined ? (
                         <GeneratingQuestion />
                     ) : (
                         <>
                             <h1>
-                                Question #{i + 1} (
-                                {questions[i]?.marksScored !== undefined
-                                    ? `${questions[i].marksScored}/${questions[i].marks}`
-                                    : `${questions[i].marks} marks`}
-                                )
+                                Question #{i + 1}{" "}
+                                <span
+                                    style={{
+                                        color:
+                                            questions[i]?.marksScored !==
+                                            undefined
+                                                ? interpolateColor(
+                                                      questions[i].marksScored /
+                                                          questions[i].marks,
+                                                      theme.colours.error,
+                                                      theme.colours.correct
+                                                  )
+                                                : "white",
+                                    }}>
+                                    (
+                                    {questions[i]?.marksScored !== undefined
+                                        ? `${questions[i].marksScored}/${questions[i].marks}`
+                                        : `${questions[i].marks} mark${
+                                              questions[i].marks === 1
+                                                  ? ""
+                                                  : "s"
+                                          }`}
+                                    )
+                                </span>
                             </h1>
                             {questions[i].type === "written" ? (
                                 <WrittenQuestion
@@ -166,7 +190,7 @@ function Question({
                     {questions[i]?.correctFeedback && (
                         <CollapsableText
                             style={{
-                                color: "rgb(0, 255, 0)",
+                                color: theme.colours.correct,
                             }}>
                             {questions[i]?.correctFeedback}
                         </CollapsableText>
@@ -174,13 +198,14 @@ function Question({
                     {questions[i]?.feedback && (
                         <CollapsableText
                             style={{
-                                color: percentageToColour(
-                                    (questions[i].feedback.marksScored /
-                                        questions[i].marks) *
-                                        100
+                                color: interpolateColor(
+                                    questions[i].marksScored /
+                                        questions[i].marks,
+                                    theme.colours.error,
+                                    theme.colours.correct
                                 ),
                             }}>
-                            {questions[i]?.feedback.text}
+                            {questions[i]?.feedback}
                         </CollapsableText>
                     )}
                     {/* {correctFeedback?.[i] && (
@@ -210,7 +235,7 @@ function Question({
                         <>
                             {questions[i].finished ? (
                                 <>
-                                    {questions[i] ? (
+                                    {questions[i].final ? (
                                         <FinishQuizButton
                                             generatingFeedback={
                                                 generatingFeedback
@@ -228,9 +253,9 @@ function Question({
                                             onClick={() => {
                                                 nextQuestion();
                                                 // setAnswer("");
-                                                setSelectedChoiceIndex(
-                                                    undefined
-                                                );
+                                                // setSelectedChoiceIndex(
+                                                //     undefined
+                                                // );
                                             }}
                                         />
                                     )}
@@ -271,7 +296,10 @@ function Question({
                         <h2>Generating image...</h2>
                     </div>
                 ) : (
-                    <div style={{ backgroundColor: "white" }} ref={imageRef} />
+                    <div
+                        style={{ backgroundColor: "white", color: "black" }}
+                        ref={imageRef}
+                    />
                 )}
             </CenteredRow>
         </CenteredColumn>

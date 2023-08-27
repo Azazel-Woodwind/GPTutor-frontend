@@ -7,6 +7,7 @@ const QuizAPI = {
         const user_id = (await supabase.auth.getSession()).data.session?.user
             .id;
 
+        console.log("score", score);
         const { error } = await supabase
             .from("quiz_scores")
             .delete()

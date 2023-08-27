@@ -23,6 +23,7 @@ const Theme = {
         highlight2: gradientColour3,
         glow: "#3523a9",
         error: "#ff5252",
+        correct: "#00ff00",
     },
     font: {
         small: "0.75rem",

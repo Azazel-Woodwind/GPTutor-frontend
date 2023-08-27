@@ -35,7 +35,7 @@ function useXQuiz({ lesson, ...props }) {
         // console.log("SUBMITTING ANSWER: ", answer);
         // console.log("CHOICE INDEX: ", choiceIndex);
         X.sendMessage({
-            message: choiceIndex || answer,
+            message: choiceIndex !== undefined ? "" + choiceIndex : answer,
             altChannel: "quiz_request_feedback",
             messageParams: {
                 questionIndex: currentQuestionNum,
@@ -64,7 +64,7 @@ function useXQuiz({ lesson, ...props }) {
         console.log("CHANGING QUESTION");
         setCurrentQuestionNum(prev => prev + 1);
         Socket.emit("quiz_change_question");
-        setAnswerIsCorrect(false);
+        // setAnswerIsCorrect(false);
         X.resetAudio();
 
         if (!questions[currentQuestionNum + 1].final) {
@@ -76,6 +76,8 @@ function useXQuiz({ lesson, ...props }) {
         const score = scores.current.reduce((acc, curr) => acc + curr, 0);
         const maxScore = questions.reduce((acc, curr) => acc + curr.marks, 0);
 
+        console.log(`SCORE: ${score}/${maxScore}`);
+        // console.log(scores.current);
         return {
             score,
             maxScore,
@@ -160,7 +162,11 @@ function useXQuiz({ lesson, ...props }) {
         }) => {
             if (questionIndex === currentQuestionNum) {
                 if (!scores.current[questionIndex]) {
-                    scores.current[questionIndex] = marksScored;
+                    if (type === "multiple") {
+                        scores.current[questionIndex] = Number(isCorrect);
+                    } else {
+                        scores.current[questionIndex] = marksScored;
+                    }
                 }
 
                 setGeneratingFeedback(false);
@@ -184,10 +190,8 @@ function useXQuiz({ lesson, ...props }) {
                     // }
                     setQuestions(prev => {
                         const newQuestions = [...prev];
-                        newQuestions[questionIndex].feedback = {
-                            text: feedback,
-                            marksScored,
-                        };
+                        newQuestions[questionIndex].feedback = feedback;
+                        newQuestions[questionIndex].marksScored = marksScored;
                         if (marksScored === newQuestions[questionIndex].marks) {
                             newQuestions[questionIndex].finished = true;
                         }
@@ -287,20 +291,23 @@ function useXQuiz({ lesson, ...props }) {
         Socket.on("quiz_answer_stream", onAnswerStream);
     }, [onAnswerStream]);
 
-    const onAnswer = React.useCallback(({ answer, questionIndex }) => {
-        if (questionIndex === currentQuestionNum) {
-            setStreamingAnswer(false);
-            setQuestions(prev => {
-                const newQuestions = [...prev];
-                newQuestions[questionIndex].modalAnswer = answer;
-                newQuestions[questionIndex].finished = true;
-                return newQuestions;
-            });
-            // setCurrentAnswer("");
-            // setGeneratingAnswer(false);
-            // setAnswer({ answer, questionIndex });
-        }
-    }, []);
+    const onAnswer = React.useCallback(
+        ({ answer, questionIndex }) => {
+            if (questionIndex === currentQuestionNum) {
+                setStreamingAnswer(false);
+                setQuestions(prev => {
+                    const newQuestions = [...prev];
+                    newQuestions[questionIndex].modalAnswer = answer;
+                    newQuestions[questionIndex].finished = true;
+                    return newQuestions;
+                });
+                // setCurrentAnswer("");
+                // setGeneratingAnswer(false);
+                // setAnswer({ answer, questionIndex });
+            }
+        },
+        [currentQuestionNum]
+    );
 
     React.useEffect(() => {
         Socket.off("quiz_answer");
@@ -354,9 +361,9 @@ function useXQuiz({ lesson, ...props }) {
         };
     }, []);
 
-    React.useEffect(() => {
-        setCurrentQuestion(questions[currentQuestionNum]);
-    }, [currentQuestionNum, questions]);
+    // React.useEffect(() => {
+    //     setCurrentQuestion(questions[currentQuestionNum]);
+    // }, [currentQuestionNum, questions]);
 
     return {
         ...X,

@@ -94,7 +94,7 @@ function Quiz() {
             <Container key="quiz" {...fade_animation()}>
                 <QuizHeader
                     lesson={lesson}
-                    answerIsCorrect={answerIsCorrect}
+                    currentQuestion={questions[currentQuestionNum]}
                     setExit={setExit}
                 />
                 {[...Array(currentQuestionNum + 1).keys()].map(i => (
