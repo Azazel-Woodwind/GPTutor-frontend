@@ -9,14 +9,6 @@ function MultipleChoiceQuestion({
     selectedChoiceIndex,
     currentQuestionNum,
 }) {
-    // const [correctChoiceIndex, setCorrectChoiceIndex] = React.useState(undefined);
-
-    // React.useEffect(() => {
-    //     if (question.correctFeedback) {
-    //         setCorrectChoiceIndex(selectedChoiceIndex);
-    //     }
-    // }, [question?.correctFeedback])
-
     return (
         <>
             <h2>{question.title}</h2>
@@ -39,7 +31,6 @@ function MultipleChoiceQuestion({
                         choiceIndex={choiceIndex}
                         question={question}
                         currentQuestionNum={currentQuestionNum}
-                        // correctChoiceIndex={correctChoiceIndex}
                     />
                 ))}
             </div>

@@ -66,17 +66,6 @@ function Choice({
                     {choice.incorrectFeedback}
                 </CollapsableText>
             )}
-            {/* {currentFeedback?.questionIndex === questionIndex &&
-                currentFeedback?.isCorrect === false &&
-                currentFeedback?.choiceIndex === choiceIndex && (
-                    <CollapsableText
-                        style={{
-                            color: theme.colours.error,
-                        }}
-                        collapsable={false}>
-                        {currentFeedback.text}
-                    </CollapsableText>
-                )} */}
         </div>
     );
 }

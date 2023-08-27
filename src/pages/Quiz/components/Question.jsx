@@ -50,23 +50,11 @@ const htmlContent = `
 function Question({
     i,
     questions,
-    // answer,
-    // setAnswer,
     submitAnswer,
-    // currentFeedback,
-    // correctFeedback,
-    // incorrectFeedback,
     currentQuestionNum,
-    // selectedChoiceIndex,
-    // setSelectedChoiceIndex,
     generatingFeedback,
-    // generatingHint,
-    // generatingAnswer,
-    // answerIsCorrect,
     nextQuestion,
     loading,
-    // modalAnswer,
-    // currentAnswer,
     setExit,
     streamingAnswer,
 }) {
@@ -160,22 +148,11 @@ function Question({
                                     setAnswer={setAnswer}
                                     submitAnswer={submitAnswer}
                                     loading={loading}
-                                    // currentFeedback={currentFeedback}
-                                    // correctFeedback={correctFeedback?.[i]}
-                                    // incorrectFeedback={incorrectFeedback?.[i]}
                                     questionIndex={i}
-                                    // selectedChoiceIndex={selectedChoiceIndex}
-                                    // modalAnswer={modalAnswer}
-                                    // currentAnswer={currentAnswer}
                                 />
                             ) : (
                                 <MultipleChoiceQuestion
                                     question={questions[i]}
-                                    // answer={answer}
-                                    // setAnswer={setAnswer}
-                                    // currentFeedback={currentFeedback}
-                                    // correctFeedback={correctFeedback?.[i]}
-                                    // incorrectFeedback={incorrectFeedback[i]}
                                     questionIndex={i}
                                     setSelectedChoiceIndex={
                                         setSelectedChoiceIndex

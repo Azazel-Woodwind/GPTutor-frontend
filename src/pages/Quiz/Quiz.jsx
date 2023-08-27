@@ -28,26 +28,14 @@ function Quiz() {
         questions,
         nextQuestion,
         currentQuestionNum,
-        // incorrectFeedback,
-        // correctFeedback,
-        // currentFeedback,
-        // answerIsCorrect,
         generatingFeedback,
         submitAnswer,
-        // generatingHint,
-        // answer: modalAnswer,
-        // currentAnswer,
-        // generatingAnswer,
         getScore,
         loading,
         streamingAnswer,
     } = useXQuiz({
         lesson,
     });
-
-    // React.useEffect(() => {
-    //     setSelectedChoiceIndex(undefined);
-    // }, [incorrectFeedback]);
 
     const { setShowMainHeader } = useHeader();
 
@@ -59,8 +47,6 @@ function Quiz() {
             setShowMainHeader(true);
         };
     }, [questions, exit]);
-
-    // console.log(generatingFeedback);
 
     const renderComponent = () => {
         if (!questions[0]) {
@@ -102,23 +88,11 @@ function Quiz() {
                         key={i}
                         i={i}
                         questions={questions}
-                        // answer={answer}
-                        // setAnswer={setAnswer}
                         submitAnswer={submitAnswer}
-                        // currentFeedback={currentFeedback}
-                        // correctFeedback={correctFeedback}
-                        // incorrectFeedback={incorrectFeedback}
                         currentQuestionNum={currentQuestionNum}
-                        // selectedChoiceIndex={selectedChoiceIndex}
-                        // setSelectedChoiceIndex={setSelectedChoiceIndex}
                         generatingFeedback={generatingFeedback}
-                        // generatingHint={generatingHint}
-                        // generatingAnswer={generatingAnswer}
-                        // answerIsCorrect={answerIsCorrect}
                         nextQuestion={nextQuestion}
                         loading={loading}
-                        // modalAnswer={modalAnswer}
-                        // currentAnswer={currentAnswer}
                         setExit={setExit}
                         streamingAnswer={streamingAnswer}
                     />

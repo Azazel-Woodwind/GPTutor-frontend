@@ -11,22 +11,7 @@ function WrittenQuestion({
     submitAnswer,
     loading,
 }) {
-    // const [finalAnswer, setFinalAnswer] = React.useState(undefined);
     const answerTextfieldRef = React.useRef(null);
-
-    // const theme = useTheme();
-
-    // if (!finalAnswer && currentFeedback?.isCorrect) {
-    //     setFinalAnswer(answer);
-    // }
-
-    // React.useEffect(() => {
-    //     if (
-    //         question.finished
-    //     ) {
-    //         setFinalAnswer(question.modalAnswer || answer);
-    //     }
-    // }, [question.finished]);
 
     React.useEffect(() => {
         // setFinalAnswer(question.modalAnswer)
@@ -74,32 +59,6 @@ function WrittenQuestion({
                     }}
                 />
             </div>
-            {/* <div
-                style={{
-                    maxWidth: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.625em",
-                }}>
-                {incorrectFeedback?.map(feedback => (
-                    <IncorrectFeedback
-                        key={feedback}
-                        feedback={feedback}
-                        currentFeedback={currentFeedback}
-                        questionIndex={questionIndex}
-                    />
-                ))}
-                {currentFeedback?.questionIndex === questionIndex &&
-                    currentFeedback?.isCorrect === false && (
-                        <CollapsableText
-                            style={{
-                                color: theme.colours.error,
-                            }}
-                            collapsable={false}>
-                            {currentFeedback.text}
-                        </CollapsableText>
-                    )}
-            </div> */}
         </>
     );
 }

@@ -68,8 +68,13 @@ function LessonCard({ lesson }) {
                             lesson.quiz_scores[0]?.score /
                             lesson.quiz_scores[0]?.max_score
                         }>
-                        {lesson.quiz_scores[0]?.score ?? "?"} /{" "}
-                        {lesson.quiz_scores[0]?.max_score ?? "?"}
+                        {lesson.quiz_scores[0]
+                            ? Math.round(
+                                  (lesson.quiz_scores[0].score /
+                                      lesson.quiz_scores[0].max_score) *
+                                      100
+                              ) + "%"
+                            : "?"}
                     </QuizScore>
                 </QuizSection>
             </Footer>
