@@ -16,6 +16,8 @@ import ImageCarousel from "../../components/ImageCarousel";
 import EndOfLessonModal from "./components/EndOfLessonModal";
 import ClassroomHeader from "./components/ClassroomHeader";
 import { useHeader } from "../../context/HeaderContext";
+import QuizQuestion from "../../components/Quiz/QuizQuestion";
+import Question from "./components/Question";
 
 function Classroom() {
     const currentLesson = useLoaderData();
@@ -31,22 +33,20 @@ function Classroom() {
     useConversationDisplay(false);
 
     const {
-        lesson,
         finished,
         started,
         setStarted,
         learningObjectiveNumber,
         images,
-        toggleMute,
-        getSpeed,
-        setSpeed,
-        paused,
-        pause,
-        play,
         currentImageIndex,
         streaming,
         speaking,
         isMuted,
+        finishedLearningObjective,
+        currentQuestionNum,
+        finishLearningObjectiveQuestions,
+        loading,
+        changeQuestion,
     } = hook;
 
     const getClassroomHeight = React.useCallback(ref => {
@@ -63,6 +63,11 @@ function Classroom() {
             setShowMainHeader(true);
         };
     }, []);
+
+    // console.log(images?.filter(image => image.length > 0).length);
+    console.log(finishedLearningObjective, streaming, loading);
+
+    const showQuizQuestions = finishedLearningObjective && !streaming;
 
     const renderComponent = () => {
         if (started === undefined) {
@@ -115,33 +120,66 @@ function Classroom() {
                                     layoutId="avatar"
                                     {...fade_animation()}
                                 />
-                                <AnimatePresence>
+                                <AnimatePresence mode="wait">
                                     {images?.filter(image => image.length > 0)
-                                        .length > 0 && (
-                                        <GalleryContainer
-                                            as={motion.div}
-                                            layout
-                                            layoutId="container"
-                                            {...fade_animation({
-                                                delayed: true,
-                                            })}>
-                                            <ImageCarousel
-                                                images={images}
-                                                currentImageIndex={
-                                                    currentImageIndex
-                                                }
-                                                animationType="fade"
-                                            />
-                                        </GalleryContainer>
-                                    )}
+                                        .length > 0 &&
+                                        (showQuizQuestions ? (
+                                            <QuizQuestionContainer
+                                                key={`question${currentQuestionNum}`}
+                                                {...fade_animation()}
+                                                onAnimationComplete={animation => {
+                                                    if (
+                                                        animation.opacity === 1
+                                                    ) {
+                                                        console.log(
+                                                            "STARTING QUIZ QUESTION:",
+                                                            currentQuestionNum
+                                                        );
+                                                        changeQuestion(
+                                                            currentQuestionNum
+                                                        );
+                                                    }
+                                                }}>
+                                                <Question
+                                                    i={currentQuestionNum}
+                                                    finishLearningObjectiveQuestions={
+                                                        finishLearningObjectiveQuestions
+                                                    }
+                                                    {...hook}
+                                                />
+                                            </QuizQuestionContainer>
+                                        ) : (
+                                            <GalleryContainer
+                                                key="gallery"
+                                                as={motion.div}
+                                                layout
+                                                layoutId="container"
+                                                {...fade_animation({
+                                                    delayed: true,
+                                                })}>
+                                                <ImageCarousel
+                                                    images={images}
+                                                    currentImageIndex={
+                                                        currentImageIndex
+                                                    }
+                                                    animationType="fade"
+                                                />
+                                            </GalleryContainer>
+                                        ))}
                                 </AnimatePresence>
                             </LayoutGroup>
                         </DualDisplay>
-                        <ChatSection
-                            {...fade_animation({ delayed: true })}
-                            hook={hook}
-                            prompt={"This is the classroom environment."}
-                        />
+                        <AnimatePresence>
+                            {!showQuizQuestions && (
+                                <ChatSection
+                                    {...fade_animation()}
+                                    hook={hook}
+                                    prompt={
+                                        "This is the classroom environment."
+                                    }
+                                />
+                            )}
+                        </AnimatePresence>
                     </>
                 )}
             </Container>
@@ -152,6 +190,11 @@ function Classroom() {
 }
 
 const LoadingScreenWrapper = styled(motion.div)``;
+
+const QuizQuestionContainer = styled(motion.div)`
+    width: fit-content;
+    height: fit-content;
+`;
 
 const GalleryContainer = styled.div`
     position: relative;

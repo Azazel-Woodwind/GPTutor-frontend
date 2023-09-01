@@ -1,5 +1,5 @@
 import React from "react";
-import Choice from "./Choice";
+import Choice from "../../pages/Quiz/components/Choice";
 
 function MultipleChoiceQuestion({
     question,

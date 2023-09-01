@@ -6,7 +6,7 @@ import CenteredRow from "../../styles/containers/CenteredRow";
 import { degreesToRadians } from "../../lib/misc";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom/dist/umd/react-router-dom.development";
-import Pulse from "./Pulse";
+import Pulse, { RING_PROPAGATION_DURATIONS } from "./Pulse";
 
 // 8 different questions related to GCSE education that a student might ask
 const examplePrompts = [
@@ -36,9 +36,6 @@ const appearAnimation = {
     },
 };
 
-const ringPropagateDuration = 4;
-const numRings = 3;
-
 const XAvatar = ({
     size,
     rings,
@@ -53,8 +50,12 @@ const XAvatar = ({
     setSpeed,
     showExamplePrompts,
     appear,
+    newEmotion,
+    numRings = 3,
+    glow,
     ...props
 }) => {
+    // console.log("NUM RINGS:", numRings);
     const animationControls = useAnimationControls();
     // const location = useLocation();
 
@@ -174,13 +175,17 @@ const XAvatar = ({
                     {...{ ...props, loading: undefined }}>
                     {/* {rings} */}
                     {(!appear || scale === 1) &&
+                        numRings &&
                         [...Array(numRings)].map((_, i) => (
                             <Pulse
+                                newEmotion={newEmotion}
                                 key={i}
                                 size={size}
                                 delay={
                                     // !!appear * 1.5 +
-                                    (ringPropagateDuration / numRings) * i
+                                    (RING_PROPAGATION_DURATIONS["neutral"] /
+                                        numRings) *
+                                    i
                                 }
                             />
                         ))}
@@ -238,15 +243,19 @@ const XAvatar = ({
     return (
         <AvatarWrapper size={size} as={motion.div} {...props}>
             {/* {rings} */}
-            {[...Array(numRings)].map((_, i) => (
-                <Pulse
-                    key={i}
-                    size={size}
-                    delay={
-                        !!appear * 1.5 + (ringPropagateDuration / numRings) * i
-                    }
-                />
-            ))}
+            {numRings &&
+                [...Array(numRings)].map((_, i) => (
+                    <Pulse
+                        newEmotion={newEmotion}
+                        key={i}
+                        size={size}
+                        delay={
+                            !!appear * 1.5 +
+                            (RING_PROPAGATION_DURATIONS["neutral"] / numRings) *
+                                i
+                        }
+                    />
+                ))}
             <X
                 size={size}
                 transition={{ duration: 0.3 }}

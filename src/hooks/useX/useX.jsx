@@ -57,9 +57,10 @@ function useX(config) {
         message,
         context,
         altChannel,
+        includeInHistory = true,
         messageParams = {},
-    }) => {
-        if (message.trim() === "" || streaming || loading) return false;
+    } = {}) => {
+        if (streaming || loading) return false;
         instructionQueue.current = [];
         audio.current.src = "";
         audio.current.load();
@@ -67,7 +68,7 @@ function useX(config) {
         animationId.current && cancelAnimationFrame(animationId.current);
         setMultiplier(1);
 
-        if (responseData) {
+        if (responseData && includeInHistory) {
             // console.log("here");
             setCurrentMessage("");
             setHistory(prev => [
@@ -77,7 +78,9 @@ function useX(config) {
         }
 
         setResponseData("");
-        setHistory(prev => [...prev, { role: "user", content: message }]);
+        if (includeInHistory) {
+            setHistory(prev => [...prev, { role: "user", content: message }]);
+        }
         currentResponseId.current = nanoid();
         orderMaintainer.reset();
         Socket.emit(altChannel || `${channel}_message_x`, {
@@ -300,27 +303,33 @@ function useX(config) {
             setCurrentMessage(prevMessage => prevMessage + char);
             await new Promise(resolve => setTimeout(resolve, 20));
         }
-
-        return Promise.resolve();
     };
 
     const handleNextInstruction = async () => {
         const instruction = instructionQueue.current[0];
         if (!instruction) return;
-        setStreaming(true);
+
         setLoading(false);
 
         if (instruction.type === "sentence") {
+            setStreaming(true);
+            console.log("handling sentence:", instruction.text);
             audio.current.src = `data:audio/x-wav;base64,${instruction.audioContent}`;
             streamText(instruction.text, instruction.duration * 1000);
             play();
+        } else if (instruction.type === "audio") {
+            console.log("handling audio");
+            audio.current.src = `data:audio/x-wav;base64,${instruction.audioContent}`;
+            play();
         } else if (instruction.type === "data") {
+            console.log("handling data");
             onData(instruction);
             instructionQueue.current.shift();
             if (instructionQueue.current.length > 0) {
                 handleNextInstruction();
             }
         } else if (instruction.type === "delta") {
+            setStreaming(true);
             await streamDelta(instruction.delta);
             instructionQueue.current.shift();
             if (instructionQueue.current.length > 0) {
@@ -340,6 +349,9 @@ function useX(config) {
             }
 
             instructionQueue.current.shift();
+            if (instructionQueue.current.length > 0) {
+                handleNextInstruction();
+            }
         }
     };
 
@@ -395,7 +407,7 @@ function useX(config) {
         };
 
         Socket.on(`${channel}_instruction`, data => {
-            // console.log("instruction", data);
+            // console.log("RECEIVED INSTRUCTION", data);
             if (!data.first && data.id !== currentResponseId.current) {
                 console.log(
                     "ignoring instruction because it's not the current response"

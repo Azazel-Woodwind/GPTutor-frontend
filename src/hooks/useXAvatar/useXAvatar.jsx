@@ -3,7 +3,7 @@ import { useAnimation, useAnimationControls } from "framer-motion";
 import XAvatar from "./XAvatar";
 import Pulse from "./Pulse";
 
-const useXAvatar = ({ size = 100, ringCount = 3, duration = 4, appear }) => {
+const useXAvatar = ({ size = 100, ringCount = 3, duration = 4 }) => {
     const [rings, setRings] = React.useState([]);
     const [isPulsing, setIsPulsing] = React.useState(true);
     const controls = useAnimationControls();

@@ -26,7 +26,7 @@ function Quiz() {
 
     const {
         questions,
-        nextQuestion,
+        changeQuestion,
         currentQuestionNum,
         generatingFeedback,
         submitAnswer,
@@ -35,6 +35,7 @@ function Quiz() {
         streamingAnswer,
     } = useXQuiz({
         lesson,
+        channel: "quiz",
     });
 
     const { setShowMainHeader } = useHeader();
@@ -91,7 +92,7 @@ function Quiz() {
                         submitAnswer={submitAnswer}
                         currentQuestionNum={currentQuestionNum}
                         generatingFeedback={generatingFeedback}
-                        nextQuestion={nextQuestion}
+                        changeQuestion={changeQuestion}
                         loading={loading}
                         setExit={setExit}
                         streamingAnswer={streamingAnswer}

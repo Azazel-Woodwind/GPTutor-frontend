@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 
 import React from "react";
 import useX from "./useX";
+import useXQuiz from "./useXQuiz";
 // import {Config} from "./useX"
 
 function useXLesson({ currentLesson, delay, ...props }) {
@@ -15,19 +16,13 @@ function useXLesson({ currentLesson, delay, ...props }) {
     const [started, setStarted] = React.useState(undefined);
     const [images, setImages] = React.useState([]);
     const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
+    const [finishedLearningObjective, setFinishedLearningObjective] =
+        React.useState(false);
 
     const { Socket } = React.useContext(SocketContext);
 
-    const X = useX({
+    const X = useXQuiz({
         channel: "lesson",
-        onMessage: data => {
-            // const { learningObjectiveNumber } = data;
-            // console.log(
-            //     "LEARNING OBJECTIVE NUMBER CHANGED TO:",
-            //     learningObjectiveNumber
-            // );
-            // setLearningObjectiveNumber(learningObjectiveNumber);
-        },
         onData: data => {
             console.log("ONDATA");
             if (data.finished) {
@@ -35,25 +30,33 @@ function useXLesson({ currentLesson, delay, ...props }) {
                 return;
             }
 
-            let [learningObjectiveIndex, instructionIndex] = data.instruction
-                .toString()
-                .split(".");
-            learningObjectiveIndex = parseInt(learningObjectiveIndex);
-            instructionIndex = parseInt(instructionIndex);
-            learningObjectiveIndex--;
-            instructionIndex--;
-            console.log(
-                `NEW INSTRUCTION: ${learningObjectiveIndex + 1}.${
-                    instructionIndex + 1
-                }`
-            );
+            if (data.finishedLearningObjective) {
+                console.log("FINISHED CURRENT LEARNING OBJECTIVE");
+                setFinishedLearningObjective(true);
+                return;
+            }
 
-            setLearningObjectiveNumber(learningObjectiveIndex + 1);
-            setInstruction({
-                learningObjectiveIndex,
-                instructionIndex,
-            });
+            if (data.instruction) {
+                let [learningObjectiveIndex, instructionIndex] =
+                    data.instruction.toString().split(".");
+                learningObjectiveIndex = parseInt(learningObjectiveIndex);
+                instructionIndex = parseInt(instructionIndex);
+                learningObjectiveIndex--;
+                instructionIndex--;
+                console.log(
+                    `NEW INSTRUCTION: ${learningObjectiveIndex + 1}.${
+                        instructionIndex + 1
+                    }`
+                );
+
+                setLearningObjectiveNumber(learningObjectiveIndex + 1);
+                setInstruction({
+                    learningObjectiveIndex,
+                    instructionIndex,
+                });
+            }
         },
+        sendStart: false,
         ...props,
     });
 
@@ -76,28 +79,12 @@ function useXLesson({ currentLesson, delay, ...props }) {
 
     useEffect(() => {
         // Socket.emit("authenticate", true);
-        if (!started) return;
+        if (!started || X.currentMessage || X.history.length > 0) return;
 
         console.log("starting lesson:", currentLesson);
 
         const timer = setTimeout(() => {
             Socket.emit("start_lesson", { current_lesson: currentLesson });
-            // Socket.on("lesson_finished", () => setFinished(true));
-            // Socket.on(
-            //     "instruction_change",
-            //     ({ learningObjectiveIndex, instructionIndex }) => {
-
-            //     }
-            // );
-            // Socket.on("lesson_response_data", data => {
-            //     const { learningObjectiveNumber } = data;
-            // console.log(
-            //     "LEARNING OBJECTIVE NUMBER CHANGED TO:",
-            //     learningObjectiveNumber
-            // );
-
-            // setLearningObjectiveNumber(learningObjectiveNumber);
-            // });
         }, delay);
 
         return () => {
@@ -126,6 +113,14 @@ function useXLesson({ currentLesson, delay, ...props }) {
         [instruction, started]
     );
 
+    const finishLearningObjectiveQuestions = () => {
+        setFinishedLearningObjective(false);
+        X.changeQuestion();
+        X.sendMessage({
+            includeInHistory: false,
+        });
+    };
+
     return {
         ...X,
         lesson,
@@ -135,6 +130,8 @@ function useXLesson({ currentLesson, delay, ...props }) {
         learningObjectiveNumber,
         currentImageIndex,
         images,
+        finishLearningObjectiveQuestions,
+        finishedLearningObjective,
     };
 }
 

@@ -16,7 +16,7 @@ const MAX_PROMPT_LENGTH = 1024;
 
 function Controls({
     prompts,
-    hook: { sendMessage, streaming, loading },
+    hook: { sendMessage, streaming, loading, finishedLearningObjective },
     height,
     prompt,
 }) {
@@ -60,6 +60,7 @@ function Controls({
         transcript,
         recording,
         finalTranscript,
+        speaking,
     } = useWhisper({
         Socket,
     });
@@ -150,8 +151,12 @@ function Controls({
     // console.log(messageInput, streaming, loading);
 
     const sendDisabled =
-        !messageInput?.trim() || streaming || loading || recording;
-    const micDisabled = streaming || loading || recording;
+        !messageInput?.trim() ||
+        streaming ||
+        loading ||
+        recording ||
+        finishedLearningObjective;
+    const micDisabled = streaming || loading || finishedLearningObjective;
 
     const toggleRecord = () => {
         if (filling) {
@@ -172,6 +177,7 @@ function Controls({
                 recording={recording}
                 onClick={toggleRecord}
                 disabled={micDisabled}
+                speaking={speaking}
             />
             <ChatForm ref={chatFormRef} onSubmit={onSubmit}>
                 <ChatInput

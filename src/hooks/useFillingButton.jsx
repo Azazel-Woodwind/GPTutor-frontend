@@ -25,6 +25,7 @@ function FillingButton({
     resetAnimation1Ref,
     resetAnimation2Ref,
     onClick,
+    speaking,
     ...props
 }) {
     // console.log("disabled:", disabled);
@@ -154,7 +155,9 @@ function FillingButton({
                             disabled
                                 ? "gray"
                                 : animating
-                                ? `${theme.colours.primary}EF`
+                                ? speaking
+                                    ? theme.colours.error
+                                    : `${theme.colours.primary}EF`
                                 : `url(#${gradientID2})`
                         }
                         d={path}></path>

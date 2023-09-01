@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "styled-components";
-import Textfield from "../../../components/input/Textfield";
-import CollapsableText from "../../../components/CollapsableText";
+import Textfield from "../input/Textfield";
+import CollapsableText from "../CollapsableText";
 
 function WrittenQuestion({
     question,
@@ -60,34 +60,6 @@ function WrittenQuestion({
                 />
             </div>
         </>
-    );
-}
-
-function IncorrectFeedback({ feedback, currentFeedback, questionIndex }) {
-    const [collapsed, setCollapsed] = React.useState(false);
-
-    React.useEffect(() => {
-        if (
-            currentFeedback?.questionIndex === questionIndex &&
-            currentFeedback?.text.length === 1
-        ) {
-            setCollapsed(true);
-        }
-    }, [currentFeedback]);
-
-    const theme = useTheme();
-
-    return (
-        <CollapsableText
-            style={{
-                color: theme.colours.error,
-            }}
-            {...{
-                collapsed,
-                setCollapsed,
-            }}>
-            {feedback}
-        </CollapsableText>
     );
 }
 

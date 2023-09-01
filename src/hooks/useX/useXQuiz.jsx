@@ -3,73 +3,47 @@ import useX from "./useX";
 import { SocketContext, useSocket } from "../../context/SocketContext";
 import { QUESTIONS_PER_LEARNING_OBJECTIVE } from "../../lib/constants";
 
-function useXQuiz({ lesson, ...props }) {
+function useXQuiz({ lesson, channel, sendStart = true, ...props }) {
     const [questions, setQuestions] = React.useState([]);
     const [currentQuestionNum, setCurrentQuestionNum] = React.useState(0);
-    // const [currentFeedbackIsCorrect, setCurrentFeedbackIsCorrect] =
-    // React.useState(undefined);
     const [generatingFeedback, setGeneratingFeedback] = React.useState(false);
-    // const [generatingHint, setGeneratingHint] = React.useState(false);
-    // const [hints, setHints] = React.useState([]);
-    // const [incorrectFeedback, setIncorrectFeedback] = React.useState([]);
-    // const [correctFeedback, setCorrectFeedback] = React.useState([]);
-    // const [currentFeedback, setCurrentFeedback] = React.useState("");
-    // const [currentHint, setCurrentHint] = React.useState("");
     const [finished, setFinished] = React.useState(false);
-    // const [answerIsCorrect, setAnswerIsCorrect] = React.useState(false);
-    // const [generatingAnswer, setGeneratingAnswer] = React.useState(false);
-    // const [currentAnswer, setCurrentAnswer] = React.useState("");
-    // const [answer, setAnswer] = React.useState("");
     const [streamingAnswer, setStreamingAnswer] = React.useState(false);
 
     const scores = React.useRef([]);
 
     const X = useX({
-        channel: "quiz",
+        channel,
         ...props,
     });
 
     const { Socket } = useSocket();
 
-    const submitAnswer = ({ answer, choiceIndex, questionIndex }) => {
-        // console.log("SUBMITTING ANSWER: ", answer);
-        // console.log("CHOICE INDEX: ", choiceIndex);
+    console.log("CURRENT QUESTION NUM: ", currentQuestionNum);
+
+    const submitAnswer = ({ answer, choiceIndex, questionIndex, ...opts }) => {
+        console.log("SUBMITTING ANSWER: ", answer);
+        console.log("CHOICE INDEX: ", choiceIndex);
         X.sendMessage({
-            message: choiceIndex !== undefined ? "" + choiceIndex : answer,
-            altChannel: "quiz_request_feedback",
+            message: choiceIndex !== undefined ? choiceIndex : answer,
+            altChannel: `${channel}_request_feedback`,
             messageParams: {
                 questionIndex: currentQuestionNum,
-                choiceIndex,
-                question: questions[currentQuestionNum].questionString,
             },
+            ...opts,
         });
 
         setGeneratingFeedback(true);
         // setCurrentFeedbackIsCorrect(undefined);
     };
 
-    // const requestHint = () => {
-    //     console.log("REQUESTING HINT");
-    //     X.sendMessage({
-    //         channel: "quiz_request_hint",
-    //         messageParams: {
-    //             questionIndex: currentQuestionNum,
-    //             question: currentQuestion,
-    //         },
-    //     });
-    //     setGeneratingHint(true);
-    // };
-
-    const nextQuestion = () => {
+    const changeQuestion = questionIndex => {
         console.log("CHANGING QUESTION");
-        setCurrentQuestionNum(prev => prev + 1);
-        Socket.emit("quiz_change_question");
+        const newQuestionIndex = questionIndex || currentQuestionNum + 1;
+        setCurrentQuestionNum(newQuestionIndex);
+        Socket.emit(`${channel}_change_question`, newQuestionIndex);
         // setAnswerIsCorrect(false);
         X.resetAudio();
-
-        if (!questions[currentQuestionNum + 1].final) {
-            Socket.emit("quiz_generate_next_question");
-        }
     };
 
     function getScore() {
@@ -128,26 +102,14 @@ function useXQuiz({ lesson, ...props }) {
                         return newQuestions;
                     });
                 }
-                // setCurrentFeedbackIsCorrect(isCorrect);
-                // setAnswerIsCorrect(isCorrect);
-                // setCurrentFeedback(prev =>
-                //     prev
-                //         ? { ...prev, text: prev.text + delta, isCorrect }
-                //         : {
-                //               questionIndex,
-                //               choiceIndex,
-                //               text: delta,
-                //               isCorrect,
-                //           }
-                // );
             }
         },
         [currentQuestionNum]
     );
 
     React.useEffect(() => {
-        Socket.off("quiz_feedback_stream");
-        Socket.on("quiz_feedback_stream", onFeedbackStream);
+        Socket.off(`${channel}_feedback_stream`);
+        Socket.on(`${channel}_feedback_stream`, onFeedbackStream);
     }, [onFeedbackStream]);
 
     const onNewFeedback = React.useCallback(
@@ -185,9 +147,6 @@ function useXQuiz({ lesson, ...props }) {
                         return newQuestions;
                     });
                 } else {
-                    // if (final) {
-                    //     setGeneratingAnswer(true);
-                    // }
                     setQuestions(prev => {
                         const newQuestions = [...prev];
                         newQuestions[questionIndex].feedback = feedback;
@@ -198,77 +157,15 @@ function useXQuiz({ lesson, ...props }) {
                         return newQuestions;
                     });
                 }
-                // setCurrentFeedback(undefined);
-                // setCurrentFeedbackIsCorrect(undefined);
-                // setAnswerIsCorrect(isCorrect);
-
-                // if (!isCorrect) {
-                //     setIncorrectFeedback(prev => {
-                //         if (!prev[questionIndex]) {
-                //             prev[questionIndex] = [];
-                //         }
-
-                //         if (choiceIndex !== undefined) {
-                //             prev[questionIndex][choiceIndex] = feedback;
-
-                //             return [...prev];
-                //         }
-
-                //         prev[questionIndex].push(feedback);
-
-                //         return [...prev];
-                //     });
-                // } else {
-                //     setCorrectFeedback(prev => {
-                //         prev[questionIndex] = {
-                //             feedback,
-                //             choiceIndex,
-                //         };
-                //         return [...prev];
-                //     });
-                // }
             }
         },
         [currentQuestionNum]
     );
 
     React.useEffect(() => {
-        Socket.off("quiz_new_feedback");
-        Socket.on("quiz_new_feedback", onNewFeedback);
+        Socket.off(`${channel}_new_feedback`);
+        Socket.on(`${channel}_new_feedback`, onNewFeedback);
     }, [onNewFeedback]);
-
-    // const onHintStream = React.useCallback(
-    //     ({ delta, questionIndex }) => {
-    //         X.setLoading(false);
-    //         if (questionIndex === currentQuestionNum) {
-    //             setCurrentHint(prev => prev + delta);
-    //         }
-    //     },
-    //     [currentQuestionNum]
-    // );
-
-    // React.useEffect(() => {
-    //     Socket.off("quiz_hint_stream");
-    //     Socket.on("quiz_hint_stream", onHintStream);
-    // }, [onHintStream]);
-
-    // const onNewHint = React.useCallback(
-    //     ({ hint, questionIndex }) => {
-    //         if (questionIndex === currentQuestionNum) {
-    //             setCurrentHint("");
-    //             setHints(prev => {
-    //                 prev[questionIndex].push(hint);
-    //                 return [...prev];
-    //             });
-    //         }
-    //     },
-    //     [currentQuestionNum]
-    // );
-
-    // React.useEffect(() => {
-    //     Socket.off("quiz_new_hint");
-    //     Socket.on("quiz_new_hint", onNewHint);
-    // }, [onNewHint]);
 
     const onAnswerStream = React.useCallback(
         ({ delta, questionIndex }) => {
@@ -287,8 +184,8 @@ function useXQuiz({ lesson, ...props }) {
     );
 
     React.useEffect(() => {
-        Socket.off("quiz_answer_stream");
-        Socket.on("quiz_answer_stream", onAnswerStream);
+        Socket.off(`${channel}_answer_stream`);
+        Socket.on(`${channel}_answer_stream`, onAnswerStream);
     }, [onAnswerStream]);
 
     const onAnswer = React.useCallback(
@@ -301,26 +198,25 @@ function useXQuiz({ lesson, ...props }) {
                     newQuestions[questionIndex].finished = true;
                     return newQuestions;
                 });
-                // setCurrentAnswer("");
-                // setGeneratingAnswer(false);
-                // setAnswer({ answer, questionIndex });
             }
         },
         [currentQuestionNum]
     );
 
     React.useEffect(() => {
-        Socket.off("quiz_answer");
-        Socket.on("quiz_answer", onAnswer);
+        Socket.off(`${channel}_answer`);
+        Socket.on(`${channel}_answer`, onAnswer);
     }, [onAnswer]);
 
     React.useEffect(() => {
         if (!Socket || questions.length > 0) return;
 
-        Socket.emit("start_quiz", { lesson });
+        if (sendStart) {
+            Socket.emit("start_quiz", { lesson });
+        }
 
-        Socket.on("quiz_next_question", question => {
-            console.log("RECEIVED QUESTION", question.questionNumber);
+        Socket.on(`${channel}_next_question`, question => {
+            console.log("RECEIVED QUESTION", question.questionIndex);
             setQuestions(prev => {
                 const newQuestions = [...prev];
                 question.marksScored = undefined;
@@ -334,58 +230,42 @@ function useXQuiz({ lesson, ...props }) {
                     question.feedback = "";
                     question.modalAnswer = "";
                 }
-                newQuestions[question.questionNumber] = question;
+                newQuestions[question.questionIndex] = question;
                 return newQuestions;
             });
             setFinished(question.final);
         });
 
-        Socket.on("quiz_question_image", ({ imageHTML, questionNumber }) => {
-            console.log("RECEIVED IMAGE FOR QUESTION", questionNumber);
-            setQuestions(prev => {
-                const newQuestions = [...prev];
-                newQuestions[questionNumber].imageHTML = imageHTML;
-                return newQuestions;
-            });
-        });
-
-        Socket.emit("quiz_generate_next_question");
-        Socket.emit("quiz_generate_next_question");
+        Socket.on(
+            `${channel}_question_image`,
+            ({ imageHTML, questionIndex }) => {
+                console.log("RECEIVED IMAGE FOR QUESTION", questionIndex);
+                setQuestions(prev => {
+                    const newQuestions = [...prev];
+                    newQuestions[questionIndex].imageHTML = imageHTML;
+                    return newQuestions;
+                });
+            }
+        );
 
         return () => {
-            Socket.off("quiz_next_question");
-            Socket.off("quiz_hint_stream");
-            Socket.off("quiz_new_hint");
-            Socket.off("quiz_feedback_stream");
-            Socket.off("quiz_new_feedback");
+            Socket.off(`${channel}_next_question`);
+            Socket.off(`${channel}_hint_stream`);
+            Socket.off(`${channel}_new_hint`);
+            Socket.off(`${channel}_feedback_stream`);
+            Socket.off(`${channel}_new_feedback`);
         };
     }, []);
-
-    // React.useEffect(() => {
-    //     setCurrentQuestion(questions[currentQuestionNum]);
-    // }, [currentQuestionNum, questions]);
 
     return {
         ...X,
         questions,
-        nextQuestion,
+        changeQuestion,
         currentQuestionNum,
         submitAnswer,
         generatingFeedback,
         streamingAnswer,
-        // generatingHint,
-        // requestHint,
-        // currentFeedbackIsCorrect,
-        // currentFeedback,
-        // currentHint,
         finished,
-        // incorrectFeedback,
-        // correctFeedback,
-        // answerIsCorrect,
-        // hints,
-        // generatingAnswer,
-        // currentAnswer,
-        // answer,
         getScore,
     };
 }

@@ -4,13 +4,25 @@ import Logo from "../styles/Logo";
 import useXAvatar from "../hooks/useXAvatar/useXAvatar";
 
 const XAvatar = ({ size = 200, hasLogo, multiplier, ...props }) => {
-    const { XAvatar, XAvatarProps, pulseX } = useXAvatar({ size, ...props });
+    const { XAvatar, XAvatarProps, pulseX, handleEmotionChange } = useXAvatar({
+        size,
+        ...props,
+    });
 
     React.useEffect(() => {
         if (multiplier !== undefined) {
             pulseX(multiplier);
         }
     }, [multiplier]);
+
+    // React.useEffect(() => {
+    //     // console.log("emotion changed", emotion);
+    //     handleEmotionChange(newEmotion);
+    // }, [newEmotion]);
+
+    // console.log(numRings);
+    // console.log(props);
+    // console.log(XAvatarProps);
 
     return (
         <Container>

@@ -20,7 +20,7 @@ const defaultConfig = {
     removeSilence: false,
     stopTimeout: defaultStopTimeout,
     streaming: true,
-    timeSlice: 1_100,
+    timeSlice: 1_000,
     onDataAvailable: undefined,
     onTranscribe: undefined,
     Socket: undefined,
@@ -60,7 +60,8 @@ export const useWhisper = config => {
         if (Socket) {
             Socket.off("transcribed_audio");
             Socket.on("transcribed_audio", data => {
-                console.log(data.id, currentTranscriptId.current);
+                // console.log("received audio");
+                // console.log(data.id, currentTranscriptId.current);
 
                 if (data.id !== currentTranscriptId.current) {
                     return;
@@ -70,6 +71,7 @@ export const useWhisper = config => {
                     if (data.final) {
                         console.log("FINAL TRANSCRIPT:", data.transcription);
                         setFinalTranscript(data.transcription);
+                        setTranscript(data.transcription);
                         currentTranscriptId.current = undefined;
                     } else if (!finalTranscript) {
                         setTranscript(data.transcription);
@@ -91,6 +93,9 @@ export const useWhisper = config => {
     const stream = useRef();
     const timeout = useRef(defaultTimeout);
     const currentTranscriptId = useRef(undefined);
+    const time = useRef(undefined);
+    const speakingRef = useRef(undefined);
+    const spokenSinceLastChunk = useRef(undefined);
 
     const [recording, setRecording] = useState(false);
     const [speaking, setSpeaking] = useState(false);
@@ -98,6 +103,7 @@ export const useWhisper = config => {
     const [blob, setBlob] = useState();
     const [transcript, setTranscript] = useState("");
     const [finalTranscript, setFinalTranscript] = useState("");
+    // const [spokenSinceLastChunk, setSpokenSinceLastChunk] = useState(false);
 
     /**
      * cleanup on component unmounted
@@ -146,6 +152,7 @@ export const useWhisper = config => {
         setFinalTranscript("");
         setTranscript("");
         currentTranscriptId.current = nanoid();
+        spokenSinceLastChunk.current = false;
         await onStartRecording();
     };
 
@@ -228,7 +235,7 @@ export const useWhisper = config => {
             if (!listener.current) {
                 const { default: hark } = await import("hark");
                 listener.current = hark(stream.current, {
-                    interval: 100,
+                    interval: 50,
                     play: false,
                 });
                 listener.current.on("speaking", onStartSpeaking);
@@ -256,6 +263,8 @@ export const useWhisper = config => {
     const onStartSpeaking = () => {
         console.log("start speaking");
         setSpeaking(true);
+        speakingRef.current = true;
+        spokenSinceLastChunk.current = true;
         onStopTimeout("stop");
     };
 
@@ -267,6 +276,7 @@ export const useWhisper = config => {
     const onStopSpeaking = () => {
         console.log("stop speaking");
         setSpeaking(false);
+        speakingRef.current = false;
         if (nonStop) {
             onStartTimeout("stop");
         }
@@ -312,7 +322,7 @@ export const useWhisper = config => {
                 onStopStreaming();
                 onStopTimeout("stop");
                 setRecording(false);
-                console.log("HERE HERE HERE");
+                // console.log("HERE HERE HERE");
 
                 if (autoTranscribe) {
                     await onTranscribing();
@@ -323,6 +333,9 @@ export const useWhisper = config => {
                 await recorder.current.destroy();
                 chunks.current = [];
                 recorder.current = undefined;
+                setSpeaking(false);
+                speakingRef.current = false;
+                spokenSinceLastChunk.current = false;
             }
         } catch (err) {
             console.error(err);
@@ -460,13 +473,40 @@ export const useWhisper = config => {
      * - set transcript text with interim result
      */
     const onDataAvailable = async data => {
+        // if (time.current) {
+        //     console.log(
+        //         "TIME BETWEEN CHUNKS",
+        //         performance.now() - time.current
+        //     );
+        //     time.current = performance.now();
+        // } else {
+        //     // console.log("FIRST CHUNK");
+        //     time.current = performance.now();
+        // }
         // console.log("onDataAvailable", data);
+
         try {
             if (streaming && recorder.current) {
+                // console.log("**********");
+                // console.log("CHUNK AVAILABLE");
+                // console.log("CURRENTLY SPEAKING:", speakingRef.current);
+                // console.log(
+                //     "SPOKEN SINCE LAST CHUNK:",
+                //     spokenSinceLastChunk.current
+                // );
+                // console.log("**********");
                 onDataAvailableCallback?.(data);
                 chunks.current.push(data);
+                if (!speakingRef.current && !spokenSinceLastChunk.current) {
+                    console.log("IGNORING CHUNK BECAUSE SILENT");
+                    return;
+                }
+
+                if (!speakingRef.current) {
+                    spokenSinceLastChunk.current = false;
+                }
                 const recorderState = await recorder.current.getState();
-                console.log(speaking);
+                // console.log(speaking);
 
                 if (recorderState === "recording") {
                     const blob = new Blob(chunks.current, {
@@ -485,7 +525,7 @@ export const useWhisper = config => {
                     //   }
                     // )
 
-                    console.log("sending audio to server");
+                    console.log("SENDING AUDIO TO SERVER");
 
                     Socket.emit("transcribe_audio", {
                         file,

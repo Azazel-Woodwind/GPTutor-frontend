@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../../components/input/Button";
+import Button from "../input/Button";
 
 function SubmitAnswerButton({ onClick, disabled }) {
     return (
