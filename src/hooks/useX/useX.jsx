@@ -1,24 +1,15 @@
 import { nanoid } from "nanoid";
 import { SocketContext } from "../../context/SocketContext";
-import { useEffect, useContext, useState, useRef, useCallback } from "react";
+import React, {
+    useEffect,
+    useContext,
+    useState,
+    useRef,
+    useCallback,
+} from "react";
 import OrderMaintainer from "../../lib/OrderMaintainer";
 
-const defaultConfig = {
-    channel: "",
-    onMessage: ({ role, content }) => {
-        // console.log(role, content);
-    },
-    onFinished: message => {},
-    onDelta: message => {},
-    onData: data => {},
-};
-
-function useX(config) {
-    const { channel, onMessage, onFinished, onDelta, onData } = {
-        ...defaultConfig,
-        ...config,
-    };
-
+function useX({ channel, onData }) {
     const { Socket } = useContext(SocketContext);
 
     const [history, setHistory] = useState([]);
@@ -28,9 +19,10 @@ function useX(config) {
     const [speaking, setSpeaking] = useState(false);
     const [multiplier, setMultiplier] = useState(undefined);
     const [userPaused, setUserPaused] = useState(false);
-    const [responseData, setResponseData] = useState("");
-    // const [streamingInstruction, setStreamingInstruction] = useState(false);
+    const [currentInstruction, setCurrentInstruction] = useState(undefined);
 
+    const onCurrentMessageChange = useRef(() => {});
+    const onFullResponse = useRef(() => {});
     const audio = useRef(new Audio());
     const audioContext = useRef();
     const analyserNode = useRef(null);
@@ -38,9 +30,16 @@ function useX(config) {
     const animationId = useRef(null);
     const audioSource = useRef(null);
     const instructionQueue = useRef([]);
-    const currentResponseId = useRef(undefined);
     const currentPlaybackRate = useRef(1);
     const streamingInstruction = useRef(false);
+
+    const setOnCurrentMessageChange = callback => {
+        onCurrentMessageChange.current = callback;
+    };
+
+    const setOnFullResponse = callback => {
+        onFullResponse.current = callback;
+    };
 
     const { current: orderMaintainer } = useRef(
         new OrderMaintainer({
@@ -68,25 +67,14 @@ function useX(config) {
         animationId.current && cancelAnimationFrame(animationId.current);
         setMultiplier(1);
 
-        if (responseData && includeInHistory) {
-            // console.log("here");
-            setCurrentMessage("");
-            setHistory(prev => [
-                ...prev,
-                { role: "assistant", content: responseData },
-            ]);
-        }
-
-        setResponseData("");
         if (includeInHistory) {
             setHistory(prev => [...prev, { role: "user", content: message }]);
         }
-        currentResponseId.current = nanoid();
+
         orderMaintainer.reset();
         Socket.emit(altChannel || `${channel}_message_x`, {
             message,
             context,
-            id: currentResponseId.current,
             ...messageParams,
         });
         setLoading(true);
@@ -177,94 +165,6 @@ function useX(config) {
         return audio.current.paused;
     };
 
-    const onReceiveAudioData = useCallback(
-        data => {
-            // console.log("received audio_data");
-
-            if (!data.first && data.id !== currentResponseId.current) {
-                console.log(
-                    "ignoring audio_data because it's not the current response"
-                );
-                return;
-            }
-        },
-        [userPaused]
-    );
-
-    const onResponseData = useCallback(
-        data => {
-            // console.log("response_data:", data);
-            if (streaming || loading) {
-                // console.log("NO HERE");
-                setResponseData(data.response);
-            } else {
-                // console.log("HERE");
-                setCurrentMessage("");
-                setHistory(prev => [
-                    ...prev,
-                    { role: "assistant", content: data.response },
-                ]);
-            }
-
-            onMessage(data);
-        },
-        [streaming, loading]
-    );
-
-    useEffect(() => {
-        if (!Socket) return;
-        Socket.off(`${channel}_response_data`);
-        Socket.on(`${channel}_response_data`, onResponseData);
-    }, [onResponseData]);
-
-    useEffect(() => {
-        if (!Socket) return;
-        orderMaintainer.callback = onReceiveAudioData;
-        Socket.off(`${channel}_audio_data`);
-        Socket.on(`${channel}_audio_data`, ({ order, ...data }) => {
-            // console.log(order, data);
-            if (order === 0) {
-                orderMaintainer.reset();
-            }
-
-            orderMaintainer.addData(data, order);
-        });
-    }, [onReceiveAudioData]);
-
-    const onReceiveResponseStream = useCallback(
-        delta => {
-            setLoading(false);
-
-            if (delta === "[END]") {
-                return;
-            }
-
-            setStreaming(true);
-            onDelta(delta);
-
-            setCurrentMessage(prevMessage => prevMessage + delta);
-        },
-        [responseData]
-    );
-
-    useEffect(() => {
-        if (responseData && !streaming) {
-            // console.log("herio");
-            setCurrentMessage("");
-            setHistory(prev => [
-                ...prev,
-                { role: "assistant", content: responseData },
-            ]);
-            setResponseData("");
-        }
-    }, [streaming]);
-
-    useEffect(() => {
-        if (!Socket) return;
-        Socket.off(`${channel}_response_stream`);
-        Socket.on(`${channel}_response_stream`, onReceiveResponseStream);
-    }, [onReceiveResponseStream]);
-
     const streamText = async (text, duration) => {
         // add text to currentMessage character by character over duration
         duration *= 0.5;
@@ -305,9 +205,25 @@ function useX(config) {
         }
     };
 
+    React.useEffect(() => {
+        if (!currentInstruction || !onCurrentMessageChange.current) {
+            console.log("no current instruction");
+            return;
+        }
+        onCurrentMessageChange.current({
+            currentMessage,
+            ...currentInstruction,
+        });
+    }, [currentMessage]);
+
+    // console.log(onFullResponse);
+
     const handleNextInstruction = async () => {
         const instruction = instructionQueue.current[0];
         if (!instruction) return;
+        console.log("handling next instruction:", instruction);
+
+        setCurrentInstruction(instruction);
 
         setLoading(false);
 
@@ -338,15 +254,14 @@ function useX(config) {
         } else if (instruction.type === "end") {
             console.log("response_stream end");
             setStreaming(false);
-            if (responseData) {
-                // console.log("here");
-                setCurrentMessage("");
+            setCurrentMessage("");
+            if (instruction.response) {
                 setHistory(prev => [
                     ...prev,
-                    { role: "assistant", content: responseData },
+                    { role: "assistant", content: instruction.response },
                 ]);
-                setResponseData("");
             }
+            onFullResponse.current?.(instruction);
 
             instructionQueue.current.shift();
             if (instructionQueue.current.length > 0) {
@@ -389,8 +304,6 @@ function useX(config) {
     useEffect(() => {
         if (!Socket) return;
 
-        let start, end;
-
         audio.current.onplay = () => {
             // start = performance.now();
             console.log("track playing");
@@ -407,14 +320,6 @@ function useX(config) {
         };
 
         Socket.on(`${channel}_instruction`, data => {
-            // console.log("RECEIVED INSTRUCTION", data);
-            if (!data.first && data.id !== currentResponseId.current) {
-                console.log(
-                    "ignoring instruction because it's not the current response"
-                );
-                return;
-            }
-
             instructionQueue.current.push(data);
             if (instructionQueue.current.length === 1) {
                 handleNextInstruction();
@@ -428,7 +333,6 @@ function useX(config) {
 
         Socket.on(`${channel}_message_user`, message => {
             // console.log("message_user");
-            onFinished(message);
             setLoading(false);
         });
     }, [Socket]);
@@ -472,6 +376,9 @@ function useX(config) {
         isMuted,
         resetAudio,
         setLoading,
+        currentInstruction,
+        setOnCurrentMessageChange,
+        setOnFullResponse,
     };
 }
 

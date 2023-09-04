@@ -27,9 +27,11 @@ function QuizQuestion({
     const theme = useTheme();
     // console.log(questions[i].type);
     // console.log(selectedChoiceIndex);
+    console.log(generatingFeedback);
 
     return (
         <CenteredColumn
+            // border
             gap="0.5em"
             style={{ width: "60em", alignItems: "start" }}>
             {questions[i] === undefined ? (
@@ -59,7 +61,7 @@ function QuizQuestion({
                             )
                         </span>
                     </h1>
-                    {questions[i].type === "written" ? (
+                    {questions[i].questionType === "written" ? (
                         <WrittenQuestion
                             question={questions[i]}
                             answer={answer}
@@ -127,18 +129,22 @@ function QuizQuestion({
                             disabled={
                                 generatingFeedback ||
                                 streamingAnswer ||
-                                (questions[i].type === "multiple" &&
-                                    selectedChoiceIndex === undefined)
+                                (questions[i].questionType === "multiple" &&
+                                    (selectedChoiceIndex === undefined ||
+                                        questions[i]?.choices[
+                                            selectedChoiceIndex
+                                        ]?.incorrectFeedback))
                             }
                             onClick={() => {
                                 submitAnswer({
                                     includeInHistory: false,
                                     answer,
                                     choiceIndex:
-                                        questions[i].type === "written"
+                                        questions[i].questionType === "written"
                                             ? undefined
                                             : selectedChoiceIndex,
                                 });
+                                // setSelectedChoiceIndex(undefined);
                             }}
                         />
                     )}

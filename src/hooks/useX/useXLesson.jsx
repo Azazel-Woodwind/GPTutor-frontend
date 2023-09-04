@@ -33,6 +33,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
             if (data.finishedLearningObjective) {
                 console.log("FINISHED CURRENT LEARNING OBJECTIVE");
                 setFinishedLearningObjective(true);
+                // X.changeQuestion(X.currentQuestionNum === 0 ? 0 : undefined);
                 return;
             }
 
@@ -115,10 +116,15 @@ function useXLesson({ currentLesson, delay, ...props }) {
 
     const finishLearningObjectiveQuestions = () => {
         setFinishedLearningObjective(false);
-        X.changeQuestion();
+        // X.changeQuestion();
         X.sendMessage({
             includeInHistory: false,
         });
+    };
+
+    const getQuestionTitleAudio = () => {
+        console.log("FETCHING AUDIO FOR CURRENT QUESTION TITLE");
+        Socket.emit(`lesson_get_audio_for_question`, X.currentQuestionNum);
     };
 
     return {
@@ -132,6 +138,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
         images,
         finishLearningObjectiveQuestions,
         finishedLearningObjective,
+        getQuestionTitleAudio,
     };
 }
 

@@ -9,6 +9,7 @@ function Question({
     questions,
     currentQuestionNum,
     generatingFeedback,
+    setExit,
     ...props
 }) {
     // const  = props;
@@ -43,24 +44,25 @@ function Question({
 
     return (
         <CenteredColumn
+            // border
             width="100vw"
             style={{
                 minHeight: "100vh",
-                padding: "1.25em 0",
+                // padding: "1.25em 0",
                 // minHeight?
             }}
             ref={callback}
             key={i}>
             <CenteredRow
+                // border
                 wrap
                 fillparent
                 gap="1.3em"
-                style={
-                    {
-                        // padding: "1.25em",
-                        // paddingLeft: "2em",
-                    }
-                }>
+                style={{
+                    minHeight: "100vh",
+                    // padding: "1.25em",
+                    // paddingLeft: "2em",
+                }}>
                 <QuizQuestion
                     {...{
                         i,

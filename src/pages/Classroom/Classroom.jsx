@@ -47,6 +47,7 @@ function Classroom() {
         finishLearningObjectiveQuestions,
         loading,
         changeQuestion,
+        getQuestionTitleAudio,
     } = hook;
 
     const getClassroomHeight = React.useCallback(ref => {
@@ -65,9 +66,9 @@ function Classroom() {
     }, []);
 
     // console.log(images?.filter(image => image.length > 0).length);
-    console.log(finishedLearningObjective, streaming, loading);
+    // console.log(finishedLearningObjective, streaming, loading);
 
-    const showQuizQuestions = finishedLearningObjective && !streaming;
+    // const showQuizQuestions = finishedLearningObjective && !streaming;
 
     const renderComponent = () => {
         if (started === undefined) {
@@ -123,21 +124,23 @@ function Classroom() {
                                 <AnimatePresence mode="wait">
                                     {images?.filter(image => image.length > 0)
                                         .length > 0 &&
-                                        (showQuizQuestions ? (
+                                        (finishedLearningObjective ? (
                                             <QuizQuestionContainer
                                                 key={`question${currentQuestionNum}`}
                                                 {...fade_animation()}
                                                 onAnimationComplete={animation => {
+                                                    console.log(
+                                                        "ANIMATION:",
+                                                        animation
+                                                    );
                                                     if (
-                                                        animation.opacity === 1
+                                                        animation === "visible"
                                                     ) {
                                                         console.log(
                                                             "STARTING QUIZ QUESTION:",
                                                             currentQuestionNum
                                                         );
-                                                        changeQuestion(
-                                                            currentQuestionNum
-                                                        );
+                                                        getQuestionTitleAudio();
                                                     }
                                                 }}>
                                                 <Question
@@ -145,6 +148,7 @@ function Classroom() {
                                                     finishLearningObjectiveQuestions={
                                                         finishLearningObjectiveQuestions
                                                     }
+                                                    setExit={setExit}
                                                     {...hook}
                                                 />
                                             </QuizQuestionContainer>
@@ -170,7 +174,7 @@ function Classroom() {
                             </LayoutGroup>
                         </DualDisplay>
                         <AnimatePresence>
-                            {!showQuizQuestions && (
+                            {!finishedLearningObjective && (
                                 <ChatSection
                                     {...fade_animation()}
                                     hook={hook}
