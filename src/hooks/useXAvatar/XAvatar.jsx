@@ -183,7 +183,9 @@ const XAvatar = ({
                                 size={size}
                                 delay={
                                     // !!appear * 1.5 +
-                                    (RING_PROPAGATION_DURATIONS["neutral"] /
+                                    (RING_PROPAGATION_DURATIONS[
+                                        newEmotion || "neutral"
+                                    ] /
                                         numRings) *
                                     i
                                 }
@@ -243,24 +245,30 @@ const XAvatar = ({
     return (
         <AvatarWrapper size={size} as={motion.div} {...props}>
             {/* {rings} */}
-            {numRings &&
+            {(!appear || scale === 1) &&
                 [...Array(numRings)].map((_, i) => (
                     <Pulse
                         newEmotion={newEmotion}
                         key={i}
+                        // key={`${newEmotion}-${i}`}
                         size={size}
                         delay={
-                            !!appear * 1.5 +
-                            (RING_PROPAGATION_DURATIONS["neutral"] / numRings) *
-                                i
+                            // !!appear * 1.5 +
+                            (RING_PROPAGATION_DURATIONS[
+                                newEmotion || "neutral"
+                            ] /
+                                numRings) *
+                            i
                         }
                     />
                 ))}
             <X
                 size={size}
                 transition={{ duration: 0.3 }}
-                initial={{ scale: 1 }}
                 animate={controls}
+                style={{
+                    scale: appear ? scale : 1,
+                }}
             />
         </AvatarWrapper>
     );

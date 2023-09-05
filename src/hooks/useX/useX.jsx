@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import OrderMaintainer from "../../lib/OrderMaintainer";
 
-function useX({ channel, onData }) {
+function useX({ channel, ...props }) {
     const { Socket } = useContext(SocketContext);
 
     const [history, setHistory] = useState([]);
@@ -20,6 +20,7 @@ function useX({ channel, onData }) {
     const [multiplier, setMultiplier] = useState(undefined);
     const [userPaused, setUserPaused] = useState(false);
     const [currentInstruction, setCurrentInstruction] = useState(undefined);
+    const [newEmotion, setNewEmotion] = useState("neutral");
 
     const onCurrentMessageChange = useRef(() => {});
     const onFullResponse = useRef(() => {});
@@ -32,6 +33,7 @@ function useX({ channel, onData }) {
     const instructionQueue = useRef([]);
     const currentPlaybackRate = useRef(1);
     const streamingInstruction = useRef(false);
+    const timer = useRef(null);
 
     const setOnCurrentMessageChange = callback => {
         onCurrentMessageChange.current = callback;
@@ -115,6 +117,7 @@ function useX({ channel, onData }) {
 
     const play = async () => {
         setUserPaused(false);
+        audio.autoplay = true;
         if (audio.current.src && audio.current.src.startsWith("data:")) {
             try {
                 await audio.current.play();
@@ -218,10 +221,36 @@ function useX({ channel, onData }) {
 
     // console.log(onFullResponse);
 
+    const onData = instruction => {
+        if (instruction.emotion) {
+            const emotion = instruction.emotion.toLowerCase();
+            console.log("CURRENT EMOTION:", emotion);
+            const EMOTION_DURATION = 2500;
+
+            if (timer.current) {
+                clearTimeout(timer.current);
+                timer.current = null;
+            }
+
+            if (emotion === newEmotion) {
+                timer.current = setTimeout(() => {
+                    setNewEmotion("neutral");
+                }, EMOTION_DURATION);
+            } else {
+                setNewEmotion(emotion);
+
+                timer.current = setTimeout(() => {
+                    setNewEmotion("neutral");
+                }, EMOTION_DURATION);
+            }
+        }
+        props.onData?.(instruction);
+    };
+
     const handleNextInstruction = async () => {
         const instruction = instructionQueue.current[0];
         if (!instruction) return;
-        console.log("handling next instruction:", instruction);
+        // console.log("handling next instruction:", instruction);
 
         setCurrentInstruction(instruction);
 
@@ -229,7 +258,7 @@ function useX({ channel, onData }) {
 
         if (instruction.type === "sentence") {
             setStreaming(true);
-            console.log("handling sentence:", instruction.text);
+            // console.log("handling sentence:", instruction.text);
             audio.current.src = `data:audio/x-wav;base64,${instruction.audioContent}`;
             streamText(instruction.text, instruction.duration * 1000);
             play();
@@ -238,7 +267,7 @@ function useX({ channel, onData }) {
             audio.current.src = `data:audio/x-wav;base64,${instruction.audioContent}`;
             play();
         } else if (instruction.type === "data") {
-            console.log("handling data");
+            // console.log("handling data");
             onData(instruction);
             instructionQueue.current.shift();
             if (instructionQueue.current.length > 0) {
@@ -252,7 +281,7 @@ function useX({ channel, onData }) {
                 handleNextInstruction();
             }
         } else if (instruction.type === "end") {
-            console.log("response_stream end");
+            // console.log("response_stream end");
             setStreaming(false);
             setCurrentMessage("");
             if (instruction.response) {
@@ -272,21 +301,11 @@ function useX({ channel, onData }) {
 
     const onAudioEnd = useCallback(async () => {
         console.log("track ended");
-        // end = performance.now();
-        //     const duration = end - start;
-        //     console.log("track ended");
-        //     console.log("duration of speech", duration);
-
-        // console.log(instructionQueue.current.length);
         audio.current.src = "";
         setSpeaking(false);
         cancelAnimationFrame(animationId.current);
         setMultiplier(1);
 
-        // console.log(
-        //     streamingInstruction.current,
-        //     instructionQueue.current.length
-        // );
         if (!streamingInstruction.current) {
             instructionQueue.current.shift();
 
@@ -379,6 +398,7 @@ function useX({ channel, onData }) {
         currentInstruction,
         setOnCurrentMessageChange,
         setOnFullResponse,
+        newEmotion,
     };
 }
 

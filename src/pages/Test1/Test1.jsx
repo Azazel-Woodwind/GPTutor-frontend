@@ -34,8 +34,27 @@ const images = [
 const MAX_INITIAL_VOICE_WAIT = 5000;
 const MAX_VOICE_WAIT = 2000;
 
+function Test() {
+    React.useEffect(() => {
+        console.log("MOUNTING");
+        return () => {
+            console.log("UNMOUNTING");
+        };
+    }, []);
+
+    return (
+        <div
+            style={{
+                width: 200,
+                height: 100,
+                backgroundColor: "red",
+                margin: "1rem",
+            }}></div>
+    );
+}
+
 function Main() {
-    const [emotion, setEmotion] = React.useState(null);
+    const [emotion, setEmotion] = React.useState("neutral");
     const [numRings, setNumRings] = React.useState(1);
     const [variant, setVariant] = React.useState("slow");
     const [glow, setGlow] = React.useState(false);
@@ -47,7 +66,8 @@ function Main() {
 
     const { Socket } = React.useContext(SocketContext);
 
-    // console.log(Socket);
+    console.log("RERENDER");
+    const controls = useAnimationControls();
 
     const {
         startRecording,
@@ -107,28 +127,13 @@ function Main() {
 
     return (
         <CenteredColumn fillparent>
-            <AnimatePresence>
-                {state && (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        style={{
-                            width: 200,
-                            height: 200,
-                            backgroundColor: "red",
-                        }}
-                        onAnimationComplete={animation => {
-                            console.log(animation);
-                            if (animation.opacity === 1) {
-                                console.log("ENTER ANIMATION COMPLETE");
-                            }
-                        }}
-                    />
-                )}
-            </AnimatePresence>
-            <Button onClick={() => setState(prev => !prev)}>Toggle</Button>
-            {/* <FillingButton
+            {/* {emotion === "neutral" &&
+                [...Array(3)].map((_, i) => <Test key={i} />)} */}
+            {/* <motion.div
+                style={{ width: 200, height: 200, backgroundColor: "red" }}
+                animate={controls}
+            /> */}
+            <FillingButton
                 {...MicSvgData}
                 {...ComponentProps}
                 scale={1.2}
@@ -138,8 +143,14 @@ function Main() {
                 onClick={toggleRecord}
                 speaking={speaking}
             />
-            <div>{transcript && <p>{transcript}</p>}</div> */}
-            {/* <XAvatar size={150} newEmotion={emotion} numRings={0} glow={glow} /> */}
+            <div>{transcript && <p>{transcript}</p>}</div>
+            {/* <XAvatar
+                size={150}
+                newEmotion={emotion}
+                numRings={3}
+                glow={glow}
+                appear
+            /> */}
             {/* <img src="/glow.svg" width="50" alt="description" /> */}
             {/* <Button onClick={() => setGlow(prev => !prev)}>Toggle glow</Button> */}
             {/* <CenteredRow gap="1rem">
@@ -149,14 +160,6 @@ function Main() {
                         setTimeout(() => {
                             setEmotion("neutral");
                         }, 4000);
-                        // controls.start({
-                        //     rotate: 360,
-                        //     transition: {
-                        //         duration: 2,
-                        //         repeat: Infinity,
-                        //         ease: "linear",
-                        //     },
-                        // });
                     }}>
                     Excited
                 </Button>
@@ -168,6 +171,12 @@ function Main() {
                         }, 4000);
                     }}>
                     Happy
+                </Button>
+                <Button
+                    onClick={async () => {
+                        setState(prev => !prev);
+                    }}>
+                    Toggle
                 </Button>
             </CenteredRow> */}
         </CenteredColumn>
