@@ -85,7 +85,7 @@ function LessonCard({ lesson }) {
 const QuizScore = styled.div`
     /* border: 3px solid red; */
     ${props =>
-        props.percentage !== NaN &&
+        !isNaN(props.percentage) &&
         css`
             color: ${interpolateColor(
                 props.percentage,

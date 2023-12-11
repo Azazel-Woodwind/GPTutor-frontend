@@ -133,7 +133,7 @@ function Main() {
                 style={{ width: 200, height: 200, backgroundColor: "red" }}
                 animate={controls}
             /> */}
-            <FillingButton
+            {/* <FillingButton
                 {...MicSvgData}
                 {...ComponentProps}
                 scale={1.2}
@@ -143,17 +143,17 @@ function Main() {
                 onClick={toggleRecord}
                 speaking={speaking}
             />
-            <div>{transcript && <p>{transcript}</p>}</div>
-            {/* <XAvatar
+            <div>{transcript && <p>{transcript}</p>}</div> */}
+            <XAvatar
                 size={150}
                 newEmotion={emotion}
                 numRings={3}
                 glow={glow}
                 appear
-            /> */}
+            />
             {/* <img src="/glow.svg" width="50" alt="description" /> */}
             {/* <Button onClick={() => setGlow(prev => !prev)}>Toggle glow</Button> */}
-            {/* <CenteredRow gap="1rem">
+            <CenteredRow gap="1rem">
                 <Button
                     onClick={async () => {
                         setEmotion("excited");
@@ -178,7 +178,7 @@ function Main() {
                     }}>
                     Toggle
                 </Button>
-            </CenteredRow> */}
+            </CenteredRow>
         </CenteredColumn>
     );
 }
