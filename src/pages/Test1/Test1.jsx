@@ -1,28 +1,13 @@
-import CenteredColumn from "../../styles/containers/CenteredColumn";
+import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import React from "react";
-import {
-    AnimatePresence,
-    easeOut,
-    motion,
-    useAnimationControls,
-} from "framer-motion";
-import Button from "../../components/input/Button";
-import DropdownList from "../../components/input/DropdownList";
-import { useAppData } from "../../context/AppDataContext";
-import DropdownListNew from "../../components/input/DropdownListNew";
-import XAvatar from "../../components/XAvatar";
+import { motion, useAnimationControls } from "framer-motion";
+import Button from "@/components/common/input/Button";
+import XAvatar from "@/components/application/XAvatar";
 import styled from "styled-components";
-import CollapsableText from "../../components/CollapsableText";
-import ImageCarousel from "../../components/ImageCarousel";
-import Pulse from "../../hooks/useXAvatar/Pulse";
-import CenteredRow from "../../styles/containers/CenteredRow";
-import useWhisper from "../../hooks/use-whisper";
-import useFillingButton from "../../hooks/useFillingButton";
-import {
-    SocketContext,
-    SocketContextProvider,
-} from "../../context/SocketContext";
-import { MicSvgData } from "../../lib/svgIconData";
+import CenteredRow from "@/components/common/layout/CenteredRow";
+import useWhisper from "@/hooks/useWhisper";
+import useFillingButton from "@/hooks/useFillingButton";
+import { SocketContext, SocketContextProvider } from "@/context/SocketContext";
 
 const options = ["OPTION 1", "OPTION 2", "OPTION 3"];
 

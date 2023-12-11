@@ -1,7 +1,7 @@
 import React from "react";
 import { animate } from "framer-motion";
 
-import { ChatContext } from "../context/ChatContext";
+import { ChatContext } from "@/context/ChatContext";
 
 import useScreensize from "./useScreensize";
 

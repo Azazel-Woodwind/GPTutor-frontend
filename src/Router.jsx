@@ -1,35 +1,35 @@
-import * as MyLessons from "./pages/Dashboard/MyLessons";
-import * as Users from "./pages/Dashboard/Users";
-import * as LessonsDashboard from "./pages/Dashboard/LessonsDashboard";
-import * as WaitingList from "./pages/WaitingList";
+import * as MyLessons from "./pages/private/Dashboard/MyLessons";
+import * as Users from "./pages/private/Dashboard/Users";
+import * as LessonsDashboard from "./pages/private/Dashboard/LessonsDashboard";
+import * as WaitingList from "./pages/public/WaitingList";
 import * as Test1 from "./pages/Test1";
-import * as Login from "./pages/Login";
-import * as Register from "./pages/Register";
-import * as ActivateAccount from "./pages/ActivateAccount";
-import * as RecoverPassword from "./pages/RecoverPassword";
-import * as Hub from "./pages/Hub";
-import * as CreateLesson from "./pages/CreateLesson";
-import * as ResetPassword from "./pages/Settings/ResetPassword";
-import * as Profile from "./pages/Settings/Profile";
-import * as Account from "./pages/Settings/Account";
-import * as Appearance from "./pages/Settings/Appearance";
-import * as Notifications from "./pages/Settings/Notifications";
-import * as General from "./pages/Settings/General";
-import * as Plans from "./pages/Settings/Plans";
-import * as Quiz from "./pages/Quiz";
-import * as Lessons from "./pages/Lessons";
-import * as Classroom from "./pages/Classroom";
-import * as Unauthorised from "./pages/Unauthorised";
+import * as Login from "./pages/public/Login";
+import * as Register from "./pages/public/Register";
+import * as ActivateAccount from "./pages/public/ActivateAccount";
+import * as RecoverPassword from "./pages/private/RecoverPassword";
+import * as Hub from "./pages/private/Hub";
+import * as CreateLesson from "./pages/private/CreateLesson";
+import * as ResetPassword from "./pages/private/Settings/ResetPassword";
+import * as Profile from "./pages/private/Settings/Profile";
+import * as Account from "./pages/private/Settings/Account";
+import * as Appearance from "./pages/private/Settings/Appearance";
+import * as Notifications from "./pages/private/Settings/Notifications";
+import * as General from "./pages/private/Settings/General";
+import * as Plans from "./pages/private/Settings/Plans";
+import * as Quiz from "./pages/private/Quiz";
+import * as Lessons from "./pages/private/Lessons";
+import * as Classroom from "./pages/private/Classroom";
+import * as Unauthorised from "./pages/private/Unauthorised";
 import {
     Navigate,
     RouterProvider,
     createBrowserRouter,
-} from "react-router-dom/dist/umd/react-router-dom.development";
-import PublicFooter from "./components/PublicFooter";
-import PublicWrapper from "./wrappers/PublicWrapper";
-import ApplicationWrapper from "./wrappers/ApplicationWrapper";
-import SettingsWrapper from "./wrappers/SettingsWrapper";
-import DashboardWrapper from "./wrappers/DashboardWrapper";
+} from "react-router-dom";
+import PublicFooter from "./components/application/PublicFooter";
+import PublicWrapper from "./pages/public/PublicWrapper";
+import PrivateWrapper from "./pages/private/PrivateWrapper";
+import SettingsWrapper from "./pages/private/Settings/SettingsWrapper";
+import DashboardWrapper from "./pages/private/Dashboard/DashboardWrapper";
 
 const router = createBrowserRouter([
     {
@@ -70,7 +70,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/",
-        element: <ApplicationWrapper />,
+        element: <PrivateWrapper />,
         // errorElement: <Error />, need to implement this
         children: [
             {

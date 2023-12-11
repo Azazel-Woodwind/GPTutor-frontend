@@ -1,11 +1,11 @@
 import { VolumeUp } from "@styled-icons/material-sharp/VolumeUp";
 import { VolumeOff } from "@styled-icons/material-sharp/VolumeOff";
 import { AnimatePresence, motion } from "framer-motion";
-import IconButton from "../../components/input/IconButton";
+import IconButton from "@/components/common/input/IconButton";
 import styled from "styled-components";
 import React from "react";
-import Slider from "../../components/input/Slider";
-import SpeedChangerButton from "../../components/input/SpeedChangerButton";
+import Slider from "../../components/common/input/Slider";
+import SpeedChangerButton from "../../components/common/input/SpeedChangerButton";
 
 function XControls({
     isMuted,

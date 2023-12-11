@@ -1,6 +1,6 @@
 import React from "react";
 import { useAnimation, useAnimationControls } from "framer-motion";
-import XAvatar from "./XAvatar";
+import XAvatar from "@/components/application/XAvatar";
 import Pulse from "./Pulse";
 
 const useXAvatar = ({ size = 100, ringCount = 3, duration = 4 }) => {

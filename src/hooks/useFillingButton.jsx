@@ -2,8 +2,12 @@ import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
 import React from "react";
 import { useTheme } from "styled-components";
-import SvgLinearGradient from "../components/SvgLinearGradient";
-import { Container, BorderSvg, IconSvg } from "../components/input/IconButton";
+import SvgLinearGradient from "@/components/common/graphics/SvgLinearGradient";
+import {
+    Container,
+    BorderSvg,
+    IconSvg,
+} from "../components/common/input/IconButton";
 
 function FillingButton({
     width,
