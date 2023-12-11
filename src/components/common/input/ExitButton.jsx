@@ -19,7 +19,7 @@ function ExitButton({ outline, onClick }) {
                     fontSize="1.25rem">
                     Exit
                 </TextWrapper>
-                <SvgIcon
+                <SVGIcon
                     svgData={ExitSvgData}
                     fill={!outline ? "white" : "gradient"}
                     size="2rem"

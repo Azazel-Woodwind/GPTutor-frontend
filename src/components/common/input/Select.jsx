@@ -52,7 +52,7 @@ const GradientBackground = styled.div`
 `;
 
 const layouts = {
-    selected: { scale: 1.05 },
+    selected: { scale: 1 },
     unselected: { scale: 1 },
 };
 

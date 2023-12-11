@@ -4,8 +4,6 @@ import { motion, useAnimationControls } from "framer-motion";
 import React from "react";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { degreesToRadians } from "../../utils/misc";
-import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import Pulse, { RING_PROPAGATION_DURATIONS } from "./Pulse";
 
 // 8 different questions related to GCSE education that a student might ask

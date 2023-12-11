@@ -4,7 +4,7 @@ import Logo from "../common/graphics/Logo";
 import useXAvatar from "../../hooks/useXAvatar/useXAvatar";
 
 const XAvatar = ({ size = 200, hasLogo, multiplier, ...props }) => {
-    const { XAvatar, XAvatarProps, pulseX, handleEmotionChange } = useXAvatar({
+    const { XAvatar, XAvatarProps, pulseX } = useXAvatar({
         size,
         ...props,
     });
@@ -56,4 +56,4 @@ const Container = styled.div`
     width: fit-content;
     /* border: 10px solid black; */
 `;
-export default React.memo(XAvatar);
+export default XAvatar;

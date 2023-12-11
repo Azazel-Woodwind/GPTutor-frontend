@@ -3,9 +3,10 @@ import { motion } from "framer-motion";
 import React, { useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import SvgLinearGradient from "@/components/common/graphics/SvgLinearGradient";
+import { FONT_SIZE_MAPPINGS } from "@/lib/constants";
 
 const BaseButtonStyles = css`
-    font-size: ${props => getFontSize(props.size)};
+    font-size: ${props => FONT_SIZE_MAPPINGS[props.size || "md"]};
     padding: 0.8em 2em;
 `;
 

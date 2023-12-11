@@ -11,6 +11,7 @@ import Textfield from "@/components/common/input/Textfield";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
 import Select from "@/components/common/input/Select";
 import UserAPI from "@/api/UserAPI";
+import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
 const Profile = () => {
     const sendNotification = useNotification();
@@ -144,7 +145,7 @@ const Profile = () => {
                     }) => (
                         <Select
                             // {...field}
-                            style={{ maxWidth: "37.5rem" }}
+                            style={{ maxWidth: "40rem" }}
                             selected={field.value.map(subject =>
                                 capitaliseFirstLetter(
                                     subject

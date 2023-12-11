@@ -16,11 +16,11 @@ import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
 import Textfield from "@/components/common/input/Textfield";
 import RadioButton from "@/components/common/input/RadioButton";
 import { occupations } from "@/lib/FormData";
+import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
 function WaitingList() {
     const [success, setSuccess] = React.useState(false);
 
-    const { subjectOptions, educationLevels } = useAppData();
     const sendNotification = useNotification();
 
     const WaitingListSchema = React.useMemo(
@@ -38,11 +38,8 @@ function WaitingList() {
         resolver: zodResolver(WaitingListSchema),
         defaultValues: {
             first_name: "",
-            // last_name: "",
             email: "",
-            // education_level: "",
             occupation: "",
-            // subjects: [],
         },
     });
 
@@ -58,17 +55,11 @@ function WaitingList() {
             return;
         }
 
-        // data = data.map(field => field.trim());
-
         try {
             const user = await UserAPI.signUpToWaitingList({
                 first_name: data.first_name,
-                // last_name: data.last_name,
                 email: data.email,
-                // password: generatePassword(12),
-                // education_level: data.education_level,
                 is_student: data.occupation === "Student",
-                // subjects: data.subjects,
             });
 
             // console.log(response);
@@ -130,34 +121,6 @@ function WaitingList() {
                                 />
                             )}
                         />
-                        {/* <Controller
-                            name="last_name"
-                            control={form.control}
-                            render={({
-                                field, // { onChange, onBlur, value, name, ref }
-                                fieldState, //{ invalid, isTouched, isDirty, error }
-                                formState,
-                            }) => (
-                                <Textfield
-                                    // fullwidth
-                                    label="Last Name"
-                                    type="text"
-                                    required
-                                    error={fieldState.invalid}
-                                    helperText={
-                                        fieldState.invalid &&
-                                        fieldState.error?.message
-                                    }
-                                    {...field}
-                                    onChange={e => {
-                                        field.onChange(e.target.value.trim());
-                                    }}
-                                    style={{
-                                        flex: 1,
-                                    }}
-                                />
-                            )}
-                        /> */}
                         <Controller
                             name="email"
                             control={form.control}
@@ -187,43 +150,6 @@ function WaitingList() {
                             )}
                         />
                     </MultiTextfieldRow>
-                    {/* <Controller
-                        control={form.control}
-                        name="education_level"
-                        render={({
-                            field, // { onChange, onBlur, value, name, ref }
-                            fieldState, //{ invalid, isTouched, isDirty, error }
-                            formState,
-                        }) => (
-                            <RadioButtonsContainer gap="1.5rem">
-                                {educationLevels.map(level => (
-                                    <RadioButton
-                                        key={level}
-                                        label={level}
-                                        checked={field.value === level}
-                                        onChange={e => field.onChange(level)}
-                                    />
-                                ))}
-                            </RadioButtonsContainer>
-                        )}
-                    /> */}
-                    {/* <Controller
-                        name="subjects"
-                        control={form.control}
-                        render={({
-                            field, // { onChange, onBlur, value, name, ref }
-                            fieldState, //{ invalid, isTouched, isDirty, error }
-                            formState,
-                        }) => (
-                            <Select
-                                // {...field}
-                                selected={field.value}
-                                setSelected={field.onChange}
-                                options={subjectOptions}
-                                defaultValue={[]}
-                            />
-                        )}
-                    /> */}
                     <Controller
                         control={form.control}
                         name="occupation"

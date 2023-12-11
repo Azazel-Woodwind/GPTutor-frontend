@@ -15,6 +15,7 @@ import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 import Row, { Cell } from "./Row";
 import IconStyles from "./IconStyles";
 import Tooltip from "@/components/common/dataDisplay/Tooltip";
+import IconsContainer from "./IconsContainer";
 
 function LessonRow({
     lesson,
@@ -58,49 +59,6 @@ function LessonRow({
             <Cell>
                 <StatusChip status={lesson.status} />
             </Cell>
-            {/* <Cell style={{ paddingLeft: "1.25rem" }}>
-                <Checkbox
-                    checked={lesson.is_published}
-                    onChange={e => {
-                        if (e.target.checked) {
-                            const validate = lessonFormSchema({
-                                subjectOptions,
-                                educationLevels,
-                                examBoards,
-                            }).safeParse(lesson);
-
-                            if (validate.success) {
-                                setSelectedLesson(lesson);
-                                PublishModal.handleOpen();
-                            } else {
-                                // console.log(lesson);
-                                // console.log(validate);
-                                InvalidModal.handleOpen();
-                            }
-                        } else {
-                            setSelectedLesson(lesson);
-                            UnpublishModal.handleOpen();
-                        }
-                    }}
-                />
-            </Cell>
-            <Cell style={{ paddingLeft: "0.625rem" }} content={lesson.is_published}>
-                {lesson.is_published ? (
-                    <SvgIcon
-                        svgData={
-                            lesson.is_verified ? CheckSvgData : CrossSvgData
-                        }
-                        fill={
-                            lesson.is_verified
-                                ? "gradient"
-                                : `${theme.colours.error}`
-                        }
-                        size="2.5rem"
-                    />
-                ) : (
-                    "N/A (not published)"
-                )}
-            </Cell> */}
             <IconsContainer>
                 {onAdminDashboard && (
                     <>

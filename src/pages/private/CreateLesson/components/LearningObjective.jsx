@@ -37,7 +37,7 @@ export default function LearningObjective({
                     //     MIN_LEARNING_OBJECTIVES
                     // }
                 >
-                    <SvgIcon
+                    <SVGIcon
                         size="1.9rem"
                         svgData={CrossSvgData}
                         fill={

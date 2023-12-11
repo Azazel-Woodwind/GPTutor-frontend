@@ -47,7 +47,7 @@ export function useNavigationBlocker() {
     const [confirmed, setConfirmed] = React.useState(undefined);
 
     return {
-        Prompt,
+        Prompt: NavigationBlocker,
         PromptProps: {
             confirmed,
             setConfirmed,
