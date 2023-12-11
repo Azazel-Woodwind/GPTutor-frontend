@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { SocketContext } from "../../context/SocketContext";
+import { SocketContext } from "@/context/SocketContext";
 import React, {
     useEffect,
     useContext,

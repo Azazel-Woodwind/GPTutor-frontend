@@ -1,7 +1,6 @@
 import * as React from "react";
-import supabase from "../api/configs/supabase";
-import Loading from "../pages/Loading/Loading";
-import { useNavigate } from "react-router-dom";
+import supabase from "@/api/configs/supabase";
+import Loading from "@/pages/public/Loading/Loading";
 
 export const useAuth = () => React.useContext(SessionContext);
 

@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".", // This must be specified if "paths" is set
+        "paths": {
+            "@/*": ["./src/*"] // Mirroring the alias in vite.config.js
+        }
+    },
+    "include": ["src/**/*"]
+}

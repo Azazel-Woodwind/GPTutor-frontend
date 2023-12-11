@@ -1,7 +1,7 @@
 import * as React from "react";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./SessionContext";
+import { useAuth } from "@/context/SessionContext";
 
 export const SocketContext = React.createContext({
     Socket: null,

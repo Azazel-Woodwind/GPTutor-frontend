@@ -1,8 +1,8 @@
 import React from "react";
-import DropdownList from "../components/DropdownList";
+import DropdownList from "@/components/common/input/DropdownList";
 
 function useDropdownList({ label, options, required, ...props }) {
-    const [selected, setSelected] = React.useState<string | null>(null);
+    const [selected, setSelected] = (React.useState < string) | (null > null);
 
     return {
         selected,

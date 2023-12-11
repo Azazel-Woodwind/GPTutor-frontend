@@ -1,6 +1,6 @@
 import React from "react";
-import Notification from "../components/Notification";
 import styled from "styled-components";
+import Notification from "../components/common/feedback/Notification";
 
 const NotificationsContainer = styled.div`
     position: absolute;

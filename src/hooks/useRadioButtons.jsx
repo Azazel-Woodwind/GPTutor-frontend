@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import React from "react";
-import RadioButton from "../components/RadioButton";
+import RadioButton from "@/components/common/input/RadioButton";
 
 function useRadioButtons(options) {
     const [selected, setSelected] = React.useState(null);

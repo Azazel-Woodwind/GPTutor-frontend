@@ -1,14 +1,11 @@
-import { SocketContext } from "../../context/SocketContext";
+import { SocketContext } from "@/context/SocketContext";
 import React from "react";
 import useX from "./useX";
 import { useChatContext } from "../../context/ChatContext";
-import { useAuth } from "../../context/SessionContext";
-import UserAPI from "../../api/UserAPI";
-import {
-    useLocation,
-    useNavigate,
-} from "react-router-dom/dist/umd/react-router-dom.development";
-import supabase from "../../api/configs/supabase";
+import { useAuth } from "@/context/SessionContext";
+import UserAPI from "@/api/UserAPI";
+import { useLocation, useNavigate } from "react-router-dom";
+import supabase from "@/api/configs/supabase";
 
 function useXConversation(props) {
     const { Socket } = React.useContext(SocketContext);

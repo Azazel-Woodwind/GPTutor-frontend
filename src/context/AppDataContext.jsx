@@ -1,9 +1,9 @@
-import * as React from "react";
+import React from "react";
 import SubjectsAPI from "../api/SubjectAPI";
 import EducationLevelsAPI from "../api/EducationLevelAPI";
-import Loading from "../pages/Loading/Loading";
 import ExamBoardAPI from "../api/ExamBoardAPI";
 import UsagePlanAPI from "../api/UsagePlansAPI";
+import Loading from "@/pages/public/Loading/Loading";
 
 export const AppDataContext = React.createContext({
     subjectOptions: [],

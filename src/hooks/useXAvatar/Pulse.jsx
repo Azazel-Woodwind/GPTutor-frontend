@@ -6,17 +6,10 @@ import {
     useMotionValue,
 } from "framer-motion";
 import styled from "styled-components";
-import FillParent from "../../styles/containers/FillParent";
+import FillParent from "../../components/common/layout/FillParent";
 import React from "react";
-import {
-    RGBAarrToString,
-    correctAnimation,
-    interpolateArrays,
-    inverseEaseOut,
-    splitBezierAtT,
-    splitRGBA,
-} from "../../lib/misc";
 import { EASE_OUT_BEZIER } from "../../lib/constants";
+import { correctAnimation, splitBezierAtT } from "@/lib/animation";
 
 export const RING_PROPAGATION_DURATIONS = {
     excited: 1,

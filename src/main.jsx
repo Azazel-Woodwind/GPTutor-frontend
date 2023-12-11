@@ -1,14 +1,14 @@
 import ReactDOM from "react-dom/client";
 import Router from "./Router";
 import { SessionContextProvider } from "./context/SessionContext";
-import { Ellipse1, Ellipse2 } from "./styles/Ellipses";
 import { ThemeProvider } from "styled-components";
-import Theme from "./styles/Theme";
+import Theme from "@/styles/Theme";
 import GlobalStyles from "./styles/GlobalStyles";
-import PageWrapper from "./styles/containers/PageWrapper";
 import { NotificationContextProvider } from "./context/NotificationContext";
 import { AppDataContextProvider } from "./context/AppDataContext";
 import { HeaderContextProvider } from "./context/HeaderContext";
+import Ellipse1 from "./components/application/BlurredEllipses/Ellipse1";
+import Ellipse2 from "./components/application/BlurredEllipses/Ellipse2";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <ThemeProvider theme={Theme}>
