@@ -68,25 +68,3 @@ export function formatImageSource(src) {
         return image;
     }
 }
-
-// by GPT-4
-export function generatePassword(length) {
-    // Define the characters to use in the password
-    const characters =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
-
-    // Initialize an empty string for the password
-    let password = "";
-
-    // Use a for loop to select a random character from the characters string, length times
-    for (let i = 0; i < length; i++) {
-        // Get a random index into the characters string
-        const index = Math.floor(Math.random() * characters.length);
-
-        // Add the character at the random index to the password
-        password += characters[index];
-    }
-
-    // Return the generated password
-    return password;
-}
