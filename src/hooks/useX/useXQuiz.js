@@ -1,7 +1,6 @@
 import React from "react";
 import useX from "./useX";
-import { SocketContext, useSocket } from "../../context/SocketContext";
-import { QUESTIONS_PER_LEARNING_OBJECTIVE } from "../../lib/constants";
+import { useSocket } from "../../context/SocketContext";
 
 function useXQuiz({ lesson, channel, sendStart = true, ...props }) {
     const [questions, setQuestions] = React.useState([]);

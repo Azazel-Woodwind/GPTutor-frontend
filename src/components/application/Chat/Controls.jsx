@@ -7,7 +7,7 @@ import { Send } from "@styled-icons/material/Send";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { MAX_PROMPT_LENGTH } from "../../../lib/constants";
 import { useChatContext } from "@/context/ChatContext";
-import useFillingButton from "@/hooks/useFillingButton";
+import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";
 import { SocketContext } from "@/context/SocketContext";
 import { TextInputStyle } from "@/components/common/input/TextInput";

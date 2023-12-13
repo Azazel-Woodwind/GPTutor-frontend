@@ -176,7 +176,7 @@ function Pulse({ size, delay, newEmotion }) {
         if (!newEmotion) {
             newEmotion = "neutral";
         }
-        console.log("emotion", newEmotion);
+        // console.log("emotion", newEmotion);
 
         handleEmotionChange(newEmotion);
     }, [newEmotion]);
@@ -187,7 +187,7 @@ function Pulse({ size, delay, newEmotion }) {
     React.useEffect(() => {
         // console.log("DELAY:", delay);
         return () => {
-            console.log("UNMOUNTING");
+            // console.log("UNMOUNTING");
             controls.stop();
         };
     }, []);

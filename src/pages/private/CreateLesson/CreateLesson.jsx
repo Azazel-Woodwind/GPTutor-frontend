@@ -18,7 +18,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CustomSelect from "@/components/common/input/Select";
 import LearningObjective from "./components/LearningObjective";
 import ExitCreateLessonModal from "./components/ExitCreateLessonModal";
-import { useNavigationBlocker } from "@/hooks/useNavigationBlocker";
+import { useNavigationBlocker } from "@/hooks/useNavigationBlocker/useNavigationBlocker";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
 const CreateLessonForm = styled.form`

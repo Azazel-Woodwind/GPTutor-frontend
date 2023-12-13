@@ -3,9 +3,9 @@ import {
     unstable_useBlocker as useBlocker,
     useNavigate,
 } from "react-router-dom";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "../useModal/useModal";
 
-function NavigationBlocker({ when, confirmed, setConfirmed, children }) {
+function NavigationBlockerModal({ when, confirmed, setConfirmed, children }) {
     const [nextLocation, setNextLocation] = React.useState(null);
 
     const navigate = useNavigate();
@@ -43,18 +43,4 @@ function NavigationBlocker({ when, confirmed, setConfirmed, children }) {
     );
 }
 
-export function useNavigationBlocker() {
-    const [confirmed, setConfirmed] = React.useState(undefined);
-
-    return {
-        Prompt: NavigationBlocker,
-        PromptProps: {
-            confirmed,
-            setConfirmed,
-        },
-        confirmed,
-        setConfirmed,
-    };
-}
-
-export default NavigationBlocker;
+export default NavigationBlockerModal;

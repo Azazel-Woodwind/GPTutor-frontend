@@ -130,7 +130,10 @@ function ChatHistory({
                         );
                     })}
                     {currentMessage && (
-                        <Message type={"assistant"} message={currentMessage} />
+                        <ChatEntry
+                            type={"assistant"}
+                            message={currentMessage}
+                        />
                     )}
                 </ChatHistoryStyle>
             </DraggableChat>

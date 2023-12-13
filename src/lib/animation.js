@@ -1,5 +1,8 @@
 //If we're going to reuse animations a massive amount define them here
 
+import { RGBAarrToString, splitRGBA } from "@/utils/css";
+import { interpolateArrays } from "@/utils/misc";
+
 export const fade_animation = ({ delayed = false } = {}) => ({
     initial: "hidden",
     animate: "visible",

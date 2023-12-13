@@ -34,12 +34,11 @@ export function SocketContextProvider({ children }) {
                 // either no token, token is invalid, database error or timeout
             });
 
-            socket.on("authenticated", bool => {
-                if (!bool) return;
+            socket.on("authenticated", () => {
                 setSocket(socket);
                 setLoading(false);
                 // console.log(socket);
-                console.log("Authenticated ", bool);
+                console.log("Authenticated");
             });
 
             socket.on("navigate", navigate);

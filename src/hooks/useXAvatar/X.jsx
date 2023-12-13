@@ -5,34 +5,9 @@ import React from "react";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { degreesToRadians } from "../../utils/misc";
 import Pulse, { RING_PROPAGATION_DURATIONS } from "./Pulse";
-
-// 8 different questions related to GCSE education that a student might ask
-const examplePrompts = [
-    "Can you explain the concept of electromagnetic waves and their various properties",
-    "What are some effective study techniques for improving memory and retention of information?",
-    "What are the key principles behind Newton's laws of motion, and how are they applied in physics problems?",
-    "What strategies can I use to improve my problem-solving skills in algebraic equations?",
-    "Can you quiz me on the key dates and events of the Cold War?",
-    "Let's have a discussion about the key themes and motifs in Shakespeare's Macbeth",
-    "Can you please make me comprehensive revision notes for the topic of photosynthesis for GCSE Biology?",
-    "I don't understand how covalent bonds work. Can you please explain them to me?",
-];
+import { EXAMPLE_PROMPTS } from "@/lib/constants";
 
 const MAX_ANGLE = 40;
-
-const appearAnimation = {
-    initial: {
-        scale: 0,
-    },
-    animate: {
-        scale: 1,
-        transition: {
-            type: "spring",
-            ease: "easeIn",
-            duration: 2,
-        },
-    },
-};
 
 const XAvatar = ({
     size,
@@ -81,9 +56,9 @@ const XAvatar = ({
             // console.log(promptIndex);
 
             setPromptIndex(prev => {
-                const indices = examplePrompts
-                    .map((_, i) => i)
-                    .filter(i => i !== prev);
+                const indices = EXAMPLE_PROMPTS.map((_, i) => i).filter(
+                    i => i !== prev
+                );
                 const randomIndex =
                     indices[Math.floor(Math.random() * indices.length)];
 
@@ -224,7 +199,7 @@ const XAvatar = ({
                                 examplePromptVerticalDisplacement
                             }
                             radius={(size * 3) / 2}>
-                            {examplePrompts[promptIndex]}
+                            {EXAMPLE_PROMPTS[promptIndex]}
                         </PromptContainer>
                     )}
                 </AvatarWrapper>

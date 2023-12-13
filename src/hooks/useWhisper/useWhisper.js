@@ -1,57 +1,20 @@
-import { useEffectAsync, useMemoAsync } from "@chengsokdara/react-hooks-async";
 import { useEffect, useRef, useState } from "react";
-
-import {
-    defaultStopTimeout,
-    ffmpegCoreUrl,
-    silenceRemoveCommand,
-} from "./configs";
 import { nanoid } from "nanoid";
 
 /**
  * default useWhisper configuration
  */
 const defaultConfig = {
-    apiKey: "",
-    autoStart: false,
-    autoTranscribe: true,
-    mode: "transcriptions",
-    nonStop: false,
-    removeSilence: false,
-    stopTimeout: defaultStopTimeout,
     streaming: true,
-    timeSlice: 1_000,
-    onDataAvailable: undefined,
-    onTranscribe: undefined,
+    timeSlice: 700,
     Socket: undefined,
-};
-
-/**
- * default timeout for recorder
- */
-const defaultTimeout = {
-    stop: undefined,
 };
 
 /**
  * React Hook for OpenAI Whisper
  */
 export const useWhisper = config => {
-    const {
-        autoStart,
-        autoTranscribe,
-        mode,
-        nonStop,
-        removeSilence,
-        stopTimeout,
-        streaming,
-        timeSlice,
-        whisperConfig,
-        Socket,
-        onDataAvailable: onDataAvailableCallback,
-        onTranscribe: onTranscribeCallback,
-        onFinalTranscript,
-    } = {
+    const { streaming, timeSlice, Socket } = {
         ...defaultConfig,
         ...config,
     };
@@ -91,11 +54,10 @@ export const useWhisper = config => {
     const listener = useRef();
     const recorder = useRef();
     const stream = useRef();
-    const timeout = useRef(defaultTimeout);
     const currentTranscriptId = useRef(undefined);
-    const time = useRef(undefined);
     const speakingRef = useRef(undefined);
     const spokenSinceLastChunk = useRef(undefined);
+    const hasSpoken = useRef(false);
 
     const [recording, setRecording] = useState(false);
     const [speaking, setSpeaking] = useState(false);
@@ -103,7 +65,6 @@ export const useWhisper = config => {
     const [blob, setBlob] = useState();
     const [transcript, setTranscript] = useState("");
     const [finalTranscript, setFinalTranscript] = useState("");
-    // const [spokenSinceLastChunk, setSpokenSinceLastChunk] = useState(false);
 
     /**
      * cleanup on component unmounted
@@ -121,7 +82,6 @@ export const useWhisper = config => {
                 recorder.current.destroy();
                 recorder.current = undefined;
             }
-            onStopTimeout("stop");
             if (listener.current) {
                 // @ts-ignore
                 listener.current.off("speaking", onStartSpeaking);
@@ -136,16 +96,6 @@ export const useWhisper = config => {
     }, []);
 
     /**
-     * if config.autoStart is true
-     * start speech recording immediately upon component mounted
-     */
-    useEffectAsync(async () => {
-        if (autoStart) {
-            await onStartRecording();
-        }
-    }, [autoStart]);
-
-    /**
      * start speech recording and start listen for speaking event
      */
     const startRecording = async () => {
@@ -153,6 +103,7 @@ export const useWhisper = config => {
         setTranscript("");
         currentTranscriptId.current = nanoid();
         spokenSinceLastChunk.current = false;
+        hasSpoken.current = false;
         await onStartRecording();
     };
 
@@ -189,7 +140,7 @@ export const useWhisper = config => {
                         default: { RecordRTCPromisesHandler },
                     } = await import("recordrtc");
                     const recorderConfig = {
-                        mimeType: "audio/webm",
+                        mimeType: "audio/webm;codecs=pcm",
                         timeSlice: streaming ? timeSlice : undefined,
                         type: "audio",
                         ondataavailable: streaming
@@ -207,9 +158,6 @@ export const useWhisper = config => {
                 }
                 if (recordState === "paused") {
                     await recorder.current.resumeRecording();
-                }
-                if (nonStop) {
-                    onStartTimeout("stop");
                 }
                 setRecording(true);
             }
@@ -237,21 +185,13 @@ export const useWhisper = config => {
                 listener.current = hark(stream.current, {
                     interval: 50,
                     play: false,
+                    threshold: -80,
                 });
                 listener.current.on("speaking", onStartSpeaking);
                 listener.current.on("stopped_speaking", onStopSpeaking);
             }
         } catch (err) {
             console.error(err);
-        }
-    };
-
-    /**
-     * start stop timeout event
-     */
-    const onStartTimeout = type => {
-        if (!timeout.current[type]) {
-            timeout.current[type] = setTimeout(onStopRecording, stopTimeout);
         }
     };
 
@@ -265,7 +205,7 @@ export const useWhisper = config => {
         setSpeaking(true);
         speakingRef.current = true;
         spokenSinceLastChunk.current = true;
-        onStopTimeout("stop");
+        hasSpoken.current = true;
     };
 
     /**
@@ -277,16 +217,13 @@ export const useWhisper = config => {
         console.log("stop speaking");
         setSpeaking(false);
         speakingRef.current = false;
-        if (nonStop) {
-            onStartTimeout("stop");
-        }
     };
 
     /**
      * pause speech recording event
      * - if recorder state is recording, pause the recorder
      * - clear stop timeout
-     * - set recoriding state to false
+     * - set recording state to false
      */
     const onPauseRecording = async () => {
         try {
@@ -295,7 +232,6 @@ export const useWhisper = config => {
                 if (recordState === "recording") {
                     await recorder.current.pauseRecording();
                 }
-                onStopTimeout("stop");
                 setRecording(false);
             }
         } catch (err) {
@@ -320,16 +256,10 @@ export const useWhisper = config => {
                     await recorder.current.stopRecording();
                 }
                 onStopStreaming();
-                onStopTimeout("stop");
                 setRecording(false);
-                // console.log("HERE HERE HERE");
 
-                if (autoTranscribe) {
-                    await onTranscribing();
-                } else {
-                    const blob = await recorder.current.getBlob();
-                    setBlob(blob);
-                }
+                await onTranscribing();
+
                 await recorder.current.destroy();
                 chunks.current = [];
                 recorder.current = undefined;
@@ -362,101 +292,23 @@ export const useWhisper = config => {
         }
     };
 
-    /**
-     * stop timeout event
-     * - clear stop timeout and remove it from ref
-     */
-    const onStopTimeout = type => {
-        if (timeout.current[type]) {
-            clearTimeout(timeout.current[type]);
-            timeout.current[type] = undefined;
-        }
-    };
-
-    /**
-     * start Whisper transcrition event
-     * - make sure recorder state is stopped
-     * - set transcribing state to true
-     * - get audio blob from recordrtc
-     * - if config.removeSilence is true, load ffmpeg-wasp and try to remove silence from speec
-     * - if config.customServer is true, send audio data to custom server in base64 string
-     * - if config.customServer is false, send audio data to Whisper api in multipart/form-data
-     * - set transcript object with audio blob and transcription result from Whisper
-     * - set transcribing state to false
-     */
-
     const onTranscribing = async () => {
-        // console.log("transcribing speech");
+        console.log("transcribing speech");
         try {
-            if (recorder.current) {
+            if (recorder.current && hasSpoken.current) {
                 const recordState = await recorder.current.getState();
                 if (recordState === "stopped") {
                     setTranscribing(true);
-                    let blob = await recorder.current.getBlob();
-                    if (removeSilence) {
-                        const { createFFmpeg } = await import("@ffmpeg/ffmpeg");
-                        const ffmpeg = createFFmpeg({
-                            mainName: "main",
-                            corePath: ffmpegCoreUrl,
-                            log: true,
-                        });
-                        if (!ffmpeg.isLoaded()) {
-                            await ffmpeg.load();
-                        }
-                        const buffer = await blob.arrayBuffer();
-                        console.log({ in: buffer.byteLength });
-                        ffmpeg.FS(
-                            "writeFile",
-                            "speech.webm",
-                            new Uint8Array(buffer)
-                        );
-                        await ffmpeg.run(
-                            "-i", // Input
-                            "speech.webm",
-                            "-acodec", // Audio codec
-                            "libmp3lame",
-                            "-aq", // Audio quality
-                            "6",
-                            "-ar", // Audio sample rate
-                            "44100",
-                            "-af", // Audio filter = remove silence from start to end with 2 seconds in between
-                            silenceRemoveCommand,
-                            "speech.mp3" // Output
-                        );
-                        const out = ffmpeg.FS("readFile", "speech.mp3");
-                        console.log({ out: out.buffer.byteLength });
-                        // 225 seems to be empty mp3 file
-                        if (out.length <= 225) {
-                            ffmpeg.exit();
-                            setBlob(blob);
-                            setTranscribing(false);
-                            return;
-                        }
-                        blob = new Blob([out.buffer], { type: "audio/mpeg" });
-                        ffmpeg.exit();
-                    }
-                    if (typeof onTranscribeCallback === "function") {
-                        const transcribed = await onTranscribeCallback(blob);
-                        console.log("onTranscribe", transcribed);
-                        setTranscript(transcribed.text);
-                    } else {
-                        let file = new File([blob], "speech.webm", {
-                            type: "audio/webm;codecs=opus",
-                        });
-                        if (removeSilence) {
-                            file = new File([blob], "speech.mp3", {
-                                type: "audio/mpeg",
-                            });
-                        }
-                        Socket.emit("transcribe_audio", {
-                            file,
-                            final: true,
-                            id: currentTranscriptId.current,
-                        });
-                        // const text = await onWhispered(file);
-                        // console.log("onTranscribing", { text });
-                        setBlob(blob);
-                    }
+                    const blob = await recorder.current.getBlob();
+                    const file = new File([blob], "speech.webm", {
+                        type: "audio/webm;codecs=pcm",
+                    });
+                    Socket.emit("transcribe_audio", {
+                        file,
+                        final: true,
+                        id: currentTranscriptId.current,
+                    });
+                    setBlob(blob);
                     setTranscribing(false);
                 }
             }
@@ -473,29 +325,8 @@ export const useWhisper = config => {
      * - set transcript text with interim result
      */
     const onDataAvailable = async data => {
-        // if (time.current) {
-        //     console.log(
-        //         "TIME BETWEEN CHUNKS",
-        //         performance.now() - time.current
-        //     );
-        //     time.current = performance.now();
-        // } else {
-        //     // console.log("FIRST CHUNK");
-        //     time.current = performance.now();
-        // }
-        // console.log("onDataAvailable", data);
-
         try {
             if (streaming && recorder.current) {
-                // console.log("**********");
-                // console.log("CHUNK AVAILABLE");
-                // console.log("CURRENTLY SPEAKING:", speakingRef.current);
-                // console.log(
-                //     "SPOKEN SINCE LAST CHUNK:",
-                //     spokenSinceLastChunk.current
-                // );
-                // console.log("**********");
-                onDataAvailableCallback?.(data);
                 chunks.current.push(data);
                 if (!speakingRef.current && !spokenSinceLastChunk.current) {
                     console.log("IGNORING CHUNK BECAUSE SILENT");
@@ -510,20 +341,11 @@ export const useWhisper = config => {
 
                 if (recorderState === "recording") {
                     const blob = new Blob(chunks.current, {
-                        type: "audio/webm;codecs=opus",
+                        type: "audio/webm;codecs=pcm",
                     });
                     const file = new File([blob], "speech.webm", {
-                        type: "audio/webm;codecs=opus",
+                        type: "audio/webm;codecs=pcm",
                     });
-
-                    // const body = new FormData();
-                    // const base64 = await new Promise<string | ArrayBuffer | null>(
-                    //   (resolve) => {
-                    //     const reader = new FileReader()
-                    //     reader.onloadend = () => resolve(reader.result)
-                    //     reader.readAsDataURL(blob)
-                    //   }
-                    // )
 
                     console.log("SENDING AUDIO TO SERVER");
 
@@ -537,25 +359,6 @@ export const useWhisper = config => {
             console.error(err);
         }
     };
-
-    /**
-     * Send audio file to Whisper to be transcribed
-     * - create formdata and append file, model, and language
-     * - append more Whisper config if whisperConfig is provided
-     * - add OpenAPI Token to header Authorization Bearer
-     * - post with axios to OpenAI Whisper transcript endpoint
-     * - return transcribed text result
-     */
-    const onWhispered = useMemoAsync(async file => {
-        const body = new FormData();
-        body.append("file", file);
-        Socket.emit("lesson_transcribe_audio", { body });
-
-        const response = await new Promise(resolve =>
-            Socket.on("transcribed_audio", resolve)
-        );
-        return response.data.text;
-    });
 
     return {
         // dickhead??
