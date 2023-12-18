@@ -147,17 +147,17 @@ function useX({ channel, onData }) {
 
         if (instruction.type === "sentence") {
             setStreaming(true);
-            console.log("text:", instruction.text);
-            console.log("audioContent", instruction.audioContent);
+            // console.log("text:", instruction.text);
+            // console.log("audioContent", instruction.audioContent);
             const duration = await audioVisualiser.setAudioSrcGetDuration(
                 `data:audio/mpeg;base64,${instruction.audioContent}`
             );
-            console.log("duration", duration);
+            // console.log("duration", duration);
 
             streamText(instruction.text, duration * 1000);
             audioVisualiser.play();
         } else if (instruction.type === "audio") {
-            console.log("handling audio");
+            // console.log("handling audio");
             audioVisualiser.play(
                 `data:audio/mpeg;base64,${instruction.audioContent}`
             );
