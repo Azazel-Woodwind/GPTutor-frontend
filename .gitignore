@@ -25,5 +25,3 @@ dist-ssr
 
 .env.development
 tree.txt
-
-src/pages/Test1

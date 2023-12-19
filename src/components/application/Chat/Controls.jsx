@@ -24,10 +24,12 @@ function Controls({
     );
 
     const [messageInput, setMessageInput] = React.useState(undefined);
+    const [hasSpoken, setHasSpoken] = React.useState(false);
 
     const location = useLocation();
     const messageInputRef = React.useRef(undefined);
     const chatFormRef = React.useRef(undefined);
+    const timer = React.useRef(null);
 
     const onSubmit = e => {
         e && e.preventDefault();
@@ -73,15 +75,37 @@ function Controls({
         filling,
         paused,
     } = useFillingButton({
-        onAnimationStart: () => {
-            // console.log(10);
-            startRecording();
+        onAnimationStart: async () => {
+            setHasSpoken(false);
+            await startRecording();
+            timer.current = setTimeout(() => {
+                console.log("MAX INITIAL WAIT TIME REACHED");
+                stopAnimation();
+            }, MAX_INITIAL_VOICE_WAIT);
         },
         onAnimationEnd: () => {
             console.log("ANIMATION STOPPED");
             stopRecording();
         },
     });
+
+    React.useEffect(() => {
+        if (speaking) {
+            if (!hasSpoken) {
+                console.log("SPOKEN FOR THE FIRST TIME");
+                setHasSpoken(true);
+            }
+            clearTimeout(timer.current);
+            return;
+        }
+
+        if (hasSpoken) {
+            timer.current = setTimeout(() => {
+                console.log("MAX WAIT TIME REACHED");
+                stopAnimation();
+            }, MAX_VOICE_WAIT);
+        }
+    }, [speaking]);
 
     React.useEffect(() => {
         if (transcript) {
@@ -109,9 +133,7 @@ function Controls({
         if (messageInput == undefined) {
             return;
         }
-        // console.log("MESSAGE INPUT:", messageInput);
-        // console.log(chatFormRef.current?.offsetHeight);
-        // console.log(messageInputRef.current.scrollHeight);
+
         messageInputRef.current.style.height = 0;
         messageInputRef.current.style.height =
             Math.max(
