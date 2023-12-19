@@ -1,4 +1,3 @@
-import { apiClient } from "./configs/axiosConfig";
 import supabase from "./configs/supabase";
 
 const ExamBoardAPI = {

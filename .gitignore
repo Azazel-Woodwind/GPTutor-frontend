@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .env.development
+tree.txt
+
+src/pages/Test1
