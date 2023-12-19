@@ -1,5 +1,3 @@
-import { QUESTIONS_PER_LEARNING_OBJECTIVE } from "../lib/constants";
-import { apiClient } from "./configs/axiosConfig";
 import supabase from "./configs/supabase";
 
 const QuizAPI = {
