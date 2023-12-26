@@ -158,6 +158,34 @@ function Controls({
         [width, draggable]
     );
 
+    const handleKeyPress = React.useCallback(
+        e => {
+            if(messageInputRef.current && document.activeElement !== messageInputRef.current){
+                e.preventDefault();
+                messageInputRef.current?.focus();
+                messageInputRef.current.value += e.key;
+                if (messageInputRef.current?.value.length > MAX_PROMPT_LENGTH) {
+                    setMessageInput(
+                        e.target.value
+                            .slice(0, MAX_PROMPT_LENGTH)
+                            .trim()
+                    );
+                } else {
+                    setMessageInput(e.target.value);
+                }
+            }
+        },
+        [width, draggable]
+    );
+
+    React.useEffect(() => {
+        document.addEventListener("keypress", handleKeyPress);
+
+        return () => {
+            document.removeEventListener("keypress", handleKeyPress);
+        };
+    }, [handleKeyPress]);
+
     React.useEffect(() => {
         document.addEventListener("keydown", handleKeyDown);
 
