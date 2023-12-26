@@ -140,7 +140,7 @@ export const useWhisper = config => {
                         default: { RecordRTCPromisesHandler },
                     } = await import("recordrtc");
                     const recorderConfig = {
-                        mimeType: "audio/webm;codecs=pcm",
+                        mimeType: "audio/webm;codecs=opus",
                         timeSlice: streaming ? timeSlice : undefined,
                         type: "audio",
                         ondataavailable: streaming
@@ -301,7 +301,7 @@ export const useWhisper = config => {
                     setTranscribing(true);
                     const blob = await recorder.current.getBlob();
                     const file = new File([blob], "speech.webm", {
-                        type: "audio/webm;codecs=pcm",
+                        type: "audio/webm;codecs=opus",
                     });
                     Socket.emit("transcribe_audio", {
                         file,
@@ -341,10 +341,10 @@ export const useWhisper = config => {
 
                 if (recorderState === "recording") {
                     const blob = new Blob(chunks.current, {
-                        type: "audio/webm;codecs=pcm",
+                        type: "audio/webm;codecs=opus",
                     });
                     const file = new File([blob], "speech.webm", {
-                        type: "audio/webm;codecs=pcm",
+                        type: "audio/webm;codecs=opus",
                     });
 
                     console.log("SENDING AUDIO TO SERVER");
