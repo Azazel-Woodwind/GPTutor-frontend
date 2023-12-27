@@ -1,18 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import Textfield from "@/components/common/input/Textfield";
-import useConversationDisplay from "../../../hooks/useConversationDisplay";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 import { useLoaderData } from "react-router-dom";
-import { ChatContext } from "@/context/ChatContext";
 import LessonCard from "./components/LessonCard";
 
+/**
+ * Page that lists all lessons a student can take.
+ *
+ * @page
+ * @route /lessons
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the lessons page with a list of lessons.
+ */
 function Lessons() {
     const lessons = useLoaderData();
-    // console.log(lessons);
-
-    // useConversationDisplay(0.3);
-    const { width } = React.useContext(ChatContext);
-    // console.log(width.get());
 
     const [filteredLessons, setFilteredLessons] = React.useState(lessons);
 

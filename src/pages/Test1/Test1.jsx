@@ -4,7 +4,7 @@ import { motion, useAnimationControls } from "framer-motion";
 import styled from "styled-components";
 import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
 import { SocketContext, SocketContextProvider } from "@/context/SocketContext";
-import Textfield from "@/components/common/input/Textfield";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 import FillingButton from "./FillingButton";
 
 function Main() {

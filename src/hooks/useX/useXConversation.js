@@ -7,6 +7,22 @@ import UserAPI from "@/api/UserAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import supabase from "@/api/configs/supabase";
 
+/**
+ * useXConversation - A custom React hook for managing chat conversations.
+ * This hook integrates various contexts and APIs to handle chat functionalities,
+ * navigation, and session management. It depends on the external `useX` hook for
+ * chat-related operations and state management.
+ *
+ * @param {Object} props - Properties passed to configure the hook.
+ * @returns {Object} An object containing the properties and methods from the `useX` hook,
+ *                   along with additional chat conversation functionalities.
+ * @see useX for the underlying chat functionality.
+ * @see SocketContext for socket connection handling.
+ * @see useChatContext for context related to chat UI.
+ * @see useAuth for authentication state management.
+ * @see useLocation, useNavigate from "react-router-dom" for routing functionalities.
+ * @see UserAPI, supabase for user data and session management.
+ */
 function useXConversation(props) {
     const { Socket } = React.useContext(SocketContext);
     const chatStarted = React.useRef(false);

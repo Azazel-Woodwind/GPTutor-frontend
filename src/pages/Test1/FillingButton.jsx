@@ -1,7 +1,7 @@
 import { SocketContext } from "@/context/SocketContext";
 import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";
-import { MicSvgData } from "@/lib/SVGIconData";
+import { MicSvgData } from "@/lib/svgIconData";
 import React from "react";
 
 const MAX_INITIAL_VOICE_WAIT = 5_000;

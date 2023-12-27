@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Notification from "../components/common/feedback/Notification";
+import Notification from "../components/common/feedback/Notification/Notification";
 
+/**
+ * Styled container for notifications.
+ */
 const NotificationsContainer = styled.div`
     position: absolute;
     top: 1.25rem;
@@ -17,14 +20,26 @@ const NotificationsContainer = styled.div`
     /* border: 3px solid red; */
 `;
 
+/**
+ * Context for managing notifications.
+ */
 export const NotificationContext = React.createContext({
     sendNotification: () => {},
 });
 
+/**
+ * Provider component for the NotificationContext.
+ * Manages the display and state of notifications.
+ *
+ * @param {ReactNode} children - The child components to be rendered within the provider.
+ * @returns {ReactNode} A context provider wrapping children.
+ */
 export function NotificationContextProvider({ children }) {
     const [notifications, setNotifications] = React.useState([]);
 
-    const sendNotification = props => {
+    const {
+        sendNotification,
+    } = props => {
         const key = Date.now();
         setNotifications(prev => [
             ...prev,
@@ -51,8 +66,11 @@ export function NotificationContextProvider({ children }) {
     );
 }
 
+/**
+ * Custom hook to access the NotificationContext.
+ *
+ * @returns {Object} The context data containing the sendNotification function.
+ */
 export function useNotification() {
-    const { sendNotification } = React.useContext(NotificationContext);
-
-    return sendNotification;
+    return React.useContext(NotificationContext);
 }

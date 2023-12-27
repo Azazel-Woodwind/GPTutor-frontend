@@ -8,7 +8,7 @@ import XForm from "@/components/application/XForm";
 import { ResetPasswordSchema } from "@/pages/private/RecoverPassword/RecoverPassword";
 
 function ActivateForm() {
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const form = useForm({
         mode: "onChange",

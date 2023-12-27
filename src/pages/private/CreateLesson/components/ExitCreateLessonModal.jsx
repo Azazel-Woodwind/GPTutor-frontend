@@ -1,10 +1,10 @@
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 import TextWrapper from "@/components/utils/TextWrapper";
 import {
     ButtonRow,
     Content,
     ModalContainer,
-} from "../../Dashboard/components/PublishLessonModal";
+} from "../../Dashboard/LessonsDashboard/components/PublishLessonModal";
 
 function ExitCreateLessonModal({ setConfirmed, isPublished, form, onSubmit }) {
     const publish = isPublished && form.formState.isValid;

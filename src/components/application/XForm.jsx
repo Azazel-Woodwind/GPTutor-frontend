@@ -2,7 +2,7 @@ import styled from "styled-components";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import Avatar from "./XAvatar";
 import React from "react";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 
 // Embrace the shadows ; find the truth
 
@@ -45,6 +45,19 @@ const SubContainer = styled.div`
     }
 `;
 
+/**
+ * XForm - A form component that encapsulates form elements, a submit button, and an optional link.
+ * It includes an Avatar component and is styled to center its contents.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - Form elements to be included in the form.
+ * @param {string} props.submitButtonText - Text for the submit button.
+ * @param {Function} props.onSubmit - Function to handle form submission.
+ * @param {string} props.title - The title of the form.
+ * @param {React.ReactNode} [props.link] - An optional link component to be displayed in the form.
+ * @param {boolean} [props.isValid] - A flag to control the disabled state of the submit button.
+ * @returns {React.Component} A styled form component.
+ */
 function XForm({
     children,
     submitButtonText,
@@ -75,6 +88,10 @@ function XForm({
     );
 }
 
+/**
+ * React.memo optimization to prevent unnecessary re-renders.
+ * Compares props to determine if the component should re-render.
+ */
 function formPropsAreEqual(prevProps, nextProps) {
     return prevProps.isValid === nextProps.isValid;
 }

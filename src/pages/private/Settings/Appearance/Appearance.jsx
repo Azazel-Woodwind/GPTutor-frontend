@@ -1,7 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-const Profile = () => {
+/**
+ * Appearance Settings page.
+ * User can change the appearance of XTutor.
+ * Currently not implemented
+ *
+ * @page
+ * @route /settings/appearance
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the appearance settings.
+ */
+function Appearance() {
     return (
         <Container>
             <div>
@@ -11,11 +21,11 @@ const Profile = () => {
             </div>
         </Container>
     );
-};
+}
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
 `;
-export default Profile;
+export default Appearance;

@@ -4,7 +4,7 @@ import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import { motion } from "framer-motion";
 import { fade_animation } from "@/lib/animation";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 
 function GeneratingQuestionModal({ questionNum, goToPrevQuestion }) {
     const { open, handleClose, handleOpen, ModalProps, Modal } = useModal({

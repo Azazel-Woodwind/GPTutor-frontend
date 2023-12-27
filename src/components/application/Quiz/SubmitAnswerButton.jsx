@@ -1,4 +1,4 @@
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 import React from "react";
 
 function SubmitAnswerButton({ onClick, disabled }) {

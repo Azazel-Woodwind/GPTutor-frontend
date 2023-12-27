@@ -8,20 +8,28 @@ import {
     email_schema,
     first_name_schema,
     occupation_schema,
-} from "@/lib/userFormSchema";
+} from "@/lib/schemas/userFormSchema";
 import UserAPI from "@/api/UserAPI";
 import SuccessScreen from "@/components/application/SuccessScreen";
 import XForm from "@/components/application/XForm";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
-import Textfield from "@/components/common/input/Textfield";
-import RadioButton from "@/components/common/input/RadioButton";
-import { occupations } from "@/lib/FormData";
+import Textfield from "@/components/common/input/Textfield/Textfield";
+import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import { occupations } from "@/lib/formData";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
+/**
+ * Page that allows the user to sign up to the waiting list.
+ *
+ * @page
+ * @route /
+ * @public
+ * @returns {JSX.Element} - Renders the waiting list form
+ */
 function WaitingList() {
     const [success, setSuccess] = React.useState(false);
 
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const WaitingListSchema = React.useMemo(
         () =>

@@ -1,7 +1,7 @@
 import React from "react";
-import Textfield from "@/components/common/input/Textfield";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 import XForm from "@/components/application/XForm";
-import RadioButton from "@/components/common/input/RadioButton";
+import RadioButton from "@/components/common/input/RadioButton/RadioButton";
 import UserAPI from "@/api/UserAPI";
 import { Link } from "react-router-dom";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
@@ -16,18 +16,26 @@ import {
     last_name_schema,
     password_schema,
     subjects_schema,
-} from "../../../lib/userFormSchema";
+} from "../../../lib/schemas/userFormSchema";
 import { useAppData } from "@/context/AppDataContext";
-import Select from "@/components/common/input/Select";
+import Select from "@/components/common/input/MultiSelect/MultiSelect";
 import TextWrapper from "@/components/utils/TextWrapper";
 import LinkWrapper from "@/components/common/dataDisplay/LinkWrapper";
 import PasswordSection from "@/components/application/PasswordSection";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
+/**
+ * Page that allows users to register to the platform.
+ *
+ * @page
+ * @route /register
+ * @public
+ * @returns {JSX.Element} - Renders the registration form
+ */
 function Register() {
     const { subjectOptions, educationLevels } = useAppData();
 
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const RegisterSchema = React.useMemo(
         () =>

@@ -1,10 +1,10 @@
 import React from "react";
 import TextWrapper from "@/components/utils/TextWrapper";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 import {
     ButtonRow,
     ModalContainer,
-} from "../../../Dashboard/components/PublishLessonModal";
+} from "../../../Dashboard/LessonsDashboard/components/PublishLessonModal";
 
 function XSpeakModal({ reqAudioData, handleClose, onConfirm }) {
     return (

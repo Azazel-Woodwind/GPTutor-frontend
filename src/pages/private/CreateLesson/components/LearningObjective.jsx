@@ -1,13 +1,13 @@
 import { Controller, useFieldArray } from "react-hook-form";
 import SVGIcon from "@/components/common/graphics/SVGIcon";
-import IconButton from "@/components/common/input/IconButton";
-import { MIN_LEARNING_OBJECTIVES } from "../../../../lib/FormData";
-import Textfield from "@/components/common/input/Textfield";
+import IconButton from "@/components/common/input/IconButton/IconButton";
+import { MIN_LEARNING_OBJECTIVES } from "../../../../lib/formData";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 import styled from "styled-components";
 import TextWrapper from "@/components/utils/TextWrapper";
-import { CrossSvgData } from "@/lib/SVGIconData";
+import { CrossSvgData } from "@/lib/svgIconData";
 import LearningObjectiveInstruction from "./LearningObjectiveInstruction";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 
 export default function LearningObjective({
     index,

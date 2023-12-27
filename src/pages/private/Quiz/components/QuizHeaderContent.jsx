@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ExitButton from "@/components/common/input/ExitButton";
+import ExitButton from "@/components/application/Header/ExitButton";
 import HeaderContent from "../../../components/Header/HeaderContent";
 
 function QuizHeaderContent({

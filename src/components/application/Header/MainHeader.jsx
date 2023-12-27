@@ -1,28 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
 import styled from "styled-components";
-import Logo from "../../common/graphics/Logo";
-import Navigation from "./Navigation";
+import Navigation from "./Navigation/Navigation";
 import HeaderContainer from "@/components/application/Header/HeaderContainer";
-import { useAuth } from "@/context/SessionContext";
-
-export const LogoSvg = styled(Logo)`
-    cursor: pointer;
-    width: 175px;
-    height: 6.25rem;
-`;
-
-const inClassroomRegex = /^\/lessons\/([^\/\?]+)\?id=([^\/\?]+)$/;
-const inQuizRegex = /^\/quiz\/([^\/\?]+)\?id=([^\/\?]+)$/;
+import LogoSvg from "./LogoSvg";
 
 export default function MainHeader() {
-    const { session, setLoading } = useAuth();
     const navigate = useNavigate();
-    const location = useLocation();
-
-    // if (location.pathname === "/reset-password") {
-    //     return <></>;
-    // }
 
     return (
         <HeaderContainer>
@@ -33,8 +17,6 @@ export default function MainHeader() {
             />
             <Navigation />
             <Filler />
-
-            {/* <LogoSvgAlt /> */}
         </HeaderContainer>
     );
 }

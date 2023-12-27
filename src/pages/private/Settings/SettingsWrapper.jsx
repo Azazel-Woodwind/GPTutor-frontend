@@ -9,8 +9,8 @@ import { AccountCircle } from "@styled-icons/material";
 import { DarkTheme } from "@styled-icons/fluentui-system-filled";
 import { Payment } from "@styled-icons/fluentui-system-filled";
 import { AlternateGlobalStyle } from "../../../styles/GlobalStyles";
-import MenuElement from "../../../components/application/Menu/MenuElement";
-import MenuIcon from "../../../components/application/Menu/MenuIcon";
+import MenuElement from "../../../components/application/NavigationMenu/MenuElement";
+import MenuIcon from "../../../components/application/NavigationMenu/MenuIcon";
 
 const Settings = MenuIcon(Settings2Outline);
 const Plans = MenuIcon(Payment);

@@ -2,6 +2,16 @@ import { SocketContext } from "@/context/SocketContext";
 import React from "react";
 import useAudioVisualiser from "../useAudioVisualiser";
 
+/**
+ * Custom hook to handle interactions with a specific channel, including message sending,
+ * streaming text, handling audio, and managing user interactions.
+ *
+ * @hook
+ * @param {Object} params - Parameters for the hook.
+ * @param {string} params.channel - The channel name for communication.
+ * @param {Function} params.onData - Callback function to handle incoming data.
+ * @returns {Object} An object containing various functionalities and state variables.
+ */
 function useX({ channel, onData }) {
     const { Socket } = React.useContext(SocketContext);
 

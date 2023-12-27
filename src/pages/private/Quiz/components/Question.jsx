@@ -4,6 +4,21 @@ import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import QuizQuestion from "@/components/application/Quiz/QuizQuestion";
 
+/**
+ * Question - A component for rendering individual questions within the Quiz environment.
+ * It manages the display and interaction of each quiz question, including user selections and feedback.
+ *
+ * @param {Object} props - The component props.
+ * @param {number} props.i - The index of the current question within the quiz.
+ * @param {Array} props.questions - The array of questions in the quiz.
+ * @param {number} props.currentQuestionNum - The number of the current question being displayed.
+ * @param {boolean} props.generatingFeedback - Indicates if feedback is being generated for the question.
+ * @param {Function} props.setExit - Function to trigger the exit action from the quiz.
+ * @param {Function} props.submitAnswer - Function to submit the answer to the question.
+ * @param {boolean} props.loading - Indicates if the question is in the loading state.
+ * @param {boolean} props.streamingAnswer - Indicates if the answer is being streamed (e.g., voice input).
+ * @returns {React.Component} Component representing an individual question within the quiz.
+ */
 function Question({
     i,
     questions,

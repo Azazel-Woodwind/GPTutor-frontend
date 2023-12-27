@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import Button from "@/components/common/input/Button";
-import Textfield from "@/components/common/input/Textfield";
+import Button from "@/components/common/input/Button/Button";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 import useModal from "@/hooks/useModal/useModal";
 import { fade_animation } from "@/lib/animation";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";

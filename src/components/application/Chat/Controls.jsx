@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
-import { CrossSvgData, MicSvgData } from "@/lib/SVGIconData";
-import Button from "@/components/common/input/Button";
+import { CrossSvgData, MicSvgData } from "@/lib/svgIconData";
+import Button from "@/components/common/input/Button/Button";
 import { Send } from "@styled-icons/material/Send";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { MAX_PROMPT_LENGTH } from "../../../lib/constants";
@@ -10,9 +10,55 @@ import { useChatContext } from "@/context/ChatContext";
 import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";
 import { SocketContext } from "@/context/SocketContext";
-import { TextInputStyle } from "@/components/common/input/TextInput";
-import IconButton from "@/components/common/input/IconButton";
+import { TextInputStyle } from "@/components/common/input/Textfield/TextInput/TextInput";
+import IconButton from "@/components/common/input/IconButton/IconButton";
 
+const ChatForm = styled.form`
+    position: relative;
+    /* border: 3px solid blue; */
+    flex: 1 1 0;
+    height: 100%;
+`;
+
+const ChatInput = styled(TextInputStyle)`
+    border-radius: 0.94rem;
+    border: 1px solid #f3f3f3;
+    padding: 0.5rem 2rem;
+
+    //hide the scrollbar
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+`;
+
+const Container = styled(CenteredRow)`
+    position: relative;
+    z-index: 1000;
+    background-color: rgb(15, 13, 27);
+    border-top: 1px solid ${props => props.theme.colours.primary}30;
+
+    width: 100%;
+    padding: 1rem 2rem;
+    /* height: 100%; */
+
+    flex: 0 1 auto;
+    /* border-bottom: 2px solid white; */
+`;
+
+/**
+ * Controls - A component that provides chat input, send button, and voice recording functionality.
+ * It handles message input and sending, voice command recording, and controls for clearing the input.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.prompts - An array of prompts for the chat input placeholder.
+ * @param {Object} props.hook - Hook containing methods and states for sending messages and handling voice commands.
+ * @param {Function} props.hook.sendMessage - Function to send chat messages.
+ * @param {boolean} props.hook.streaming - State indicating if streaming is active.
+ * @param {boolean} props.hook.loading - State indicating if the system is processing.
+ * @param {boolean} props.hook.finishedLearningObjective - State indicating if the learning objective is finished.
+ * @returns {React.Component} A component with chat controls including text input, send button, and voice recording.
+ */
 function Controls({
     prompts,
     hook: { sendMessage, streaming, loading, finishedLearningObjective },
@@ -261,38 +307,5 @@ function Controls({
         </Container>
     );
 }
-
-const ChatForm = styled.form`
-    position: relative;
-    /* border: 3px solid blue; */
-    flex: 1 1 0;
-    height: 100%;
-`;
-
-const ChatInput = styled(TextInputStyle)`
-    border-radius: 0.94rem;
-    border: 1px solid #f3f3f3;
-    padding: 0.5rem 2rem;
-
-    //hide the scrollbar
-    ::-webkit-scrollbar {
-        width: 0;
-        height: 0;
-    }
-`;
-
-const Container = styled(CenteredRow)`
-    position: relative;
-    z-index: 1000;
-    background-color: rgb(15, 13, 27);
-    border-top: 1px solid ${props => props.theme.colours.primary}30;
-
-    width: 100%;
-    padding: 1rem 2rem;
-    /* height: 100%; */
-
-    flex: 0 1 auto;
-    /* border-bottom: 2px solid white; */
-`;
 
 export default Controls;

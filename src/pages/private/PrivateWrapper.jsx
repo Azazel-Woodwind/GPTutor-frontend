@@ -7,7 +7,7 @@ import RouteProtector from "@/components/auth/RouteProtector";
 import { SocketContextProvider } from "../../context/SocketContext";
 import { ChatContextProvider } from "../../context/ChatContext";
 import { STUDENT_ACCESS_LEVEL } from "../../lib/accessLevels";
-import XChat from "../../components/application/Chat/XChat/XChat";
+import XChat from "../../components/application/Hub/Hub";
 import RedirectNewToHub from "../../components/auth/RedirectNewToHub";
 import {
     HEADER_HEIGHT_IN_REM,

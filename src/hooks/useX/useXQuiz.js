@@ -2,6 +2,17 @@ import React from "react";
 import useX from "./useX";
 import { useSocket } from "../../context/SocketContext";
 
+/**
+ * useXQuiz - Custom hook for managing the quiz functionality.
+ * It integrates with a socket for real-time communication and handles the state and logic of quiz questions.
+ *
+ * @param {Object} props - Properties for configuring the quiz.
+ * @param {Object} props.lesson - The lesson data associated with the quiz.
+ * @param {string} props.channel - The communication channel for socket interactions.
+ * @param {boolean} [props.sendStart=true] - Flag to determine if the quiz should start automatically.
+ * @param {Object} props... - Additional properties passed to the useX hook.
+ * @returns {Object} An object containing quiz state, functions for question management, and feedback handling.
+ */
 function useXQuiz({ lesson, channel, sendStart = true, ...props }) {
     const [questions, setQuestions] = React.useState([]);
     const [currentQuestionNum, setCurrentQuestionNum] = React.useState(0);
@@ -68,6 +79,8 @@ function useXQuiz({ lesson, channel, sendStart = true, ...props }) {
             maxScore,
         };
     }
+
+    // Callbacks for handling different types of feedback
 
     const onWrittenFeedbackStream = React.useCallback(
         ({ currentFeedback, questionIndex, marksScored }) => {

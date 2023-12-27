@@ -9,6 +9,26 @@ import SubmitAnswerButton from "./SubmitAnswerButton";
 import { interpolateColor } from "@/utils/css";
 import CollapsableText from "@/components/common/dataDisplay/CollapsableText";
 
+/**
+ * QuizQuestion - A component for rendering individual quiz questions, including written and multiple choice questions.
+ * It handles displaying the question, user responses, feedback, and navigation through the quiz.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.questions - The array of questions in the quiz.
+ * @param {number} props.i - The index of the current question in the quiz.
+ * @param {Function} props.submitAnswer - Function to submit the answer to the question.
+ * @param {boolean} props.generatingFeedback - Indicates if feedback is being generated for the question.
+ * @param {Function} props.changeQuestion - Function to change to the next question in the quiz.
+ * @param {boolean} props.loading - Indicates if the question is in the loading state.
+ * @param {boolean} props.streamingAnswer - Indicates if the answer is being streamed (e.g., voice input).
+ * @param {number} props.currentQuestionNum - The number of the current question being displayed.
+ * @param {string} props.answer - The current answer input by the user.
+ * @param {Function} props.setAnswer - Function to set the user's answer.
+ * @param {number} props.selectedChoiceIndex - The index of the selected choice in a multiple choice question.
+ * @param {Function} props.setSelectedChoiceIndex - Function to set the selected choice index.
+ * @param {React.Component} props.finalQuestionButton - The button displayed for the final question in the quiz.
+ * @returns {React.Component} Component representing an individual quiz question with its functionality.
+ */
 function QuizQuestion({
     questions,
     i,
@@ -68,7 +88,6 @@ function QuizQuestion({
                             setAnswer={setAnswer}
                             submitAnswer={submitAnswer}
                             loading={loading}
-                            questionIndex={i}
                         />
                     ) : (
                         <MultipleChoiceQuestion

@@ -1,15 +1,10 @@
-import {
-    animate,
-    easeOut,
-    motion,
-    useAnimationControls,
-    useMotionValue,
-} from "framer-motion";
+import { motion, useAnimationControls, useMotionValue } from "framer-motion";
 import styled from "styled-components";
 import FillParent from "../../components/common/layout/FillParent";
 import React from "react";
 import { EASE_OUT_BEZIER } from "../../lib/constants";
-import { correctAnimation, splitBezierAtT } from "@/lib/animation";
+import { correctAnimation } from "@/lib/animation";
+import { splitBezierAtT } from "@/utils/misc";
 
 export const RING_PROPAGATION_DURATIONS = {
     excited: 1,
@@ -28,6 +23,7 @@ const transition = ({ duration, ...opts } = {}) => ({
 
 const MAX_SCALE = 3;
 
+// emotion animation configuration
 const ANIMATIONS = {
     neutral: {
         scale: MAX_SCALE,
@@ -70,6 +66,17 @@ const ANIMATIONS = {
     },
 };
 
+/**
+ * Pulse - A React component that creates a pulsating ring animation.
+ * This component uses framer-motion for animations and styled-components for styling.
+ * It's designed to visually represent different emotions through animation properties.
+ *
+ * @param {Object} props - Properties to configure the Pulse component.
+ * @param {number} props.size - Size of the ring.
+ * @param {number} props.delay - Delay before the animation starts.
+ * @param {string} props.newEmotion - The emotion to represent, which affects the animation style.
+ * @returns {React.Component} A styled motion.div component with pulsating ring animation.
+ */
 function Pulse({ size, delay, newEmotion }) {
     const currentEmotion = React.useRef(newEmotion || "neutral");
     const animatingTimeBuffer = React.useRef(0);
@@ -78,14 +85,6 @@ function Pulse({ size, delay, newEmotion }) {
     const currentDelay = React.useRef(delay);
 
     const scale = useMotionValue(1);
-
-    // React.useEffect(
-    //     () =>
-    //         scale.on("change", latest => {
-    //             console.log(scale.animation?.time);
-    //         }),
-    //     []
-    // );
 
     const controls = useAnimationControls();
 
@@ -152,8 +151,6 @@ function Pulse({ size, delay, newEmotion }) {
             t,
             currentEmotion.current
         );
-        // console.log("T:", t);
-        // console.log("ANIMATION", animation);
         await controls.start(animation, {
             duration: remainingTime,
             ease: newEasing,
@@ -161,7 +158,6 @@ function Pulse({ size, delay, newEmotion }) {
         });
 
         if (currentEmotion.current !== newEmotion) return;
-        // console.log("END INITIAL EXCITED ANIMATION");
         animatingTimeBuffer.current = 0;
         controls.start(
             ANIMATIONS[newEmotion],
@@ -185,14 +181,11 @@ function Pulse({ size, delay, newEmotion }) {
     // all code here was written by none other than LOIC CUNNINGHAM +44 7862 658907 @zedd_grayhem on twitter also commonly known as "Little Bitch"
     // ALL COMPLAINTS ABOUT THIS CODE TO kaistrachan@gmail.com (17.14lat,12.04) (queens road london 17 flat 3) 280307524874403840 (xoxo call me) (into dominant men and women)
     React.useEffect(() => {
-        // console.log("DELAY:", delay);
         return () => {
-            // console.log("UNMOUNTING");
             controls.stop();
         };
     }, []);
 
-    // console.log(delay);
     return (
         <Ring
             style={{
@@ -204,7 +197,6 @@ function Pulse({ size, delay, newEmotion }) {
             onAnimationStart={() => {
                 startTime.current = performance.now();
             }}
-            // animate={animation}
         />
     );
 }

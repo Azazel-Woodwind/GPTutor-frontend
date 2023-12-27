@@ -5,10 +5,38 @@ import {
     Container,
     BorderSvg,
     IconSvg,
-} from "../../components/common/input/IconButton";
+} from "@/components/common/input/IconButton/IconButton";
 import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
 
+/**
+ * A component for an animated filling button. This component is used by useFillingButton.js.
+ * @see useFillingButton.js
+ *
+ * @param {object} props - Props for the FillingButton component.
+ * @param {number} props.width - Width of the button.
+ * @param {number} props.height - Height of the button.
+ * @param {number} props.iconSize - Size of the icon inside the button.
+ * @param {number} props.borderWidth - Width of the button's border.
+ * @param {number} props.viewboxWidth - Width of the SVG viewBox.
+ * @param {number} props.viewboxHeight - Height of the SVG viewBox.
+ * @param {Array<string>} props.paths - SVG paths for the icon.
+ * @param {number} props.scale - Scale factor for the button.
+ * @param {boolean} props.disabled - Indicates if the button is disabled.
+ * @param {string} props.fillColour - Colour used for filling animation.
+ * @param {number} props.duration - Duration of the filling animation.
+ * @param {boolean} props.recording - Indicates if recording is in progress.
+ * @param {React.Ref} props.svgRef - Ref to the SVG element.
+ * @param {React.Ref} props.fillAnimationRef1 - Ref to the first fill animation element.
+ * @param {React.Ref} props.fillAnimationRef2 - Ref to the second fill animation element.
+ * @param {Function} props.onAnimationEnd - Callback function when animation ends.
+ * @param {React.Ref} props.resetAnimation1Ref - Ref to reset the first animation.
+ * @param {React.Ref} props.resetAnimation2Ref - Ref to reset the second animation.
+ * @param {Function} props.onClick - Click event handler.
+ * @param {boolean} props.speaking - Indicates if speaking animation should be shown.
+ * @param {object} props...rest - Other props.
+ * @returns {React.ReactNode} The rendered FillingButton component.
+ */
 function FillingButton({
     width,
     height,

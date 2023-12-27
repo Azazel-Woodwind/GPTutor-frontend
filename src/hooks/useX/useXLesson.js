@@ -1,12 +1,21 @@
 import { SocketContext } from "@/context/SocketContext";
-
-import { useState, useEffect } from "react";
-
 import React from "react";
-import useX from "./useX";
 import useXQuiz from "./useXQuiz";
-// import {Config} from "./useX"
 
+/**
+ * useXLesson - Custom hook for managing the state and logic of a lesson.
+ * It handles lesson progress, instructions, and integrates with the useXQuiz hook
+ * for quiz functionality. The hook also manages socket communications for lesson interactions.
+ *
+ * @param {Object} props - The properties for configuring the lesson.
+ * @param {Object} props.currentLesson - The current lesson data.
+ * @param {number} props.delay - Delay before starting the lesson, in milliseconds.
+ * @param {Object} props... - Additional properties passed to the useXQuiz hook.
+ * @returns {Object} An object containing various state properties and functions for lesson management.
+ *   Includes lesson details, progress indicators, image management, and functions to handle lesson objectives.
+ * @see useXQuiz for the underlying quiz functionality.
+ * @see SocketContext for managing real-time socket communication.
+ */
 function useXLesson({ currentLesson, delay, ...props }) {
     const [lesson, setLesson] = React.useState(currentLesson);
     const [learningObjectiveNumber, setLearningObjectiveNumber] =
@@ -61,7 +70,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
         ...props,
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
         // check if audio can play
 
         const audio = new Audio();
@@ -78,7 +87,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
         }, 1000);
     }, []);
 
-    useEffect(() => {
+    React.useEffect(() => {
         // Socket.emit("authenticate", true);
         if (!started || X.currentMessage || X.history.length > 0) return;
 
@@ -96,7 +105,7 @@ function useXLesson({ currentLesson, delay, ...props }) {
         };
     }, [started]);
 
-    useEffect(
+    React.useEffect(
         () => {
             if (!lesson || !started || !instruction) return;
 

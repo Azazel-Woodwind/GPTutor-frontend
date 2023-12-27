@@ -1,4 +1,3 @@
-import * as MyLessons from "./pages/private/Dashboard/MyLessons";
 import * as Users from "./pages/private/Dashboard/Users";
 import * as LessonsDashboard from "./pages/private/Dashboard/LessonsDashboard";
 import * as WaitingList from "./pages/public/WaitingList";
@@ -136,20 +135,15 @@ const router = createBrowserRouter([
                 element: <DashboardWrapper />,
                 children: [
                     {
-                        path: "/dashboard/my-lessons",
-                        element: <MyLessons.Element />,
-                        action: MyLessons.action,
-                        loader: MyLessons.loader,
+                        path: "/dashboard/lessons",
+                        element: <LessonsDashboard.Element />,
+                        loader: LessonsDashboard.loader,
+                        action: LessonsDashboard.action,
                     },
                     {
                         path: "/dashboard/users",
                         element: <Users.Element />,
                         loader: Users.loader,
-                    },
-                    {
-                        path: "/dashboard/lessons",
-                        element: <LessonsDashboard.Element />,
-                        loader: LessonsDashboard.loader,
                     },
                 ],
             },

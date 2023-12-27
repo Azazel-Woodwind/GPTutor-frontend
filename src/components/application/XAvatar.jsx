@@ -3,40 +3,6 @@ import styled from "styled-components";
 import Logo from "../common/graphics/Logo";
 import useXAvatar from "../../hooks/useXAvatar/useXAvatar";
 
-const XAvatar = ({ size = 200, hasLogo, multiplier, ...props }) => {
-    const { XAvatar, XAvatarProps, pulseX } = useXAvatar({
-        size,
-        ...props,
-    });
-
-    React.useEffect(() => {
-        if (multiplier !== undefined) {
-            pulseX(multiplier);
-        }
-    }, [multiplier]);
-
-    // React.useEffect(() => {
-    //     // console.log("emotion changed", emotion);
-    //     handleEmotionChange(newEmotion);
-    // }, [newEmotion]);
-
-    // console.log(numRings);
-    // console.log(props);
-    // console.log(XAvatarProps);
-
-    return (
-        <Container>
-            <XAvatar {...XAvatarProps} {...props} />
-            {hasLogo && (
-                <LogoWrapper>
-                    <Logo size={size} />
-                    <Slogan size={size}>Revolutionising Education</Slogan>
-                </LogoWrapper>
-            )}
-        </Container>
-    );
-};
-
 const Slogan = styled.div`
     padding: 0;
     text-align: center;
@@ -56,4 +22,30 @@ const Container = styled.div`
     width: fit-content;
     /* border: 10px solid black; */
 `;
+
+const XAvatar = ({ size = 200, hasLogo, multiplier, ...props }) => {
+    const { XAvatar, XAvatarProps, pulseX } = useXAvatar({
+        size,
+        ...props,
+    });
+
+    React.useEffect(() => {
+        if (multiplier !== undefined) {
+            pulseX(multiplier);
+        }
+    }, [multiplier]);
+
+    return (
+        <Container>
+            <XAvatar {...XAvatarProps} {...props} />
+            {hasLogo && (
+                <LogoWrapper>
+                    <Logo size={size} />
+                    <Slogan size={size}>Revolutionising Education</Slogan>
+                </LogoWrapper>
+            )}
+        </Container>
+    );
+};
+
 export default XAvatar;

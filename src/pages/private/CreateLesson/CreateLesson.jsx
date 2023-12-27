@@ -4,18 +4,18 @@ import LessonAPI from "../../../api/LessonAPI";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import styled from "styled-components";
 import CenteredRow from "@/components/common/layout/CenteredRow";
-import Textfield from "@/components/common/input/Textfield";
-import RadioButton from "@/components/common/input/RadioButton";
-import Button from "@/components/common/input/Button";
-import Checkbox from "@/components/common/input/Checkbox";
+import Textfield from "@/components/common/input/Textfield/Textfield";
+import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import Button from "@/components/common/input/Button/Button";
+import Checkbox from "@/components/common/input/Checkbox/Checkbox";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { formatEducationLevel, formatSubject } from "@/utils/string";
-import DropdownList from "@/components/common/input/DropdownList";
+import DropdownList from "@/components/common/input/DropdownLists/BasicDropdownList/BasicDropdownList";
 import { useNotification } from "@/context/NotificationContext";
-import { lessonFormSchema } from "@/lib/lessonFormSchema";
+import { lessonFormSchema } from "@/lib/schemas/lessonFormSchema";
 import { useAppData } from "@/context/AppDataContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomSelect from "@/components/common/input/Select";
+import CustomSelect from "@/components/common/input/MultiSelect/MultiSelect";
 import LearningObjective from "./components/LearningObjective";
 import ExitCreateLessonModal from "./components/ExitCreateLessonModal";
 import { useNavigationBlocker } from "@/hooks/useNavigationBlocker/useNavigationBlocker";
@@ -61,6 +61,14 @@ const defaultValues = {
     is_published: false,
 };
 
+/**
+ * Page that allows an administrator to create or edit a lesson
+ *
+ * @page
+ * @route /create-lesson && /edit-lesson
+ * @accessLevel 3 - Administrator
+ * @returns {JSX.Element} - Renders the create lesson form
+ */
 function CreateLesson({ action }) {
     const { subjectOptions, educationLevels, examBoards } = useAppData();
     // console.log(examBoards);
@@ -70,7 +78,7 @@ function CreateLesson({ action }) {
 
     // useConversationDisplay(0.3);
 
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const form = useForm({
         mode: "onChange",

@@ -2,18 +2,6 @@ import styled from "styled-components";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import XAvatar from "@/components/application/XAvatar";
 
-function SuccessScreen({ heading, caption }) {
-    return (
-        <Container gap="2rem" fullscreen>
-            <XAvatar size={150} hasLogo />
-            <MessageBox gap="2rem">
-                <h1>{heading}</h1>
-                <h3>{caption}</h3>
-            </MessageBox>
-        </Container>
-    );
-}
-
 const MessageBox = styled(CenteredColumn)`
     background-color: rgb(0, 0, 0, 0.03);
     box-shadow: ${props => props.theme.colours.glow}40 0px 8px 36px;
@@ -41,4 +29,17 @@ const Container = styled(CenteredColumn)`
         margin-top: 0;
     }
 `;
+
+function SuccessScreen({ heading, caption }) {
+    return (
+        <Container gap="2rem" fullscreen>
+            <XAvatar size={150} hasLogo />
+            <MessageBox gap="2rem">
+                <h1>{heading}</h1>
+                <h3>{caption}</h3>
+            </MessageBox>
+        </Container>
+    );
+}
+
 export default SuccessScreen;

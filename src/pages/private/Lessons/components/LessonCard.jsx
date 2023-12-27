@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 import { capitaliseFirstLetter, formatEducationLevel } from "@/utils/string";
 import { interpolateColor } from "@/utils/css";
 

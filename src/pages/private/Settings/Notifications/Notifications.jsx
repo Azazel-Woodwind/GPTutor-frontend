@@ -1,7 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const Profile = () => {
+/**
+ * Notifications Settings page.
+ * User can change their notification settings.
+ *
+ * @page
+ * @route /settings/notifications
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the notifications settings.
+ */
+function Notifications() {
     return (
         <Container>
             <div>
@@ -13,11 +22,11 @@ const Profile = () => {
             </div>
         </Container>
     );
-};
+}
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
 `;
-export default Profile;
+export default Notifications;

@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import React from "react";
 import { Controller } from "react-hook-form";
-import Textfield from "@/components/common/input/Textfield";
+import Textfield from "@/components/common/input/Textfield/Textfield";
 
 export default function LearningObjectiveInstruction({
     instructionIndex,

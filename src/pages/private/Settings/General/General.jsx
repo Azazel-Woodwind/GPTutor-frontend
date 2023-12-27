@@ -5,20 +5,28 @@ import useModal from "@/hooks/useModal/useModal";
 import XSpeakModal from "./components/XSpeakModal";
 import { nanoid } from "nanoid";
 import supabase from "@/api/configs/supabase";
-import ProgressBar from "@/components/common/feedback/ProgressBar";
-import Checkbox from "@/components/common/input/Checkbox";
+import ProgressBar from "@/components/common/feedback/ProgressBar/ProgressBar";
+import Checkbox from "@/components/common/input/Checkbox/Checkbox";
 
 const max = 200000;
 
-const General = () => {
+/**
+ * General Settings page.
+ * User can change the general settings of XTutor and view their token usage.
+ *
+ * @page
+ * @route /settings/general
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the general settings.
+ */
+function General() {
     const { session } = useAuth();
     const [tokenUsage, setTokenUsage] = React.useState(0);
 
-    console.log(session);
+    // console.log(session);
 
     React.useEffect(() => {
         const getTokenUsage = async () => {
-            // console.log(await supabase.auth.getUser());
             const {
                 data: { daily_token_usage },
                 error,
@@ -30,7 +38,6 @@ const General = () => {
             setTokenUsage(daily_token_usage);
         };
         getTokenUsage();
-        // setTokenUsage(daily_token_usage);
         const channel = supabase
             .channel(`user-changes-${nanoid()}`)
             .on(
@@ -42,7 +49,6 @@ const General = () => {
                     filter: `id=eq.${session?.user.id}`,
                 },
                 payload => {
-                    // console.log("Change received in public.users", payload);
                     setTokenUsage(payload.new.daily_token_usage);
                 }
             )
@@ -52,13 +58,6 @@ const General = () => {
             supabase.removeChannel(channel);
         };
     }, []);
-
-    // console.log(session.user.user_metadata.req_audio_data);
-    // const form = useForm({
-    //     defaultValues: {
-    //         requestAudioData: session.user.user_metadata.req_audio_data,
-    //     },
-    // });
 
     const { Modal: Component, ...Modal } = useModal({
         initialOpen: false,
@@ -75,8 +74,6 @@ const General = () => {
                             req_audio_data:
                                 !session.user.user_metadata.req_audio_data,
                         });
-                        // setReqAudioData(!reqAudioData);
-                        // Modal.handleClose();
                     }}
                 />
             </Component>
@@ -94,14 +91,6 @@ const General = () => {
                             label: "Standard Limit",
                             location: 100000,
                         },
-                        // {
-                        //     label: "1/2",
-                        //     location: (max / 4) * 2,
-                        // },
-                        // {
-                        //     label: "3/4",
-                        //     location: (max / 4) * 3,
-                        // },
                         {
                             label: "Premium Limit",
                             location: max,
@@ -111,10 +100,6 @@ const General = () => {
                     max={max}
                 />
             </Usage>
-            {/* <Controller
-                name="requestAudioData"
-                control={form.control}
-                render={({ field }) => ( */}
             <Checkbox
                 checkboxSize={31}
                 borderWidth={2}
@@ -125,11 +110,9 @@ const General = () => {
                     Modal.handleOpen();
                 }}
             />
-            {/* )}
-            // /> */}
         </Container>
     );
-};
+}
 
 const Usage = styled.div`
     margin-bottom: 2rem;

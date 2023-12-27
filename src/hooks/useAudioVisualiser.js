@@ -1,5 +1,12 @@
 import React from "react";
 
+/**
+ * useAudioVisualiser - A custom hook to manage audio playback and visualisation.
+ * It provides functionalities like playing audio, visualising audio frequency,
+ * managing playback speed, and mute state.
+ *
+ * @returns {Object} An object containing audio control functions, state variables, and refs.
+ */
 function useAudioVisualiser() {
     const [speaking, setSpeaking] = React.useState(false);
     const [multiplier, setMultiplier] = React.useState(undefined);

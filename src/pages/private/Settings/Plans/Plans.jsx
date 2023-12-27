@@ -1,8 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-const Profile = () => {
-    const onSubmit = () => {};
+/**
+ * Plans Settings page.
+ * User can change their plan and billing settings.
+ *
+ * @page
+ * @route /settings/plans
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the plans settings.
+ */
+function Plans() {
     return (
         <Container>
             <div>
@@ -15,11 +23,11 @@ const Profile = () => {
             </div>
         </Container>
     );
-};
+}
 
 const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
 `;
-export default Profile;
+export default Plans;

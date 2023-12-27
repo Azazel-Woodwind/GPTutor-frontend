@@ -9,6 +9,53 @@ import { EXAMPLE_PROMPTS } from "@/lib/constants";
 
 const MAX_ANGLE = 40;
 
+const ControlsContainer = styled.div`
+    position: relative;
+    /* border: 5px solid red; */
+`;
+
+const X = styled(motion.div)`
+    position: absolute;
+    ${props => props.clickable && `cursor: pointer;`}
+    border-radius: 50%;
+    ${props => props.theme.gradient({ animationLength: 5, opacity: 0.75 })}
+    backdrop-filter: blur(0.625rem);
+    width: ${props => props.size}px;
+    height: ${props => props.size}px;
+    z-index: 1;
+    border: 1px solid rgb(255, 255, 255, 0.05);
+`;
+
+const AvatarWrapper = styled(CenteredRow)`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: ${props => props.size * 3}px;
+    min-height: ${props => props.size * 3}px;
+`;
+
+/**
+ * XAvatar - A React component for displaying an avatar with optional rings and controls.
+ * It supports animations, pulsating rings, and interactive prompts.
+ *
+ * @param {Object} props - Properties to configure the avatar.
+ * @param {number} props.size - Size of the avatar.
+ * @param {number} [props.numRings=3] - Number of rings around the avatar.
+ * @param {string} props.newEmotion - Emotion for the Pulse effect.
+ * @param {function} props.toggleMute - Function to toggle mute state.
+ * @param {function} props.paused - Function to check if paused.
+ * @param {function} props.play - Function to start playing.
+ * @param {function} props.pause - Function to pause.
+ * @param {function} props.setSpeed - Function to set speed.
+ * @param {boolean} props.showExamplePrompts - Flag to show example prompts.
+ * @param {boolean} props.appear - Flag to control appearance animation.
+ * @param {boolean} props.glow - Flag to enable/disable glow effect.
+ * @param {object} props.controls - Animation controls for framer motion.
+ * @param {function} props.onClick - Function to handle click events.
+ * @param {boolean} props.hasControls - Flag to show/hide controls.
+ * @returns {React.Component} A styled avatar component with interactive features.
+ */
 const XAvatar = ({
     size,
     rings,
@@ -46,6 +93,7 @@ const XAvatar = ({
     ] = React.useState(0);
     const [scale, setScale] = React.useState(0);
 
+    // Effect for showing example prompts at intervals
     React.useEffect(() => {
         if (!showExamplePrompts) {
             return;
@@ -80,10 +128,6 @@ const XAvatar = ({
                     : -verticalDisplacement;
             setExamplePromptHorizontalDisplacement(horizontalDisplacement);
             setExamplePromptVerticalDisplacement(verticalDisplacement);
-
-            // console.log(size);
-            // console.log(horizontalDisplacement);
-            // console.log(verticalDisplacement);
         }, 5000);
 
         return () => {
@@ -93,6 +137,7 @@ const XAvatar = ({
         };
     }, []);
 
+    // Effect for controlling the animation of prompts
     React.useEffect(() => {
         if (!showExamplePrompts) {
             return;
@@ -117,6 +162,7 @@ const XAvatar = ({
         };
     }, [promptIndex]);
 
+    // Effect for the initial appearance animation
     React.useEffect(() => {
         async function animate() {
             if (appear) {
@@ -134,9 +180,9 @@ const XAvatar = ({
         }
 
         animate();
-    }, []);
+    }, [appear]);
 
-    // console.log(pulse);
+    // Main rendering logic, conditionally rendering rings, controls, and prompts
     if (hasControls) {
         return (
             <ControlsContainer
@@ -257,11 +303,8 @@ const PromptContainer = styled(motion.div)`
         ${promptIndex === undefined && "display: none;"}
         width: 25rem;
         position: absolute;
-        /* white-space: nowrap; */
         font-style: italic;
         font-size: 1.2rem;
-        /* left: ${radius}px;
-        z-index: 100000; */
         ${horizontalDisplacement > 0
             ? `left: ${radius + horizontalDisplacement}px;`
             : `right: ${radius - horizontalDisplacement}px;`}
@@ -277,33 +320,6 @@ const PromptContainer = styled(motion.div)`
             content: '"';
         }
     `}
-`;
-
-const ControlsContainer = styled.div`
-    position: relative;
-    /* border: 5px solid red; */
-`;
-
-const X = styled(motion.div)`
-    position: absolute;
-    ${props => props.clickable && `cursor: pointer;`}
-    border-radius: 50%;
-    ${props => props.theme.gradient({ animationLength: 5, opacity: 0.75 })}
-    backdrop-filter: blur(0.625rem);
-    width: ${props => props.size}px;
-    height: ${props => props.size}px;
-    z-index: 1;
-    border: 1px solid rgb(255, 255, 255, 0.05);
-`;
-
-const AvatarWrapper = styled(CenteredRow)`
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: ${props => props.size * 3}px;
-    min-height: ${props => props.size * 3}px;
-    /* border: 5px solid blue; */
 `;
 
 export default XAvatar;

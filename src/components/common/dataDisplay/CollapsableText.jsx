@@ -4,6 +4,17 @@ import styled, { css } from "styled-components";
 
 const lineHeight = 1.25;
 
+/**
+ * CollapsableText - A component to display text that can be toggled between a collapsed and expanded state.
+ * In its collapsed state, the text is truncated with an ellipsis. When expanded, it shows the full text.
+ *
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The text content to be displayed and collapsed.
+ * @param {boolean} [props.collapsable=true] - Determines if the text can be collapsed/expanded.
+ * @param {boolean} [props.collapsed] - Controls the collapsed state of the text. If not provided, internal state is used.
+ * @param {Function} [props.setCollapsed] - Function to set the collapsed state from outside the component. If not provided, internal state control is used.
+ * @returns {React.Component} A component that renders collapsable text with a control to toggle its state.
+ */
 function CollapsableText({
     children,
     collapsable = true,
@@ -78,10 +89,10 @@ const Container = styled(motion.div)`
     ${props =>
         props.collapsed &&
         props.fullyCollapsed &&
-        `
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    `}
+        css`
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        `}
 `;
 
 export default CollapsableText;

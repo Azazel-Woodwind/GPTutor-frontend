@@ -1,6 +1,6 @@
 import React from "react";
 import QuizQuestion from "@/components/application/Quiz/QuizQuestion";
-import Button from "@/components/common/input/Button";
+import Button from "@/components/common/input/Button/Button";
 
 function Question({ finishLearningObjectiveQuestions, ...props }) {
     const [selectedChoiceIndex, setSelectedChoiceIndex] =
