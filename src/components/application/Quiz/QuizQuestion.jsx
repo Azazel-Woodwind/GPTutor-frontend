@@ -32,9 +32,8 @@ function QuizQuestion({
     const [isAnswerChanged,setIsAnswerChanged] =  React.useState(false)
 
 
-    const disableSubmit = (question) => {
-        if(generatingFeedback) return true;
-        if(streamingAnswer) return true;
+    const submitDisabled = (question) => {
+        if(generatingFeedback || streamingAnswer) return true;
         
         let shouldDisableSubmit = false;
         switch (question.questionType) {
@@ -94,7 +93,7 @@ function QuizQuestion({
                             answer={answer}
                             setAnswer={setAnswer}
                             setIsAnswerChanged={setIsAnswerChanged}
-                            disableSubmit={disableSubmit}
+                            submitDisabled={submitDisabled}
                             submitAnswer={submitAnswer}
                             loading={loading}
                             questionIndex={i}
@@ -155,7 +154,7 @@ function QuizQuestion({
                         </>
                     ) : (
                         <SubmitAnswerButton
-                            disabled={disableSubmit(questions[i])}
+                            disabled={submitDisabled(questions[i])}
                             onClick={() => {
                                 setIsAnswerChanged(false)
                                 submitAnswer({

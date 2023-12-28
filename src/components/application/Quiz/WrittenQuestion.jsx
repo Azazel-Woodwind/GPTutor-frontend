@@ -8,7 +8,7 @@ function WrittenQuestion({
     setAnswer,
     submitAnswer,
     loading,
-    disableSubmit,
+    submitDisabled,
     setIsAnswerChanged
 }) {
     const answerTextfieldRef = React.useRef(null);
@@ -47,7 +47,7 @@ function WrittenQuestion({
                     onKeyDown={e => {
                         if (e.key === "Enter") {
                             e.preventDefault();
-                            if (!e.shiftKey && !disableSubmit(question)) {
+                            if (!e.shiftKey && !submitDisabled(question)) {
                                 setIsAnswerChanged(false)
                                 submitAnswer({
                                     answer,
