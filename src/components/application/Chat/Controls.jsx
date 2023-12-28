@@ -30,6 +30,18 @@ function Controls({
     const messageInputRef = React.useRef(undefined);
     const chatFormRef = React.useRef(undefined);
     const timer = React.useRef(null);
+    
+    const handleChangeInput = (text) =>{
+        if (text.length > MAX_PROMPT_LENGTH) {
+            setMessageInput(
+                text
+                    .slice(0, MAX_PROMPT_LENGTH)
+                    .trim()
+            );
+        } else {
+            setMessageInput(text);
+        }
+    }
 
     const onSubmit = e => {
         e && e.preventDefault();
@@ -164,15 +176,7 @@ function Controls({
                 e.preventDefault();
                 messageInputRef.current?.focus();
                 messageInputRef.current.value += e.key;
-                if (messageInputRef.current?.value.length > MAX_PROMPT_LENGTH) {
-                    setMessageInput(
-                        e.target.value
-                            .slice(0, MAX_PROMPT_LENGTH)
-                            .trim()
-                    );
-                } else {
-                    setMessageInput(e.target.value);
-                }
+                handleChangeInput(messageInputRef.current.value)
             }
         },
         [width, draggable]
@@ -235,17 +239,7 @@ function Controls({
                         height: "100%",
                         backgroundColor: "rgb(15, 13, 27)",
                     }}
-                    onChange={e => {
-                        if (e.target.value.length > MAX_PROMPT_LENGTH) {
-                            setMessageInput(
-                                e.target.value
-                                    .slice(0, MAX_PROMPT_LENGTH)
-                                    .trim()
-                            );
-                        } else {
-                            setMessageInput(e.target.value);
-                        }
-                    }}
+                    onChange={e => handleChangeInput(e.target.value)}
                     onFocus={e => {
                         e.target.style.height = 0;
                         e.target.style.height =
