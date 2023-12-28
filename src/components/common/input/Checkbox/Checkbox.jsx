@@ -12,7 +12,7 @@ import {
     Container,
     SvgCheckIcon,
     SvgCheckbox,
-} from "./styles";
+} from "./Checkbox.styles";
 
 /**
  * Checkbox - A custom checkbox component with an optional label and custom styling.

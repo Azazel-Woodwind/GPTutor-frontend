@@ -10,8 +10,8 @@ import { useChatContext } from "@/context/ChatContext";
 import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";
 import { SocketContext } from "@/context/SocketContext";
-import { TextInputStyle } from "@/components/common/input/Textfield/TextInput/TextInput";
 import IconButton from "@/components/common/input/IconButton/IconButton";
+import { TextInputStyle } from "@/components/common/input/Textfield/TextInput/TextInput.styles";
 
 const ChatForm = styled.form`
     position: relative;
@@ -45,6 +45,9 @@ const Container = styled(CenteredRow)`
     flex: 0 1 auto;
     /* border-bottom: 2px solid white; */
 `;
+
+const MAX_VOICE_WAIT = 5000;
+const MAX_INITIAL_VOICE_WAIT = 10000;
 
 /**
  * Controls - A component that provides chat input, send button, and voice recording functionality.

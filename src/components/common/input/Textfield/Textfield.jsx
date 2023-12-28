@@ -1,5 +1,4 @@
 import React from "react";
-import { TextInput } from "./TextInput/TextInput";
 import Theme from "@/styles/Theme";
 import Collapse from "../../layout/Collapse";
 import {
@@ -7,14 +6,13 @@ import {
     CustomLegend,
     ErrorText,
     InputLabel,
+    LEGEND_FONT_SIZE,
     Label,
     TextfieldContainer,
     TextfieldWrapper,
-} from "./styles";
-import TextInput from "./TextInput/TextInput";
+} from "./Textfield.styles";
 import PasswordInfo from "./PasswordInfo/PasswordInfo";
-
-const LEGEND_FONT_SIZE = "0.9em";
+import TextInput from "./TextInput";
 
 /**
  * Textfield - A custom text input component that provides enhanced user experience features.

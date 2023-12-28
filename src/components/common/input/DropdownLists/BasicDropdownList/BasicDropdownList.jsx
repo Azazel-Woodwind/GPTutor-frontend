@@ -1,6 +1,11 @@
 import React from "react";
 import Textfield from "@/components/common/input/Textfield/Textfield";
-import { DropdownListOption, DropdownListWrapper, Wrapper } from "./styles";
+import {
+    DropdownListOption,
+    DropdownListWrapper,
+    Wrapper,
+} from "./BasicDropdownList.styles";
+import EndAdornment from "./EndAdornment";
 
 /**
  * DropdownList - A custom dropdown list component for selecting an option.
@@ -179,7 +184,7 @@ function BasicDropdownList({
                 ref={inputRef}
                 onChange={e => setInputValue(e.target.value)}
                 endAdornment={
-                    <DropdownListEndAdornment
+                    <EndAdornment
                         mouseEntered={mouseEntered}
                         selected={selected}
                         setSelected={setSelected}

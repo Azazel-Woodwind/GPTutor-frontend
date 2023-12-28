@@ -12,10 +12,11 @@ import { Publish } from "@styled-icons/entypo/Publish";
 import { Unpublished } from "@styled-icons/material-outlined/Unpublished";
 import { Check } from "@styled-icons/material/Check";
 import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
-import Row, { Cell } from "../../components/Row";
+import Row from "../../components/Row";
 import IconStyles from "../../components/IconStyles";
 import Tooltip from "@/components/common/dataDisplay/Tooltip";
 import IconsContainer from "../../components/IconsContainer";
+import Cell from "../../components/Cell";
 
 function LessonRow({
     lesson,

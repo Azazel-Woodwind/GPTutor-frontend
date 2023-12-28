@@ -1,5 +1,5 @@
 import React from "react";
-import AnimatedModal from "./Modal/AnimatedModal";
+import Modal from "./Modal";
 
 function useModal({ initialOpen = false } = {}) {
     const [open, setOpen] = React.useState(initialOpen);
@@ -15,7 +15,7 @@ function useModal({ initialOpen = false } = {}) {
             open,
             handleClose,
         },
-        Modal: AnimatedModal,
+        Modal,
     };
 }
 

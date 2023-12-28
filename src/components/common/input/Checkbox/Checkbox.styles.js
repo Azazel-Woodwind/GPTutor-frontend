@@ -1,3 +1,5 @@
+import TextWrapper from "@/components/utils/TextWrapper";
+import { motion } from "framer-motion";
 import styled from "styled-components";
 
 export const SvgCheckbox = styled.svg`

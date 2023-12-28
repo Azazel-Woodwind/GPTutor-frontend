@@ -5,10 +5,10 @@ import { useLoaderData } from "react-router-dom";
 import styled from "styled-components";
 import { EditAlt } from "@styled-icons/boxicons-regular";
 import { Delete } from "@styled-icons/fluentui-system-regular";
-import Table from "../../components/Table";
-import Row from "../../components/Row";
-import IconsContainer from "../../components/IconsContainer";
-import IconStyles from "../../components/IconStyles";
+import Table from "../components/Table";
+import Row from "../components/Row";
+import IconsContainer from "../components/IconsContainer";
+import IconStyles from "../components/IconStyles";
 
 const EditIcon = styled(EditAlt)`
     ${IconStyles}

@@ -11,14 +11,6 @@ import { ChatContext } from "@/context/ChatContext";
 import useXConversation from "@/hooks/useX/useXConversation";
 import Resizable from "@/components/application/Hub/Resizable/Resizable";
 
-const prompts = [
-    "Hi X. Can you show me the available lessons?",
-    "Help me get started with GCSE math?",
-    "How does this page work?",
-    "What subjects can you teach?",
-    "Explain basic algebra",
-];
-
 const ActivityButton = styled(Button)`
     position: absolute;
     top: 1.8rem;
@@ -51,6 +43,13 @@ const Window = styled.div`
     padding-top: ${HEADER_HEIGHT_IN_REM}rem;
 `;
 
+const prompts = [
+    "Hi X. Can you show me the available lessons?",
+    "Help me get started with GCSE math?",
+    "How does this page work?",
+    "What subjects can you teach?",
+    "Explain basic algebra",
+];
 function Hub() {
     const { width } = React.useContext(ChatContext);
     const hook = useXConversation();

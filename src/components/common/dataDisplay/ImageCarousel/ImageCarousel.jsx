@@ -3,7 +3,13 @@ import { useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { ArrowBoldRight } from "@styled-icons/entypo/ArrowBoldRight";
 import { formatImageSource } from "@/utils/string";
-import { Container, Image, ImageContainer, Next, Prev } from "./styles";
+import {
+    Container,
+    Image,
+    ImageContainer,
+    Next,
+    Prev,
+} from "./ImageCarousel.styles";
 import {
     swipeConfidenceThreshold,
     swipePower,

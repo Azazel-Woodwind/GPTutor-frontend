@@ -1,11 +1,14 @@
-const UnfilledProgress = styled.div`
+import styled from "styled-components";
+import { motion } from "framer-motion";
+
+export const UnfilledProgress = styled.div`
     background-color: ${props => props.colour};
     height: 100%;
     flex-grow: 1;
     /* border: 1px solid black; */
 `;
 
-const Container = styled.div`
+export const Container = styled.div`
     position: relative;
     width: ${props => props.width};
     display: flex;
@@ -14,7 +17,7 @@ const Container = styled.div`
     height: ${props => props.height};
 `;
 
-const Label = styled.p`
+export const Label = styled.p`
     position: absolute;
     top: ${props => props.stopSize};
     /* top: 50%;
@@ -27,7 +30,7 @@ const Label = styled.p`
     /* left: ${props => props.location - 1}%; */
 `;
 
-const Stop = styled.div`
+export const Stop = styled.div`
     display: flex;
     justify-content: center;
     border-radius: 50%;
@@ -50,7 +53,7 @@ const Stop = styled.div`
     ${props => props.active && props.theme.gradient({ animationLength: 5 })};
 `;
 
-const Progress = styled(motion.div)`
+export const Progress = styled(motion.div)`
     height: 100%;
     /* position: absolute;
     ${props => (props.reverse ? "right: 0px;" : "left: 0px;")} */
@@ -59,7 +62,7 @@ const Progress = styled(motion.div)`
     ${props => props.colour === "gradient" && props.theme.gradient()}
 `;
 
-const ProgressContainer = styled(motion.div)`
+export const ProgressContainer = styled(motion.div)`
     position: relative;
 
     overflow: clip;

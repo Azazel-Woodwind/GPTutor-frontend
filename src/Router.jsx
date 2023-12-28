@@ -145,6 +145,10 @@ const router = createBrowserRouter([
                         element: <Users.Element />,
                         loader: Users.loader,
                     },
+                    {
+                        path: "*",
+                        element: <Navigate to="/dashboard/lessons" replace />,
+                    },
                 ],
             },
             {

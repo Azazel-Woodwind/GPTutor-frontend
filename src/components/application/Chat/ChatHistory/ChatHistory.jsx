@@ -7,9 +7,8 @@ import {
     ChatHistoryStyle,
     Container,
     DraggableChat,
-} from "./styles";
-
-const handleHeight = 7;
+    handleHeight,
+} from "./ChatHistory.styles";
 
 /**
  * ChatHistory - A component for displaying a chat history with draggable handle for resizing.

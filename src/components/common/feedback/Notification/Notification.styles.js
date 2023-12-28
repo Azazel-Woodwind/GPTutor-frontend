@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import SVGIcon from "@/svg/SVGIcon";
-import { TYPES_TO_COLOUR } from "@/constants/feedback";
+import SVGIcon from "../../graphics/SVGIcon";
+import { TYPES_TO_COLOUR } from "./Notification";
 
 export const CrossSvg = styled(SVGIcon)`
     position: absolute;

@@ -5,7 +5,8 @@ import {
     DropdownSearchContainer,
     OptionContainer,
     Search,
-} from "./styles";
+    Option,
+} from "./FancyDropdownList.styles";
 
 const itemVariants = {
     open: {

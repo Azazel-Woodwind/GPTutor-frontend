@@ -1,3 +1,6 @@
+import styled from "styled-components";
+import { motion } from "framer-motion";
+
 export const ErrorText = styled.div`
     color: ${props => props.theme.colours.error};
     font-size: 0.94em;
@@ -42,6 +45,7 @@ export const CustomFieldset = styled.fieldset.withConfig({
     transition: border-color 0.15s;
 `;
 
+export const LEGEND_FONT_SIZE = "0.9em";
 export const CustomLegend = styled.legend.withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
         !["name", "value"].includes(prop) && defaultValidatorFn(prop),

@@ -6,6 +6,7 @@ import {
     CONTAINS_UPPERCASE_REGEX,
     PASSWORD_LENGTH_REGEX,
 } from "@/lib/regexes";
+import PasswordInfoEntry from "./PasswordInfoEntry";
 
 function PasswordInfo({ password }) {
     return (

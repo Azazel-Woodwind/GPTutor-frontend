@@ -29,6 +29,7 @@ export const DraggableChat = styled(motion.div)`
     flex-direction: column;
 `;
 
+export const handleHeight = 7;
 export const ChatHandle = styled.div`
     width: 100%;
     height: ${handleHeight}px;

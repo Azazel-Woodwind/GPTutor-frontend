@@ -2,7 +2,7 @@ import React from "react";
 import IconButton from "@/components/common/input/IconButton/IconButton";
 import { EyeOutline } from "@styled-icons/evaicons-outline/EyeOutline";
 import { EyeOffOutline } from "@styled-icons/evaicons-outline/EyeOffOutline";
-import { EndAdornmentWrapper, TextInputStyle } from "./styles";
+import { EndAdornmentWrapper, TextInputStyle } from "./TextInput.styles";
 
 function TextInput({ type, multiline, ...props }, ref) {
     const [wrapper, setRef] = React.useState(undefined);

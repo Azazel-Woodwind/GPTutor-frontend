@@ -5,7 +5,7 @@ import {
     Container,
     BorderSvg,
     IconSvg,
-} from "@/components/common/input/IconButton/IconButton";
+} from "@/components/common/input/IconButton/OutlinedIconButton/OutlinedIconButton.styles";
 import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
 

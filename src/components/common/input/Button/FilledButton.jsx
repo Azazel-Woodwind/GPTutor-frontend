@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import React from "react";
-import { BaseButtonStyles } from "./styles";
+import { BaseButtonStyles } from "./Button.styles";
 
 const FilledButtonStyle = styled(motion.button)`
     ${BaseButtonStyles}

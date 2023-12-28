@@ -2,7 +2,13 @@ import React from "react";
 import { AnimatePresence, motion, useDragControls } from "framer-motion";
 import TextWrapper from "@/components/utils/TextWrapper";
 import { clamp, roundToNearestMultiple } from "@/utils/misc";
-import { Knob, Mark, MarksContainer, TooltipContainer, Track } from "./styles";
+import {
+    Knob,
+    Mark,
+    MarksContainer,
+    TooltipContainer,
+    Track,
+} from "./Slider.styles";
 
 /**
  * Slider - A custom slider component for selecting a value within a range.

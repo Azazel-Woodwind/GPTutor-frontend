@@ -2,6 +2,32 @@ import React from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 
+const TooltipContainer = styled(motion.span)`
+    user-select: none;
+    position: absolute;
+    max-width: 80ch;
+    ${props => (props.underneath ? "bottom" : "top")}: -2.8rem;
+    color: ${props => props.theme.colours.primary};
+    max-height: 1rem;
+    height: fit-content;
+    padding: 0.5rem;
+    box-sizing: content-box;
+    border-radius: 5px;
+    font-size: 90%;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #21273f;
+`;
+const Wrapper = styled.div`
+    position: relative;
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
 /**
  * Tooltip - A component for displaying a tooltip with a label.
  * The tooltip can be configured to appear above or underneath the child element.
@@ -36,31 +62,5 @@ function Tooltip({ children, label, underneath, show }) {
         </Wrapper>
     );
 }
-
-const TooltipContainer = styled(motion.span)`
-    user-select: none;
-    position: absolute;
-    max-width: 80ch;
-    ${props => (props.underneath ? "bottom" : "top")}: -2.8rem;
-    color: ${props => props.theme.colours.primary};
-    max-height: 1rem;
-    height: fit-content;
-    padding: 0.5rem;
-    box-sizing: content-box;
-    border-radius: 5px;
-    font-size: 90%;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #21273f;
-`;
-const Wrapper = styled.div`
-    position: relative;
-    width: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
 
 export default Tooltip;

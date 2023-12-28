@@ -1,13 +1,20 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import {
-    motion,
     useMotionValue,
     animate,
     useTransform,
     useAnimation,
 } from "framer-motion";
 import TextWrapper from "@/components/utils/TextWrapper";
+import {
+    Container,
+    ProgressContainer,
+    Progress,
+    UnfilledProgress,
+    Stop,
+    Label,
+} from "./ProgressBar.styles";
 
 /**
  * ProgressBar - A component for displaying a progress bar with customizable features like stops, labels, and animation.

@@ -1,6 +1,10 @@
 import React from "react";
 import SvgLinearGradient from "@/components/common/graphics/SvgLinearGradient";
-import { OutlinedButtonStyle, SvgBorder } from "./styles";
+import {
+    ButtonText,
+    OutlinedButtonStyle,
+    SvgBorder,
+} from "./OutlinedButton.styles";
 import { motion } from "framer-motion";
 import { nanoid } from "nanoid";
 
@@ -38,10 +42,14 @@ function OutlinedButton({
 
     React.useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                setButtonWidth(entry.contentRect.width);
-                setButtonHeight(entry.contentRect.height);
-            }
+            setButtonHeight(containerRef?.current?.offsetHeight);
+            setButtonWidth(containerRef?.current?.offsetWidth);
+            // for (let entry of entries) {
+            //     setButtonHeight(containerRef?.current?.offsetHeight);
+            //     setButtonWidth(containerRef?.current?.offsetWidth);
+            //     // setButtonWidth(entry.contentRect.width);
+            //     // setButtonHeight(entry.contentRect.height);
+            // }
         });
 
         if (containerRef.current) {
@@ -58,13 +66,13 @@ function OutlinedButton({
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             ref={containerRef}
-            paddingY={paddingY}
-            paddingX={paddingX}
-            borderWidth={borderWidth}
-            {...otherProps}
-            as={motion.div}
-            style={{ margin: `${borderWidth}px` }}>
-            <SvgBorder viewBox={`0 0 ${buttonWidth || 0} ${buttonHeight || 0}`}>
+            style={{
+                padding: `${paddingY || 0.8}rem ${paddingX || 1.5}rem`,
+                margin: `${borderWidth}px`,
+            }}
+            disabled={disabled}
+            {...otherProps}>
+            <SvgBorder>
                 <defs>
                     <SvgLinearGradient gradientID={borderGradientID} />
                 </defs>
@@ -74,7 +82,13 @@ function OutlinedButton({
                     width={buttonWidth || 0}
                     height={buttonHeight || 0}
                     rx="10"
-                    fill={hovering ? "rgb(39, 46, 95)" : "none"}
+                    fill={
+                        disabled
+                            ? "rgb(0, 0, 0, 0.1)"
+                            : hovering
+                            ? "rgb(39, 46, 95)"
+                            : "none"
+                    }
                     stroke={disabled ? "gray" : `url(#${borderGradientID})`}
                     strokeWidth={borderWidth}
                 />

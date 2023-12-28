@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { BaseButtonStyles } from "../styles";
+import { BaseButtonStyles } from "../Button.styles";
 
 export const OutlinedButtonStyle = styled(motion.button)`
     ${BaseButtonStyles}

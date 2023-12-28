@@ -23,7 +23,9 @@ function Button({
 }) {
     // Define hover and tap interactions for non-disabled buttons
     const interactiveProps = disabled
-        ? {}
+        ? {
+              disabled,
+          }
         : {
               whileHover: {
                   scale: whileHoverScale,
@@ -33,6 +35,7 @@ function Button({
                   scale: whileTapScale,
                   transition: { duration: 0.1 },
               },
+              disabled,
           };
 
     // Render the outlined or filled button based on the 'outline' prop

@@ -15,7 +15,7 @@ import {
     InnerContentContainer,
     LabelContainer,
     ProgressContainer,
-} from "./styles";
+} from "./Notification.styles";
 
 const TYPES_TO_ICON_DATA = {
     info: <SVGIcon svgData={InfoSvgData} fill="white" size={24} />,
@@ -23,7 +23,7 @@ const TYPES_TO_ICON_DATA = {
     success: <SVGIcon svgData={CheckSvgData} fill="white" size={30} />,
 };
 
-const TYPES_TO_COLOUR = {
+export const TYPES_TO_COLOUR = {
     info: Theme.colours.glow,
     error: Theme.colours.error,
     success: "transparent",

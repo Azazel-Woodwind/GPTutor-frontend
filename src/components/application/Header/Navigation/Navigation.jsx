@@ -4,6 +4,7 @@ import { JournalBookmark } from "styled-icons/bootstrap";
 import { Dashboard } from "@styled-icons/boxicons-solid";
 import { Settings2Outline } from "@styled-icons/evaicons-outline";
 import { BookAdd } from "@styled-icons/boxicons-solid/BookAdd";
+import NavOption from "./NavOption";
 
 const Icon = icon => styled(icon).withConfig({
     shouldForwardProp: (prop, defaultValidatorFn) =>
@@ -23,38 +24,44 @@ const StyledSettings = Icon(Settings2Outline);
 const StyledBookAdd = Icon(BookAdd);
 
 function NavigateHome() {
-    <LinkWrapper path="/hub" label={"Hub"} Icon={StyledHome} {...props} />;
+    return <NavOption path="/hub" label={"Hub"} Icon={StyledHome} />;
 }
 
 function NavigateLessons() {
-    <LinkWrapper path="/lessons" label={"Lessons"} Icon={StyledBook} />;
+    return <NavOption path="/lessons" label={"Lessons"} Icon={StyledBook} />;
 }
 
 function NavigateCreateLesson() {
-    <LinkWrapper
-        path="/create-lesson"
-        Icon={StyledBookAdd}
-        label={"Create Lesson"}
-    />;
+    return (
+        <NavOption
+            path="/create-lesson"
+            Icon={StyledBookAdd}
+            label={"Create Lesson"}
+        />
+    );
 }
 
 function NavigateDashboard() {
-    <LinkWrapper
-        path="/dashboard/my-lessons"
-        Icon={StyledDashboard}
-        label={"Dashboard"}
-    />;
+    return (
+        <NavOption
+            path="/dashboard/lessons"
+            Icon={StyledDashboard}
+            label={"Dashboard"}
+        />
+    );
 }
 
 function NavigateSettings() {
-    <LinkWrapper
-        path="/settings/general"
-        Icon={StyledSettings}
-        label={"Settings"}
-    />;
+    return (
+        <NavOption
+            path="/settings/general"
+            Icon={StyledSettings}
+            label={"Settings"}
+        />
+    );
 }
 
-const Navigation = styled.div`
+const NavigationStyle = styled.div`
     position: relative;
     display: flex;
     justify-content: center;
@@ -68,16 +75,14 @@ const Navigation = styled.div`
 `;
 
 function Navigation() {
-    // console.log("rendering navigation");
-
     return (
-        <Navigation>
+        <NavigationStyle>
             <NavigateHome />
             <NavigateLessons />
             <NavigateDashboard />
             <NavigateCreateLesson />
             <NavigateSettings />
-        </Navigation>
+        </NavigationStyle>
     );
 }
 
