@@ -6,7 +6,7 @@ import { fade_animation } from "@/lib/animation";
 import Textfield from "@/components/common/input/Textfield";
 import Button from "@/components/common/input/Button";
 import { interpolateColor } from "@/utils/css";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "@/hooks/useModal";
 
 function EndOfQuizModal({ score, onExit }) {
     const { ModalProps, Modal } = useModal({

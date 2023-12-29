@@ -9,12 +9,21 @@ import { capitaliseFirstLetter, formatEducationLevel } from "@/utils/string";
 import { useNotification } from "@/context/NotificationContext";
 import Textfield from "@/components/common/input/Textfield";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
-import Select from "@/components/common/input/Select";
+import Select from "@/components/common/input/MultiSelect";
 import UserAPI from "@/api/UserAPI";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
-const Profile = () => {
-    const sendNotification = useNotification();
+/**
+ * Profile Settings page.
+ * User can change their profile settings.
+ *
+ * @page
+ * @route /settings/profile
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the profile settings.
+ */
+function Profile() {
+    const { sendNotification } = useNotification();
 
     const { subjectOptions, educationLevels } = useAppData();
     const { session } = useAuth();
@@ -166,7 +175,7 @@ const Profile = () => {
             </FormContainer>
         </Container>
     );
-};
+}
 
 const FormContainer = styled.form`
     display: flex;

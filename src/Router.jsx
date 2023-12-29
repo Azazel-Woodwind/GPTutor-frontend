@@ -1,4 +1,3 @@
-import * as MyLessons from "./pages/private/Dashboard/MyLessons";
 import * as Users from "./pages/private/Dashboard/Users";
 import * as LessonsDashboard from "./pages/private/Dashboard/LessonsDashboard";
 import * as WaitingList from "./pages/public/WaitingList";
@@ -20,16 +19,16 @@ import * as Quiz from "./pages/private/Quiz";
 import * as Lessons from "./pages/private/Lessons";
 import * as Classroom from "./pages/private/Classroom";
 import * as Unauthorised from "./pages/private/Unauthorised";
-import {
-    Navigate,
-    RouterProvider,
-    createBrowserRouter,
-} from "react-router-dom";
 import PublicFooter from "./components/application/PublicFooter";
 import PublicWrapper from "./pages/public/PublicWrapper";
 import PrivateWrapper from "./pages/private/PrivateWrapper";
 import SettingsWrapper from "./pages/private/Settings/SettingsWrapper";
 import DashboardWrapper from "./pages/private/Dashboard/DashboardWrapper";
+import {
+    Navigate,
+    RouterProvider,
+    createBrowserRouter,
+} from "react-router-dom";
 
 const router = createBrowserRouter([
     {
@@ -136,20 +135,15 @@ const router = createBrowserRouter([
                 element: <DashboardWrapper />,
                 children: [
                     {
-                        path: "/dashboard/my-lessons",
-                        element: <MyLessons.Element />,
-                        action: MyLessons.action,
-                        loader: MyLessons.loader,
+                        path: "/dashboard/lessons",
+                        element: <LessonsDashboard.Element />,
+                        loader: LessonsDashboard.loader,
+                        action: LessonsDashboard.action,
                     },
                     {
                         path: "/dashboard/users",
                         element: <Users.Element />,
                         loader: Users.loader,
-                    },
-                    {
-                        path: "/dashboard/lessons",
-                        element: <LessonsDashboard.Element />,
-                        loader: LessonsDashboard.loader,
                     },
                 ],
             },

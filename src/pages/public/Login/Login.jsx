@@ -8,14 +8,21 @@ import Textfield from "@/components/common/input/Textfield";
 import TextWrapper from "@/components/utils/TextWrapper";
 import LinkWrapper from "@/components/common/dataDisplay/LinkWrapper";
 
+/**
+ * Page that allows users to login to their account.
+ *
+ * @page
+ * @route /login
+ * @public
+ * @returns {JSX.Element} - Renders the login form
+ */
 function Login() {
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const emailInput = React.useRef(null);
     const passwordInput = React.useRef(null);
 
     const { session } = useAuth();
-    const navigate = useNavigate();
 
     const login = async e => {
         e.preventDefault();

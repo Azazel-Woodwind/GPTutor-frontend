@@ -8,8 +8,28 @@ import { useAuth } from "@/context/SessionContext";
 import { capitaliseFirstLetter } from "@/utils/string";
 import { useNotification } from "@/context/NotificationContext";
 
-const Profile = () => {
-    const sendNotification = useNotification();
+const ButtonContainer = styled.div`
+    display: flex;
+    gap: 1.25rem;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`;
+
+/**
+ * Account Settings page.
+ * User can sign out and change their password.
+ *
+ * @page
+ * @route /settings/account
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the account settings.
+ */
+function Account() {
+    const { sendNotification } = useNotification();
     const navigate = useNavigate();
     const { session } = useAuth();
 
@@ -56,16 +76,6 @@ const Profile = () => {
             </ButtonContainer>
         </Container>
     );
-};
+}
 
-const ButtonContainer = styled.div`
-    display: flex;
-    gap: 1.25rem;
-`;
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-`;
-export default Profile;
+export default Account;

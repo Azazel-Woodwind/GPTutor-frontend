@@ -4,7 +4,7 @@ import {
     ButtonRow,
     Content,
     ModalContainer,
-} from "../../Dashboard/components/PublishLessonModal";
+} from "../../Dashboard/LessonsDashboard/components/PublishLessonModal";
 
 function ExitCreateLessonModal({ setConfirmed, isPublished, form, onSubmit }) {
     const publish = isPublished && form.formState.isValid;

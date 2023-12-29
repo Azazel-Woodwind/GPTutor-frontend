@@ -1,16 +1,22 @@
-import * as React from "react";
+import React from "react";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/SessionContext";
 
+/**
+ * Context for socket connection.
+ */
 export const SocketContext = React.createContext({
     Socket: null,
 });
 
-export function useSocket() {
-    return React.useContext(SocketContext);
-}
-
+/**
+ * Provider component for SocketContext.
+ *
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components.
+ * @returns {React.ReactNode} The provider component.
+ */
 export function SocketContextProvider({ children }) {
     const navigate = useNavigate();
     const [Socket, setSocket] = React.useState(null);
@@ -55,4 +61,13 @@ export function SocketContextProvider({ children }) {
             {children}
         </SocketContext.Provider>
     );
+}
+
+/**
+ * Custom hook to use SocketContext.
+ *
+ * @returns {object} Socket instance from context.
+ */
+export function useSocket() {
+    return React.useContext(SocketContext);
 }

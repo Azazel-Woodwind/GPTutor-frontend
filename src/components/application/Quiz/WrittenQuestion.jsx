@@ -1,9 +1,20 @@
 import Textfield from "@/components/common/input/Textfield";
 import React from "react";
 
+/**
+ * WrittenQuestion - A component for displaying and interacting with a written quiz question.
+ * It allows users to input their answer into a text field and handles the submission of the answer.
+ *
+ * @param {Object} props - The component props.
+ * @param {Object} props.question - The question object containing details about the question.
+ * @param {string} props.answer - The current answer input by the user.
+ * @param {Function} props.setAnswer - Function to set the user's answer.
+ * @param {Function} props.submitAnswer - Function to submit the answer to the question.
+ * @param {boolean} props.loading - Indicates if the question is in the loading state.
+ * @returns {React.Component} Component for rendering a written question and its answer field.
+ */
 function WrittenQuestion({
     question,
-    questionIndex,
     answer,
     setAnswer,
     submitAnswer,

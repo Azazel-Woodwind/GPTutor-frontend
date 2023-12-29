@@ -1,8 +1,9 @@
 import HeaderContainer from "@/components/application/Header/HeaderContainer";
-import { LogoSvg } from "@/components/application/Header/MainHeader";
-import ExitButton from "@/components/common/input/ExitButton";
+import ExitButton from "@/components/application/Header/ExitButton";
 import React from "react";
 import styled from "styled-components";
+import LogoSvg from "@/components/application/Header/LogoSvg";
+import ProgressBar from "@/components/common/feedback/ProgressBar";
 
 function ClassroomHeader({
     learningObjectiveNumber,

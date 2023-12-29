@@ -6,6 +6,15 @@ const EASE_IN_OUT_KEYFRAMES = {
     calcMode: "spline",
 }; // do NOT change any of these numbers, they are very carefully calculated
 
+/**
+ * SvgLinearGradient - A component for creating a linear gradient within an SVG element.
+ * It includes predefined color stops and animations to create a dynamic visual effect.
+ * The gradient animation uses carefully calculated ease-in-out keyframes.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.gradientID - The unique identifier for the gradient, used in the 'id' attribute.
+ * @returns {React.Component} A linearGradient SVG element with predefined color stops and animations.
+ */
 function SvgLinearGradient({ gradientID }) {
     return (
         <linearGradient

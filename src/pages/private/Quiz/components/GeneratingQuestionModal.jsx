@@ -1,5 +1,5 @@
 import React from "react";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "@/hooks/useModal";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import { motion } from "framer-motion";
 import { fade_animation } from "@/lib/animation";

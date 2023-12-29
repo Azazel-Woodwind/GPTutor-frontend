@@ -1,12 +1,18 @@
 import React from "react";
 
-const Logo = ({ size, className, ...props }) => {
+/**
+ * The XTutor logo.
+ *
+ * @param {object} props - The component props.
+ *
+ * @returns {JSX.Element} The logo SVG.
+ */
+function Logo(props) {
     return (
         <svg
             viewBox="0 0 476 114"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className={className}
             {...props}>
             <g filter="url(#filter0_d_197_143)">
                 <path
@@ -52,6 +58,6 @@ const Logo = ({ size, className, ...props }) => {
             </defs>
         </svg>
     );
-};
+}
 
 export default Logo;

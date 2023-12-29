@@ -1,17 +1,37 @@
-import * as React from "react";
+import React from "react";
 import supabase from "@/api/configs/supabase";
-import Loading from "@/pages/public/Loading/Loading";
+import Loading from "@/components/common/feedback/Loading";
 
-export const useAuth = () => React.useContext(SessionContext);
+/**
+ * Context for user session and authentication state.
+ */
+export const SessionContext = React.createContext({
+    session: null,
+    setSession: () => {},
+    loading: true,
+    setLoading: () => {},
+    event: null,
+});
 
-export const SessionContext = React.createContext();
-
+/**
+ * Provider component for SessionContext.
+ * Manages user session state, loading state, and authentication events.
+ *
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components.
+ * @returns {React.ReactNode} The provider component with SessionContext.
+ */
 export function SessionContextProvider({ children }) {
     const [session, setSession] = React.useState(undefined);
-    const [fetchedData, setFetchedData] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [event, setEvent] = React.useState(null);
 
+    /**
+     * Fetch user data from the database.
+     *
+     * @param {string} id - User ID to fetch data for.
+     * @returns {Promise<object|null>} User data object or null on error.
+     */
     const getUserData = async id => {
         const { data, error: userError } = await supabase
             .from("users")
@@ -28,6 +48,9 @@ export function SessionContextProvider({ children }) {
         return { ...data.access_levels, new: data.new };
     };
 
+    /**
+     * Initialize the user session and set up authentication state change handler.
+     */
     const initialiseSession = async () => {
         supabase.auth.onAuthStateChange(async (_event, newSession) => {
             // console.log("EVENT:", _event);
@@ -74,4 +97,13 @@ export function SessionContextProvider({ children }) {
             {session !== undefined && children}
         </SessionContext.Provider>
     );
+}
+
+/**
+ * Custom hook to use SessionContext.
+ *
+ * @returns {object} The current session and related functions from context.
+ */
+export function useAuth() {
+    return React.useContext(SessionContext);
 }

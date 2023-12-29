@@ -1,5 +1,3 @@
-//If we're going to reuse animations a massive amount define them here
-
 import { RGBAarrToString, splitRGBA } from "@/utils/css";
 import { interpolateArrays } from "@/utils/misc";
 
@@ -22,36 +20,6 @@ export const fade_animation = ({ delayed = false } = {}) => ({
 });
 
 export const fade_exit = { opacity: 0, transition: { duration: 0.5 } };
-
-export function splitBezierAtT(p0, p1, p2, p3, t) {
-    let q0 = (1 - t) * p0 + t * p1;
-    let q1 = (1 - t) * p1 + t * p2;
-    let q2 = (1 - t) * p2 + t * p3;
-
-    let r0 = (1 - t) * q0 + t * q1;
-    let r1 = (1 - t) * q1 + t * q2;
-
-    let s = (1 - t) * r0 + t * r1;
-
-    return [s, r1, q2, p3];
-}
-
-export function inverseEaseOut(x, epsilon = 1e-6) {
-    let lower = 0,
-        upper = 1,
-        guess;
-
-    while (upper - lower > epsilon) {
-        guess = (upper + lower) / 2;
-        if (easeOut(guess) < x) {
-            lower = guess;
-        } else {
-            upper = guess;
-        }
-    }
-
-    return (upper + lower) / 2;
-}
 
 export function correctAnimation(animation, progress) {
     if (!animation) return;

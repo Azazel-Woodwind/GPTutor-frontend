@@ -1,13 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from "@/context/SessionContext";
-import FillParent from "../../../components/common/layout/FillParent";
+import FillParent from "@/components/common/layout/FillParent";
 import { Outlet } from "react-router-dom";
 import { ADMIN_ACCESS_LEVEL } from "@/lib/accessLevels";
 import { UserBadge } from "@styled-icons/boxicons-solid/UserBadge";
-import { AlternateGlobalStyle } from "../../../styles/GlobalStyles";
-import MenuElement from "../../../components/application/Menu/MenuElement";
-import MenuIcon from "../../../components/application/Menu/MenuIcon";
+import { AlternateGlobalStyle } from "@/styles/GlobalStyles";
+import MenuElement from "@/components/application/NavigationMenu/MenuElement";
+import MenuIcon from "@/components/application/NavigationMenu/MenuIcon";
+import RouteProtector from "@/components/auth/RouteProtector";
 
 const Users = MenuIcon(UserBadge);
 
@@ -16,29 +17,31 @@ const Dashboard = () => {
     const { session } = useAuth();
 
     return (
-        <Container>
-            <AlternateGlobalStyle />
-            <UsedSpace>
-                <DashboardNav>
-                    <MenuElement Icon={Users} subPath="my-lessons">
-                        My Lessons
-                    </MenuElement>
-                    {session?.user?.accessLevel >= ADMIN_ACCESS_LEVEL && (
-                        <>
-                            <MenuElement Icon={Users} subPath="users">
-                                Users
-                            </MenuElement>
-                            <MenuElement Icon={Users} subPath="lessons">
-                                Lessons
-                            </MenuElement>
-                        </>
-                    )}
-                </DashboardNav>
-                <Page>
-                    <Outlet />
-                </Page>
-            </UsedSpace>
-        </Container>
+        <RouteProtector accessLevel={ADMIN_ACCESS_LEVEL}>
+            <Container>
+                <AlternateGlobalStyle />
+                <UsedSpace>
+                    <DashboardNav>
+                        <MenuElement Icon={Users} subPath="lessons">
+                            Lessons
+                        </MenuElement>
+                        {session?.user?.accessLevel >= ADMIN_ACCESS_LEVEL && (
+                            <>
+                                <MenuElement Icon={Users} subPath="users">
+                                    Users
+                                </MenuElement>
+                                <MenuElement Icon={Users} subPath="lessons">
+                                    Lessons
+                                </MenuElement>
+                            </>
+                        )}
+                    </DashboardNav>
+                    <Page>
+                        <Outlet />
+                    </Page>
+                </UsedSpace>
+            </Container>
+        </RouteProtector>
     );
 };
 

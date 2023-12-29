@@ -1,17 +1,25 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import useXQuiz from "../../../hooks/useX/useXQuiz";
-import useConversationDisplay from "../../../hooks/useConversationDisplay";
+import useXQuiz from "./useXQuiz";
+import useConversationDisplay from "@/hooks/useConversationDisplay";
 import styled from "styled-components";
 import EndOfQuizModal from "./components/EndOfQuizModal";
 import { AnimatePresence, motion } from "framer-motion";
-import Loading from "@/pages/public/Loading/Loading";
-import { useHeader } from "../../../context/HeaderContext";
+import Loading from "@/components/common/feedback/Loading";
+import { useHeader } from "@/context/HeaderContext";
 import QuizHeader from "./components/QuizHeader";
-import QuizAPI from "../../../api/QuizAPI";
+import QuizAPI from "@/api/QuizAPI";
 import Question from "./components/Question";
 import { fade_animation } from "@/lib/animation";
 
+/**
+ * The Quiz environment, where the user is tested on a lesson by X.
+ *
+ * @page
+ * @route /quiz/:lessonName?id=:lessonId
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - A page of quiz questions.
+ */
 function Quiz() {
     useConversationDisplay(false);
 

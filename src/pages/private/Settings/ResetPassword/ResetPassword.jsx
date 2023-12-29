@@ -5,12 +5,21 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotification } from "@/context/NotificationContext";
 import UserAPI from "@/api/UserAPI";
-import PasswordSection from "../../../../components/application/PasswordSection";
+import PasswordSection from "@/components/application/PasswordSection";
 import Button from "@/components/common/input/Button";
-import { ResetPasswordSchema } from "../../RecoverPassword/RecoverPassword";
+import ResetPasswordSchema from "@/lib/schemas/resetPasswordSchema";
 
+/**
+ * Reset Password page.
+ * User can reset their password.
+ *
+ * @page
+ * @route /settings/reset-password
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the reset password form.
+ */
 function ResetPassword() {
-    const sendNotification = useNotification();
+    const { sendNotification } = useNotification();
 
     const form = useForm({
         mode: "onChange",

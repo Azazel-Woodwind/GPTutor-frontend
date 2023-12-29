@@ -1,20 +1,28 @@
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import React from "react";
 import styled from "styled-components";
-import useXLesson from "../../../hooks/useX/useXLesson";
-import useConversationDisplay from "../../../hooks/useConversationDisplay";
+import useXLesson from "./useXLesson";
+import useConversationDisplay from "@/hooks/useConversationDisplay";
 import { fade_animation } from "@/lib/animation";
 import StartLessonModal from "./components/StartLessonModal";
-import ChatSection from "../../../components/application/Chat/ChatSection";
+import ChatSection from "@/components/application/Chat";
 import EndOfLessonModal from "./components/EndOfLessonModal";
 import ClassroomHeader from "./components/ClassroomHeader";
-import { useHeader } from "../../../context/HeaderContext";
+import { useHeader } from "@/context/HeaderContext";
 import Question from "./components/Question";
 import { useLoaderData } from "react-router-dom";
-import Loading from "@/pages/public/Loading/Loading";
+import Loading from "@/components/common/feedback/Loading";
 import XAvatar from "@/components/application/XAvatar";
 import ImageCarousel from "@/components/common/dataDisplay/ImageCarousel";
 
+/**
+ * The Classroom environment, where the user is taught a lesson by X.
+ *
+ * @page
+ * @route /lessons/:lessonName?id=:lessonId
+ * @accessLevel 1 - Student
+ * @returns {JSX.Element} - Renders the classroom environment.
+ */
 function Classroom() {
     const currentLesson = useLoaderData();
 
