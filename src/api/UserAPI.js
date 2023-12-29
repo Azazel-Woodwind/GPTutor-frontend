@@ -180,13 +180,6 @@ const UserAPI = {
      */
     getAll: async function () {
         const res = await apiClient.get("/users");
-
-        if (res.status === 401) throw new Error("Unauthorised. No user found.");
-        if (res.status === 403)
-            throw new Error("Forbidden. Insufficient access level.");
-        if (res.status !== 200)
-            throw new Error("Something went wrong. Please try again later.");
-
         return res.data;
     },
 
@@ -200,13 +193,6 @@ const UserAPI = {
      */
     deleteById: async function (id) {
         const res = await apiClient.delete(`/users/${id}`);
-
-        if (res.status === 401) throw new Error("Unauthorised. No user found.");
-        if (res.status === 403)
-            throw new Error("Forbidden. Insufficient access level.");
-        if (res.status !== 204)
-            throw new Error("Something went wrong. Please try again later.");
-
         return res.data;
     },
 
@@ -221,13 +207,6 @@ const UserAPI = {
      */
     updateById: async function (id, data) {
         const res = await apiClient.put(`/users/${id}`, data);
-
-        if (res.status === 401) throw new Error("Unauthorised. No user found.");
-        if (res.status === 403)
-            throw new Error("Forbidden. Insufficient access level.");
-        if (res.status !== 200)
-            throw new Error("Something went wrong. Please try again later.");
-
         return res.data;
     },
 };

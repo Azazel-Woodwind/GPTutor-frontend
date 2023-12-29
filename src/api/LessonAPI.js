@@ -42,21 +42,8 @@ const LessonAPI = {
      * @throws Throws an error if the lesson is not found or the query fails.
      */
     getLessonById: async function (lesson_id) {
-        try {
-            const res = await apiClient.get(`/lessons/${lesson_id}`);
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.get(`/lessons/${lesson_id}`);
+        return res.data;
     },
 
     /**
@@ -68,23 +55,10 @@ const LessonAPI = {
      * @throws Throws an error if the update operation fails.
      */
     togglePublishById: async function (lesson_id, is_published) {
-        try {
-            const res = await apiClient.patch(`/lessons/${lesson_id}`, {
-                is_published,
-            });
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.patch(`/lessons/${lesson_id}`, {
+            is_published,
+        });
+        return res.data;
     },
 
     /**
@@ -96,21 +70,8 @@ const LessonAPI = {
      * @throws Throws an error if the deletion operation fails.
      */
     deleteOwnedByid: async function (lesson_id) {
-        try {
-            const res = await apiClient.delete(`/lessons/${lesson_id}`);
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.delete(`/lessons/${lesson_id}`);
+        return res.data;
     },
 
     /**
@@ -123,21 +84,8 @@ const LessonAPI = {
      * @throws Throws an error if the update operation fails.
      */
     updateById: async function (lesson_id, newLesson) {
-        try {
-            const res = await apiClient.put(`/lessons/${lesson_id}`, newLesson);
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.put(`/lessons/${lesson_id}`, newLesson);
+        return res.data;
     },
 
     /**
@@ -149,22 +97,8 @@ const LessonAPI = {
      * @throws Throws an error if the creation operation fails.
      */
     create: async function (newLesson) {
-        // console.log(newLesson);
-        try {
-            const res = await apiClient.post("/lessons", newLesson);
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.post("/lessons", newLesson);
+        return res.data;
     },
 
     /**
@@ -175,21 +109,8 @@ const LessonAPI = {
      * @throws Throws an error if not authorized or if the request fails.
      */
     getAll: async function () {
-        try {
-            const res = await apiClient.get("/lessons");
-            return res.data;
-        } catch (error) {
-            if (error.response?.status === 401)
-                throw new Error("Unauthorised. No user found.");
-            if (error.response?.status === 403)
-                throw new Error("Forbidden. Insufficient access level.");
-            if (error.response?.status !== 200)
-                throw new Error(
-                    "Something went wrong. Please try again later."
-                );
-
-            throw error;
-        }
+        const res = await apiClient.get("/lessons");
+        return res.data;
     },
 };
 
