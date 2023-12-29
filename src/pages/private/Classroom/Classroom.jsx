@@ -5,7 +5,7 @@ import useXLesson from "../../../hooks/useX/useXLesson";
 import useConversationDisplay from "../../../hooks/useConversationDisplay";
 import { fade_animation } from "@/lib/animation";
 import StartLessonModal from "./components/StartLessonModal";
-import ChatSection from "../../../components/application/Chat/Chat";
+import ChatSection from "../../../components/application/Chat";
 import EndOfLessonModal from "./components/EndOfLessonModal";
 import ClassroomHeader from "./components/ClassroomHeader";
 import { useHeader } from "../../../context/HeaderContext";
@@ -13,7 +13,7 @@ import Question from "./components/Question";
 import { useLoaderData } from "react-router-dom";
 import Loading from "@/components/common/feedback/Loading";
 import XAvatar from "@/components/application/XAvatar";
-import ImageCarousel from "@/components/common/dataDisplay/ImageCarousel/ImageCarousel";
+import ImageCarousel from "@/components/common/dataDisplay/ImageCarousel";
 
 /**
  * The Classroom environment, where the user is taught a lesson by X.

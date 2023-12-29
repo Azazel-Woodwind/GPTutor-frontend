@@ -1,7 +1,7 @@
 import { VolumeUp } from "@styled-icons/material-sharp/VolumeUp";
 import { VolumeOff } from "@styled-icons/material-sharp/VolumeOff";
 import { AnimatePresence, motion } from "framer-motion";
-import IconButton from "@/components/common/input/IconButton/IconButton";
+import IconButton from "@/components/common/input/IconButton";
 import styled from "styled-components";
 import React from "react";
 import SpeedChangerButton from "./SpeedChangerButton";

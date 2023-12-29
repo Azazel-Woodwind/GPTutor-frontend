@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller } from "react-hook-form";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 
 function PasswordSection({ form }) {
     const { trigger } = form;

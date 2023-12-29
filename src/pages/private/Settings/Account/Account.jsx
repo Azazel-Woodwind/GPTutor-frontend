@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import supabase from "@/api/configs/supabase";
-import Button from "@/components/common/input/Button/Button";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Button from "@/components/common/input/Button";
+import Textfield from "@/components/common/input/Textfield";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/SessionContext";
 import { capitaliseFirstLetter } from "@/utils/string";

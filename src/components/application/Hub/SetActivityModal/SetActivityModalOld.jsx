@@ -6,14 +6,14 @@ import {
     education_level_schema,
     subject_schema,
 } from "@/lib/schemas/userFormSchema";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import RadioButton from "@/components/common/input/RadioButton";
 import { useAppData } from "@/context/AppDataContext";
 import styled, { css } from "styled-components";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@/components/common/input/Button/Button";
-import DropdownList from "@/components/common/input/DropdownLists/BasicDropdownList/BasicDropdownList";
+import Button from "@/components/common/input/Button";
+import DropdownList from "@/components/common/input/DropdownLists/BasicDropdownList";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 
 const SubjectTopics = {

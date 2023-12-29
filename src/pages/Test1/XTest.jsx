@@ -1,5 +1,5 @@
 import XAvatar from "@/components/application/XAvatar";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import React from "react";

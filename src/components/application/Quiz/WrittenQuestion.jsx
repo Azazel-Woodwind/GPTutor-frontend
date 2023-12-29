@@ -1,4 +1,4 @@
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 import React from "react";
 
 /**

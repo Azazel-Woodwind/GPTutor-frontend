@@ -128,27 +128,26 @@ function ProgressBar({
                 const active = lastCrossed >= index;
 
                 return (
-                    <>
-                        <Stop
+                    <Stop
+                        key={index}
+                        location={percentage}
+                        active={active}
+                        stopSize={stopSize}>
+                        <Label
                             location={percentage}
                             active={active}
                             stopSize={stopSize}>
-                            <Label
-                                location={percentage}
-                                active={active}
-                                stopSize={stopSize}>
-                                <TextWrapper
-                                    noWrap
-                                    color={
-                                        !active
-                                            ? theme.colours.primaryFaded
-                                            : theme.colours.primaryStrong
-                                    }>
-                                    {stop.label}
-                                </TextWrapper>
-                            </Label>
-                        </Stop>
-                    </>
+                            <TextWrapper
+                                noWrap
+                                color={
+                                    !active
+                                        ? theme.colours.primaryFaded
+                                        : theme.colours.primaryStrong
+                                }>
+                                {stop.label}
+                            </TextWrapper>
+                        </Label>
+                    </Stop>
                 );
             })}
             <ProgressContainer width={width} reverse={reverse}>

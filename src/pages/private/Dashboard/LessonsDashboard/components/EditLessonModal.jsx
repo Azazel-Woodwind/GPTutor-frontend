@@ -4,7 +4,7 @@ import TextWrapper from "@/components/utils/TextWrapper";
 import { Content } from "./PublishLessonModal";
 import { ButtonRow } from "./PublishLessonModal";
 import { ModalContainer } from "./PublishLessonModal";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 function EditLessonModal({ lesson, handleClose }) {
     const navigate = useNavigate();

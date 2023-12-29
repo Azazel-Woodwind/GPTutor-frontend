@@ -8,7 +8,7 @@ import NavigationBlockerModal from "./NavigationBlockerModal";
  *
  * @returns {Object} An object containing the NavigationBlockerModal component and its props, along with a confirmed state and setter.
  */
-export function useNavigationBlocker() {
+function useNavigationBlocker() {
     const [confirmed, setConfirmed] = React.useState(undefined);
 
     return {

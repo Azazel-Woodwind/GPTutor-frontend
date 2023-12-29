@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Notification from "../components/common/feedback/Notification/Notification";
+import Notification from "../components/common/feedback/Notification";
 
 /**
  * Styled container for notifications.
@@ -37,9 +37,7 @@ export const NotificationContext = React.createContext({
 export function NotificationContextProvider({ children }) {
     const [notifications, setNotifications] = React.useState([]);
 
-    const {
-        sendNotification,
-    } = props => {
+    const sendNotification = props => {
         const key = Date.now();
         setNotifications(prev => [
             ...prev,

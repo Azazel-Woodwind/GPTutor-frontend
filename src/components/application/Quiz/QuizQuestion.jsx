@@ -47,7 +47,7 @@ function QuizQuestion({
     const theme = useTheme();
     // console.log(questions[i].type);
     // console.log(selectedChoiceIndex);
-    console.log(generatingFeedback);
+    // console.log(generatingFeedback);
 
     return (
         <CenteredColumn

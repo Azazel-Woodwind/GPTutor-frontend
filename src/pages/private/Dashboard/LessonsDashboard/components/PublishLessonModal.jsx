@@ -4,11 +4,10 @@ import CenteredRow from "@/components/common/layout/CenteredRow";
 import { useSubmit } from "react-router-dom";
 import styled, { useTheme } from "styled-components";
 import TextWrapper from "@/components/utils/TextWrapper";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
-function PublishLessonModal({ lesson, handleClose, onAdminDashboard }) {
+function PublishLessonModal({ lesson, handleClose }) {
     const submit = useSubmit();
-    const theme = useTheme();
 
     return (
         <ModalContainer fillparent>
@@ -16,10 +15,6 @@ function PublishLessonModal({ lesson, handleClose, onAdminDashboard }) {
                 <TextWrapper fontSize="xl" fontWeight="bold">
                     Are you sure you would like to publish the lesson titled '
                     {lesson.title}'?
-                </TextWrapper>
-                <TextWrapper fontSize="lg">
-                    This lesson will need to be verified by an administrator
-                    before it becomes publicly available.
                 </TextWrapper>
             </Content>
             <ButtonRow>
@@ -29,20 +24,10 @@ function PublishLessonModal({ lesson, handleClose, onAdminDashboard }) {
                 <Button
                     onClick={() => {
                         console.log(lesson);
-                        if (onAdminDashboard) {
-                            submit(
-                                { ...lesson, action: "togglePublished" },
-                                {
-                                    method: "put",
-                                    action: "/dashboard/lessons",
-                                }
-                            );
-                        } else {
-                            submit(lesson, {
-                                method: "put",
-                                action: "/dashboard/my-lessons",
-                            });
-                        }
+                        submit(lesson, {
+                            method: "patch",
+                            action: "/dashboard/lessons",
+                        });
 
                         handleClose();
                     }}>

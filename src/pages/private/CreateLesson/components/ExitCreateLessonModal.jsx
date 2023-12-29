@@ -1,4 +1,4 @@
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import TextWrapper from "@/components/utils/TextWrapper";
 import {
     ButtonRow,

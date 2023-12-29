@@ -30,6 +30,7 @@ export function AppDataContextProvider({ children }) {
 
     // Fetch and set data for subjects, education levels, exam boards, and usage plans on component mount
     React.useEffect(() => {
+        // use Promise.allSettled
         Promise.all([
             SubjectsAPI.getAll().then(setSubjectOptions),
             EducationLevelsAPI.getAll().then(setEducationLevels),

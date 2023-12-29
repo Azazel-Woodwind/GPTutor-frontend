@@ -1,5 +1,5 @@
 import React from "react";
-import IconButton from "@/components/common/input/IconButton/IconButton";
+import IconButton from "@/components/common/input/IconButton";
 import { EyeOutline } from "@styled-icons/evaicons-outline/EyeOutline";
 import { EyeOffOutline } from "@styled-icons/evaicons-outline/EyeOffOutline";
 import { EndAdornmentWrapper, TextInputStyle } from "./TextInput.styles";

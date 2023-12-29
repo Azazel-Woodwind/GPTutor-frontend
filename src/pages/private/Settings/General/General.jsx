@@ -1,12 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from "@/context/SessionContext";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "@/hooks/useModal";
 import XSpeakModal from "./components/XSpeakModal";
 import { nanoid } from "nanoid";
 import supabase from "@/api/configs/supabase";
-import ProgressBar from "@/components/common/feedback/ProgressBar/ProgressBar";
-import Checkbox from "@/components/common/input/Checkbox/Checkbox";
+import ProgressBar from "@/components/common/feedback/ProgressBar";
+import Checkbox from "@/components/common/input/Checkbox";
 
 const max = 200000;
 

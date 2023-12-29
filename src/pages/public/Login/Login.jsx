@@ -4,7 +4,7 @@ import { useAuth } from "@/context/SessionContext";
 import { Link, useNavigate } from "react-router-dom";
 import UserAPI from "@/api/UserAPI";
 import XForm from "@/components/application/XForm";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 import TextWrapper from "@/components/utils/TextWrapper";
 import LinkWrapper from "@/components/common/dataDisplay/LinkWrapper";
 
@@ -23,7 +23,6 @@ function Login() {
     const passwordInput = React.useRef(null);
 
     const { session } = useAuth();
-    const navigate = useNavigate();
 
     const login = async e => {
         e.preventDefault();

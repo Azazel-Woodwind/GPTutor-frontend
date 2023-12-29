@@ -1,7 +1,7 @@
 import { ButtonRow, Content, ModalContainer } from "./PublishLessonModal";
 import TextWrapper from "@/components/utils/TextWrapper";
 import { useSubmit } from "react-router-dom";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 function UnpublishLessonModal({ lesson, handleClose }) {
     const submit = useSubmit();
@@ -13,10 +13,6 @@ function UnpublishLessonModal({ lesson, handleClose }) {
                     Are you sure you would like to unpublish the lesson titled '
                     {lesson.title}'?
                 </TextWrapper>
-                <TextWrapper fontSize="lg">
-                    If you do, the lesson will need to be re-verified by an
-                    administrator before being published again.
-                </TextWrapper>
             </Content>
             <ButtonRow>
                 <Button onClick={handleClose} type="error">
@@ -25,8 +21,8 @@ function UnpublishLessonModal({ lesson, handleClose }) {
                 <Button
                     onClick={() => {
                         submit(lesson, {
-                            method: "put",
-                            action: "/dashboard/my-lessons",
+                            method: "patch",
+                            action: "/dashboard/lessons",
                         });
                         handleClose();
                     }}>

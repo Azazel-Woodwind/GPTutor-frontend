@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Logo from "../common/graphics/Logo";
-import useXAvatar from "../../hooks/useXAvatar/useXAvatar";
+import useXAvatar from "../../hooks/useXAvatar";
 
 const Slogan = styled.div`
     padding: 0;

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import styled from "styled-components";
-import Navigation from "./Navigation/Navigation";
+import Navigation from "./Navigation";
 import HeaderContainer from "@/components/application/Header/HeaderContainer";
 import LogoSvg from "./LogoSvg";
 

@@ -30,15 +30,6 @@ function OutlinedIconButton({
     scale,
     ...props
 }) {
-    if (!props.disabled) {
-        props = {
-            ...props,
-            whileFocus: { scale: 1.1, transition: { duration: 0.2 } },
-            whileHover: { scale: 1.1, transition: { duration: 0.2 } },
-            whileTap: { scale: 0.95 },
-        };
-    }
-
     const [hovering, setHovering] = React.useState(false);
 
     const gradientID1 = React.useMemo(nanoid, []);

@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "@/components/common/input/Button/Button";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import Button from "@/components/common/input/Button";
+import RadioButton from "@/components/common/input/RadioButton";
 import { useAppData } from "@/context/AppDataContext";
 import { Controller, useForm } from "react-hook-form";
 import { useAuth } from "@/context/SessionContext";
 import { capitaliseFirstLetter, formatEducationLevel } from "@/utils/string";
 import { useNotification } from "@/context/NotificationContext";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
-import Select from "@/components/common/input/MultiSelect/MultiSelect";
+import Select from "@/components/common/input/MultiSelect";
 import UserAPI from "@/api/UserAPI";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 

@@ -2,9 +2,9 @@ import React from "react";
 import { ButtonRow, ModalContainer } from "./PublishLessonModal";
 import TextWrapper from "@/components/utils/TextWrapper";
 import { useSubmit } from "react-router-dom";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
-function DeleteLessonModal({ lesson, handleClose, onAdminDashboard }) {
+function DeleteLessonModal({ lesson, handleClose }) {
     const submit = useSubmit();
 
     return (
@@ -25,9 +25,7 @@ function DeleteLessonModal({ lesson, handleClose, onAdminDashboard }) {
                     onClick={() => {
                         submit(lesson, {
                             method: "delete",
-                            action: onAdminDashboard
-                                ? "/dashboard/lessons"
-                                : "/dashboard/my-lessons",
+                            action: "/dashboard/lessons",
                         });
                         handleClose();
                     }}>

@@ -2,7 +2,7 @@ import React from "react";
 import { useSubmit } from "react-router-dom";
 import TextWrapper from "@/components/utils/TextWrapper";
 import { ButtonRow, ModalContainer } from "./PublishLessonModal";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 function ApproveLessonModal({ lesson, handleClose }) {
     const submit = useSubmit();

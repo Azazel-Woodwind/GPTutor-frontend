@@ -1,7 +1,7 @@
 import React from "react";
 import { ButtonRow, ModalContainer } from "./PublishLessonModal";
 import TextWrapper from "@/components/utils/TextWrapper";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 function InvalidLessonModal({ handleClose }) {
     return (

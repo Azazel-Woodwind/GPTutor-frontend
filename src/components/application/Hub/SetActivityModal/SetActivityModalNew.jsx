@@ -2,7 +2,7 @@ import React from "react";
 import { useAppData } from "@/context/AppDataContext";
 import styled, { css } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
-import DropdownListNew from "@/components/common/input/DropdownLists/FancyDropdownList/FancyDropdownList";
+import DropdownListNew from "@/components/common/input/DropdownLists/FancyDropdownList";
 
 const activityOptions = ["Discussion", "Quiz", "Revision Notes", "Debate"];
 

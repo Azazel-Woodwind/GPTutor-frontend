@@ -2,15 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { useLocation } from "react-router-dom";
 import { CrossSvgData, MicSvgData } from "@/lib/svgIconData";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import { Send } from "@styled-icons/material/Send";
 import CenteredRow from "@/components/common/layout/CenteredRow";
 import { MAX_PROMPT_LENGTH } from "../../../lib/constants";
 import { useChatContext } from "@/context/ChatContext";
-import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
+import useFillingButton from "@/hooks/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";
 import { SocketContext } from "@/context/SocketContext";
-import IconButton from "@/components/common/input/IconButton/IconButton";
+import IconButton from "@/components/common/input/IconButton";
 import { TextInputStyle } from "@/components/common/input/Textfield/TextInput/TextInput.styles";
 
 const ChatForm = styled.form`

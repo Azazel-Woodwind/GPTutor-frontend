@@ -22,8 +22,8 @@ const Dashboard = () => {
                 <AlternateGlobalStyle />
                 <UsedSpace>
                     <DashboardNav>
-                        <MenuElement Icon={Users} subPath="my-lessons">
-                            My Lessons
+                        <MenuElement Icon={Users} subPath="lessons">
+                            Lessons
                         </MenuElement>
                         {session?.user?.accessLevel >= ADMIN_ACCESS_LEVEL && (
                             <>

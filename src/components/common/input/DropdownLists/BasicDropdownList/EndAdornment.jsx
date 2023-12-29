@@ -1,6 +1,6 @@
 import React from "react";
 import CenteredRow from "@/components/common/layout/CenteredRow";
-import IconButton from "@/components/common/input/IconButton/IconButton";
+import IconButton from "@/components/common/input/IconButton";
 import { CloseOutline } from "@styled-icons/evaicons-outline/CloseOutline";
 import { ArrowIosUpward } from "@styled-icons/evaicons-solid/ArrowIosUpward";
 import { ArrowIosDownward } from "@styled-icons/evaicons-solid/ArrowIosDownward";

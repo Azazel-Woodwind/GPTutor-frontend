@@ -3,7 +3,7 @@ import {
     unstable_useBlocker as useBlocker,
     useNavigate,
 } from "react-router-dom";
-import useModal from "../useModal/useModal";
+import useModal from "../useModal";
 
 /**
  * NavigationBlockerModal - A component to block navigation away from the current page.

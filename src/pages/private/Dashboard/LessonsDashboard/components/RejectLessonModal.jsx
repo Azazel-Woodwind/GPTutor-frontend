@@ -1,6 +1,6 @@
 import { useSubmit } from "react-router-dom";
 import TextWrapper from "@/components/utils/TextWrapper";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import { ButtonRow } from "./PublishLessonModal";
 
 function RejectLessonModal({ lesson, handleClose }) {

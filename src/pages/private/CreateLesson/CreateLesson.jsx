@@ -4,22 +4,23 @@ import LessonAPI from "../../../api/LessonAPI";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import styled from "styled-components";
 import CenteredRow from "@/components/common/layout/CenteredRow";
-import Textfield from "@/components/common/input/Textfield/Textfield";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
-import Button from "@/components/common/input/Button/Button";
-import Checkbox from "@/components/common/input/Checkbox/Checkbox";
+import Textfield from "@/components/common/input/Textfield";
+import RadioButton from "@/components/common/input/RadioButton";
+import Button from "@/components/common/input/Button";
+import Checkbox from "@/components/common/input/Checkbox";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { formatEducationLevel, formatSubject } from "@/utils/string";
-import DropdownList from "@/components/common/input/DropdownLists/BasicDropdownList/BasicDropdownList";
+import DropdownList from "@/components/common/input/DropdownLists/BasicDropdownList";
 import { useNotification } from "@/context/NotificationContext";
 import { lessonFormSchema } from "@/lib/schemas/lessonFormSchema";
 import { useAppData } from "@/context/AppDataContext";
 import { zodResolver } from "@hookform/resolvers/zod";
-import CustomSelect from "@/components/common/input/MultiSelect/MultiSelect";
+import CustomSelect from "@/components/common/input/MultiSelect";
 import LearningObjective from "./components/LearningObjective";
 import ExitCreateLessonModal from "./components/ExitCreateLessonModal";
-import { useNavigationBlocker } from "@/hooks/useNavigationBlocker/useNavigationBlocker";
+import useNavigationBlocker from "@/hooks/useNavigationBlocker";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
+import { ErrorText } from "@/components/common/input/Textfield/Textfield.styles";
 
 const CreateLessonForm = styled.form`
     margin: 0 auto;
@@ -124,10 +125,9 @@ function CreateLesson({ action }) {
         console.log(currentLesson);
 
         form.reset({
-            title: currentLesson.title || undefined,
-            education_level: formatEducationLevel(
-                currentLesson.education_level
-            ),
+            title: currentLesson.title ?? "",
+            education_level:
+                formatEducationLevel(currentLesson.education_level) ?? "",
             subject: formatSubject(currentLesson.subject) ?? "",
             exam_boards: currentLesson.exam_boards ?? [],
             caption: currentLesson.caption ?? "",
@@ -218,16 +218,15 @@ function CreateLesson({ action }) {
             console.log(lessonData);
             let newLesson;
             if (action === "edit") {
-                newLesson = await LessonAPI.updateOwnedByid(
-                    lesson.id,
-                    lessonData
-                );
+                console.log("updating lesson");
+                newLesson = await LessonAPI.updateById(lesson.id, lessonData);
                 sendNotification({
                     label: "Lesson successfully updated!",
                     duration: 5,
                     type: "success",
                 });
             } else {
+                console.log("creating lesson");
                 newLesson = await LessonAPI.create(lessonData);
                 sendNotification({
                     label: is_published
@@ -255,8 +254,6 @@ function CreateLesson({ action }) {
                 duration: 5,
                 type: "error",
             });
-
-            throw error;
         }
     };
 

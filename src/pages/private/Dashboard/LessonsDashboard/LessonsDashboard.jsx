@@ -3,12 +3,12 @@ import { useActionData, useLoaderData } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useNotification } from "@/context/NotificationContext";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "@/hooks/useModal";
 import PublishLessonModal from "./components/PublishLessonModal";
 import InvalidLessonModal from "./components/InvalidLessonModal";
 import UnpublishLessonModal from "./components/UnpublishLessonModal";
 import DeleteLessonModal from "./components/DeleteLessonModal";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import LessonRow from "./components/LessonRow";
 import EditLessonModal from "./components/EditLessonModal";
 import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
@@ -16,6 +16,12 @@ import TextWrapper from "@/components/utils/TextWrapper";
 import Table from "../components/Table";
 import Row from "../components/Row";
 import Cell from "../components/Cell";
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1.875rem;
+`;
 
 /**
  * A dashboard page that allows administrators to view and manage lessons.
@@ -51,14 +57,6 @@ function LessonsDashboard() {
         initialOpen: false,
     });
 
-    const { Modal: ApproveModalComponent, ...ApproveModal } = useModal({
-        initialOpen: false,
-    });
-
-    const { Modal: RejectModalComponent, ...RejectModal } = useModal({
-        initialOpen: false,
-    });
-
     const [selectedLesson, setSelectedLesson] = React.useState(null);
 
     React.useEffect(() => {
@@ -72,19 +70,20 @@ function LessonsDashboard() {
 
     return (
         <Container>
-            <h1> My Lessons</h1>
+            <h1> Lessons</h1>
             <Table>
                 <Row headings>
                     <Cell>Title</Cell>
                     <Cell>Subject</Cell>
                     <Cell>Education Level</Cell>
+                    <Cell>Author</Cell>
                     <Cell>Created On</Cell>
                     <Cell>Status</Cell>
                 </Row>
                 {lessons
                     .sort((a, b) => a.title.localeCompare(b.title))
                     .map(lesson => (
-                        <div style={{ width: "100%" }}>
+                        <div style={{ width: "100%" }} key={lesson.created_at}>
                             <LessonRow
                                 key={lesson.created_at}
                                 lesson={lesson}
@@ -94,18 +93,7 @@ function LessonsDashboard() {
                                 UnpublishModal={UnpublishModal}
                                 DeleteModal={DeleteModal}
                                 EditModal={EditModal}
-                                ApproveModal={ApproveModal}
-                                RejectModal={RejectModal}
                             />
-                            {lesson.status === "Rejected" &&
-                                lesson.rejection_reason && (
-                                    <RejectionReasonContainer>
-                                        <ErrorOutline size="1.5rem" />
-                                        <TextWrapper>
-                                            {lesson.rejection_reason}
-                                        </TextWrapper>
-                                    </RejectionReasonContainer>
-                                )}
                         </div>
                     ))}
                 <Button
@@ -149,38 +137,8 @@ function LessonsDashboard() {
                     handleClose={EditModal.handleClose}
                 />
             </EditModalComponent>
-            <ApproveModalComponent {...ApproveModal.ModalProps} type="dropIn">
-                <EditLessonModal
-                    lesson={selectedLesson}
-                    handleClose={ApproveModal.handleClose}
-                />
-            </ApproveModalComponent>
-
-            <RejectModalComponent {...RejectModal.ModalProps} type="dropIn">
-                <EditLessonModal
-                    lesson={selectedLesson}
-                    handleClose={RejectModal.handleClose}
-                />
-            </RejectModalComponent>
         </Container>
     );
 }
-
-const RejectionReasonContainer = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 6px 7px;
-
-    width: 100%;
-
-    background-color: ${props => props.theme.colours.error};
-`;
-
-const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 1.875rem;
-`;
 
 export default LessonsDashboard;

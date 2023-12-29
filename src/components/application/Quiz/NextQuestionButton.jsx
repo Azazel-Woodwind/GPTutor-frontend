@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 function NextQuestionButton(props) {
     return (

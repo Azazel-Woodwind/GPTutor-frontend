@@ -1,7 +1,7 @@
 import LessonAPI from "@/api/LessonAPI";
 
 const action = async ({ request }) => {
-    if (!["DELETE", "PUT"].includes(request.method)) {
+    if (!["DELETE", "PATCH"].includes(request.method)) {
         throw new Response("Incorrect request method", {
             status: 400,
             statusText: "Bad Request",
@@ -35,18 +35,16 @@ const action = async ({ request }) => {
         }
     }
 
-    if (request.method === "PUT") {
-        const oldStatus = data.get("status");
+    if (request.method === "PATCH") {
+        const oldIsPublished = data.get("is_published");
         try {
             // console.log(lessonID);
-            await LessonAPI.togglePublishById(lessonID);
+            await LessonAPI.togglePublishById(lessonID, !oldIsPublished);
 
             return {
                 ok: true,
                 message: `Lesson successfully ${
-                    ["Draft", "Rejected"].includes(oldStatus)
-                        ? "published"
-                        : "unpublished"
+                    !oldIsPublished ? "published" : "unpublished"
                 }!`,
             };
         } catch (error) {
@@ -54,9 +52,7 @@ const action = async ({ request }) => {
             return {
                 ok: false,
                 message: `There was an error ${
-                    ["Draft", "Rejected"].includes(oldStatus)
-                        ? "publishing"
-                        : "unpublishing"
+                    !oldIsPublished ? "publishing" : "unpublishing"
                 } the lesson.`,
             };
         }

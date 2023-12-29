@@ -36,9 +36,12 @@ function OutlinedButton({
     const [hovering, setHovering] = React.useState(false);
     const [buttonWidth, setButtonWidth] = React.useState(undefined);
     const [buttonHeight, setButtonHeight] = React.useState(undefined);
+
     const containerRef = React.useRef(null);
     const borderGradientID = React.useRef(nanoid()).current;
     const iconGradientID = React.useRef(nanoid()).current;
+    // const borderGradientID = React.useMemo(nanoid, []);
+    // const iconGradientID = React.useMemo(nanoid, []);
 
     React.useEffect(() => {
         const resizeObserver = new ResizeObserver(entries => {
@@ -66,12 +69,13 @@ function OutlinedButton({
             onMouseEnter={() => setHovering(true)}
             onMouseLeave={() => setHovering(false)}
             ref={containerRef}
-            style={{
-                padding: `${paddingY || 0.8}rem ${paddingX || 1.5}rem`,
-                margin: `${borderWidth}px`,
-            }}
             disabled={disabled}
-            {...otherProps}>
+            {...otherProps}
+            style={{
+                padding: `${paddingY}rem ${paddingX}rem`,
+                margin: `${borderWidth}px`,
+                ...otherProps.style,
+            }}>
             <SvgBorder>
                 <defs>
                     <SvgLinearGradient gradientID={borderGradientID} />

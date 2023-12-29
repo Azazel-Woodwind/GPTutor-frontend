@@ -1,6 +1,6 @@
 import { motion, useMotionValue } from "framer-motion";
 import React from "react";
-import ChatHistory from "./ChatHistory/ChatHistory";
+import ChatHistory from "./ChatHistory";
 import Controls from "./Controls";
 import styled from "styled-components";
 

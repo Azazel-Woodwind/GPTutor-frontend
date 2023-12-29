@@ -11,7 +11,7 @@ import {
     TextfieldContainer,
     TextfieldWrapper,
 } from "./Textfield.styles";
-import PasswordInfo from "./PasswordInfo/PasswordInfo";
+import PasswordInfo from "./PasswordInfo";
 import TextInput from "./TextInput";
 
 /**

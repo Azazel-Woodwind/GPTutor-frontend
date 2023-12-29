@@ -1,7 +1,7 @@
 import React from "react";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 import XForm from "@/components/application/XForm";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import RadioButton from "@/components/common/input/RadioButton";
 import UserAPI from "@/api/UserAPI";
 import { Link } from "react-router-dom";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
@@ -16,9 +16,9 @@ import {
     last_name_schema,
     password_schema,
     subjects_schema,
-} from "../../../lib/schemas/userFormSchema";
+} from "@/lib/schemas/userFormSchema";
 import { useAppData } from "@/context/AppDataContext";
-import Select from "@/components/common/input/MultiSelect/MultiSelect";
+import Select from "@/components/common/input/MultiSelect";
 import TextWrapper from "@/components/utils/TextWrapper";
 import LinkWrapper from "@/components/common/dataDisplay/LinkWrapper";
 import PasswordSection from "@/components/application/PasswordSection";

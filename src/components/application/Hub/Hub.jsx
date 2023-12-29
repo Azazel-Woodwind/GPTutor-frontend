@@ -1,15 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-import ChatSection from "../Chat/Chat";
+import ChatSection from "../Chat";
 import XAvatar from "@/components/application/XAvatar";
 import { useLocation } from "react-router-dom";
-import Button from "@/components/common/input/Button/Button";
-import useModal from "@/hooks/useModal/useModal";
+import Button from "@/components/common/input/Button";
+import useModal from "@/hooks/useModal";
 import SetActivityModal from "./SetActivityModal/SetActivityModalNew";
 import { HEADER_HEIGHT_IN_REM } from "@/lib/measurements";
 import { ChatContext } from "@/context/ChatContext";
 import useXConversation from "@/hooks/useX/useXConversation";
-import Resizable from "@/components/application/Hub/Resizable/Resizable";
+import Resizable from "@/components/application/Hub/Resizable";
 
 const ActivityButton = styled(Button)`
     position: absolute;

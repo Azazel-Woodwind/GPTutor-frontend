@@ -7,16 +7,16 @@ import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
 
 const statusIcons = {
     Draft: <Draft size="1.5rem" />,
-    Pending: <Pending size="1.5rem" />,
-    Verified: <Check size="1.5rem" />,
-    Rejected: <ErrorOutline size="1.5rem" />,
+    Published: <Check size="1.5rem" />,
 };
 
-function StatusChip({ status, ...props }) {
+function StatusChip({ isPublished, ...props }) {
     return (
-        <Container status={status} {...props}>
-            {statusIcons[status]}
-            <TextWrapper fontSize="md">{status}</TextWrapper>
+        <Container isPublished={isPublished} {...props}>
+            {isPublished ? statusIcons.Published : statusIcons.Draft}
+            <TextWrapper fontSize="md">
+                {isPublished ? "Published" : "Draft"}
+            </TextWrapper>
         </Container>
     );
 }
@@ -33,18 +33,10 @@ const Container = styled.div`
 
     width: 100%;
 
-    ${props => {
-        switch (props.status) {
-            case "Draft":
-                return `background-color: ${props.theme.colours.primaryFaded}`;
-            case "Pending":
-                return `background-color: ${props.theme.colours.glow}`;
-            case "Verified":
-                return props.theme.gradient();
-            case "Rejected":
-                return `background-color: ${props.theme.colours.error}`;
-        }
-    }}
+    ${props =>
+        props.isPublished
+            ? props.theme.gradient()
+            : `background-color: ${props.theme.colours.primaryFaded}`}
 `;
 
 export default StatusChip;

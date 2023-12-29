@@ -1,6 +1,6 @@
 import React from "react";
 import { motion, useMotionValue } from "framer-motion";
-import ChatEntry from "./ChatEntry/ChatEntry";
+import ChatEntry from "./ChatEntry";
 import {
     ChatHandle,
     ChatHandleContainer,

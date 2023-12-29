@@ -2,9 +2,9 @@ import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import React from "react";
 import { motion, useAnimationControls } from "framer-motion";
 import styled from "styled-components";
-import useFillingButton from "@/hooks/useFillingButton/useFillingButton";
+import useFillingButton from "@/hooks/useFillingButton";
 import { SocketContext, SocketContextProvider } from "@/context/SocketContext";
-import Textfield from "@/components/common/input/Textfield/Textfield";
+import Textfield from "@/components/common/input/Textfield";
 import FillingButton from "./FillingButton";
 
 function Main() {

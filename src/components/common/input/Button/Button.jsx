@@ -22,32 +22,30 @@ function Button({
     ...otherProps
 }) {
     // Define hover and tap interactions for non-disabled buttons
-    const interactiveProps = disabled
-        ? {
-              disabled,
-          }
-        : {
-              whileHover: {
-                  scale: whileHoverScale,
-                  transition: { duration: 0.1 },
-              },
-              whileTap: {
-                  scale: whileTapScale,
-                  transition: { duration: 0.1 },
-              },
-              disabled,
-          };
+    let interactiveProps = { disabled };
+    if (disabled) {
+        interactiveProps.onClick = undefined;
+    } else {
+        interactiveProps.whileHover = {
+            scale: whileHoverScale,
+            transition: { duration: 0.1 },
+        };
+        interactiveProps.whileTap = {
+            scale: whileTapScale,
+            transition: { duration: 0.1 },
+        };
+    }
 
     // Render the outlined or filled button based on the 'outline' prop
     if (outline) {
         return (
-            <OutlinedButton {...interactiveProps} {...otherProps}>
+            <OutlinedButton {...otherProps} {...interactiveProps}>
                 {children}
             </OutlinedButton>
         );
     }
     return (
-        <FilledButton {...interactiveProps} {...otherProps}>
+        <FilledButton {...otherProps} {...interactiveProps}>
             {children}
         </FilledButton>
     );

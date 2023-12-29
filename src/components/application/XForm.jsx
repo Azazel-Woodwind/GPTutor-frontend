@@ -2,7 +2,7 @@ import styled from "styled-components";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import Avatar from "./XAvatar";
 import React from "react";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 
 // Embrace the shadows ; find the truth
 

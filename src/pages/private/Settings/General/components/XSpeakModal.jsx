@@ -1,6 +1,6 @@
 import React from "react";
 import TextWrapper from "@/components/utils/TextWrapper";
-import Button from "@/components/common/input/Button/Button";
+import Button from "@/components/common/input/Button";
 import {
     ButtonRow,
     ModalContainer,

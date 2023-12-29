@@ -13,8 +13,8 @@ import UserAPI from "@/api/UserAPI";
 import SuccessScreen from "@/components/application/SuccessScreen";
 import XForm from "@/components/application/XForm";
 import MultiTextfieldRow from "@/components/common/layout/MultiTextfieldRow";
-import Textfield from "@/components/common/input/Textfield/Textfield";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import Textfield from "@/components/common/input/Textfield";
+import RadioButton from "@/components/common/input/RadioButton";
 import { occupations } from "@/lib/formData";
 import RadioButtonsContainer from "@/components/common/layout/RadioButtonContainer";
 

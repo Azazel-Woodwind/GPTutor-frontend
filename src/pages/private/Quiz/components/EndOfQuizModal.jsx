@@ -3,10 +3,10 @@ import React from "react";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import styled from "styled-components";
 import { fade_animation } from "@/lib/animation";
-import Textfield from "@/components/common/input/Textfield/Textfield";
-import Button from "@/components/common/input/Button/Button";
+import Textfield from "@/components/common/input/Textfield";
+import Button from "@/components/common/input/Button";
 import { interpolateColor } from "@/utils/css";
-import useModal from "@/hooks/useModal/useModal";
+import useModal from "@/hooks/useModal";
 
 function EndOfQuizModal({ score, onExit }) {
     const { ModalProps, Modal } = useModal({

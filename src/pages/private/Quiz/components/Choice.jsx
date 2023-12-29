@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import CollapsableText from "@/components/common/dataDisplay/CollapsableText";
-import RadioButton from "@/components/common/input/RadioButton/RadioButton";
+import RadioButton from "@/components/common/input/RadioButton";
 
 /**
  * MultipleChoiceQuestion - A component for displaying a multiple-choice question within a quiz.
