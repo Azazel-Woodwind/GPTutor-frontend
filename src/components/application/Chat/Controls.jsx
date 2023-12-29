@@ -12,6 +12,8 @@ import useWhisper from "@/hooks/useWhisper";
 import { SocketContext } from "@/context/SocketContext";
 import { TextInputStyle } from "@/components/common/input/TextInput";
 import IconButton from "@/components/common/input/IconButton";
+import { MAX_INITIAL_VOICE_WAIT, MAX_VOICE_WAIT } from "@/lib/constants";
+
 
 function Controls({
     prompts,
