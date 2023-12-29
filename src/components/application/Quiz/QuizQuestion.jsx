@@ -29,6 +29,32 @@ function QuizQuestion({
     // console.log(selectedChoiceIndex);
     console.log(generatingFeedback);
 
+    const [isAnswerChanged,setIsAnswerChanged] =  React.useState(false)
+
+
+    const submitDisabled = (question) => {
+        if(generatingFeedback || streamingAnswer) return true;
+        
+        let shouldDisableSubmit = false;
+        switch (question.questionType) {
+            case 'multiple':
+                shouldDisableSubmit = (selectedChoiceIndex === undefined ||
+                    question?.choices[
+                        selectedChoiceIndex
+                    ]?.incorrectFeedback);
+                break;
+            case 'written':                
+                shouldDisableSubmit =  answer?.trim()?.length === 0 || (question.feedback && !isAnswerChanged)
+                break;
+            default:
+                shouldDisableSubmit = false;
+                break;
+        }
+
+        return shouldDisableSubmit;
+                                    
+    }
+
     return (
         <CenteredColumn
             // border
@@ -66,6 +92,8 @@ function QuizQuestion({
                             question={questions[i]}
                             answer={answer}
                             setAnswer={setAnswer}
+                            setIsAnswerChanged={setIsAnswerChanged}
+                            submitDisabled={submitDisabled}
                             submitAnswer={submitAnswer}
                             loading={loading}
                             questionIndex={i}
@@ -126,16 +154,9 @@ function QuizQuestion({
                         </>
                     ) : (
                         <SubmitAnswerButton
-                            disabled={
-                                generatingFeedback ||
-                                streamingAnswer ||
-                                (questions[i].questionType === "multiple" &&
-                                    (selectedChoiceIndex === undefined ||
-                                        questions[i]?.choices[
-                                            selectedChoiceIndex
-                                        ]?.incorrectFeedback))
-                            }
+                            disabled={submitDisabled(questions[i])}
                             onClick={() => {
+                                setIsAnswerChanged(false)
                                 submitAnswer({
                                     includeInHistory: false,
                                     answer,
