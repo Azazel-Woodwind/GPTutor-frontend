@@ -9,9 +9,6 @@ const BottomSection = styled(motion.div)`
     width: 100%;
     display: flex;
     flex-direction: column;
-
-    /* font-size: 3rem; */
-    /* border: 5px solid red; */
 `;
 
 /**

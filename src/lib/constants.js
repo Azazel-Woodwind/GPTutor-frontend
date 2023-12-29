@@ -13,6 +13,9 @@ export const FONT_SIZE_MAPPINGS = {
 
 export const MAX_PROMPT_LENGTH = 1024;
 
+export const MAX_INITIAL_VOICE_WAIT = 5_000;
+export const MAX_VOICE_WAIT = 3000;
+
 export const EXAMPLE_PROMPTS = [
     "Can you explain the concept of electromagnetic waves and their various properties",
     "What are some effective study techniques for improving memory and retention of information?",

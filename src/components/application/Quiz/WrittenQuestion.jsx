@@ -19,6 +19,8 @@ function WrittenQuestion({
     setAnswer,
     submitAnswer,
     loading,
+    submitDisabled,
+    setIsAnswerChanged
 }) {
     const answerTextfieldRef = React.useRef(null);
 
@@ -43,7 +45,7 @@ function WrittenQuestion({
                     multiline
                     fullwidth
                     value={question.modalAnswer || answer}
-                    onChange={e => setAnswer(e.target.value)}
+                    onChange={e => {setAnswer(e.target.value); setIsAnswerChanged(true)}}
                     label="Your Answer"
                     rows={4}
                     disabled={
@@ -56,7 +58,8 @@ function WrittenQuestion({
                     onKeyDown={e => {
                         if (e.key === "Enter") {
                             e.preventDefault();
-                            if (!e.shiftKey) {
+                            if (!e.shiftKey && !submitDisabled(question)) {
+                                setIsAnswerChanged(false)
                                 submitAnswer({
                                     answer,
                                     choiceIndex: undefined,
