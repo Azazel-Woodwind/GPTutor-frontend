@@ -1,5 +1,5 @@
 import React from "react";
-import useConversationDisplay from "../../../hooks/useConversationDisplay";
+import useConversationDisplay from "@/hooks/useConversationDisplay";
 import { animate } from "framer-motion";
 import { ChatContext } from "@/context/ChatContext";
 

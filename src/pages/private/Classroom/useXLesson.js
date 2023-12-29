@@ -1,6 +1,6 @@
 import { SocketContext } from "@/context/SocketContext";
 import React from "react";
-import useXQuiz from "./useXQuiz";
+import useXQuiz from "../Quiz/useXQuiz";
 
 /**
  * useXLesson - Custom hook for managing the state and logic of a lesson.

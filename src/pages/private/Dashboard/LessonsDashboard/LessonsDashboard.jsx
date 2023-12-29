@@ -11,8 +11,6 @@ import DeleteLessonModal from "./components/DeleteLessonModal";
 import Button from "@/components/common/input/Button";
 import LessonRow from "./components/LessonRow";
 import EditLessonModal from "./components/EditLessonModal";
-import { ErrorOutline } from "@styled-icons/material/ErrorOutline";
-import TextWrapper from "@/components/utils/TextWrapper";
 import Table from "../components/Table";
 import Row from "../components/Row";
 import Cell from "../components/Cell";
@@ -21,6 +19,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1.875rem;
+    padding-bottom: 1.875rem;
 `;
 
 /**

@@ -19,7 +19,9 @@ function XSpeakModal({ reqAudioData, handleClose, onConfirm }) {
                     : "You will no longer be able to hear X's voice until you turn it back on"}
             </TextWrapper>
             <ButtonRow>
-                <Button onClick={handleClose} type={reqAudioData && "error"}>
+                <Button
+                    onClick={handleClose}
+                    type={reqAudioData ? "error" : ""}>
                     <TextWrapper fontSize="lg">Cancel</TextWrapper>
                 </Button>
                 <Button

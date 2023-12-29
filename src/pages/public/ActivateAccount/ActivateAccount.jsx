@@ -1,4 +1,4 @@
-import RequireInactiveUser from "../../../components/auth/RequireInactiveUser";
+import RequireInactiveUser from "@/components/auth/RequireInactiveUser";
 import ActivateForm from "./components/ActivateForm";
 
 /**

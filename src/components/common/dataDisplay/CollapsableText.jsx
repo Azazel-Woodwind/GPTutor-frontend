@@ -85,6 +85,7 @@ const Container = styled(motion.div)`
     width: fit-content;
     max-width: 100%;
     overflow: hidden;
+    overflow-y: auto;
 
     ${props =>
         props.collapsed &&

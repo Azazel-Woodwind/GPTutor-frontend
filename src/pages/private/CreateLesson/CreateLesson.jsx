@@ -1,6 +1,6 @@
 import React from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
-import LessonAPI from "../../../api/LessonAPI";
+import LessonAPI from "@/api/LessonAPI";
 import CenteredColumn from "@/components/common/layout/CenteredColumn";
 import styled from "styled-components";
 import CenteredRow from "@/components/common/layout/CenteredRow";

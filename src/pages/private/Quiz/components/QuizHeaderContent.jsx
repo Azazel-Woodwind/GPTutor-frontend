@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ExitButton from "@/components/application/Header/ExitButton";
-import HeaderContent from "../../../components/Header/HeaderContent";
+import HeaderContent from "@/components/Header/HeaderContent";
 
 function QuizHeaderContent({
     lesson,

@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { useAuth } from "@/context/SessionContext";
-import FillParent from "../../../components/common/layout/FillParent";
+import FillParent from "@/components/common/layout/FillParent";
 import { Outlet } from "react-router-dom";
 import { ADMIN_ACCESS_LEVEL } from "@/lib/accessLevels";
 import { UserBadge } from "@styled-icons/boxicons-solid/UserBadge";
-import { AlternateGlobalStyle } from "../../../styles/GlobalStyles";
-import MenuElement from "../../../components/application/NavigationMenu/MenuElement";
-import MenuIcon from "../../../components/application/NavigationMenu/MenuIcon";
+import { AlternateGlobalStyle } from "@/styles/GlobalStyles";
+import MenuElement from "@/components/application/NavigationMenu/MenuElement";
+import MenuIcon from "@/components/application/NavigationMenu/MenuIcon";
 import RouteProtector from "@/components/auth/RouteProtector";
 
 const Users = MenuIcon(UserBadge);

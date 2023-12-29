@@ -1,6 +1,6 @@
 import React from "react";
-import useX from "./useX";
-import { useSocket } from "../../context/SocketContext";
+import useX from "@/hooks/useX";
+import { useSocket } from "@/context/SocketContext";
 
 /**
  * useXQuiz - Custom hook for managing the quiz functionality.

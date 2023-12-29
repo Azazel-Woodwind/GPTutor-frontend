@@ -8,7 +8,7 @@ import useModal from "@/hooks/useModal";
 import SetActivityModal from "./SetActivityModal/SetActivityModalNew";
 import { HEADER_HEIGHT_IN_REM } from "@/lib/measurements";
 import { ChatContext } from "@/context/ChatContext";
-import useXConversation from "@/hooks/useX/useXConversation";
+import useXConversation from "@/components/application/Hub/useXConversation";
 import Resizable from "@/components/application/Hub/Resizable";
 
 const ActivityButton = styled(Button)`

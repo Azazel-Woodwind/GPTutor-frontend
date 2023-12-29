@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNotification } from "@/context/NotificationContext";
 import UserAPI from "@/api/UserAPI";
-import PasswordSection from "../../../../components/application/PasswordSection";
+import PasswordSection from "@/components/application/PasswordSection";
 import Button from "@/components/common/input/Button";
 import ResetPasswordSchema from "@/lib/schemas/resetPasswordSchema";
 

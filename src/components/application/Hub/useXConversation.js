@@ -1,7 +1,7 @@
 import { SocketContext } from "@/context/SocketContext";
 import React from "react";
-import useX from "./useX";
-import { useChatContext } from "../../context/ChatContext";
+import useX from "@/hooks/useX";
+import { useChatContext } from "@/context/ChatContext";
 import { useAuth } from "@/context/SessionContext";
 import UserAPI from "@/api/UserAPI";
 import { useLocation, useNavigate } from "react-router-dom";

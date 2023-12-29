@@ -3,7 +3,7 @@ import { useNotification } from "@/context/NotificationContext";
 import { zodResolver } from "@hookform/resolvers/zod/dist/zod";
 import UserAPI from "@/api/UserAPI";
 import supabase from "@/api/configs/supabase";
-import PasswordSection from "../../../../components/application/PasswordSection";
+import PasswordSection from "@/components/application/PasswordSection";
 import XForm from "@/components/application/XForm";
 import ResetPasswordSchema from "@/lib/schemas/resetPasswordSchema";
 

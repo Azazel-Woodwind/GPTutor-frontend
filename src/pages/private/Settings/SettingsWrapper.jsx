@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import FillParent from "../../../components/common/layout/FillParent";
+import FillParent from "@/components/common/layout/FillParent";
 import { Outlet } from "react-router-dom";
 import { Settings2Outline } from "@styled-icons/evaicons-outline";
 import { NotificationsCircle } from "@styled-icons/ionicons-outline";
@@ -8,9 +8,9 @@ import { Profile } from "@styled-icons/remix-line";
 import { AccountCircle } from "@styled-icons/material";
 import { DarkTheme } from "@styled-icons/fluentui-system-filled";
 import { Payment } from "@styled-icons/fluentui-system-filled";
-import { AlternateGlobalStyle } from "../../../styles/GlobalStyles";
-import MenuElement from "../../../components/application/NavigationMenu/MenuElement";
-import MenuIcon from "../../../components/application/NavigationMenu/MenuIcon";
+import { AlternateGlobalStyle } from "@/styles/GlobalStyles";
+import MenuElement from "@/components/application/NavigationMenu/MenuElement";
+import MenuIcon from "@/components/application/NavigationMenu/MenuIcon";
 
 const Settings = MenuIcon(Settings2Outline);
 const Plans = MenuIcon(Payment);

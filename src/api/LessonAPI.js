@@ -51,6 +51,7 @@ const LessonAPI = {
      *
      * @async
      * @param {string} lesson_id - The unique identifier of the lesson to toggle.
+     * @param {boolean} is_published - The new publish status of the lesson.
      * @returns {Promise<Object>} The updated lesson object.
      * @throws Throws an error if the update operation fails.
      */
@@ -62,20 +63,20 @@ const LessonAPI = {
     },
 
     /**
-     * Deletes a lesson owned by the user, identified by its ID.
+     * Deletes a lesson identified by its ID.
      *
      * @async
      * @param {string} lesson_id - The unique identifier of the lesson to delete.
      * @returns {Promise<Object>} Confirmation of the deletion.
      * @throws Throws an error if the deletion operation fails.
      */
-    deleteOwnedByid: async function (lesson_id) {
+    deleteById: async function (lesson_id) {
         const res = await apiClient.delete(`/lessons/${lesson_id}`);
         return res.data;
     },
 
     /**
-     * Updates a lesson owned by the user, identified by its ID.
+     * Updates a lesson identified by its ID.
      *
      * @async
      * @param {string} lesson_id - The unique identifier of the lesson to update.

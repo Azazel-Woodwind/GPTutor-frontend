@@ -64,9 +64,7 @@ const Resizable = ({ number, children, min }) => {
     const { draggable } = React.useContext(ChatContext);
     // console.log(draggable);
 
-    const { width } = useScreensize(
-        (oldWidth, oldHeight, newWidth, newHeight) => {}
-    );
+    const { width } = useScreensize();
 
     const onChange = React.useCallback(
         latest => {

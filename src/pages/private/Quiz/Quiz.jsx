@@ -1,14 +1,14 @@
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
-import useXQuiz from "../../../hooks/useX/useXQuiz";
-import useConversationDisplay from "../../../hooks/useConversationDisplay";
+import useXQuiz from "./useXQuiz";
+import useConversationDisplay from "@/hooks/useConversationDisplay";
 import styled from "styled-components";
 import EndOfQuizModal from "./components/EndOfQuizModal";
 import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/common/feedback/Loading";
-import { useHeader } from "../../../context/HeaderContext";
+import { useHeader } from "@/context/HeaderContext";
 import QuizHeader from "./components/QuizHeader";
-import QuizAPI from "../../../api/QuizAPI";
+import QuizAPI from "@/api/QuizAPI";
 import Question from "./components/Question";
 import { fade_animation } from "@/lib/animation";
 

@@ -70,7 +70,7 @@ function Question({
             key={i}>
             <CenteredRow
                 // border
-                wrap
+                wrap="true"
                 fillparent
                 gap="1.3em"
                 style={{

@@ -5,7 +5,7 @@ import { CrossSvgData, MicSvgData } from "@/lib/svgIconData";
 import Button from "@/components/common/input/Button";
 import { Send } from "@styled-icons/material/Send";
 import CenteredRow from "@/components/common/layout/CenteredRow";
-import { MAX_PROMPT_LENGTH } from "../../../lib/constants";
+import { MAX_PROMPT_LENGTH } from "@/lib/constants";
 import { useChatContext } from "@/context/ChatContext";
 import useFillingButton from "@/hooks/useFillingButton";
 import useWhisper from "@/hooks/useWhisper";

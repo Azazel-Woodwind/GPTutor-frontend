@@ -20,7 +20,7 @@ const action = async ({ request }) => {
 
     if (request.method === "DELETE") {
         try {
-            await LessonAPI.deleteOwnedByid(lessonID);
+            await LessonAPI.deleteById(lessonID);
 
             return {
                 ok: true,

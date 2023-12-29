@@ -52,7 +52,7 @@ function Choice({
                 gap: "0.25em",
             }}>
             <RadioButton
-                wrap
+                wrap="true"
                 label={choice.text}
                 checked={selected || choice.incorrectFeedback}
                 onChange={e => {

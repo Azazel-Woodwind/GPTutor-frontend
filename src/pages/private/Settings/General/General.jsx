@@ -7,6 +7,8 @@ import { nanoid } from "nanoid";
 import supabase from "@/api/configs/supabase";
 import ProgressBar from "@/components/common/feedback/ProgressBar";
 import Checkbox from "@/components/common/input/Checkbox";
+import UserAPI from "@/api/UserAPI";
+import { NotificationContext } from "@/context/NotificationContext";
 
 const max = 200000;
 
@@ -63,18 +65,34 @@ function General() {
         initialOpen: false,
     });
 
+    const { sendNotification } = React.useContext(NotificationContext);
+
+    const toggleXSpeech = async () => {
+        try {
+            const enabled = !session.user.user_metadata.req_audio_data;
+            await UserAPI.updateMe({
+                req_audio_data: enabled,
+            });
+            sendNotification({
+                type: "success",
+                label: `X Speech has been ${enabled ? "enabled" : "disabled"}`,
+            });
+        } catch (error) {
+            console.log(error);
+            sendNotification({
+                type: "error",
+                label: `Error: ${error.message}`,
+            });
+        }
+    };
+
     return (
         <Container>
             <Component {...Modal.ModalProps} type="dropIn">
                 <XSpeakModal
                     reqAudioData={!session.user.user_metadata.req_audio_data}
                     handleClose={Modal.handleClose}
-                    onConfirm={() => {
-                        UserAPI.updateMe({
-                            req_audio_data:
-                                !session.user.user_metadata.req_audio_data,
-                        });
-                    }}
+                    onConfirm={toggleXSpeech}
                 />
             </Component>
             <h1>General Settings</h1>

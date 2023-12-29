@@ -1,6 +1,6 @@
 import { SocketContext } from "@/context/SocketContext";
 import React from "react";
-import useAudioVisualiser from "../useAudioVisualiser";
+import useAudioVisualiser from "./useAudioVisualiser";
 
 /**
  * Custom hook to handle interactions with a specific channel, including message sending,

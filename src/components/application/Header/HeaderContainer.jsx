@@ -16,6 +16,22 @@ const variants = {
     },
 };
 
+const Container = styled(motion.div)`
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0.8%;
+    color: white;
+    z-index: 10;
+    /* border: 2px solid red; */
+    padding: 0px 3.125rem;
+    height: ${HEADER_HEIGHT_IN_REM}rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`;
+
 function HeaderContainer({ children }) {
     const { showHeader, showBoxShadow } = useHeader();
 
@@ -32,21 +48,5 @@ function HeaderContainer({ children }) {
         </Container>
     );
 }
-
-const Container = styled(motion.div)`
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0.8%;
-    color: white;
-    z-index: 10;
-    /* border: 2px solid red; */
-    padding: 0px 3.125rem;
-    height: ${HEADER_HEIGHT_IN_REM}rem;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
 
 export default HeaderContainer;
