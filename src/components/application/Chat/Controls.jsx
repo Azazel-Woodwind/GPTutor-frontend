@@ -229,7 +229,7 @@ function Controls({
     );
 
     React.useEffect(() => {
-        document.addEventListener("keypress", handleKeyPress);
+        if(location.pathname === "/hub") document.addEventListener("keypress", handleKeyPress);
 
         return () => {
             document.removeEventListener("keypress", handleKeyPress);
@@ -237,7 +237,7 @@ function Controls({
     }, [handleKeyPress]);
 
     React.useEffect(() => {
-        document.addEventListener("keydown", handleKeyDown);
+        if(location.pathname === "/hub") document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
