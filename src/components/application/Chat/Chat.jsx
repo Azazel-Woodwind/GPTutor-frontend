@@ -5,7 +5,7 @@ import Controls from "./Controls";
 import styled from "styled-components";
 
 const BottomSection = styled(motion.div)`
-    max-width: 1200px;
+    /* max-width: 1200px; */
     width: 100%;
     display: flex;
     flex-direction: column;

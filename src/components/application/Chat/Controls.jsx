@@ -216,6 +216,7 @@ function Controls({
     const handleKeyPress = React.useCallback(
         e => {
             if (
+                location.pathname === "/hub" &&
                 messageInputRef.current &&
                 document.activeElement !== messageInputRef.current
             ) {
@@ -225,11 +226,12 @@ function Controls({
                 handleChangeInput(messageInputRef.current.value);
             }
         },
-        [width, draggable]
+        [location]
     );
 
     React.useEffect(() => {
-        if(location.pathname === "/hub") document.addEventListener("keypress", handleKeyPress);
+        
+        document.addEventListener("keypress", handleKeyPress);
 
         return () => {
             document.removeEventListener("keypress", handleKeyPress);
@@ -237,7 +239,7 @@ function Controls({
     }, [handleKeyPress]);
 
     React.useEffect(() => {
-        if(location.pathname === "/hub") document.addEventListener("keydown", handleKeyDown);
+        document.addEventListener("keydown", handleKeyDown);
 
         return () => {
             document.removeEventListener("keydown", handleKeyDown);
