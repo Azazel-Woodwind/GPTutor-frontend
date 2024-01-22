@@ -1,16 +1,22 @@
-import * as React from "react";
+import React from "react";
 import io from "socket.io-client";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./SessionContext";
+import { useAuth } from "@/context/SessionContext";
 
+/**
+ * Context for socket connection.
+ */
 export const SocketContext = React.createContext({
     Socket: null,
 });
 
-export function useSocket() {
-    return React.useContext(SocketContext);
-}
-
+/**
+ * Provider component for SocketContext.
+ *
+ * @param {object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components.
+ * @returns {React.ReactNode} The provider component.
+ */
 export function SocketContextProvider({ children }) {
     const navigate = useNavigate();
     const [Socket, setSocket] = React.useState(null);
@@ -20,26 +26,22 @@ export function SocketContextProvider({ children }) {
     React.useEffect(() => {
         if (!Socket) {
             setLoading(true);
-            const socket = io(
-                import.meta.env.PROD ? "https://api.xtutor.ai" : ":3000",
-                {
-                    auth: {
-                        token: session?.access_token,
-                    },
-                }
-            );
+            const socket = io(import.meta.env.VITE_API_URL, {
+                auth: {
+                    token: session?.access_token,
+                },
+            });
             console.log("Connecting to socket");
             socket.on("connect_error", err => {
                 console.log("error:", err.message);
                 // either no token, token is invalid, database error or timeout
             });
 
-            socket.on("authenticated", bool => {
-                if (!bool) return;
+            socket.on("authenticated", () => {
                 setSocket(socket);
                 setLoading(false);
                 // console.log(socket);
-                console.log("Authenticated ", bool);
+                console.log("Authenticated");
             });
 
             socket.on("navigate", navigate);
@@ -59,4 +61,13 @@ export function SocketContextProvider({ children }) {
             {children}
         </SocketContext.Provider>
     );
+}
+
+/**
+ * Custom hook to use SocketContext.
+ *
+ * @returns {object} Socket instance from context.
+ */
+export function useSocket() {
+    return React.useContext(SocketContext);
 }
